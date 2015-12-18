@@ -1303,23 +1303,108 @@ if !has('gui_running') && executable('tig')
     nnoremap          <Leader>gT :Tig<Space>
 endif
 
-" ervandew/supertab
-" let g:SuperTabDefaultCompletionType = "<C-n>"
-" let g:SuperTabContextDefaultCompletionType = "<C-n>"
+" Shougo/neocomplete.vim
+let g:acp_enableAtStartup                           = 0 " Disable AutoComplPop
+let g:neocomplete#enable_at_startup                 = 1 " Use neocomplete
+let g:neocomplete#enable_smart_case                 = 1 " Use smartcase
+let g:neocomplete#enable_camel_case                 = 1 " Use camelcase
+let g:neocomplete#auto_completion_start_length      = 2 " Set auto completion length
+let g:neocomplete#manual_completion_start_length    = 0 " Set manual completion length
+let g:neocomplete#min_keyword_length                = 3 " Set minimum keyword length
+let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length
+let g:neocomplete#data_directory                    = '~/.vim/cache/neocomplete'
+let g:neocomplete#lock_buffer_name_pattern          = '\*ku\*'
 
-" SirVer/ultisnips
-let g:UltiSnipsExpandTrigger       = "<Tab>"
-let g:UltiSnipsJumpForwardTrigger  = "<Tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+endif
 
-inoremap <C-x><C-k> <C-x><C-k>
+let g:neocomplete#force_omni_input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::\w*'
+let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+let g:neocomplete#force_omni_input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+let g:neocomplete#force_omni_input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+let g:neocomplete#force_omni_input_patterns.objc   = '\[\h\w*\s\h\?\|\h\w*\%(\.\|->\)'
+let g:neocomplete#force_omni_input_patterns.objcpp = '\[\h\w*\s\h\?\|\h\w*\%(\.\|->\)\|\h\w*::\w*'
 
-" inoremap <silent> <C-k> <C-r>=UltiSnips#ExpandSnippetOrJump()<CR>
-" snoremap <silent> <C-k> <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+let g:neocomplete#sources#vim#complete_functions = {
+            \ 'Unite' : 'unite#complete_source',
+            \ }
+call neocomplete#custom#source('look', 'min_pattern_length', 4)
+
+" Plugin key-mappings
+" <C-y>: paste
+inoremap <expr> <C-y> pumvisible() ? neocomplete#close_popup() :  "\<C-r>\""
+" <C-e>: close popup
+inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
+" <C-h>, <BS>: close popup and delete backword char.
+" inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-o>b"
+inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
+" <C-n>: neocomplete
+" inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>\<Down>"
+" <C-p>: keyword completion
+" inoremap <expr> <C-p> pumvisible() ? "\<C-p>" : "\<C-p>\<C-n>"
+
+" inoremap <expr> '     pumvisible() ? neocomplete#close_popup() : "'"
+
+inoremap <silent> <expr> <C-x><C-f> neocomplete#start_manual_complete('file')
+
+inoremap <expr> <C-g> neocomplete#undo_completion()
+" inoremap <expr> <C-l> neocomplete#complete_common_string()
+inoremap <expr> <C-l> neocomplete#smart_close_popup()."\<C-o>w"
+
+" <Tab>: completion
+" inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : neocomplete#start_manual_complete()
+" function! s:check_back_space()
+"     let col = col('.') - 1
+"     return !col || getline('.')[col - 1]  =~ '\s'
+" endfunction
+" <S-Tab>: completion back
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" <CR>: close popup and save indent
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+    return neocomplete#close_popup() . "\<CR>"
+    " return neocomplete#smart_close_popup() . "\<CR>"
+    " For no inserting <CR> key.
+    " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+
+" For cursor moving in insert mode
+inoremap <expr> <Left>  neocomplete#close_popup() . "\<Left>"
+inoremap <expr> <Right> neocomplete#close_popup() . "\<Right>"
+inoremap <expr> <Up>    neocomplete#close_popup() . "\<Up>"
+inoremap <expr> <Down>  neocomplete#close_popup() . "\<Down>"
+
+let g:neocomplete#fallback_mappings = ["\<C-x>\<C-o>", "\<C-x>\<C-n>"]
+
+" Shougo/neosnippet.vim
+let g:neosnippet#snippets_directory            = '~/.vim/plugged/vim-snippets/snippets,~/.vim/snippets'
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" imap <C-k> <Plug>(neosnippet_expand_or_jump)
+" smap <C-k> <Plug>(neosnippet_expand_or_jump)
+" xmap <C-k> <Plug>(neosnippet_expand_target)
 
 " Ctrl-Space
-inoremap <silent> <C-@> <C-r>=UltiSnips#ExpandSnippetOrJump()<CR>
-snoremap <silent> <C-@> <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
+imap <C-@> <Plug>(neosnippet_expand_or_jump)
+smap <C-@> <Plug>(neosnippet_expand_or_jump)
+xmap <C-@> <Plug>(neosnippet_expand_target)
+
+imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<Tab>"
+smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
+
+imap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+smap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+nnoremap <silent> [Space]I :Unite -buffer-name=snippets neosnippet<CR>
 
 if exists("$TMUX")
     " common tmux functions
