@@ -671,10 +671,6 @@ nnoremap <silent> <Down>  <C-w>j
 nnoremap <silent> <Up>    <C-w>k
 nnoremap <silent> <Right> <C-w>l
 
-" <Tab> and <S-Tab>: Cycle through the splits
-" nnoremap <silent> <Tab>   <C-w>w
-" nnoremap <silent> <S-Tab> <C-w>W
-
 " gl: List buffers
 nnoremap gl :buffers<CR>:edit #
 
@@ -682,10 +678,8 @@ nnoremap gl :buffers<CR>:edit #
 nnoremap <silent> gb :buffer#<CR>
 
 " Horizontal/Vertical split
-nnoremap <silent> ]- :sp<CR>
-nnoremap <silent> [- :sp<CR>
-nnoremap <silent> ]\ :vsp<CR>
-nnoremap <silent> [\ :vsp<CR>
+nnoremap <silent> [App]- :sp<CR>
+nnoremap <silent> [App]\ :vsp<CR>
 
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
@@ -732,16 +726,6 @@ nnoremap <silent> <Leader>iD :call <SID>CopyPath(expand("%:p:h"))<CR>
 
 " Highlight current line
 nnoremap <silent> <Leader>il :execute 'match Search /\%' . line('.') . 'l/'<CR>
-
-" Current date/time
-nnoremap <Leader>ii a<C-r>=strftime('%')<Left><Left>
-nnoremap <Leader>ic a<C-r>=strftime('%c')<CR>
-nnoremap <Leader>iy a<C-r>=strftime('%Y-%m-%d')<CR>
-nnoremap <Leader>im a<C-r>=strftime('%b %d, %Y')<CR>
-nnoremap <Leader>iM a<C-r>=strftime('%B %d, %Y')<CR>
-nnoremap <Leader>it a<C-r>=strftime('%H:%M:%S')<CR>
-nnoremap <Leader>ia a<C-r>=strftime('%Y-%m-%d %H:%M:%S')<CR>
-nnoremap <Leader>iA a<C-r>=strftime('%Y-%m-%dT%H:%M:%S%z')<CR>
 
 " User-defined commands
 " Sudo write
