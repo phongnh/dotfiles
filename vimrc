@@ -139,11 +139,8 @@ Plug 'haya14busa/incsearch.vim'
 " Vim search status
 Plug 'osyo-manga/vim-anzu'
 
-" Ack search
-Plug 'mileszs/ack.vim'
-
 " Helps you win at grep.
-" Plug 'mhinz/vim-grepper'
+Plug 'mhinz/vim-grepper'
 
 " Helpers for UNIX
 Plug 'tpope/vim-eunuch'
@@ -1048,18 +1045,16 @@ map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)zzzv
 map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
 map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 
-" mileszs/ack.vim
-let g:ack_use_dispatch    = has('nvim') ? 0 : 1
-let g:ack_default_options = ' --nocolor --nogroup --smart-case -Q '
+" mhinz/vim-grepper
+command! -nargs=* -complete=file GG Grepper! -tool git -query <args>
+command! -nargs=* -complete=file Ag Grepper! -tool ag  -query <args>
 
-nnoremap [App]S :Ack!<Space>
-nnoremap [App]L :LAck!<Space>
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
 
-nnoremap [App]s :Ack! <C-r>=GetWordForAck()<CR><Space>
-xnoremap [App]s <Esc>:Ack! <C-r>=GetSelectedTextForAck()<CR><Space>
-
-nnoremap [App]l :LAck! <C-r>=GetWordForAck()<CR><Space>
-xnoremap [App]l <Esc>:LAck! <C-r>=GetSelectedTextForAck()<CR><Space>
+nnoremap [App]s :Grepper! -query <C-r>=GetWordForAck()<CR><Space>
+xnoremap [App]s <Esc>:Grepper! -query <C-r>=GetSelectedTextForAck()<CR><Space>
+nnoremap [App]S :Grepper!<CR>
 
 " tpope/vim-surround
 let g:surround_indent             = 1
@@ -1484,19 +1479,17 @@ let g:user_emmet_mode            = 'i'
 let g:gruvbox_contrast_dark  = 'hard'
 
 if executable('ag')
-    let g:ag_ignore_opts  = '--ignore tags --ignore .git --ignore .svn --ignore .hg --ignore .DS_Store '
-    let g:ag_opts         = g:ag_ignore_opts . '-l --nocolor --nogroup --follow --hidden -g ""'
-    let g:ag_vimgrep_opts = g:ag_ignore_opts . '--vimgrep --smart-case '
+    if !exists('g:ag_ignore_opts')
+        let g:ag_ignore_opts  = '--ignore tags --ignore .git --ignore .svn --ignore .hg --ignore .DS_Store '
+        let g:ag_opts         = g:ag_ignore_opts . '-l --nocolor --nogroup --follow --hidden -g ""'
+        let g:ag_vimgrep_opts = g:ag_ignore_opts . '--vimgrep --smart-case'
+    endif
 
     let &grepprg = 'ag ' . g:ag_vimgrep_opts
 
     " ctrlpvim/ctrlp.vim
     let g:ctrlp_user_command = 'ag %s ' . g:ag_opts
     let g:ctrlp_use_caching  = 0
-
-    " mileszs/ack.vim
-    let g:ackprg              = 'ag -Q ' . g:ag_vimgrep_opts
-    let g:ack_default_options = ''
 elseif executable('ack')
     set grepprg=ack\ --nocolor\ --nogroup\ --smart-case\ $*
 elseif executable('ack-grep')
