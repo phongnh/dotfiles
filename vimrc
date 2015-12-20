@@ -1052,9 +1052,10 @@ command! -nargs=* -complete=file Ag Grepper! -tool ag  -query <args>
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
 
-nnoremap [App]s :Grepper! -query <C-r>=GetWordForAck()<CR><Space>
-xnoremap [App]s <Esc>:Grepper! -query <C-r>=GetSelectedTextForAck()<CR><Space>
 nnoremap [App]S :Grepper!<CR>
+
+nnoremap [App]s :Grepper! -query <C-r>=GetWordForSearch()<CR><Space>
+xnoremap [App]s <Esc>:Grepper! -query <C-r>=GetSelectedTextForSearch()<CR><Space>
 
 " tpope/vim-surround
 let g:surround_indent             = 1
