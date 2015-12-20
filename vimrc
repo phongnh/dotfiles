@@ -1523,31 +1523,31 @@ endfunction
 augroup MyAutoCmd
     autocmd VimEnter * call s:vim_enter_setup()
 
+    " mhinz/vim-startify
+    autocmd FileType startify setlocal nofoldenable foldcolumn=0
+    autocmd User Startified setlocal buftype=
 
     " Change settings for some file types
     autocmd FileType sql,python,c,vim,sh,zsh,fish setlocal tabstop=4 shiftwidth=4
     autocmd FileType xml,html,css,javascript,json setlocal tabstop=4 shiftwidth=4
 
-    " autocmd FileType json setlocal syntax=javascript
-
-    autocmd FileType vim setlocal keywordprg=:help
-
-    " Help
-    autocmd FileType help setlocal nolist noexpandtab
-    autocmd FileType help nmap <silent> <buffer> q :close<CR>
-
-    " Quickfix
-    autocmd FileType qf setlocal winheight=15 nolist nobuflisted
-    autocmd FileType qf nmap <silent> <buffer> q :close<CR>
-
-    " Startify
-    autocmd FileType startify setlocal nofoldenable foldcolumn=0
-
     " Set file type
     autocmd BufNewFile,BufRead *.nvim setlocal filetype=vim
     autocmd BufNewFile,BufRead *.fastercsv,*.prawn setlocal filetype=ruby
+    " autocmd FileType json setlocal syntax=javascript
 
-    " Set commentstring
+    " Vim
+    autocmd FileType vim setlocal keywordprg=:help foldmethod=marker foldmarker={{{,}}}
+
+    " Help
+    autocmd FileType help setlocal nolist noexpandtab |
+                \ nmap <silent> <buffer> q :close<CR>
+
+    " Quickfix
+    autocmd FileType qf setlocal winheight=15 nolist nobuflisted |
+                \ nmap <silent> <buffer> q :close<CR>
+
+    " SQL
     autocmd FileType sql setlocal omnifunc= commentstring=--\ %s
 
     if executable('xmllint')
@@ -1555,11 +1555,8 @@ augroup MyAutoCmd
     endif
 
     " Folding
-    autocmd FileType vim          setlocal foldmethod=marker foldmarker={{{,}}}
-    autocmd FileType nginx,puppet setlocal foldmethod=marker foldmarker={,}
-    autocmd FileType c,java       setlocal foldmethod=marker foldmarker={,}
-    autocmd FileType javascript   setlocal foldmethod=marker foldmarker={,}
-    autocmd FileType less,css     setlocal foldmethod=marker foldmarker={,} iskeyword+=-
+    autocmd FileType nginx,puppet,c,java,javascript setlocal foldmethod=marker foldmarker={,}
+    autocmd FileType less,css setlocal foldmethod=marker foldmarker={,} iskeyword+=-
 augroup END
 
 set background=dark
