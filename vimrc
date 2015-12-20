@@ -130,13 +130,12 @@ Plug 'vim-scripts/matchit.zip'
 " My vim functions for search and substitue
 Plug 'phongnh/vim-search-helpers'
 
-" The missing motion for Vim
-Plug 'justinmk/vim-sneak'
+" Extended f, F, t and T key mappings for Vim.
+Plug 'rhysd/clever-f.vim'
 
 " Improved incremental searching for Vim
 Plug 'haya14busa/incsearch.vim'
-" * - Improved
-Plug 'haya14busa/vim-asterisk'
+
 " Vim search status
 Plug 'osyo-manga/vim-anzu'
 
@@ -487,8 +486,8 @@ inoremap <C-^> <C-c><C-^>
 
 " Normal Mode Mappings
 " Use sane regular expressions
-nnoremap / /\v
-xnoremap / /\v
+" nnoremap / /\v
+" xnoremap / /\v
 
 " Useless command
 nnoremap M m
@@ -744,6 +743,7 @@ let g:airline#extensions#tmuxline#enabled   = 0
 let g:airline#extensions#promptline#enabled = 0
 let g:airline#extensions#capslock#enabled   = 0
 let g:airline#extensions#windowswap#enabled = 0
+let g:airline#extensions#anzu#enabled       = 0
 
 let g:airline#extensions#tabline#enabled        = 1
 let g:airline#extensions#tabline#tab_nr_type    = 1
@@ -1028,23 +1028,6 @@ let g:syntastic_style_warning_symbol     = 'S!'
 nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 inoremap <silent> <F6> <Esc>:SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 
-" justinmk/vim-sneak
-" replace 'f' with 1-char Sneak
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-xmap f <Plug>Sneak_f
-xmap F <Plug>Sneak_F
-omap f <Plug>Sneak_f
-omap F <Plug>Sneak_F
-
-" replace 't' with 1-char Sneak
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-xmap t <Plug>Sneak_t
-xmap T <Plug>Sneak_T
-omap t <Plug>Sneak_t
-omap T <Plug>Sneak_T
-
 " haya14busa/incsearch.vim
 " let g:incsearch#magic                             = '\v'
 let g:incsearch#auto_nohlsearch                   = 1
@@ -1054,23 +1037,16 @@ map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
-" haya14busa/vim-asterisk
-let g:asterisk#keeppos = 0
-
-map *  <Plug>(incsearch-nohl)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status)zzzv
-map #  <Plug>(incsearch-nohl)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status)zzzv
-map g* <Plug>(incsearch-nohl)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status)zzzv
-map g# <Plug>(incsearch-nohl)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status)zzzv
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
 
 " osyo-manga/vim-anzu
-" let g:anzu_status_format = "%p(%i/%l) %w"
-let g:anzu_status_format = "%p(%i/%l)"
+let g:anzu_status_format = "%p(%i/%l) %w"
 
-map n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)zzzv
-map N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)zzzv
-
-" Remap <Leader><Space> to clear anzu status in status line
-nmap <silent> <Leader><Space> <Plug>(anzu-clear-search-status)<Plug>(clear-and-redraw)
+map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)zzzv
+map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)zzzv
+map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
+map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 
 " mileszs/ack.vim
 let g:ack_use_dispatch    = has('nvim') ? 0 : 1
@@ -1547,8 +1523,6 @@ endfunction
 augroup MyAutoCmd
     autocmd VimEnter * call s:vim_enter_setup()
 
-    " osyo-manga/vim-anzu
-    autocmd BufLeave,WinLeave,TabLeave * call anzu#clear_search_status()
 
     " Change settings for some file types
     autocmd FileType sql,python,c,vim,sh,zsh,fish setlocal tabstop=4 shiftwidth=4
