@@ -167,7 +167,7 @@ Plug 'glts/vim-textobj-comment'          " c
 Plug 'mattn/vim-textobj-url'             " u
 Plug 'rhysd/vim-textobj-word-column'     " v V
 Plug 'rhysd/vim-textobj-anyblock'        " b
-Plug 'thinca/vim-textobj-between'        " f{char}
+Plug 'thinca/vim-textobj-between'        " f{char}, remapped to n{char}
 Plug 'sgur/vim-textobj-parameter'        " ,
 Plug 'whatyouhide/vim-textobj-xmlattr'   " x
 
@@ -1074,6 +1074,13 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 autocmd BufEnter * execute 'inoremap <buffer> <silent> <BS> <C-R>=AutoPairsDelete()<CR>'
 
 " thinca/vim-textobj-between
+let g:textobj_between_no_default_key_mappings = 1
+
+omap an <Plug>(textobj-between-a)
+omap in <Plug>(textobj-between-i)
+xmap an <Plug>(textobj-between-a)
+xmap in <Plug>(textobj-between-i)
+
 " Replace 'lucapette/vim-textobj-underscore'
 omap a_ <Plug>(textobj-between-a)_
 omap i_ <Plug>(textobj-between-i)_
@@ -1084,7 +1091,7 @@ xmap i_ <Plug>(textobj-between-i)_
 let g:textobj_ruby_more_mappings = 0
 
 " whatyouhide/vim-textobj-erb
-let g:textobj_erb_no_default_key_mappings = 0
+let g:textobj_erb_no_default_key_mappings = 1
 
 " Remap from 'E' to 'y'
 omap ay <Plug>(textobj-erb-a)
@@ -1093,7 +1100,7 @@ xmap ay <Plug>(textobj-erb-a)
 xmap iy <Plug>(textobj-erb-i)
 
 " poetic/vim-textobj-javascript
-let g:textobj_chunkblock_no_default_key_mappings = 0
+let g:textobj_chunkblock_no_default_key_mappings = 1
 
 " Remap from 'c' to 'j'
 omap aj <Plug>(textobj-chunkblock-a)
