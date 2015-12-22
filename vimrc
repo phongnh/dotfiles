@@ -338,7 +338,8 @@ endif
 set showtabline=0               " Hide tabline
 set laststatus=2                " Always display statusline
 
-set showcmd                     " Show (partial) command in the last line of the screen
+set noshowcmd
+" set showcmd                     " Show (partial) command in the last line of the screen
 set cmdheight=2                 " Height of command-line (easy-readable)
 
 set undolevels=1000             " Maximum number of changes that can be undone
