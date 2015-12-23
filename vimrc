@@ -790,6 +790,8 @@ let g:ctrlp_reuse_window      = 'startify'
 let g:ctrlp_cache_dir         = '~/.vim/cache/ctrlp'
 let g:ctrlp_custom_ignore     = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
+let g:ctrlp_user_command      = 'find %s -type f \( ! -path "*.git/*" -a ! -path "*.hg/*" -a ! -path "*.svn/*" -a ! -path "*.DS_Store" \)'
+" let g:ctrlp_use_caching       = 0
 
 nnoremap <silent> [Space]R :CtrlPLastMode --dir<CR>
 
@@ -1010,7 +1012,7 @@ nnoremap <silent> <F4> :IndentLinesToggle<CR>
 inoremap <silent> <F4> <Esc>:IndentLinesToggle<CR>
 
 " scrooloose/syntastic
-let g:syntastic_mode_map                 = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
+let g:syntastic_mode_map                 = { 'mode': 'passive', 'active_filetypes': [], }
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_loc_list_height          = 5
 let g:syntastic_check_on_open            = 0
@@ -1513,7 +1515,6 @@ if executable('ag')
 
     " ctrlpvim/ctrlp.vim
     let g:ctrlp_user_command = 'ag %s ' . g:ag_opts
-    let g:ctrlp_use_caching  = 0
 elseif executable('ack')
     set grepprg=ack\ --nocolor\ --nogroup\ --smart-case\ $*
 elseif executable('ack-grep')
@@ -1548,7 +1549,7 @@ augroup MyAutoCmd
     autocmd FileType qf setlocal winheight=15 nobuflisted
 
     " Ruby-related
-    autocmd FileType ruby,eruby,yaml,haml,markdown,less,sass,scss,coffee setlocal tabstop=2 shiftwidth=2
+    autocmd FileType ruby,eruby,yaml,haml,markdown,less,sass,scss,coffee,html.handlebars setlocal tabstop=2 shiftwidth=2
 
     " CSS / Less
     autocmd FileType css,less setlocal iskeyword+=-
