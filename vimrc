@@ -274,8 +274,7 @@ set hlsearch    " Highlight searche result
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 
 " Default indent settings
-set tabstop=2
-set shiftwidth=2
+set tabstop=4 shiftwidth=4
 
 set autoindent
 set smartindent
@@ -308,7 +307,6 @@ set sidescroll=1                " The minimal number of columns to scroll horizo
 set sidescrolloff=15            " The minimal number of screen columns to keep to the left and to the right of the cursor
 
 " Display tabs and trailing spaces
-set list
 set listchars=tab:>\ ,trail:-,nbsp:+,extends:>,precedes:<
 
 if has('conceal')
@@ -641,12 +639,12 @@ nnoremap <silent> z] :let &foldcolumn = &foldcolumn + 1<CR>:echo 'foldcolumn = '
 nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:echo 'foldcolumn = ' . &foldcolumn<CR>
 
 " Auto center
-nnoremap <silent> n     nzzzv
-nnoremap <silent> N     Nzzzv
-nnoremap <silent> *     *zz
-nnoremap <silent> #     #zz
-nnoremap <silent> g*    g*zz
-nnoremap <silent> g#    g#zz
+" nnoremap <silent> n     nzzzv
+" nnoremap <silent> N     Nzzzv
+" nnoremap <silent> *     *zzzv
+" nnoremap <silent> #     #zzzv
+" nnoremap <silent> g*    g*zzzv
+" nnoremap <silent> g#    g#zzzv
 nnoremap <silent> g;    g;zz
 nnoremap <silent> g,    g,zz
 nnoremap <silent> <C-o> <C-o>zz
@@ -896,10 +894,10 @@ let g:startify_show_sessions      = 1
 nnoremap <silent> <F5> :Startify<CR>
 inoremap <silent> <F5> <Esc>:Startify<CR>
 
-nnoremap          [App]ws :SSave<Space>
-nnoremap          [App]wl :SLoad<Space>
-nnoremap          [App]wd :SDelete<Space>
-nnoremap <silent> [App]wc :SClose<CR>
+augroup MyAutoCmd
+    autocmd FileType startify setlocal nofoldenable foldcolumn=0
+    autocmd User Startified setlocal buftype=
+augroup END
 
 " jlanzarotta/bufexplorer
 let g:bufExplorerDisableDefaultKeyMapping = 1
@@ -1026,6 +1024,20 @@ let g:syntastic_style_warning_symbol     = 'S!'
 nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 inoremap <silent> <F6> <Esc>:SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 
+" tpope/vim-unimpaired
+augroup MyAutoCmd
+    autocmd VimEnter * silent! nunmap >P
+    autocmd VimEnter * silent! nunmap >p
+    autocmd VimEnter * silent! nunmap <P
+    autocmd VimEnter * silent! nunmap <p
+    autocmd VimEnter * silent! nunmap =p
+    autocmd VimEnter * silent! nunmap =P
+
+    " Reselect text after moving
+    autocmd VimEnter * xnoremap <silent> [e :move -2<CR>gv
+    autocmd VimEnter * xnoremap <silent> ]e :move '>+<CR>gv
+augroup END
+
 " haya14busa/incsearch.vim
 " let g:incsearch#magic                             = '\v'
 let g:incsearch#auto_nohlsearch                   = 1
@@ -1063,6 +1075,12 @@ let g:surround_indent             = 1
 let g:surround_no_insert_mappings = 1
 
 " nmap <C-s><C-w> ysiw
+
+augroup MyAutoCmd
+    autocmd VimEnter * silent! iunmap <C-g>s
+    autocmd VimEnter * silent! iunmap <C-g>S
+    autocmd BufEnter * silent! iunmap <buffer> <C-g>g
+augroup END
 
 " jiangmiao/auto-pairs
 let g:AutoPairsMapBS              = 0
@@ -1222,10 +1240,7 @@ nnoremap <silent> cog :SignifyToggle<CR>
 
 " tpope/vim-fugitive
 augroup MyAutoCmd
-    " Automatically wrap at 72 characters and set winheight to 20 rows and spell check git commit messages
-    autocmd FileType gitcommit setlocal textwidth=72 winheight=20 spell nolist
-    autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
-    autocmd FileType git,gitconfig setlocal nolist tabstop=8
+    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-r><C-g><CR>
     autocmd BufReadPost fugitive://* set bufhidden=delete
 augroup END
 
@@ -1505,33 +1520,18 @@ elseif executable('ack-grep')
     set grepprg=ack-grep\ --nocolor\ --nogroup\ --smart-case\ $*
 endif
 
-function! s:vim_enter_setup()
-    " bling/vim-airline and itchyny/lightline.vim
-    set showtabline=1 noshowmode
-
-    " tpope/vim-unimpaired
-    silent! nunmap >P
-    silent! nunmap >p
-    silent! nunmap <P
-    silent! nunmap <p
-    silent! nunmap =p
-    silent! nunmap =P
-
-    " Reselect text after moving
-    xnoremap <silent> [e :move -2<CR>gv
-    xnoremap <silent> ]e :move '>+<CR>gv
+function! s:xmllint_setup()
+    let xmllint = 'setlocal equalprg=env\ XMLLINT_INDENT=''%s''\ xmllint\ --format\ --recover\ -\ 2>/dev/null'
+    if exists('*shiftwidth')
+        let xmllint = printf(xmllint, repeat('\ ', shiftwidth()))
+    else
+        let xmllint = printf(xmllint, repeat('\ ', &shiftwidth))
+    endif
+    execute xmllint
 endfunction
 
 augroup MyAutoCmd
-    autocmd VimEnter * call s:vim_enter_setup()
-
-    " mhinz/vim-startify
-    autocmd FileType startify setlocal nofoldenable foldcolumn=0
-    autocmd User Startified setlocal buftype=
-
-    " Change settings for some file types
-    autocmd FileType sql,python,c,vim,sh,zsh,fish setlocal tabstop=4 shiftwidth=4
-    autocmd FileType xml,html,css,javascript,json setlocal tabstop=4 shiftwidth=4
+    autocmd VimEnter * set showtabline=1 noshowmode
 
     " Set file type
     autocmd BufNewFile,BufRead *.nvim setlocal filetype=vim
@@ -1539,26 +1539,42 @@ augroup MyAutoCmd
     " autocmd FileType json setlocal syntax=javascript
 
     " Vim
-    autocmd FileType vim setlocal keywordprg=:help foldmethod=marker foldmarker={{{,}}}
+    autocmd FileType vim setlocal keywordprg=:help
 
     " Help
-    autocmd FileType help setlocal nolist noexpandtab |
-                \ nmap <silent> <buffer> q :close<CR>
+    autocmd FileType help setlocal keywordprg=:help noexpandtab
 
     " Quickfix
-    autocmd FileType qf setlocal winheight=15 nolist nobuflisted |
-                \ nmap <silent> <buffer> q :close<CR>
+    autocmd FileType qf setlocal winheight=15 nobuflisted
+
+    " Ruby-related
+    autocmd FileType ruby,eruby,yaml,haml,markdown,less,sass,scss setlocal tabstop=2 shiftwidth=2
+
+    " CSS / Less
+    autocmd FileType css,less setlocal iskeyword+=-
 
     " SQL
     autocmd FileType sql setlocal omnifunc= commentstring=--\ %s
 
+    " XML
     if executable('xmllint')
-        autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+        autocmd FileType xml call s:xmllint_setup()
     endif
 
+    " Go
+    autocmd FileType go,godoc,gedoc setlocal noexpandtab
+    autocmd FileType godoc,gedoc    setlocal tabstop=8
+
+    " Git
+    autocmd FileType gitcommit setlocal textwidth=72 winheight=20 spell
+    autocmd FileType git,gitconfig setlocal tabstop=8
+
+    " q to close
+    autocmd FileType help,qf,godoc,gedoc nmap <silent> <buffer> q :close<CR>
+
     " Folding
-    autocmd FileType nginx,puppet,c,java,javascript setlocal foldmethod=marker foldmarker={,}
-    autocmd FileType less,css setlocal foldmethod=marker foldmarker={,} iskeyword+=-
+    autocmd FileType vim setlocal foldmethod=marker foldmarker={{{,}}}
+    autocmd FileType nginx,puppet,c,javascript,go,less,css setlocal foldmethod=marker foldmarker={,}
 augroup END
 
 set background=dark
