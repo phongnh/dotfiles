@@ -1548,7 +1548,7 @@ augroup MyAutoCmd
     autocmd FileType qf setlocal winheight=15 nobuflisted
 
     " Ruby-related
-    autocmd FileType ruby,eruby,yaml,haml,markdown,less,sass,scss setlocal tabstop=2 shiftwidth=2
+    autocmd FileType ruby,eruby,yaml,haml,markdown,less,sass,scss,coffee setlocal tabstop=2 shiftwidth=2
 
     " CSS / Less
     autocmd FileType css,less setlocal iskeyword+=-
