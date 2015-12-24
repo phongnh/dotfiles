@@ -1505,16 +1505,10 @@ let g:user_emmet_mode            = 'i'
 let g:gruvbox_contrast_dark  = 'hard'
 
 if executable('ag')
-    if !exists('g:ag_ignore_opts')
-        let g:ag_ignore_opts  = '--ignore tags --ignore .git --ignore .svn --ignore .hg --ignore .DS_Store '
-        let g:ag_opts         = g:ag_ignore_opts . '-l --nocolor --nogroup --follow --hidden -g ""'
-        let g:ag_vimgrep_opts = g:ag_ignore_opts . '--vimgrep --smart-case'
-    endif
-
-    let &grepprg = 'ag ' . g:ag_vimgrep_opts
+    let &grepprg = 'ag --vimgrep --smart-case'
 
     " ctrlpvim/ctrlp.vim
-    let g:ctrlp_user_command = 'ag %s ' . g:ag_opts
+    let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup --follow --hidden -g ""'
 elseif executable('ack')
     set grepprg=ack\ --nocolor\ --nogroup\ --smart-case\ $*
 elseif executable('ack-grep')
