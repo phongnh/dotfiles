@@ -227,7 +227,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'mattn/emmet-vim'
 
 " Others
-Plug 'phongnh/pgsql.vim'
 Plug 'vim-scripts/fish-syntax'
 
 " Color schemes
