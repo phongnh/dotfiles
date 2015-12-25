@@ -731,14 +731,12 @@ command! -bar Cls execute 'silent! !clear' | redraw!
 command! -bar -nargs=+ -complete=file Grep silent! grep! <args> | cwindow | redraw!
 set grepformat=%f:%l:%m
 
-if executable('hw')
-    " https://github.com/tkengo/highway
-    let &grepprg = 'hw --no-color --no-group -n -i'
-    set grepformat=%f:%l:%m
-elseif executable('sift')
+if executable('sift')
     " https://github.com/svent/sift
     let &grepprg = 'sift --no-color --no-group --binary-skip -n -i $*'
-    set grepformat=%f:%l:%m
+elseif executable('hw')
+    " https://github.com/tkengo/highway
+    let &grepprg = 'hw --no-color --no-group -n -i'
 elseif executable('ag')
     " https://github.com/ggreer/the_silver_searcher
     let &grepprg = 'ag --vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
