@@ -271,8 +271,6 @@ set smartcase   " Do case-sensitive search if pattern contains upper case letter
 set incsearch   " Enable incremental search
 set hlsearch    " Highlight searche result
 
-set grepformat=%f:%l:%c:%m,%f:%l:%m
-
 " Default indent settings
 set tabstop=4 shiftwidth=4
 
@@ -725,8 +723,27 @@ nnoremap <silent> <Leader>il :execute 'match Search /\%' . line('.') . 'l/'<CR>
 " User-defined commands
 " Sudo write
 command! -bang SW w<bang> !sudo tee % >/dev/null
-command! -nargs=+ -complete=file -bar Grep silent! grep! <args> | cwindow | redraw!
+
+" Clear terminal console
 command! -bar Cls execute 'silent! !clear' | redraw!
+
+" Grep
+command! -bar -nargs=+ -complete=file Grep silent! grep! <args> | cwindow | redraw!
+set grepformat=%f:%l:%m
+
+if executable('hw')
+    " https://github.com/tkengo/highway
+    let &grepprg = 'hw --no-color --no-group -n -i'
+    set grepformat=%f:%l:%m
+elseif executable('sift')
+    " https://github.com/svent/sift
+    let &grepprg = 'sift --no-color --no-group --binary-skip -n -i $*'
+    set grepformat=%f:%l:%m
+elseif executable('ag')
+    " https://github.com/ggreer/the_silver_searcher
+    let &grepprg = 'ag --vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
 
 " bling/vim-airline
 let g:airline#extensions#hunks#enabled      = 0
@@ -790,8 +807,14 @@ let g:ctrlp_reuse_window      = 'startify'
 let g:ctrlp_cache_dir         = '~/.vim/cache/ctrlp'
 let g:ctrlp_custom_ignore     = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
-let g:ctrlp_user_command      = 'find %s -type f \( ! -path "*.git/*" -a ! -path "*.hg/*" -a ! -path "*.svn/*" -a ! -path "*.DS_Store" \)'
-" let g:ctrlp_use_caching       = 0
+
+if executable('ag')
+    let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup --follow --hidden -g ""'
+    " let g:ctrlp_use_caching  = 0
+elseif executable('find')
+    let g:ctrlp_user_command = 'find %s -type f' .
+                \ '\( ! -path "*.git/*" -a ! -path "*.hg/*" -a ! -path "*.svn/*" -a ! -path "*.DS_Store" \)'
+endif
 
 nnoremap <silent> [Space]R :CtrlPLastMode --dir<CR>
 
@@ -1061,8 +1084,23 @@ map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
 map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 
 " mhinz/vim-grepper
-command! -nargs=* -complete=file GG Grepper! -tool git -query <args>
-command! -nargs=* -complete=file Ag Grepper! -tool ag  -query <args>
+let g:grepper = {
+            \ 'open': 1,
+            \ 'next_tool': '<C-j>',
+            \ 'tools': ['sift', 'hw', 'ag', 'git', 'grep', 'findstr'],
+            \ 'hw': {
+            \   'grepprg': 'hw --no-color --no-group -n -i $*',
+            \   'grepformat': '%f:%l:%m',
+            \   'escape': '\+*?^$%#()[]',
+            \ },
+            \ 'sift': {
+            \   'grepprg': 'sift --no-color --binary-skip -n -i $*'
+            \ },
+            \ }
+
+command! -nargs=* -complete=file Hw   Grepper! -tool hw   -query <args>
+command! -nargs=* -complete=file Sift Grepper! -tool sift -query <args>
+command! -nargs=* -complete=file Ag   Grepper! -tool ag   -query <args>
 
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
@@ -1503,17 +1541,6 @@ let g:user_emmet_mode            = 'i'
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
-
-if executable('ag')
-    let &grepprg = 'ag --vimgrep --smart-case'
-
-    " ctrlpvim/ctrlp.vim
-    let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup --follow --hidden -g ""'
-elseif executable('ack')
-    set grepprg=ack\ --nocolor\ --nogroup\ --smart-case\ $*
-elseif executable('ack-grep')
-    set grepprg=ack-grep\ --nocolor\ --nogroup\ --smart-case\ $*
-endif
 
 function! s:xmllint_setup()
     let xmllint = 'setlocal equalprg=env\ XMLLINT_INDENT=''%s''\ xmllint\ --format\ --recover\ -\ 2>/dev/null'
