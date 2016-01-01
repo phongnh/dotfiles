@@ -100,8 +100,7 @@ Plug 'junegunn/goyo.vim'
 " Hyperfocus-writing
 Plug 'junegunn/limelight.vim'
 
-" Delete buffers and close files in Vim without closing your windows or messing up your layout.
-" Like Bclose.vim, but rewritten and well maintained.
+" Delete buffers and close files in Vim without closing your windows or messing up your layout
 Plug 'moll/vim-bbye'
 
 " Display the indention levels
