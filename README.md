@@ -25,7 +25,10 @@ My dotfiles for vim + tmux setup
 ## Clone and link my configs
 
     git clone https://github.com/phongnh/dotfiles.git ~/dotfiles
+    # if your vim is built with python and lua
     ln -sf ~/dotfiles/vimrc ~/.vimrc
+    # if your vim has not python and lua
+    ln -sf ~/dotfiles/legacy_vimrc ~/.vimrc
     ln -sf ~/dotfiles/gvimrc ~/.gvimrc
     ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
 
