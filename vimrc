@@ -50,7 +50,7 @@ if has('gui_running')
     endif
 endif
 
-call plug#begin('~/.vim/plugged')
+call plug#begin()
 
 " Asynchronous build and test dispatcher
 Plug 'tpope/vim-dispatch'
@@ -117,9 +117,6 @@ Plug 'Yggdroot/indentLine'
 
 " Syntax checking hacks for vim
 Plug 'scrooloose/syntastic'
-
-" Pairs of handy bracket mappings
-Plug 'tpope/vim-unimpaired'
 
 " Toggle useful settings
 Plug 'phongnh/vim-toggler'
@@ -334,7 +331,6 @@ endif
 set showtabline=0               " Hide tabline
 set laststatus=2                " Always display statusline
 
-set noshowcmd
 " set showcmd                     " Show (partial) command in the last line of the screen
 set cmdheight=2                 " Height of command-line (easy-readable)
 
@@ -649,16 +645,41 @@ nnoremap <silent> <C-o> <C-o>zz
 nnoremap <silent> <C-i> <C-i>zz
 
 
-" Windows and Buffers
-" ]w and [w: Next/Previous tab
-nnoremap <silent> ]w :tabnext<CR>
-nnoremap <silent> [w :tabprevious<CR>
+" Buffer
+nnoremap [b :bprevious<CR>
+nnoremap ]b :bnext<CR>
+nnoremap [B :bfirst<CR>
+nnoremap ]B :blast<CR>
 
-" [W and ]W: First/Last tab
-nnoremap <silent> [W :tabfirst<CR>
-nnoremap <silent> ]W :tablast<CR>
+" Tab
+nnoremap [t :tabprevious<CR>
+nnoremap ]t :tabnext<CR>
+nnoremap [T :tabfirst<CR>
+nnoremap ]T :tablast<CR>
 
-" Navigation using arrows
+" Quickfix
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
+nnoremap [Q :cfirst<CR>
+nnoremap ]Q :clast<CR>
+
+" Location list
+nnoremap [l :lprevious<CR>
+nnoremap ]l :lnext<CR>
+nnoremap [L :lfirst<CR>
+nnoremap ]L :llast<CR>
+
+" Empty lines
+nnoremap <silent> [<Space> :<C-u>put! =<C-r>=repeat(nr2char(10), v:count1)<CR><CR>']+1
+nnoremap <silent> ]<Space> :<C-u>put  =<C-r>=repeat(nr2char(10), v:count1)<CR><CR>'[-1
+
+" Move lines
+nnoremap <silent> [e :<C-u>execute 'move -1-' . v:count1<CR>
+nnoremap <silent> ]e :<C-u>execute 'move +'   . v:count1<CR>
+xnoremap <silent> [e :<C-u>execute "'<,'>move '<-1-" . v:count1<CR>gv
+xnoremap <silent> ]e :<C-u>execute "'<,'>move '>+"   . v:count1<CR>gv
+
+" Window navigation using arrows
 nnoremap <silent> <Left>  <C-w>h
 nnoremap <silent> <Down>  <C-w>j
 nnoremap <silent> <Up>    <C-w>k
@@ -671,8 +692,8 @@ nnoremap gl :buffers<CR>:edit #
 nnoremap <silent> gb :buffer#<CR>
 
 " Horizontal/Vertical split
-nnoremap <silent> [App]- :sp<CR>
-nnoremap <silent> [App]\ :vsp<CR>
+nnoremap <silent> <Leader>- :sp<CR>
+nnoremap <silent> <Leader>\ :vsp<CR>
 
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
@@ -680,8 +701,10 @@ nnoremap <silent> <Leader>Q :confirm qall<CR>
 noremap  <silent> <C-s> :update<CR>
 vnoremap <silent> <C-s> <C-c>:update<CR>
 inoremap <silent> <C-s> <C-o>:update<CR>
+" Close buffer
+nnoremap <silent> <Leader>q :close<CR>
 " Unload buffer
-nnoremap <silent> <Leader>- :bdelete<CR>
+nnoremap <silent> <Leader><Backspace> :bdelete<CR>
 " Equal size windows
 nnoremap <silent> <Leader>= :wincmd =<CR>
 " All other windows are closed
@@ -731,16 +754,16 @@ command! -bar Cls execute 'silent! !clear' | redraw!
 command! -bar -nargs=+ -complete=file Grep silent! grep! <args> | cwindow | redraw!
 set grepformat=%f:%l:%m
 
-if executable('sift')
-    " https://github.com/svent/sift
-    let &grepprg = 'sift --no-color --no-group --binary-skip -n -i $*'
-elseif executable('hw')
-    " https://github.com/tkengo/highway
-    let &grepprg = 'hw --no-color --no-group -n -i'
-elseif executable('ag')
+if executable('ag')
     " https://github.com/ggreer/the_silver_searcher
     let &grepprg = 'ag --vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
     set grepformat=%f:%l:%c:%m,%f:%l:%m
+elseif executable('hw')
+    " https://github.com/tkengo/highway
+    let &grepprg = 'hw --no-color --no-group -n -i'
+elseif executable('sift')
+    " https://github.com/svent/sift
+    let &grepprg = 'sift --no-color --no-group --binary-skip -n -i $*'
 endif
 
 " bling/vim-airline
@@ -809,6 +832,8 @@ let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
 if executable('ag')
     let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup --follow --hidden -g ""'
     " let g:ctrlp_use_caching  = 0
+elseif executable('dir')
+    let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 elseif executable('find')
     let g:ctrlp_user_command = 'find %s -type f' .
                 \ '\( ! -path "*.git/*" -a ! -path "*.hg/*" -a ! -path "*.svn/*" -a ! -path "*.DS_Store" \)'
@@ -1047,20 +1072,6 @@ let g:syntastic_style_warning_symbol     = 'S!'
 nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 inoremap <silent> <F6> <Esc>:SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 
-" tpope/vim-unimpaired
-augroup MyAutoCmd
-    autocmd VimEnter * silent! nunmap >P
-    autocmd VimEnter * silent! nunmap >p
-    autocmd VimEnter * silent! nunmap <P
-    autocmd VimEnter * silent! nunmap <p
-    autocmd VimEnter * silent! nunmap =p
-    autocmd VimEnter * silent! nunmap =P
-
-    " Reselect text after moving
-    autocmd VimEnter * xnoremap <silent> [e :move -2<CR>gv
-    autocmd VimEnter * xnoremap <silent> ]e :move '>+<CR>gv
-augroup END
-
 " haya14busa/incsearch.vim
 " let g:incsearch#magic                             = '\v'
 let g:incsearch#auto_nohlsearch                   = 1
@@ -1084,29 +1095,26 @@ map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 " mhinz/vim-grepper
 let g:grepper = {
             \ 'open': 1,
+            \ 'jump': 0,
             \ 'next_tool': '<C-j>',
-            \ 'tools': ['sift', 'hw', 'ag', 'git', 'grep', 'findstr'],
+            \ 'tools': ['ag', 'hw', 'sift', 'git', 'grep', 'findstr'],
             \ 'hw': {
             \   'grepprg': 'hw --no-color --no-group -n -i $*',
             \   'grepformat': '%f:%l:%m',
             \   'escape': '\+*?^$%#()[]',
             \ },
             \ 'sift': {
-            \   'grepprg': 'sift --no-color --binary-skip -n -i $*'
+            \   'grepprg': 'sift --no-color --binary-skip -n -i --exclude-dirs .git --exclude-files tags $*'
             \ },
             \ }
 
-command! -nargs=* -complete=file Hw   Grepper! -tool hw   -query <args>
-command! -nargs=* -complete=file Sift Grepper! -tool sift -query <args>
-command! -nargs=* -complete=file Ag   Grepper! -tool ag   -query <args>
-
-nmap gs <plug>(GrepperOperator)
-xmap gs <plug>(GrepperOperator)
+nmap gs <Plug>(GrepperOperator)
+xmap gs <Plug>(GrepperOperator)
 
 nnoremap [App]S :Grepper!<CR>
 
-nnoremap [App]s :Grepper! -query <C-r>=GetWordForSearch()<CR><Space>
-xnoremap [App]s <Esc>:Grepper! -query <C-r>=GetSelectedTextForSearch()<CR><Space>
+nnoremap [App]s :Grepper! -cword<CR>
+xmap     [App]s <Plug>(GrepperOperator)
 
 " tpope/vim-surround
 let g:surround_indent             = 1
@@ -1271,8 +1279,10 @@ let g:signify_cursorhold_normal     = 0
 let g:signify_update_on_bufenter    = 0
 let g:signify_update_on_focusgained = 0
 
-nmap ]h <Plug>(signify-next-hunk)zz
-nmap [h <Plug>(signify-prev-hunk)zz
+nmap ]c <Plug>(signify-next-hunk)zz
+nmap ]C 999]c
+nmap [c <Plug>(signify-prev-hunk)zz
+nmap [C 999[c
 
 nnoremap <silent> cog :SignifyToggle<CR>
 
