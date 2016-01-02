@@ -828,59 +828,35 @@ call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file', 'converters
 " call unite#custom#source('line,outline', 'matchers', ['matcher_context'])
 call unite#custom#source('line,outline', 'matchers', ['matcher_fuzzy'])
 
+let s:system_open_action = { 'is_selectable': 1 }
+
+function! s:system_open_action.func(candidates)
+    for candidate in a:candidates
+        if !isdirectory(candidate.action__path)
+            silent! execute "!open " . fnameescape(candidate.action__path) . " &"
+        endif
+    endfor
+    redraw!
+endfunction
+
 function! s:my_unite_settings()
-    let SystemOpenAction = { 'is_selectable': 1 }
-
-    function! SystemOpenAction.func(candidates)
-        for candidate in a:candidates
-            if !isdirectory(candidate.action__path)
-                silent! execute "!open " . fnameescape(candidate.action__path) . " &"
-            endif
-        endfor
-        redraw!
-    endfunction
-
-    call unite#custom#action('file', 'system-open', SystemOpenAction)
-
-    unlet SystemOpenAction
+    call unite#custom#action('file', 'system-open', s:system_open_action)
 
     call unite#custom#alias('file', 'h', 'left')
     call unite#custom#default_action('directory', 'narrow')
 
-    nmap <buffer> <Esc> <Plug>(unite_exit)
     imap <buffer> <Esc> <Plug>(unite_exit)
     imap <buffer> <C-r> <Plug>(unite_insert_leave)<Plug>(unite_restart)
 
     imap <buffer> <Tab> <Plug>(unite_complete)
     imap <buffer> '     <Plug>(unite_quick_match_default_action)
-    nmap <buffer> '     <Plug>(unite_quick_match_default_action)
-    nmap <buffer> x     <Plug>(unite_quick_match_jump)
 
     inoremap <buffer> <expr> <C-s>
                 \ unite#mappings#set_current_matchers(
                 \ empty(unite#mappings#get_current_matchers()) ?
                 \ ['matcher_context'] : [])
 
-    nnoremap <buffer> <expr> <C-s>
-                \ unite#mappings#set_current_matchers(
-                \ empty(unite#mappings#get_current_matchers()) ?
-                \ ['matcher_context'] : [])
-
     inoremap <silent> <buffer> <expr> <C-o> unite#do_action('system-open')
-    nnoremap <silent> <buffer> <expr> <C-o> unite#do_action('system-open')
-
-    nnoremap <silent> <buffer> <Tab> <C-w>w
-    nnoremap <silent> <buffer> <expr> l unite#smart_map('l', unite#do_action('default'))
-
-    let unite = unite#get_current_unite()
-    if unite.profile_name ==# '^search'
-        nnoremap <silent> <buffer> <expr> r unite#do_action('replace')
-    else
-        nnoremap <silent> <buffer> <expr> r unite#do_action('rename')
-    endif
-
-    nnoremap <silent> <buffer> <expr> cd unite#do_action('lcd')
-    nnoremap <silent> <buffer> <expr> !  unite#do_action('start')
 endfunction
 
 autocmd MyAutoCmd FileType unite call s:my_unite_settings()
