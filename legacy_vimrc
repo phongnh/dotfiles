@@ -213,6 +213,7 @@ Plug 'sheerun/vim-polyglot'
 
 " Web
 Plug 'mattn/emmet-vim'
+Plug 'gregsexton/MatchTag' " Markup Language (HTML, Markdown, Stylus, Jade and Mustache)
 
 " Others
 Plug 'vim-scripts/fish-syntax'

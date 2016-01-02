@@ -58,11 +58,8 @@ Plug 'tpope/vim-dispatch'
 " lean & mean status/tabline
 Plug 'bling/vim-airline'
 
-" A light and configurable statusline/tabline for Vim
-" Plug 'itchyny/lightline.vim'
-
 " Set vim cursor for iTerm
-" Plug 'phongnh/vim-iterm-cursor'
+Plug 'phongnh/vim-iterm-cursor'
 
 " CtrlP
 Plug 'FelikZ/ctrlp-py-matcher'
@@ -221,6 +218,7 @@ Plug 'sheerun/vim-polyglot'
 
 " Web
 Plug 'mattn/emmet-vim'
+Plug 'gregsexton/MatchTag' " Markup Language (HTML, Markdown, Stylus, Jade and Mustache)
 
 " Others
 Plug 'vim-scripts/fish-syntax'
