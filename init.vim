@@ -23,8 +23,6 @@ let g:omni_sql_no_default_maps = 1
 let g:ftplugin_sql_omni_key    = ''
 
 if has('gui_running')
-    set noshowcmd
-
     set linespace=2         " Add some line space for easy reading
 
     xnoremap <silent> <D-c> "*y
@@ -288,8 +286,6 @@ set formatoptions+=1            " Don't break a line after a one-letter word
 if v:version > 703 || v:version == 703 && has('patch541')
     set formatoptions+=j        " Delete comment character when joining commented lines
 endif
-
-set showtabline=0               " Hide tabline
 
 " set showcmd                     " Show (partial) command in the last line of the screen
 set cmdheight=2                 " Height of command-line (easy-readable)
@@ -757,7 +753,6 @@ endif
 let g:airline_symbols.readonly   = 'RO'
 let g:airline_symbols.paste      = 'PASTE'
 let g:airline_symbols.whitespace = '*'
-let g:clipboard_symbol = ' @'
 
 call airline#parts#define('mode', {
             \ 'function': 'AirlineModeAndClipboard',
@@ -765,8 +760,10 @@ call airline#parts#define('mode', {
             \ })
 
 function! AirlineModeAndClipboard()
-    return airline#parts#mode() . (match(&clipboard, 'unnamed') > -1 ? g:clipboard_symbol : '')
+    return airline#parts#mode() . (match(&clipboard, 'unnamed') > -1 ? ' @' : '')
 endfunction
+
+autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
 " Shougo/unite.vim
 let g:unite_data_directory             = '~/.vim/cache/unite'
@@ -1597,8 +1594,6 @@ function! s:xmllint_setup()
 endfunction
 
 augroup MyAutoCmd
-    autocmd VimEnter * set showtabline=1 noshowmode
-
     " Set file type
     autocmd BufNewFile,BufRead *.nvim setlocal filetype=vim
     autocmd BufNewFile,BufRead *.fastercsv,*.prawn setlocal filetype=ruby

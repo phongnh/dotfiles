@@ -325,7 +325,6 @@ if v:version > 703 || v:version == 703 && has('patch541')
     set formatoptions+=j        " Delete comment character when joining commented lines
 endif
 
-set showtabline=0               " Hide tabline
 set laststatus=2                " Always display statusline
 
 " set showcmd                     " Show (partial) command in the last line of the screen
@@ -797,7 +796,6 @@ endif
 let g:airline_symbols.readonly   = 'RO'
 let g:airline_symbols.paste      = 'PASTE'
 let g:airline_symbols.whitespace = '*'
-let g:clipboard_symbol = ' @'
 
 call airline#parts#define('mode', {
             \ 'function': 'AirlineModeAndClipboard',
@@ -805,8 +803,10 @@ call airline#parts#define('mode', {
             \ })
 
 function! AirlineModeAndClipboard()
-    return airline#parts#mode() . (match(&clipboard, 'unnamed') > -1 ? g:clipboard_symbol : '')
+    return airline#parts#mode() . (match(&clipboard, 'unnamed') > -1 ? ' @' : '')
 endfunction
+
+autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
 " FelikZ/ctrlp-py-matcher
 " let g:ctrlp_lazy_update         = 350
@@ -1554,8 +1554,6 @@ function! s:xmllint_setup()
 endfunction
 
 augroup MyAutoCmd
-    autocmd VimEnter * set showtabline=1 noshowmode
-
     " Set file type
     autocmd BufNewFile,BufRead *.nvim setlocal filetype=vim
     autocmd BufNewFile,BufRead *.fastercsv,*.prawn setlocal filetype=ruby
