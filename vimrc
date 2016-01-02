@@ -1101,7 +1101,7 @@ let g:grepper = {
             \   'escape': '\+*?^$%#()[]',
             \ },
             \ 'sift': {
-            \   'grepprg': 'sift --no-color --binary-skip -n -i --exclude-dirs .git --exclude-files tags $*'
+            \   'grepprg': 'sift --no-color --no-group --binary-skip -n -i $*'
             \ },
             \ }
 

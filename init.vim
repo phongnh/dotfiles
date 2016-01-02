@@ -774,17 +774,17 @@ if executable('ag')
     let g:unite_source_rec_async_command  = ['ag', '-l', '--nocolor', '--nogroup', '--follow', '--hidden', '-g', '']
 endif
 
-if executable('sift')
-    let g:unite_source_grep_command       = 'sift'
-    let g:unite_source_grep_default_opts  = '--no-group --no-color --binary-skip -n -i'
-    let g:unite_source_grep_recursive_opt = ''
-elseif executable('hw')
+if executable('hw')
     let g:unite_source_grep_command       = 'hw'
-    let g:unite_source_grep_default_opts  = '--no-group --no-color -n -i'
+    let g:unite_source_grep_default_opts  = '--no-color --no-group -n -i'
     let g:unite_source_grep_recursive_opt = ''
 elseif executable('ag')
     let g:unite_source_grep_command       = 'ag'
     let g:unite_source_grep_default_opts  = '--vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+    let g:unite_source_grep_recursive_opt = ''
+elseif executable('sift')
+    let g:unite_source_grep_command       = 'sift'
+    let g:unite_source_grep_default_opts  = '--no-color --no-group --binary-skip -n -i'
     let g:unite_source_grep_recursive_opt = ''
 endif
 
@@ -801,7 +801,7 @@ call unite#custom#profile('files', 'context', { 'smartcase': 1 })
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 
-call unite#custom#source('file_rec/git,file_rec/neovim,neomru/file,neomru/directory,file,buffer,grep',
+call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file,neomru/directory,buffer,grep',
             \ 'ignore_pattern',
             \ join([
             \ '\.git/',
@@ -811,7 +811,7 @@ call unite#custom#source('file_rec/git,file_rec/neovim,neomru/file,neomru/direct
             \ 'tmp/',
             \ ], '\|'))
 
-call unite#custom#source('buffer,file_rec/git,file_rec/neovim', 'matchers', [
+call unite#custom#source('file_rec/neovim,file_rec/git,buffer', 'matchers', [
             \ 'converter_relative_word',
             \ 'matcher_fuzzy'
             \ ])
@@ -823,7 +823,7 @@ call unite#custom#source('neomru/file', 'matchers', [
             \ 'matcher_hide_current_file'
             \ ])
 
-call unite#custom#source('file_rec/git,file_rec/neovim,neomru/file', 'converters', ['converter_file_directory'])
+call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file', 'converters', ['converter_file_directory'])
 
 " call unite#custom#source('line,outline', 'matchers', ['matcher_context'])
 call unite#custom#source('line,outline', 'matchers', ['matcher_fuzzy'])
@@ -902,7 +902,7 @@ nnoremap <silent> [Space]g :Unite -resume -input= -buffer-name=files file_rec/gi
 nnoremap          [Space]G :Unite -resume -buffer-name=files file_rec/git:
 
 nnoremap <silent> [Space]c :Unite file_rec/neovim:<C-r>=expand("%:h")<CR> file/new:<C-r>=expand("%:h")<CR><CR>
-nnoremap <silent> [Space]C :Unite file_rec/neovim:<C-r>=fnamemodify(expand("%:h"), ':h')<CR> file/new:<C-r>=fnamemodify(expand("%:h"), ':h')<CR><CR>
+nnoremap <silent> [Space]C :Unite file_rec/neovim:<C-r>=expand("%:h:h")<CR> file/new:<C-r>=expand("%:h:h")<CR><CR>
 
 nnoremap <silent> [Space]b :Unite buffer<CR>
 nnoremap <silent> [Space]t :Unite tab<CR>
@@ -1144,7 +1144,7 @@ let g:grepper = {
             \   'escape': '\+*?^$%#()[]',
             \ },
             \ 'sift': {
-            \   'grepprg': 'sift --no-color --binary-skip -n -i --exclude-dirs .git --exclude-files tags $*'
+            \   'grepprg': 'sift --no-color --no-group --binary-skip -n -i $*'
             \ },
             \ }
 
