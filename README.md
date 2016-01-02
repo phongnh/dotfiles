@@ -46,7 +46,7 @@ My dotfiles for vim + tmux setup
     # If vim has both python and lua
     ln -sf ~/dotfiles/vimrc ~/.vimrc
     # If vim has neither python nand lua
-    ln -sf ~/dotfiles/legacy_vimrc ~/.vimrc
+    ln -sf ~/dotfiles/legacy.vimrc ~/.vimrc
     # Using neovim
     ln -sf ~/dotfiles/init.vim ~/.config/nvim/init.vim
 
