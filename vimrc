@@ -153,16 +153,16 @@ Plug 'jiangmiao/auto-pairs'
 
 " Text Objects
 Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-line'             " l
-Plug 'kana/vim-textobj-indent'           " i
-Plug 'kana/vim-textobj-entire'           " e
-Plug 'glts/vim-textobj-comment'          " c
-Plug 'mattn/vim-textobj-url'             " u
-Plug 'rhysd/vim-textobj-word-column'     " v V
-Plug 'rhysd/vim-textobj-anyblock'        " b
-Plug 'thinca/vim-textobj-between'        " f{char}, remapped to n{char}
-Plug 'sgur/vim-textobj-parameter'        " ,
-Plug 'whatyouhide/vim-textobj-xmlattr'   " x
+Plug 'kana/vim-textobj-line'               " l
+Plug 'kana/vim-textobj-indent'             " i
+Plug 'kana/vim-textobj-entire'             " e
+Plug 'glts/vim-textobj-comment'            " c
+Plug 'mattn/vim-textobj-url'               " u
+Plug 'Julian/vim-textobj-variable-segment' " v
+Plug 'rhysd/vim-textobj-anyblock'          " b
+Plug 'thinca/vim-textobj-between'          " f{char}, remapped to n{char}
+Plug 'sgur/vim-textobj-parameter'          " ,
+Plug 'whatyouhide/vim-textobj-xmlattr'     " x
 
 " Plug 'tek/vim-textobj-ruby', { 'for': 'ruby' }        " r: block, f: function, c: class/module, n: name
 Plug 'rhysd/vim-textobj-ruby', { 'for': 'ruby' }        " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
@@ -1180,12 +1180,8 @@ let g:commentary_map_backslash = 0
 xnoremap <silent> <Enter> :EasyAlign<Enter>
 
 " godlygeek/tabular
-nmap          <Leader>aa :Tabularize /
-xmap          <Leader>aa :Tabularize /
-nmap <silent> <Leader>a= :Tabularize /=<CR>
-xmap <silent> <Leader>a= :Tabularize /=<CR>
-nmap <silent> <Leader>a: :Tabularize /:\zs<CR>
-xmap <silent> <Leader>a: :Tabularize /:\zs<CR>
+nnoremap [App]<Enter> :Tabularize /
+xnoremap [App]<Enter> :Tabularize /
 
 autocmd MyAutoCmd FileType cucumber inoremap <silent> <buffer> <Bar> <Bar><Esc>:call <SID>BarAlign()<CR>a
 
