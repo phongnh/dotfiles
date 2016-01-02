@@ -229,8 +229,6 @@ Plug 'morhetz/gruvbox'
 
 call plug#end()
 
-" set ttimeout ttimeoutlen=1000
-
 " Make ESC respond faster
 set timeoutlen=1000
 set ttimeoutlen=0
