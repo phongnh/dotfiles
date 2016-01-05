@@ -35,11 +35,11 @@ tnoremap <Esc> <C-\><C-n>
 
 call plug#begin()
 
-" Interactive command execution
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-
 " lean & mean status/tabline
 Plug 'bling/vim-airline'
+
+" Interactive command execution
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
 " Unite and create user interfaces
 Plug 'Shougo/unite.vim'
@@ -72,8 +72,13 @@ Plug 'mhinz/vim-startify'
 " A plugin for asynchronous :make using Neovim's job-control functionality
 Plug 'benekastah/neomake'
 
-" Vim undo tree visualizer
-Plug 'simnalamburt/vim-mundo'
+if has('python')
+    " Vim undo tree visualizer
+    Plug 'simnalamburt/vim-mundo'
+else
+    " The ultimate undo history visualizer for VIM
+    Plug 'mbbill/undotree'
+endif
 
 " A class/symbol outline viewer
 Plug 'majutsushi/tagbar'
@@ -217,9 +222,7 @@ Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
 
 " Color schemes
 " Dark and light themes
-Plug 'NLKNguyen/papercolor-theme'
 Plug 'morhetz/gruvbox'
-Plug 'junegunn/seoul256.vim'
 
 call plug#end()
 
@@ -1048,15 +1051,24 @@ let g:neomake_echo_current_error = 1
 nnoremap <silent> <F6> :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
 inoremap <silent> <F6> <Esc>:Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
 
-" sjl/gundo.vim
-let g:gundo_right          = 1
-let g:gundo_width          = 30
-let g:gundo_preview_bottom = 1
-let g:gundo_preview_height = 18
-let g:gundo_auto_preview   = 0
+if has('python')
+    " simnalamburt/vim-mundo
+    let g:gundo_right          = 1
+    let g:gundo_width          = 30
+    let g:gundo_preview_bottom = 1
+    let g:gundo_preview_height = 18
+    let g:gundo_auto_preview   = 0
 
-nnoremap <silent> <F7> :GundoToggle<CR>
-inoremap <silent> <F7> <Esc>:GundoToggle<CR>
+    nnoremap <silent> <F7> :GundoToggle<CR>
+    inoremap <silent> <F7> <Esc>:GundoToggle<CR>
+else
+    " mbbill/undotree
+    let g:undotree_WindowLayout       = 'botright'
+    let g:undotree_SetFocusWhenToggle = 1
+
+    nnoremap <silent> <F7> :UndotreeToggle<CR>
+    inoremap <silent> <F7> <Esc>:UndotreeToggle<CR>
+endif
 
 " majutsushi/tagbar
 let g:tagbar_sort      = 0
@@ -1683,10 +1695,6 @@ autocmd MyAutoCmd FileType go call s:VimGoSetup()
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
-
-" junegunn/seoul256.vim
-let g:seoul256_background = 235
-let g:seoul256_light_background = 254
 
 function! s:xmllint_setup()
     let xmllint = 'setlocal equalprg=env\ XMLLINT_INDENT=''%s''\ xmllint\ --format\ --recover\ -\ 2>/dev/null'

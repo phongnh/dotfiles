@@ -52,14 +52,14 @@ endif
 
 call plug#begin()
 
-" Asynchronous build and test dispatcher
-Plug 'tpope/vim-dispatch'
-
 " lean & mean status/tabline
 Plug 'bling/vim-airline'
 
 " Set vim cursor for iTerm
 Plug 'phongnh/vim-iterm-cursor'
+
+" Asynchronous build and test dispatcher
+Plug 'tpope/vim-dispatch'
 
 " CtrlP
 if has('python')
@@ -1351,7 +1351,7 @@ if has('lua')
 
     " Plugin key-mappings
     " <C-e>: close popup
-    inoremap <expr> <C-e> pumvisible() ? neocomplcache#cancel_popup() : "\<End>"
+    inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
     " <C-h>: close popup and word backward
     inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-o>b"
     " <C-l>: close popup and word forward
@@ -1692,10 +1692,6 @@ autocmd MyAutoCmd FileType go call s:VimGoSetup()
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
-
-" junegunn/seoul256.vim
-let g:seoul256_background = 235
-let g:seoul256_light_background = 254
 
 function! s:xmllint_setup()
     let xmllint = 'setlocal equalprg=env\ XMLLINT_INDENT=''%s''\ xmllint\ --format\ --recover\ -\ 2>/dev/null'
