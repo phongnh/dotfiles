@@ -21,7 +21,7 @@ if has('gui_macvim')
     xnoremap <silent> <D-c> "*y
     xnoremap <silent> <D-x> "*x
     nnoremap <silent> <D-v> "*gP
-    inoremap <silent> <D-v> <C-g>u<C-o>"*gP
+    inoremap <silent> <D-v> <C-G>u<C-O>"*gP
 elseif has("gui_gnome") || has('gui_gtk')
     set guifont=Source\ Code\ Pro\ 9
 endif

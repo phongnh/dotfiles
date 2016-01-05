@@ -114,6 +114,9 @@ Plug 'majutsushi/tagbar'
 " A tree explorer plugin for vim
 Plug 'scrooloose/nerdtree'
 
+" BufExplorer Plugin for Vim
+Plug 'jlanzarotta/bufexplorer'
+
 " Delete buffers and close files in Vim without closing your windows or messing up your layout
 Plug 'moll/vim-bbye'
 
@@ -410,78 +413,66 @@ nnoremap <F1> :help<Space>
 inoremap <F1> <Esc>:help<Space>
 
 " Command-line Mode Mappings
-" Ctrl-[ae]: Move to Home/End
-cnoremap <C-a> <Home>
-cnoremap <C-e> <End>
+" CTRL-[AE]: Move to Home/End
+cnoremap <C-A> <Home>
+cnoremap <C-E> <End>
 
-" Ctrl-[fb]: Next/Previous char
-cnoremap <C-f> <Right>
-cnoremap <C-b> <Left>
+" CTRL-[FB]: Next/Previous char
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
 
-" Ctrl-[hl]: Move left/right by word
-cnoremap <C-h> <S-Left>
-cnoremap <C-l> <S-Right>
+" CTRL-[HL]: Move left/right by word
+cnoremap <C-H> <S-Left>
+cnoremap <C-L> <S-Right>
 
-" Ctrl-Space: Show history
-cnoremap <C-@> <C-f>
+" CTRL-Space: Show history
+cnoremap <C-@> <C-F>
 
-" Ctrl-[np]: Next/Previous history
-cnoremap <C-n> <Down>
-cnoremap <C-p> <Up>
+" CTRL-[NP]: Next/Previous history
+cnoremap <C-N> <Down>
+cnoremap <C-P> <Up>
 
-" <C-d>: Delete char
-cnoremap <C-d> <Del>
+" CTRL-D: Delete char
+cnoremap <C-D> <Del>
 
-" <C-k>: Delete to end
-cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
+" CTRL-K: Delete to end
+cnoremap <C-K> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 
-" Ctrl-v: Paste from clipboard
-cnoremap <C-v> <C-r>*
+" CTRL-V: Paste from clipboard
+cnoremap <C-V> <C-R>*
 
-" Ctrl-y: Paste from register "
-cnoremap <C-y> <C-r>"
+" CTRL-Y: Paste from register "
+cnoremap <C-Y> <C-R>"
 
 " Insert Mode Mappings
-" Enable undo <C-w> (Delete word) and <C-u> (Delete line)
-inoremap <C-w> <C-g>u<C-w>
-inoremap <C-u> <C-g>u<C-u>
+" Enable undo CTRL-W (Delete word) and CTRL-U (Delete line)
+inoremap <C-W> <C-G>u<C-W>
+inoremap <C-U> <C-G>u<C-U>
 
-" Ctrl-/: Undo
-inoremap <C-_> <C-o>u
+" CTRL-/: Undo
+inoremap <C-_> <C-O>u
 
-" Ctrl-[ae]: Move to Home/End
-inoremap <C-a> <Esc>I
-inoremap <C-e> <Esc>A
+" CTRL-[AE]: Move to Home/End
+inoremap <C-A> <Home>
+inoremap <C-E> <End>
 
-" Ctrl-d: Delete char
-inoremap <C-d> <Del>
+" CTRL-D: Delete char
+inoremap <C-D> <Del>
 
-" Ctrl-b: Move cursor left
-inoremap <C-b> <Left>
-inoremap <expr> <C-b> pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<Left>"
+" CTRL-b: Move cursor left
+inoremap <C-B> <Left>
+inoremap <expr> <C-B> pumvisible() ? "\<PageUp>"   : "\<Left>"
 
-" Ctrl-f: Move cursor right
-inoremap <C-b> <Right>
-inoremap <expr> <C-f> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<Right>"
+" CTRL-F: Move cursor right
+inoremap <C-F> <Right>
+inoremap <expr> <C-F> pumvisible() ? "\<PageDown>" : "\<Right>"
 
-" Ctrl-h: Move word left
-inoremap <C-h> <C-o>b
-
-" Ctrl-j: Move cursor down
-inoremap <expr> <C-j> pumvisible() ? "\<C-e>\<Down>" : "\<Down>"
-
-" Ctrl-k: Move cursor up
-inoremap <expr> <C-k> pumvisible() ? "\<C-e>\<Up>" : "\<Up>"
-
-" Ctrl-l: Move word right
-inoremap <C-l> <C-o>w
-
-" Ctrl-t: Insert tab
-inoremap <silent> <C-t> <C-v><Tab>
+" CTRL-T: Insert tab
+inoremap <silent> <C-T> <C-V><Tab>
 
 " Jump to last active buffer
-inoremap <C-^> <C-c><C-^>
-" inoremap <C-^> <C-c>:update<CR><C-^>
+inoremap <C-^> <C-C><C-^>
+" inoremap <C-^> <C-C>:update<CR><C-^>
 
 " Normal Mode Mappings
 " Useless command
@@ -497,10 +488,10 @@ xnoremap . :normal.<CR>
 " @: repeats macro on every line
 xnoremap @ :normal@
 
-" Disable ZZ, ZQ, Ctrl-z
+" Disable ZZ, ZQ, CTRL-Z
 nnoremap ZZ    <Nop>
 nnoremap ZQ    <Nop>
-nnoremap <C-z> <Nop>
+nnoremap <C-Z> <Nop>
 
 " Indent
 nnoremap >       >>
@@ -522,7 +513,7 @@ xnoremap L g_
 " Select until end of current line in visual mode
 xnoremap v $h
 " Select rectangle - Visual Block
-xnoremap r <C-v>
+xnoremap r <C-V>
 
 " gi already moves to "last place you exited insert mode"
 " gI: Move to last change
@@ -576,7 +567,7 @@ endfunction
 nnoremap <silent> <Leader>y :call <SID>CopyYankedText()<CR>
 
 " Paste from clipboard
-inoremap <silent> <C-v>     <C-g>u<C-o>"*gP
+inoremap <silent> <C-V>     <C-G>u<C-O>"*gP
 nnoremap <silent> <Leader>p "*gP
 nnoremap <silent> <Leader>P :set paste<CR>"*gP:set nopaste<CR>
 
@@ -587,26 +578,26 @@ nnoremap <silent> <Leader>V o<Esc>"*gpm``[=`]``^
 " Middle mouse to paste from clipboard
 nnoremap <MiddleMouse> "*P
 xnoremap <MiddleMouse> "*P
-inoremap <MiddleMouse> <C-o><C-r>*
-cnoremap <MiddleMouse> <C-r>*
+inoremap <MiddleMouse> <C-O><C-R>*
+cnoremap <MiddleMouse> <C-R>*
 
 " Paste with indent
 nnoremap <silent> ]v o<Esc>pm``[=`]``^
 nnoremap <silent> [v O<esc>pm``[=`]``^
 
 " Redraw
-nnoremap <silent> <Plug>(clear-and-redraw) :<C-u>echo<CR>:nohlsearch<CR>:match<CR>:redraw!<CR>
+nnoremap <silent> <Plug>(clear-and-redraw) :<C-U>echo<CR>:nohlsearch<CR>:match<CR>:redraw!<CR>
 nmap <silent> <Leader><Space> <Plug>(clear-and-redraw)
 
 " Use <C-\> to do <C-]> but open it in a new split
-nnoremap <C-\> <C-w>v<C-]>zvzz
+nnoremap <C-\> <C-W>v<C-]>zvzz
 
 " Search and Replace
 nnoremap <Leader>r :%s//gc<Left><Left><Left>
-nnoremap <Leader>R :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+nnoremap <Leader>R :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
 
 xnoremap <Leader>r :s/\%V/gc<Left><Left><Left>
-xnoremap <Leader>R <Esc>:%s/<C-r>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xnoremap <Leader>R <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
 
 " Folding
 " If press h on head, fold close
@@ -646,8 +637,8 @@ nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:echo 'foldcolumn = '
 " nnoremap <silent> g#    g#zzzv
 nnoremap <silent> g;    g;zz
 nnoremap <silent> g,    g,zz
-nnoremap <silent> <C-o> <C-o>zz
-nnoremap <silent> <C-i> <C-i>zz
+nnoremap <silent> <C-O> <C-O>zz
+nnoremap <silent> <C-I> <C-I>zz
 
 
 " Buffer
@@ -675,20 +666,20 @@ nnoremap [L :lfirst<CR>
 nnoremap ]L :llast<CR>
 
 " Empty lines
-nnoremap <silent> [<Space> :<C-u>put! =<C-r>=repeat(nr2char(10), v:count1)<CR><CR>']+1
-nnoremap <silent> ]<Space> :<C-u>put  =<C-r>=repeat(nr2char(10), v:count1)<CR><CR>'[-1
+nnoremap <silent> [<Space> :<C-U>put! =<C-R>=repeat(nr2char(10), v:count1)<CR><CR>']+1
+nnoremap <silent> ]<Space> :<C-U>put  =<C-R>=repeat(nr2char(10), v:count1)<CR><CR>'[-1
 
 " Move lines
-nnoremap <silent> [e :<C-u>execute 'move -1-' . v:count1<CR>
-nnoremap <silent> ]e :<C-u>execute 'move +'   . v:count1<CR>
-xnoremap <silent> [e :<C-u>execute "'<,'>move '<-1-" . v:count1<CR>gv
-xnoremap <silent> ]e :<C-u>execute "'<,'>move '>+"   . v:count1<CR>gv
+nnoremap <silent> [e :<C-U>execute 'move -1-' . v:count1<CR>
+nnoremap <silent> ]e :<C-U>execute 'move +'   . v:count1<CR>
+xnoremap <silent> [e :<C-U>execute "'<,'>move '<-1-" . v:count1<CR>gv
+xnoremap <silent> ]e :<C-U>execute "'<,'>move '>+"   . v:count1<CR>gv
 
 " Window navigation using arrows
-nnoremap <silent> <Left>  <C-w>h
-nnoremap <silent> <Down>  <C-w>j
-nnoremap <silent> <Up>    <C-w>k
-nnoremap <silent> <Right> <C-w>l
+nnoremap <silent> <Left>  <C-W>h
+nnoremap <silent> <Down>  <C-W>j
+nnoremap <silent> <Up>    <C-W>k
+nnoremap <silent> <Right> <C-W>l
 
 " gl: List buffers
 nnoremap gl :buffers<CR>:edit #
@@ -703,9 +694,9 @@ nnoremap <silent> <Leader>\ :vsp<CR>
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
 " Save buffer
-noremap  <silent> <C-s> :update<CR>
-vnoremap <silent> <C-s> <C-c>:update<CR>
-inoremap <silent> <C-s> <C-o>:update<CR>
+noremap  <silent> <C-S> :update<CR>
+vnoremap <silent> <C-S> <C-C>:update<CR>
+inoremap <silent> <C-S> <C-O>:update<CR>
 " Close buffer
 nnoremap <silent> <Leader>q :close<CR>
 " Unload buffer
@@ -832,7 +823,7 @@ let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_reuse_window      = 'startify'
 let g:ctrlp_cache_dir         = '~/.vim/cache/ctrlp'
 let g:ctrlp_custom_ignore     = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
+let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-Z>', '<C-@>'], }
 
 if executable('ag')
     let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup --follow --hidden -g ""'
@@ -857,7 +848,7 @@ nnoremap <silent> [Space]f :CtrlP<CR>
 nnoremap          [Space]F :CtrlP<Space>
 
 nnoremap <silent> [Space]c :CtrlPCurFile<CR>
-nnoremap <silent> [Space]C :CtrlP <C-r>=fnamemodify(expand("%:h"), ':h')<CR><CR>
+nnoremap <silent> [Space]C :CtrlP <C-R>=fnamemodify(expand("%:h"), ':h')<CR><CR>
 
 nnoremap <silent> [Space]b :CtrlPBuffer<CR>
 
@@ -1077,6 +1068,12 @@ inoremap <silent> <F9>  <Esc>:NERDTreeToggle<CR>
 nnoremap <silent> <F10> :NERDTreeFind<CR>
 inoremap <silent> <F10> <Esc>:NERDTreeFind<CR>
 
+" jlanzarotta/bufexplorer
+let g:bufExplorerDisableDefaultKeyMapping = 1
+let g:bufExplorerShowDirectories          = 0
+let g:bufExplorerShowRelativePath         = 1
+nnoremap <silent> gl :ToggleBufExplorer<CR>
+
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
 
@@ -1104,7 +1101,7 @@ map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 let g:grepper = {
             \ 'open': 1,
             \ 'jump': 0,
-            \ 'next_tool': '<C-j>',
+            \ 'next_tool': '<C-J>',
             \ 'tools': ['ag', 'hw', 'sift', 'git', 'grep', 'findstr'],
             \ 'hw': {
             \   'grepprg': 'hw --no-color --no-group -n -i $*',
@@ -1128,12 +1125,12 @@ xmap     [App]s <Plug>(GrepperOperator)
 let g:surround_indent             = 1
 let g:surround_no_insert_mappings = 1
 
-" nmap <C-s><C-w> ysiw
+" nmap <C-S><C-W> ysiw
 
 augroup MyAutoCmd
-    autocmd VimEnter * silent! iunmap <C-g>s
-    autocmd VimEnter * silent! iunmap <C-g>S
-    autocmd BufEnter * silent! iunmap <buffer> <C-g>g
+    autocmd VimEnter * silent! iunmap <C-G>s
+    autocmd VimEnter * silent! iunmap <C-G>S
+    autocmd BufEnter * silent! iunmap <buffer> <C-G>g
 augroup END
 
 " jiangmiao/auto-pairs
@@ -1254,9 +1251,9 @@ map + <Plug>(expand_region_expand)
 
 " terryma/vim-multiple-cursors
 let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_next_key            = '<C-N>'
+let g:multi_cursor_prev_key            = '<C-P>'
+let g:multi_cursor_skip_key            = '<C-X>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
 xnoremap <F6> :MultipleCursorsFind<Space>
@@ -1292,7 +1289,7 @@ nnoremap <silent> cog :SignifyToggle<CR>
 
 " tpope/vim-fugitive
 augroup MyAutoCmd
-    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-r><C-g><CR>
+    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-R><C-G><CR>
     autocmd BufReadPost fugitive://* set bufhidden=delete
 augroup END
 
@@ -1317,8 +1314,8 @@ nnoremap <silent> <Leader>gF :Gfetch -p<CR>
 nnoremap <silent> <Leader>gp :Gpush<CR>
 nnoremap <silent> <Leader>gP :Gpull<CR>
 nnoremap          <Leader>g/ :Ggrep!<Space>
-nnoremap          <Leader>gg :Ggrep! <C-r>=GetWordForAck()<CR><Space>
-xnoremap          <Leader>gg <Esc>:Ggrep! <C-r>=GetSelectedTextForAck()<CR><Space>
+nnoremap          <Leader>gg :Ggrep! <C-R>=GetWordForAck()<CR><Space>
+xnoremap          <Leader>gg <Esc>:Ggrep! <C-R>=GetSelectedTextForAck()<CR><Space>
 nnoremap          <Leader>gl :Glog!<Space>
 nnoremap          <Leader>gL :Gllog!<Space>
 
@@ -1341,38 +1338,30 @@ if has('lua')
     let g:neocomplete#enable_smart_case                 = 1 " Use smartcase
     let g:neocomplete#min_keyword_length                = 3 " Set minimum keyword length
     let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length
-    let g:neocomplete#enable_cursor_hold_i              = 0
-    let g:neocomplete#enable_auto_select                = 1
 
     let g:neocomplete#sources#vim#complete_functions = {
                 \ 'Unite' : 'unite#complete_source',
                 \ }
     call neocomplete#custom#source('look', 'min_pattern_length', 4)
 
-    " Plugin key-mappings
-    " <C-e>: close popup
-    inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
-    " <C-h>: close popup and word backward
-    inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-o>b"
-    " <C-l>: close popup and word forward
-    inoremap <expr> <C-l> neocomplete#smart_close_popup()."\<C-o>w"
-    " <BS>: close popup and delete backword char
-    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
+    " CTRL-H, <BS>: close popup and delete backword char
+    inoremap <expr> <C-H> neocomplete#smart_close_popup()."\<C-H>"
+    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-H>"
 
-    inoremap <silent> <expr> <C-x><C-f> neocomplete#start_manual_complete('file')
+    inoremap <silent> <expr> <C-X><C-F> neocomplete#start_manual_complete('file')
 
-    inoremap <expr> <C-g> neocomplete#undo_completion()
-    " inoremap <expr> <C-l> neocomplete#complete_common_string()
+    inoremap <expr> <C-G> neocomplete#undo_completion()
+    inoremap <expr> <C-L> neocomplete#complete_common_string()
 
     " <CR>: close popup
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
     function! s:my_cr_function()
         return neocomplete#close_popup() . "\<CR>"
     endfunction
 
     " <Tab>: completion
     inoremap <silent> <expr> <Tab>
-                \ pumvisible() ? "\<C-n>" :
+                \ pumvisible() ? "\<C-N>" :
                 \ <SID>check_back_space() ? "\<Tab>" :
                 \ neocomplete#start_manual_complete()
     function! s:check_back_space() abort
@@ -1381,51 +1370,37 @@ if has('lua')
     endfunction
 
     " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
 
-    " For cursor moving in insert mode
-    inoremap <expr> <Left>  neocomplete#close_popup() . "\<Left>"
-    inoremap <expr> <Right> neocomplete#close_popup() . "\<Right>"
-    inoremap <expr> <Up>    neocomplete#close_popup() . "\<Up>"
-    inoremap <expr> <Down>  neocomplete#close_popup() . "\<Down>"
-
-    let g:neocomplete#fallback_mappings = ["\<C-x>\<C-o>", "\<C-x>\<C-n>"]
+    let g:neocomplete#fallback_mappings = ["\<C-X>\<C-O>", "\<C-X>\<C-N>"]
 else
     " Shougo/neocomplcache.vim
-    let g:neocomplcache_data_directory           = '~/.vim/cache/neocomplcache'
-    let g:neocomplcache_enable_at_startup        = 1 " Use neocomplcache
-    let g:neocomplcache_enable_smart_case        = 1 " Use smartcase
-    let g:neocomplcache_min_keyword_length       = 3 " Set minimum keyword length
-    let g:neocomplcache_min_syntax_length        = 3 " Set minimum syntax keyword length
-    let g:neocomplcache_enable_cursor_hold_i     = 0
-    let g:neocomplcache_enable_auto_select       = 1
+    let g:neocomplcache_data_directory     = '~/.vim/cache/neocomplcache'
+    let g:neocomplcache_enable_at_startup  = 1 " Use neocomplcache
+    let g:neocomplcache_enable_smart_case  = 1 " Use smartcase
+    let g:neocomplcache_min_keyword_length = 3 " Set minimum keyword length
+    let g:neocomplcache_min_syntax_length  = 3 " Set minimum syntax keyword length
 
     call neocomplcache#custom_source('look', 'min_pattern_length', 4)
 
-    " Plugin key-mappings
-    " <C-e>: close popup
-    inoremap <expr> <C-e> pumvisible() ? neocomplcache#cancel_popup() : "\<End>"
-    " <C-h>: close popup and word backward
-    inoremap <expr> <C-h> neocomplcache#smart_close_popup()."\<C-o>b"
-    " <C-l>: close popup and word forward
-    inoremap <expr> <C-l> neocomplcache#smart_close_popup()."\<C-o>w"
-    " <BS>: close popup and delete backword char
-    inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-h>"
+    " CTRL-H, <BS>: close popup and delete backword char
+    inoremap <expr> <C-H> neocomplcache#smart_close_popup()."\<C-H>"
+    inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-H>"
 
-    inoremap <silent> <expr> <C-x><C-f> neocomplcache#start_manual_complete('file')
+    inoremap <silent> <expr> <C-X><C-F> neocomplcache#start_manual_complete('file')
 
-    inoremap <expr> <C-g> neocomplcache#undo_completion()
-    " inoremap <expr> <C-l> neocomplcache#complete_common_string()
+    inoremap <expr> <C-G> neocomplcache#undo_completion()
+    inoremap <expr> <C-L> neocomplcache#complete_common_string()
 
     " <CR>: close popup
-    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
     function! s:my_cr_function()
         return neocomplcache#close_popup() . "\<CR>"
     endfunction
 
     " <Tab>: completion
     inoremap <silent> <expr> <Tab>
-                \ pumvisible() ? "\<C-n>" :
+                \ pumvisible() ? "\<C-N>" :
                 \ <SID>check_back_space() ? "\<Tab>" :
                 \ neocomplcache#start_manual_complete()
     function! s:check_back_space() abort
@@ -1434,15 +1409,9 @@ else
     endfunction
 
     " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
 
-    " For cursor moving in insert mode
-    inoremap <expr> <Left>  neocomplcache#close_popup() . "\<Left>"
-    inoremap <expr> <Right> neocomplcache#close_popup() . "\<Right>"
-    inoremap <expr> <Up>    neocomplcache#close_popup() . "\<Up>"
-    inoremap <expr> <Down>  neocomplcache#close_popup() . "\<Down>"
-
-    let g:neocomplcache#fallback_mappings = ["\<C-x>\<C-o>", "\<C-x>\<C-n>"]
+    let g:neocomplcache#fallback_mappings = ["\<C-X>\<C-O>", "\<C-X>\<C-N>"]
 endif
 
 " Shougo/neosnippet.vim
@@ -1451,16 +1420,15 @@ let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#enable_complete_done          = 1
 let g:neosnippet#expand_word_boundary          = 1
 
-" Ctrl-Space
-smap <C-@> <Plug>(neosnippet_jump_or_expand)
-xmap <C-@> <Plug>(neosnippet_expand_target)
-imap <C-@> <Plug>(neosnippet_expand_or_jump)
+smap <C-K> <Plug>(neosnippet_jump_or_expand)
+xmap <C-K> <Plug>(neosnippet_expand_target)
+imap <C-K> <Plug>(neosnippet_expand_or_jump)
 
-imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<Tab>"
+imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-N>" : "\<Tab>"
 smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
 
-imap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-smap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+imap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
+smap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
 
 nnoremap <silent> [Space]I :Unite -buffer-name=snippets neosnippet<CR>
 
