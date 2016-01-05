@@ -1120,12 +1120,7 @@ let g:grepper = {
             \ 'open': 1,
             \ 'jump': 0,
             \ 'next_tool': '<C-J>',
-            \ 'tools': ['ag', 'hw', 'sift', 'git', 'grep', 'findstr'],
-            \ 'hw': {
-            \   'grepprg': 'hw --no-color --no-group -n -i $*',
-            \   'grepformat': '%f:%l:%m',
-            \   'escape': '\+*?^$%#()[]',
-            \ },
+            \ 'tools': ['ag', 'sift', 'git', 'grep', 'findstr'],
             \ 'sift': {
             \   'grepprg': 'sift --no-color --no-group --binary-skip -n -i $*'
             \ },
