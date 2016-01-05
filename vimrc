@@ -62,8 +62,9 @@ Plug 'bling/vim-airline'
 Plug 'phongnh/vim-iterm-cursor'
 
 " CtrlP
-Plug 'FelikZ/ctrlp-py-matcher'
-" Plug 'JazzCore/ctrlp-cmatcher', { 'do': './install.sh' }
+if has('python')
+    Plug 'FelikZ/ctrlp-py-matcher'
+endif
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'mattn/ctrlp-git'
 " Plug 'h2ero/ctrlp-hg'
@@ -81,21 +82,6 @@ Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
 " logging registers and reusing them
 Plug 'LeafCage/yankround.vim'
 
-" A tree explorer plugin for vim
-Plug 'scrooloose/nerdtree'
-
-" A fancy start screen
-Plug 'mhinz/vim-startify'
-
-" BufExplorer Plugin for Vim
-Plug 'jlanzarotta/bufexplorer'
-
-" Visualize your Vim undo tree
-Plug 'sjl/gundo.vim'
-
-" A class/symbol outline viewer
-Plug 'majutsushi/tagbar'
-
 " Maximize current buffer
 Plug 'regedarek/ZoomWin'
 
@@ -105,14 +91,31 @@ Plug 'junegunn/goyo.vim'
 " Hyperfocus-writing
 Plug 'junegunn/limelight.vim'
 
-" Delete buffers and close files in Vim without closing your windows or messing up your layout
-Plug 'moll/vim-bbye'
-
 " Display the indention levels
 Plug 'Yggdroot/indentLine'
 
+" A fancy start screen
+Plug 'mhinz/vim-startify'
+
 " Syntax checking hacks for vim
 Plug 'scrooloose/syntastic'
+
+if has('python')
+    " Visualize your Vim undo tree
+    Plug 'sjl/gundo.vim'
+else
+    " The ultimate undo history visualizer for VIM
+    Plug 'mbbill/undotree'
+endif
+
+" A class/symbol outline viewer
+Plug 'majutsushi/tagbar'
+
+" A tree explorer plugin for vim
+Plug 'scrooloose/nerdtree'
+
+" Delete buffers and close files in Vim without closing your windows or messing up your layout
+Plug 'moll/vim-bbye'
 
 " Toggle useful settings
 Plug 'phongnh/vim-toggler'
@@ -148,8 +151,6 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-speeddating'
 " insert or delete brackets, parens, quotes in pair
 Plug 'jiangmiao/auto-pairs'
-" Auto close parentheses and repeat by dot dot dot...
-" Plug 'cohama/lexima.vim'
 
 " Text Objects
 Plug 'kana/vim-textobj-user'
@@ -198,20 +199,23 @@ Plug 'tpope/vim-fugitive'
 " Plug 'ludovicchabant/vim-lawrencium'
 
 " Code completion and Snippets
-Plug 'Shougo/neocomplete.vim'
+if has('lua')
+    Plug 'Shougo/neocomplete.vim'
+else
+    Plug 'Shougo/neocomplcache.vim'
+endif
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
-
-" Utility
-" An implementation of Sublime's PlainTasks plugin for Vim
-Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
 
 " Tmux
 if exists("$TMUX")
     Plug 'benmills/vimux'
     Plug 'jebaum/vim-tmuxify'
 endif
+
+" Run your tests at the speed of thought
+Plug 'janko-m/vim-test'
 
 " A solid language pack for Vim
 Plug 'sheerun/vim-polyglot'
@@ -220,8 +224,24 @@ Plug 'sheerun/vim-polyglot'
 Plug 'mattn/emmet-vim'
 Plug 'gregsexton/MatchTag' " Markup Language (HTML, Markdown, Stylus, Jade and Mustache)
 
+" JavaScript / NodeJS
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'moll/vim-node'
+" Plug 'marijnh/tern_for_vim'
+
+" Go
+Plug 'fatih/vim-go'
+Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
+
+" Swift
+Plug 'kballard/vim-swift'
+
 " Others
 Plug 'vim-scripts/fish-syntax'
+
+" Utility
+" An implementation of Sublime's PlainTasks plugin for Vim
+Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
 
 " Color schemes
 " Dark and light themes
@@ -301,7 +321,6 @@ set listchars=tab:>\ ,trail:-,nbsp:+,extends:>,precedes:<
 
 if has('conceal')
     set listchars+=conceal:^
-    set conceallevel=2 concealcursor=i
 endif
 
 set display+=lastline           " When a line is long, do not omit it in @
@@ -440,23 +459,19 @@ inoremap <C-d> <Del>
 " Ctrl-b: Move cursor left
 inoremap <C-b> <Left>
 inoremap <expr> <C-b> pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<Left>"
-" inoremap <expr> <C-b> pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<C-b>"
 
 " Ctrl-f: Move cursor right
-inoremap <C-f> <Right>
+inoremap <C-b> <Right>
 inoremap <expr> <C-f> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<Right>"
-" inoremap <expr> <C-f> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-f>"
 
 " Ctrl-h: Move word left
 inoremap <C-h> <C-o>b
 
 " Ctrl-j: Move cursor down
 inoremap <expr> <C-j> pumvisible() ? "\<C-e>\<Down>" : "\<Down>"
-" inoremap <expr> <C-j> pumvisible() ? "\<C-p>" : "\<Down>"
 
 " Ctrl-k: Move cursor up
 inoremap <expr> <C-k> pumvisible() ? "\<C-e>\<Up>" : "\<Up>"
-" inoremap <expr> <C-k> pumvisible() ? "\<C-n>" : "\<Up>"
 
 " Ctrl-l: Move word right
 inoremap <C-l> <C-o>w
@@ -469,10 +484,6 @@ inoremap <C-^> <C-c><C-^>
 " inoremap <C-^> <C-c>:update<CR><C-^>
 
 " Normal Mode Mappings
-" Use sane regular expressions
-" nnoremap / /\v
-" xnoremap / /\v
-
 " Useless command
 nnoremap M m
 
@@ -806,14 +817,13 @@ endfunction
 
 autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
-" FelikZ/ctrlp-py-matcher
-" let g:ctrlp_lazy_update         = 350
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_max_files           = 0
-let g:ctrlp_match_func          = { 'match': 'pymatcher#PyMatch' }
-
-" JazzCore/ctrlp-cmatcher
-" let g:ctrlp_match_func = { 'match' : 'matcher#cmatch' }
+if has('python')
+    " FelikZ/ctrlp-py-matcher
+    " let g:ctrlp_lazy_update         = 350
+    let g:ctrlp_clear_cache_on_exit = 0
+    let g:ctrlp_max_files           = 0
+    let g:ctrlp_match_func          = { 'match': 'pymatcher#PyMatch' }
+endif
 
 " ctrlpvim/ctrlp.vim
 let g:ctrlp_match_window      = 'bottom,order:btt,min:1,max:20,results:20'
@@ -905,68 +915,6 @@ let g:yankround_max_history = 100
 
 nnoremap <silent> [Space]y :CtrlPYankRound<CR>
 
-" scrooloose/nerdtree
-let g:NERDTreeWinSize       = 35
-let g:NERDTreeMouseMode     = 2
-let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
-let g:NERDTreeQuitOnOpen    = 0
-let g:NERDTreeChDirMode     = 0
-let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeBookmarksFile = expand('~/.vim/cache/NERDTreeBookmarks')
-
-nnoremap <silent> <F9>  :NERDTreeToggle<CR>
-inoremap <silent> <F9>  <Esc>:NERDTreeToggle<CR>
-nnoremap <silent> <F10> :NERDTreeFind<CR>
-inoremap <silent> <F10> <Esc>:NERDTreeFind<CR>
-
-" mhinz/vim-startify
-let g:startify_skiplist = [
-            \ '.git/index',
-            \ '.git/config',
-            \ 'COMMIT_EDITMSG',
-            \ 'git-rebase-todo',
-            \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
-            \ ]
-
-let g:startify_session_dir        = '~/.vim/cache/sessions'
-let g:startify_enable_special     = 0
-let g:startify_change_to_dir      = 0
-let g:startify_change_to_vcs_root = 1
-let g:startify_show_sessions      = 1
-
-nnoremap <silent> <F5> :Startify<CR>
-inoremap <silent> <F5> <Esc>:Startify<CR>
-
-augroup MyAutoCmd
-    autocmd FileType startify setlocal nofoldenable foldcolumn=0
-    autocmd User Startified setlocal buftype=
-augroup END
-
-" jlanzarotta/bufexplorer
-let g:bufExplorerDisableDefaultKeyMapping = 1
-let g:bufExplorerShowDirectories          = 0
-let g:bufExplorerShowRelativePath         = 1
-nnoremap <silent> gl :ToggleBufExplorer<CR>
-
-" sjl/gundo.vim
-let g:gundo_right          = 1
-let g:gundo_width          = 30
-let g:gundo_preview_bottom = 1
-let g:gundo_preview_height = 18
-let g:gundo_auto_preview   = 0
-
-nnoremap <silent> <F7> :GundoToggle<CR>
-inoremap <silent> <F7> <Esc>:GundoToggle<CR>
-
-" majutsushi/tagbar
-let g:tagbar_sort      = 0
-let g:tagbar_autofocus = 1
-let g:tagbar_autoclose = 0
-let g:tagbar_iconchars = ['▸', '▾']
-
-nnoremap <silent> <F8> :TagbarToggle<CR>
-inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
-
 " regedarek/ZoomWin
 nnoremap <silent> <F2> :ZoomWin<CR>
 inoremap <silent> <F2> <Esc>:ZoomWin<CR>
@@ -1037,9 +985,6 @@ let g:limelight_default_coefficient = 0.5
 let g:limelight_paragraph_span      = 1
 let g:limelight_priority            = -1
 
-" moll/vim-bbye
-command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
-
 " Yggdroot/indentLine
 let g:indentLine_enabled              = 0
 let g:indentLine_char                 = '│'
@@ -1051,6 +996,29 @@ let g:indentLine_color_term           = 239
 
 nnoremap <silent> <F4> :IndentLinesToggle<CR>
 inoremap <silent> <F4> <Esc>:IndentLinesToggle<CR>
+
+" mhinz/vim-startify
+let g:startify_skiplist = [
+            \ '.git/index',
+            \ '.git/config',
+            \ 'COMMIT_EDITMSG',
+            \ 'git-rebase-todo',
+            \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
+            \ ]
+
+let g:startify_session_dir        = '~/.vim/cache/sessions'
+let g:startify_enable_special     = 0
+let g:startify_change_to_dir      = 0
+let g:startify_change_to_vcs_root = 1
+let g:startify_show_sessions      = 1
+
+nnoremap <silent> <F5> :Startify<CR>
+inoremap <silent> <F5> <Esc>:Startify<CR>
+
+augroup MyAutoCmd
+    autocmd FileType startify setlocal nofoldenable foldcolumn=0
+    autocmd User Startified setlocal buftype=
+augroup END
 
 " scrooloose/syntastic
 let g:syntastic_mode_map                 = { 'mode': 'passive', 'active_filetypes': [], }
@@ -1066,6 +1034,51 @@ let g:syntastic_style_warning_symbol     = 'S!'
 
 nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 inoremap <silent> <F6> <Esc>:SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
+
+if has('python')
+    " sjl/gundo.vim
+    let g:gundo_right          = 1
+    let g:gundo_width          = 30
+    let g:gundo_preview_bottom = 1
+    let g:gundo_preview_height = 18
+    let g:gundo_auto_preview   = 0
+
+    nnoremap <silent> <F7> :GundoToggle<CR>
+    inoremap <silent> <F7> <Esc>:GundoToggle<CR>
+else
+    " mbbill/undotree
+    let g:undotree_WindowLayout       = 'botright'
+    let g:undotree_SetFocusWhenToggle = 1
+
+    nnoremap <silent> <F7> :UndotreeToggle<CR>
+    inoremap <silent> <F7> <Esc>:UndotreeToggle<CR>
+endif
+
+" majutsushi/tagbar
+let g:tagbar_sort      = 0
+let g:tagbar_autofocus = 1
+let g:tagbar_autoclose = 0
+let g:tagbar_iconchars = ['▸', '▾']
+
+nnoremap <silent> <F8> :TagbarToggle<CR>
+inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
+
+" scrooloose/nerdtree
+let g:NERDTreeWinSize       = 35
+let g:NERDTreeMouseMode     = 2
+let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
+let g:NERDTreeQuitOnOpen    = 0
+let g:NERDTreeChDirMode     = 0
+let g:NERDTreeShowBookmarks = 1
+let g:NERDTreeBookmarksFile = expand('~/.vim/cache/NERDTreeBookmarks')
+
+nnoremap <silent> <F9>  :NERDTreeToggle<CR>
+inoremap <silent> <F9>  <Esc>:NERDTreeToggle<CR>
+nnoremap <silent> <F10> :NERDTreeFind<CR>
+inoremap <silent> <F10> <Esc>:NERDTreeFind<CR>
+
+" moll/vim-bbye
+command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
 
 " haya14busa/incsearch.vim
 " let g:incsearch#magic                             = '\v'
@@ -1321,100 +1334,127 @@ if !has('gui_running') && executable('tig')
     nnoremap          <Leader>gT :Tig<Space>
 endif
 
-" Shougo/neocomplete.vim
-let g:acp_enableAtStartup                           = 0 " Disable AutoComplPop
-let g:neocomplete#enable_at_startup                 = 1 " Use neocomplete
-let g:neocomplete#enable_smart_case                 = 1 " Use smartcase
-let g:neocomplete#enable_camel_case                 = 1 " Use camelcase
-let g:neocomplete#auto_completion_start_length      = 2 " Set auto completion length
-let g:neocomplete#manual_completion_start_length    = 0 " Set manual completion length
-let g:neocomplete#min_keyword_length                = 3 " Set minimum keyword length
-let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length
-let g:neocomplete#data_directory                    = '~/.vim/cache/neocomplete'
-let g:neocomplete#lock_buffer_name_pattern          = '\*ku\*'
+if has('lua')
+    " Shougo/neocomplete.vim
+    let g:neocomplete#data_directory                    = '~/.vim/cache/neocomplete'
+    let g:neocomplete#enable_at_startup                 = 1 " Use neocomplete
+    let g:neocomplete#enable_smart_case                 = 1 " Use smartcase
+    let g:neocomplete#min_keyword_length                = 3 " Set minimum keyword length
+    let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length
+    let g:neocomplete#enable_cursor_hold_i              = 0
+    let g:neocomplete#enable_auto_select                = 1
 
-if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
+    let g:neocomplete#sources#vim#complete_functions = {
+                \ 'Unite' : 'unite#complete_source',
+                \ }
+    call neocomplete#custom#source('look', 'min_pattern_length', 4)
+
+    " Plugin key-mappings
+    " <C-e>: close popup
+    inoremap <expr> <C-e> pumvisible() ? neocomplcache#cancel_popup() : "\<End>"
+    " <C-h>: close popup and word backward
+    inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-o>b"
+    " <C-l>: close popup and word forward
+    inoremap <expr> <C-l> neocomplete#smart_close_popup()."\<C-o>w"
+    " <BS>: close popup and delete backword char
+    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
+
+    inoremap <silent> <expr> <C-x><C-f> neocomplete#start_manual_complete('file')
+
+    inoremap <expr> <C-g> neocomplete#undo_completion()
+    " inoremap <expr> <C-l> neocomplete#complete_common_string()
+
+    " <CR>: close popup
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function()
+        return neocomplete#close_popup() . "\<CR>"
+    endfunction
+
+    " <Tab>: completion
+    inoremap <silent> <expr> <Tab>
+                \ pumvisible() ? "\<C-n>" :
+                \ <SID>check_back_space() ? "\<Tab>" :
+                \ neocomplete#start_manual_complete()
+    function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " For cursor moving in insert mode
+    inoremap <expr> <Left>  neocomplete#close_popup() . "\<Left>"
+    inoremap <expr> <Right> neocomplete#close_popup() . "\<Right>"
+    inoremap <expr> <Up>    neocomplete#close_popup() . "\<Up>"
+    inoremap <expr> <Down>  neocomplete#close_popup() . "\<Down>"
+
+    let g:neocomplete#fallback_mappings = ["\<C-x>\<C-o>", "\<C-x>\<C-n>"]
+else
+    " Shougo/neocomplcache.vim
+    let g:neocomplcache_data_directory           = '~/.vim/cache/neocomplcache'
+    let g:neocomplcache_enable_at_startup        = 1 " Use neocomplcache
+    let g:neocomplcache_enable_smart_case        = 1 " Use smartcase
+    let g:neocomplcache_min_keyword_length       = 3 " Set minimum keyword length
+    let g:neocomplcache_min_syntax_length        = 3 " Set minimum syntax keyword length
+    let g:neocomplcache_enable_cursor_hold_i     = 0
+    let g:neocomplcache_enable_auto_select       = 1
+
+    call neocomplcache#custom_source('look', 'min_pattern_length', 4)
+
+    " Plugin key-mappings
+    " <C-e>: close popup
+    inoremap <expr> <C-e> pumvisible() ? neocomplcache#cancel_popup() : "\<End>"
+    " <C-h>: close popup and word backward
+    inoremap <expr> <C-h> neocomplcache#smart_close_popup()."\<C-o>b"
+    " <C-l>: close popup and word forward
+    inoremap <expr> <C-l> neocomplcache#smart_close_popup()."\<C-o>w"
+    " <BS>: close popup and delete backword char
+    inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-h>"
+
+    inoremap <silent> <expr> <C-x><C-f> neocomplcache#start_manual_complete('file')
+
+    inoremap <expr> <C-g> neocomplcache#undo_completion()
+    " inoremap <expr> <C-l> neocomplcache#complete_common_string()
+
+    " <CR>: close popup
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function()
+        return neocomplcache#close_popup() . "\<CR>"
+    endfunction
+
+    " <Tab>: completion
+    inoremap <silent> <expr> <Tab>
+                \ pumvisible() ? "\<C-n>" :
+                \ <SID>check_back_space() ? "\<Tab>" :
+                \ neocomplcache#start_manual_complete()
+    function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " For cursor moving in insert mode
+    inoremap <expr> <Left>  neocomplcache#close_popup() . "\<Left>"
+    inoremap <expr> <Right> neocomplcache#close_popup() . "\<Right>"
+    inoremap <expr> <Up>    neocomplcache#close_popup() . "\<Up>"
+    inoremap <expr> <Down>  neocomplcache#close_popup() . "\<Down>"
+
+    let g:neocomplcache#fallback_mappings = ["\<C-x>\<C-o>", "\<C-x>\<C-n>"]
 endif
-
-let g:neocomplete#force_omni_input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::\w*'
-let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-let g:neocomplete#force_omni_input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
-let g:neocomplete#force_omni_input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-let g:neocomplete#force_omni_input_patterns.objc   = '\[\h\w*\s\h\?\|\h\w*\%(\.\|->\)'
-let g:neocomplete#force_omni_input_patterns.objcpp = '\[\h\w*\s\h\?\|\h\w*\%(\.\|->\)\|\h\w*::\w*'
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-let g:neocomplete#sources#vim#complete_functions = {
-            \ 'Unite' : 'unite#complete_source',
-            \ }
-call neocomplete#custom#source('look', 'min_pattern_length', 4)
-
-" Plugin key-mappings
-" <C-y>: paste
-inoremap <expr> <C-y> pumvisible() ? neocomplete#close_popup() :  "\<C-r>\""
-" <C-e>: close popup
-inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
-" <C-h>, <BS>: close popup and delete backword char.
-" inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-o>b"
-inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
-" <C-n>: neocomplete
-" inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>\<Down>"
-" <C-p>: keyword completion
-" inoremap <expr> <C-p> pumvisible() ? "\<C-p>" : "\<C-p>\<C-n>"
-
-" inoremap <expr> '     pumvisible() ? neocomplete#close_popup() : "'"
-
-inoremap <silent> <expr> <C-x><C-f> neocomplete#start_manual_complete('file')
-
-inoremap <expr> <C-g> neocomplete#undo_completion()
-" inoremap <expr> <C-l> neocomplete#complete_common_string()
-inoremap <expr> <C-l> neocomplete#smart_close_popup()."\<C-o>w"
-
-" <Tab>: completion
-" inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : neocomplete#start_manual_complete()
-" function! s:check_back_space()
-"     let col = col('.') - 1
-"     return !col || getline('.')[col - 1]  =~ '\s'
-" endfunction
-" <S-Tab>: completion back
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" <CR>: close popup and save indent
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    return neocomplete#close_popup() . "\<CR>"
-    " return neocomplete#smart_close_popup() . "\<CR>"
-    " For no inserting <CR> key.
-    " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
-
-" For cursor moving in insert mode
-inoremap <expr> <Left>  neocomplete#close_popup() . "\<Left>"
-inoremap <expr> <Right> neocomplete#close_popup() . "\<Right>"
-inoremap <expr> <Up>    neocomplete#close_popup() . "\<Up>"
-inoremap <expr> <Down>  neocomplete#close_popup() . "\<Down>"
-
-let g:neocomplete#fallback_mappings = ["\<C-x>\<C-o>", "\<C-x>\<C-n>"]
 
 " Shougo/neosnippet.vim
 let g:neosnippet#snippets_directory            = '~/.vim/plugged/vim-snippets/snippets,~/.vim/snippets'
 let g:neosnippet#enable_snipmate_compatibility = 1
-
-" imap <C-k> <Plug>(neosnippet_expand_or_jump)
-" smap <C-k> <Plug>(neosnippet_expand_or_jump)
-" xmap <C-k> <Plug>(neosnippet_expand_target)
+let g:neosnippet#enable_complete_done          = 1
+let g:neosnippet#expand_word_boundary          = 1
 
 " Ctrl-Space
-imap <C-@> <Plug>(neosnippet_expand_or_jump)
-smap <C-@> <Plug>(neosnippet_expand_or_jump)
+smap <C-@> <Plug>(neosnippet_jump_or_expand)
 xmap <C-@> <Plug>(neosnippet_expand_target)
+imap <C-@> <Plug>(neosnippet_expand_or_jump)
 
 imap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<Tab>"
 smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<Tab>"
@@ -1442,11 +1482,6 @@ if exists("$TMUX")
         let keys = substitute(keys, '\s\+', ' ', '')
         return keys
     endfunction
-
-    " jgdavey/vim-turbux
-    if !has('gui_running')
-        let g:turbux_runner = 'vimux'
-    endif
 
     " benmills/vimux
     let g:VimuxUseNearest = 1
@@ -1533,13 +1568,134 @@ if exists("$TMUX")
     nnoremap <silent> [App]td :TxSendKeyl'C-d'<CR>
 endif
 
+" janko-m/vim-tests
+nmap <silent> [App]tt :TestFile<CR>
+nmap <silent> [App]tf :TestNearest<CR>
+nmap <silent> [App]tl :TestLast<CR>
+nmap <silent> [App]ta :TestSuite<CR>
+nmap <silent> [App]tg :TestVisit<CR>
+
+" sheerun/vim-polyglot
+let g:polyglot_disabled = ['go', 'swift']
+
+" tpope/rails.vim
+nnoremap <silent> [App]a :A<CR>
+nnoremap <silent> [App]r :R<CR>
+
+nnoremap [Rails]  <Nop>
+xnoremap [Rails]  <Nop>
+nmap     [App]e   [Rails]
+xmap     [App]e   [Rails]
+
+nnoremap [Rails]m :Emodel<Space>
+nnoremap [Rails]v :Eview<Space>
+nnoremap [Rails]c :Econtroller<Space>
+nnoremap [Rails]e :Emailer<Space>
+nnoremap [Rails]h :Ehelper<Space>
+nnoremap [Rails]d :Emigration<Space>
+nnoremap [Rails]l :Elib<Space>
+nnoremap [Rails]t :Etask<Space>
+nnoremap [Rails]j :Ejavascript<Space>
+nnoremap [Rails]s :Estylesheet<Space>
+nnoremap [Rails]t :Espec<Space>
+
+xnoremap [Rails]e :Rextract<Space>
+
 " mattn/emmet-vim
 let g:user_emmet_install_global  = 1
 let g:user_emmet_install_command = 0
 let g:user_emmet_mode            = 'i'
 
+" fatih/vim-go and garyburd/go-explorer
+let g:go_highlight_functions         = 1
+let g:go_highlight_methods           = 1
+let g:go_highlight_structs           = 1
+let g:go_highlight_operators         = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types       = 1
+
+let g:go_fmt_command       = 'goimports'
+let g:go_fmt_fail_silently = 1
+
+if globpath(&rtp, 'plugin/neosnippet.vim')
+    let g:go_snippet_engine = 'neosnippet'
+endif
+
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+
+function! s:VimGoSetup()
+    nmap [App]R <Plug>(go-run)
+    nmap [App]B <Plug>(go-build)
+    nmap [App]G <Plug>(go-generate)
+    nmap [App]I <Plug>(go-install)
+    nmap [App]T <Plug>(go-test)
+    nmap [App]C <Plug>(go-coverage)
+    nmap [App]V <Plug>(go-vet)
+    nmap [App]N <Plug>(go-info)
+    nnoremap [App]D :GeDoc<Space>
+    nnoremap [App]P :GoPath<Space>
+    nnoremap <silent> [App]E :GoRename<CR>
+    nnoremap <silent> [App]F :GoImports<CR>
+    nnoremap <silent> [App]K :GoErrCheck<CR>
+    nnoremap <silent> [App]L :GoLint<CR>:GoMetaLinter<CR>
+
+    nnoremap [App]gr :GoRun
+    nnoremap [App]gb :GoBuild
+    nnoremap [App]gg :GoGenerate
+    nnoremap [App]gi :GoInstall
+    nnoremap [App]ga :GoImportAs<Space>
+    nnoremap [App]g, :GoImport<Space>
+    nnoremap [App]g. :GoDrop<Space>
+    nnoremap [App]gp :GoPath<Space>
+    nnoremap [App]gs :GoOracleScope<Space>
+    nnoremap [App]gm :GoDoc<Space>
+    xnoremap <silent> [App]gm :GoDoc<CR>
+
+    nmap [App]gcr <Plug>(go-run)
+    nmap [App]gcb <Plug>(go-build)
+    nmap [App]gcg <Plug>(go-generate)
+    nmap [App]gci <Plug>(go-install)
+    nmap [App]gct <Plug>(go-test)
+    nmap [App]gcf <Plug>(go-test-func)
+    nmap [App]gcc <Plug>(go-test-compile)
+    nmap [App]gco <Plug>(go-coverage)
+    nmap [App]gcv <Plug>(go-vet)
+
+    nmap [App]gtf <Plug>(go-files)
+    nmap [App]gtj <Plug>(go-deps)
+    nmap [App]gtn <Plug>(go-info)
+    nmap [App]gti <Plug>(go-import)
+    nmap [App]gtr <Plug>(go-rename)
+
+    nmap [App]goi <Plug>(go-implements)
+    nmap [App]goe <Plug>(go-callees)
+    nmap [App]gor <Plug>(go-callers)
+    nmap [App]god <Plug>(go-describe)
+    nmap [App]goc <Plug>(go-callstack)
+    nmap [App]gof <Plug>(go-freevars)
+    nmap [App]goc <Plug>(go-channelpeers)
+    nmap [App]gos <Plug>(go-referrers)
+
+    nmap [App]gdo <Plug>(go-doc)
+    nmap [App]gds <Plug>(go-doc-split)
+    nmap [App]gdv <Plug>(go-doc-vertical)
+    nmap [App]gdt <Plug>(go-doc-tab)
+    nmap [App]gdb <Plug>(go-doc-browser)
+
+    nmap [App]gff <Plug>(go-def)
+    nmap [App]gfs <Plug>(go-def-split)
+    nmap [App]gfv <Plug>(go-def-vertical)
+    nmap [App]gft <Plug>(go-def-tab)
+endfunction
+
+autocmd MyAutoCmd FileType go call s:VimGoSetup()
+
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
+
+" junegunn/seoul256.vim
+let g:seoul256_background = 235
+let g:seoul256_light_background = 254
 
 function! s:xmllint_setup()
     let xmllint = 'setlocal equalprg=env\ XMLLINT_INDENT=''%s''\ xmllint\ --format\ --recover\ -\ 2>/dev/null'
