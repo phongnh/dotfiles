@@ -1113,13 +1113,13 @@ let g:grepper = {
             \ },
             \ }
 
-nmap gs <Plug>(GrepperOperator)
-xmap gs <Plug>(GrepperOperator)
+nmap <silent> gs <Plug>(GrepperOperator)
+xmap <silent> gs <Plug>(GrepperOperator)
 
-nnoremap [App]S :Grepper!<CR>
+nnoremap <silent> [App]S :Grepper!<CR>
 
-nnoremap [App]s :Grepper! -cword<CR>
-xmap     [App]s <Plug>(GrepperOperator)
+nnoremap <silent> [App]s :Grepper! -cword<CR>
+xmap     <silent> [App]s <Plug>(GrepperOperator)
 
 " tpope/vim-surround
 let g:surround_indent             = 1
