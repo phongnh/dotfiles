@@ -211,7 +211,6 @@ Plug 'janko-m/vim-test'
 Plug 'sheerun/vim-polyglot'
 
 " Ruby / Rails
-Plug 'tpope/vim-rake'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rails'
 
