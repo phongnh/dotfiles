@@ -11,9 +11,10 @@ set lines=999 columns=999
 set linespace=2         " Add some line space for easy reading
 
 if has('gui_macvim')
-    set guifont=Source\ Code\ Pro:h14
+    set invmmta         " Make Mac's Option key behave as the Meta key
     set antialias
-    set invmmta                 " Make Mac's Option key behave as the Meta key
+    set guifont=Source\ Code\ Pro:h14
+
     if has('transparency') || exists('+transparency')
         set transparency=2
     endif

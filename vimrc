@@ -7,12 +7,6 @@ if &shell =~# 'fish$'
     set shell=bash
 endif
 
-" if executable('zsh')
-"     set shell=zsh
-" else
-"     set shell=bash
-" endif
-
 " Set augroup
 augroup MyAutoCmd
     autocmd!
@@ -20,20 +14,16 @@ augroup END
 
 " Disable system plugins
 let g:loaded_getscriptPlugin   = 1
-let g:loaded_netrw             = 1
-let g:loaded_netrwPlugin       = 1
-let g:loaded_matchparen        = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_vimball           = 1
-let g:loaded_vimballPlugin     = 1
-let g:loaded_tar               = 1
-let g:loaded_tarPlugin         = 1
-let g:loaded_zip               = 1
-let g:loaded_zipPlugin         = 1
 let loaded_gzip                = 1
-let loaded_remote_plugins      = 1
+let loaded_logipath            = 1
+" let g:loaded_matchparen        = 1
+let g:loaded_netrwPlugin       = 1
 let loaded_rrhelper            = 1
 let loaded_spellfile_plugin    = 1
+let g:loaded_tarPlugin         = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_vimballPlugin     = 1
+let g:loaded_zipPlugin         = 1
 let g:omni_sql_no_default_maps = 1
 let g:ftplugin_sql_omni_key    = ''
 
@@ -66,8 +56,7 @@ if has('python')
     Plug 'FelikZ/ctrlp-py-matcher'
 endif
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'mattn/ctrlp-git'
-" Plug 'h2ero/ctrlp-hg'
+Plug 'phongnh/ctrlp-finder'
 Plug 'h14i/vim-ctrlp-buftab'
 Plug 'DavidEGx/ctrlp-smarttabs'
 " Plug 'kaneshin/ctrlp-tabbed'
@@ -134,7 +123,6 @@ Plug 'rhysd/clever-f.vim'
 
 " Improved incremental searching for Vim
 Plug 'haya14busa/incsearch.vim'
-
 " Vim search status
 Plug 'osyo-manga/vim-anzu'
 
@@ -144,62 +132,54 @@ Plug 'mhinz/vim-grepper'
 " Helpers for UNIX
 Plug 'tpope/vim-eunuch'
 
+" Text Objects
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-line'                  " l
+Plug 'kana/vim-textobj-indent'                " i
+Plug 'kana/vim-textobj-entire'                " e
+Plug 'glts/vim-textobj-comment'               " c
+Plug 'mattn/vim-textobj-url'                  " u
+Plug 'Julian/vim-textobj-variable-segment'    " v
+Plug 'rhysd/vim-textobj-anyblock'             " b
+Plug 'thinca/vim-textobj-between'             " f{char}, remapped to n{char}
+Plug 'sgur/vim-textobj-parameter'             " ,
+Plug 'whatyouhide/vim-textobj-xmlattr'        " x
+Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
+Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y
+Plug 'kana/vim-textobj-function'
+Plug 'thinca/vim-textobj-function-javascript' " f
+Plug 'poetic/vim-textobj-javascript'          " c, remapped to j
+
 " Enable repeating supported plugin maps with "."
 Plug 'tpope/vim-repeat'
+
 " quoting/parenthesizing made simple
 Plug 'tpope/vim-surround'
+
 " easily search for, substitute, and abbreviate multiple variants of a word
 Plug 'tpope/vim-abolish'
+
 " use CTRL-A/CTRL-X to increment dates, times, and more
 Plug 'tpope/vim-speeddating'
+
 " insert or delete brackets, parens, quotes in pair
 Plug 'jiangmiao/auto-pairs'
 
-" Text Objects
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-line'               " l
-Plug 'kana/vim-textobj-indent'             " i
-Plug 'kana/vim-textobj-entire'             " e
-Plug 'glts/vim-textobj-comment'            " c
-Plug 'mattn/vim-textobj-url'               " u
-Plug 'Julian/vim-textobj-variable-segment' " v
-Plug 'rhysd/vim-textobj-anyblock'          " b
-Plug 'thinca/vim-textobj-between'          " f{char}, remapped to n{char}
-Plug 'sgur/vim-textobj-parameter'          " ,
-Plug 'whatyouhide/vim-textobj-xmlattr'     " x
-
-" Plug 'tek/vim-textobj-ruby', { 'for': 'ruby' }        " r: block, f: function, c: class/module, n: name
-Plug 'rhysd/vim-textobj-ruby', { 'for': 'ruby' }        " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
-Plug 'whatyouhide/vim-textobj-erb', { 'for': 'eruby' }  " E, remapped to y
-
-Plug 'kana/vim-textobj-function'
-Plug 'thinca/vim-textobj-function-javascript', { 'for': 'javascript' } " f
-Plug 'poetic/vim-textobj-javascript', { 'for': 'javascript' } " c, remapped to j
-
 " Delete unwanted whitespace at the end of lines
 Plug 'vim-scripts/DeleteTrailingWhitespace'
-" Plug 'ntpeters/vim-better-whitespace'
 
-" Comment code out
+" commentary.vim: comment stuff out
 Plug 'tpope/vim-commentary'
-" Plug 'scrooloose/nerdcommenter'
 
 " A Vim alignment plugin
 Plug 'junegunn/vim-easy-align'
 " Vim script for text filtering and alignment
 Plug 'godlygeek/tabular'
 
-" True Sublime Text style multiple selections for Vim
+" Vim plugin that allows you to visually select increasingly larger regions of text using the same key combination.
 Plug 'terryma/vim-expand-region'
+" True Sublime Text style multiple selections for Vim
 Plug 'terryma/vim-multiple-cursors'
-
-" SCM
-" Show a diff via Vim sign column
-Plug 'mhinz/vim-signify'
-" A awesome Git wrapper so awesome
-Plug 'tpope/vim-fugitive'
-" A Mercurial wrapper for Vim
-" Plug 'ludovicchabant/vim-lawrencium'
 
 " Code completion and Snippets
 if has('lua')
@@ -210,6 +190,13 @@ endif
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
+
+" SCM
+" A awesome Git wrapper so awesome
+Plug 'tpope/vim-fugitive'
+
+" A Vim plugin which shows a git diff in the gutter (sign column) and stages/reverts hunks.
+Plug 'airblade/vim-gitgutter'
 
 " Tmux
 if exists("$TMUX")
@@ -223,21 +210,22 @@ Plug 'janko-m/vim-test'
 " A solid language pack for Vim
 Plug 'sheerun/vim-polyglot'
 
+" Ruby / Rails
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-rails'
+
 " Web
 Plug 'mattn/emmet-vim'
-Plug 'gregsexton/MatchTag' " Markup Language (HTML, Markdown, Stylus, Jade and Mustache)
+Plug 'gregsexton/MatchTag'
 
 " JavaScript / NodeJS
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'moll/vim-node'
-" Plug 'marijnh/tern_for_vim'
 
 " Go
 Plug 'fatih/vim-go'
 Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
-
-" Swift
-Plug 'kballard/vim-swift'
 
 " Others
 Plug 'vim-scripts/fish-syntax'
@@ -247,8 +235,9 @@ Plug 'vim-scripts/fish-syntax'
 Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
 
 " Color schemes
-" Dark and light themes
+Plug 'NLKNguyen/papercolor-theme'
 Plug 'morhetz/gruvbox'
+Plug 'junegunn/seoul256.vim'
 
 call plug#end()
 
@@ -307,12 +296,12 @@ set fillchars=diff:⣿,vert:│
 set noswapfile
 set nobackup
 set nowritebackup
-set directory=~/.vim/cache/swap
-set backupdir=~/.vim/cache/backup
+set directory=~/.cache/swap
+set backupdir=~/.cache/backup
 
 if has('persistent_undo')
     set undofile
-    set undodir=~/.vim/cache/undo
+    set undodir=~/.cache/undo
 endif
 
 set scrolloff=10                " Minimal number of screen lines to keep above and below the cursor
@@ -324,6 +313,7 @@ set listchars=tab:>\ ,trail:-,nbsp:+,extends:>,precedes:<
 
 if has('conceal')
     set listchars+=conceal:^
+    set conceallevel=2 concealcursor=nvi
 endif
 
 set display+=lastline           " When a line is long, do not omit it in @
@@ -375,7 +365,7 @@ set splitright                  " Splitting a window will put the new window rig
 set t_Co=256                    " Enable 256 colors
 
 " Remember where we are, support yankring
-set viminfo=!,'100,\"100,:20,<50,s10,h,n~/.vim/cache/viminfo
+set viminfo^=!
 
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
@@ -398,11 +388,12 @@ xnoremap [App] <Nop>
 nmap     m     [App]
 xmap     m     [App]
 
+" Retain orignal behaviors
 nnoremap [App], ,
 nnoremap [App]; ;
 nnoremap [App]m m
 
-" [Space]: Other useful commands
+" <Space>: Other useful commands
 nnoremap [Space] <Nop>
 xnoremap [Space] <Nop>
 nmap     <Space> [Space]
@@ -493,17 +484,6 @@ nnoremap ZZ    <Nop>
 nnoremap ZQ    <Nop>
 nnoremap <C-Z> <Nop>
 
-" Indent
-nnoremap >       >>
-nnoremap <       <<
-xnoremap >       >gv
-xnoremap <       <gv
-xnoremap <Tab>   >gv
-xnoremap <S-Tab> <gv
-
-" Indent whole file
-nnoremap g= gg=G``
-
 " H: Move to Home
 noremap  H ^
 " L: Move to End
@@ -514,6 +494,17 @@ xnoremap L g_
 xnoremap v $h
 " Select rectangle - Visual Block
 xnoremap r <C-V>
+
+" Indent
+nnoremap >       >>
+nnoremap <       <<
+xnoremap >       >gv
+xnoremap <       <gv
+xnoremap <Tab>   >gv
+xnoremap <S-Tab> <gv
+
+" Indent whole file
+nnoremap g= gg=G``
 
 " gi already moves to "last place you exited insert mode"
 " gI: Move to last change
@@ -532,62 +523,40 @@ nnoremap U :redo<CR>
 " Yank to end line
 nnoremap Y y$
 
-" Copy to clipboard
-function! s:CopyToClipboard(msg)
-    try
-        let [@*, @+] = [@", @"]
-        echo a:msg
-    catch
-    endtry
-endfunction
+" Paste with indent
+nnoremap <silent> ]p o<Esc>pm``[=`]``^
+nnoremap <silent> [p O<Esc>Pm``[=`]``^
+nnoremap <silent> ]P o<Esc>Pm``[=`]``^
+nnoremap <silent> [P O<Esc>pm``[=`]``^
 
-xnoremap <silent> Y         ""y:call <SID>CopyToClipboard('Copied to clipboard!')<CR>
-xnoremap <silent> <Leader>y ""y:call <SID>CopyToClipboard('Copied to clipboard!')<CR>
-xnoremap <silent> <Leader>Y ""y$:call <SID>CopyToClipboard('Copied line to clipboard!')<CR>
+" Copy to clipboard
+nnoremap <silent> <Leader>y "+yy
+nnoremap <silent> <Leader>Y "+y$
+xnoremap <silent> <Leader>y "+y
+xnoremap <silent> <Leader>Y "+y$
 
 " Cut to clipboard
-xnoremap <silent> X         ""x:call <SID>CopyToClipboard('Cut to clipboard!')<CR>
-xnoremap <silent> <Leader>x ""x:call <SID>CopyToClipboard('Cut to clipboard!')<CR>
-nnoremap <silent> <Leader>X ""d$:call <SID>CopyToClipboard('Cut line to clipboard!')<CR>
-
-" Copy current yanked text to clipboard
-function! s:CopyYankedText()
-    try
-        let [@*, @+] = [@", @"]
-        let yanked_text = substitute(@", "\n", '^@', 'g')
-        if yanked_text ==? strpart(yanked_text, 0, 30)
-            echo 'Copied: ' . yanked_text
-        else
-            echo 'Copied: ' . strpart(yanked_text, 0, 30) . '...'
-        endif
-    catch
-    endtry
-endfunction
-
-nnoremap <silent> <Leader>y :call <SID>CopyYankedText()<CR>
+nnoremap <silent> <Leader>x "+dd
+nnoremap <silent> <Leader>X "+D
+xnoremap <silent> <Leader>x "+d
+xnoremap <silent> <Leader>X "+D
 
 " Paste from clipboard
-inoremap <silent> <C-V>     <C-G>u<C-O>"*gP
-nnoremap <silent> <Leader>p "*gP
-nnoremap <silent> <Leader>P :set paste<CR>"*gP:set nopaste<CR>
+inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
+nnoremap <silent> <Leader>p "+p
+nnoremap <silent> <Leader>P "+P
+nnoremap <silent> <Leader>v :set paste<CR>"+gp:set nopaste<CR>
+nnoremap <silent> <Leader>V :set paste<CR>"+gP:set nopaste<CR>
 
 " Paste from clipboard with indent
-nnoremap <silent> <Leader>v o<Esc>"*pm``[=`]``^
-nnoremap <silent> <Leader>V o<Esc>"*gpm``[=`]``^
-
-" Middle mouse to paste from clipboard
-nnoremap <MiddleMouse> "*P
-xnoremap <MiddleMouse> "*P
-inoremap <MiddleMouse> <C-O><C-R>*
-cnoremap <MiddleMouse> <C-R>*
-
-" Paste with indent
-nnoremap <silent> ]v o<Esc>pm``[=`]``^
-nnoremap <silent> [v O<esc>pm``[=`]``^
+nnoremap <silent> ]v o<Esc>"+pm``[=`]``^
+nnoremap <silent> [v O<Esc>"+Pm``[=`]``^
+nnoremap <silent> ]V o<Esc>"+Pm``[=`]``^
+nnoremap <silent> [V O<Esc>"+pm``[=`]``^
 
 " Redraw
-nnoremap <silent> <Plug>(clear-and-redraw) :<C-U>echo<CR>:nohlsearch<CR>:match<CR>:redraw!<CR>
-nmap <silent> <Leader><Space> <Plug>(clear-and-redraw)
+nnoremap <silent> <Plug>(redraw-screen) :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+nmap <Leader><Space> <Plug>(redraw-screen)
 
 " Use <C-\> to do <C-]> but open it in a new split
 nnoremap <C-\> <C-W>v<C-]>zvzz
@@ -681,9 +650,6 @@ nnoremap <silent> <Down>  <C-W>j
 nnoremap <silent> <Up>    <C-W>k
 nnoremap <silent> <Right> <C-W>l
 
-" gl: List buffers
-nnoremap gl :buffers<CR>:edit #
-
 " gb: Last buffer
 nnoremap <silent> gb :buffer#<CR>
 
@@ -694,7 +660,7 @@ nnoremap <silent> <Leader>\ :vsp<CR>
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
 " Save buffer
-noremap  <silent> <C-S> :update<CR>
+nnoremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
 " Close buffer
@@ -708,38 +674,23 @@ nnoremap <silent> <Leader>0 :only<CR>
 " Swap windows
 nnoremap <silent> <Leader>` :wincmd x<CR>
 
-" Copy path to clipboard
-function! s:CopyPath(path)
-    try
-        let @" = a:path
-        let [@*, @+] = [@", @"]
-        echo 'Copied: ' . @"
-    catch
-    endtry
-endfunction
-
-" Copy file name to clipboard
-nnoremap <silent> <Leader>if :call <SID>CopyPath(expand("%"))<CR>
-
-" Copy file name with line to clipboard
-nnoremap <silent> <Leader>iF :call <SID>CopyPath(expand("%") . ':' . line('.'))<CR>
-
-" Copy full path to clipboard
-nnoremap <silent> <Leader>ip :call <SID>CopyPath(expand("%:p"))<CR>
-
-" Copy full path with line to clipboard
-nnoremap <silent> <Leader>iP :call <SID>CopyPath(expand("%:p") . ':' . line('.'))<CR>
-
-" Copy parent folder to clipboard
-nnoremap <silent> <Leader>id :call <SID>CopyPath(expand("%:h"))<CR>
-
-" Copy folder to clipboard
-nnoremap <silent> <Leader>iD :call <SID>CopyPath(expand("%:p:h"))<CR>
-
-" Highlight current line
-nnoremap <silent> <Leader>il :execute 'match Search /\%' . line('.') . 'l/'<CR>
-
 " User-defined commands
+" Highlight current line
+command! HighlightLine call matchadd('Search', '\%' . line('.') . 'l')
+nnoremap <silent> <Leader>il :HighlightLine<CR>
+
+" Highlight the word underneath the cursor
+command! HighlightWord call matchadd('Search', '\<\w*\%' . line('.') . 'l\%' . col('.') . 'c\w*\>')
+nnoremap <silent> <Leader>iw :HighlightWord<CR>
+
+" Highlight the words contained in the virtual column
+command! HighlightColumns call matchadd('Search', '\<\w*\%' . virtcol('.') . 'v\w*\>')
+nnoremap <silent> <Leader>iv :HighlightColumns<CR>
+
+" Clear the permanent highlights
+command! ClearHightlights call clearmatches()
+nnoremap <silent> <Leader>ic :ClearHightlights<CR>
+
 " Sudo write
 command! -bang SW w<bang> !sudo tee % >/dev/null
 
@@ -759,7 +710,17 @@ elseif executable('hw')
     let &grepprg = 'hw --no-color --no-group -n -i'
 elseif executable('sift')
     " https://github.com/svent/sift
-    let &grepprg = 'sift --no-color --no-group --binary-skip -n -i $*'
+    let &grepprg = 'sift --no-color --no-group --binary-skip --git -n -i $*'
+endif
+
+" Gitk
+if executable('gitk')
+    command! -bar -nargs=* -complete=dir -complete=file Gitk execute "silent! !gitk <args>" | redraw!
+endif
+
+" Tig
+if !has('gui_running') && executable('tig')
+    command! -nargs=* -complete=dir -complete=file Tig !tig <args>
 endif
 
 " bling/vim-airline
@@ -821,18 +782,13 @@ let g:ctrlp_match_window      = 'bottom,order:btt,min:1,max:20,results:20'
 let g:ctrlp_map               = ''
 let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_reuse_window      = 'startify'
-let g:ctrlp_cache_dir         = '~/.vim/cache/ctrlp'
 let g:ctrlp_custom_ignore     = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-Z>', '<C-@>'], }
 
 if executable('ag')
-    let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup --follow --hidden -g ""'
-    " let g:ctrlp_use_caching  = 0
-elseif executable('dir')
-    let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-elseif executable('find')
-    let g:ctrlp_user_command = 'find %s -type f' .
-                \ '\( ! -path "*.git/*" -a ! -path "*.hg/*" -a ! -path "*.svn/*" -a ! -path "*.DS_Store" \)'
+    let g:ctrlp_user_command = "ag --ignore '.hg' --ignore '.svn' --ignore '.git' --ignore '.bzr' " .
+                \ '%s -l --nocolor --nogroup --follow --hidden -g ""'
+    let g:ctrlp_use_caching  = 0
 endif
 
 nnoremap <silent> [Space]R :CtrlPLastMode --dir<CR>
@@ -869,8 +825,8 @@ nnoremap <silent> [Space]U :CtrlPChange<CR>
 
 nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
 
-" mattn/ctrlp-git
-nnoremap <silent> [Space]e :CtrlPGitFiles<CR>
+" phongnh/ctrlp-finder
+nnoremap <silent> [Space]e :CtrlPFinder<CR>
 
 " h14i/vim-ctrlp-buftab
 nnoremap <silent> [Space]B :CtrlPBufTab<CR>
@@ -901,7 +857,6 @@ nnoremap <silent> [Space]o :CtrlPFunky<CR>
 nnoremap <silent> [Space]Q :CtrlPLocationlist<CR>
 
 " LeafCage/yankround.vim
-let g:yankround_dir         = '~/.vim/cache/yankround'
 let g:yankround_max_history = 100
 
 nnoremap <silent> [Space]y :CtrlPYankRound<CR>
@@ -997,7 +952,6 @@ let g:startify_skiplist = [
             \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
             \ ]
 
-let g:startify_session_dir        = '~/.vim/cache/sessions'
 let g:startify_enable_special     = 0
 let g:startify_change_to_dir      = 0
 let g:startify_change_to_vcs_root = 1
@@ -1061,7 +1015,6 @@ let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
 let g:NERDTreeQuitOnOpen    = 0
 let g:NERDTreeChDirMode     = 0
 let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeBookmarksFile = expand('~/.vim/cache/NERDTreeBookmarks')
 
 nnoremap <silent> <F9>  :NERDTreeToggle<CR>
 inoremap <silent> <F9>  <Esc>:NERDTreeToggle<CR>
@@ -1109,7 +1062,7 @@ let g:grepper = {
             \   'escape': '\+*?^$%#()[]',
             \ },
             \ 'sift': {
-            \   'grepprg': 'sift --no-color --no-group --binary-skip -n -i $*'
+            \   'grepprg': 'sift --no-color --no-group --binary-skip --git -n -i $*'
             \ },
             \ }
 
@@ -1120,28 +1073,6 @@ nnoremap <silent> [App]S :Grepper!<CR>
 
 nnoremap <silent> [App]s :Grepper! -cword<CR>
 xmap     <silent> [App]s <Plug>(GrepperOperator)
-
-" tpope/vim-surround
-let g:surround_indent             = 1
-let g:surround_no_insert_mappings = 1
-
-" nmap <C-S><C-W> ysiw
-
-augroup MyAutoCmd
-    autocmd VimEnter * silent! iunmap <C-G>s
-    autocmd VimEnter * silent! iunmap <C-G>S
-    autocmd BufEnter * silent! iunmap <buffer> <C-G>g
-augroup END
-
-" jiangmiao/auto-pairs
-let g:AutoPairsMapBS              = 0
-let g:AutoPairsFlyMode            = 0
-let g:AutoPairsShortcutToggle     = '<M-p>'
-let g:AutoPairsShortcutJump       = '<M-n>'
-let g:AutoPairsShortcutFastWrap   = '<M-e>'
-let g:AutoPairsShortcutBackInsert = '<M-b>'
-
-autocmd BufEnter * execute 'inoremap <buffer> <silent> <BS> <C-R>=AutoPairsDelete()<CR>'
 
 " thinca/vim-textobj-between
 let g:textobj_between_no_default_key_mappings = 1
@@ -1177,6 +1108,28 @@ omap aj <Plug>(textobj-chunkblock-a)
 omap ij <Plug>(textobj-chunkblock-i)
 xmap aj <Plug>(textobj-chunkblock-a)
 xmap ij <Plug>(textobj-chunkblock-i)
+
+" tpope/vim-surround
+let g:surround_indent             = 1
+let g:surround_no_insert_mappings = 1
+
+" nmap <C-Y><C-W> ysiw
+
+augroup MyAutoCmd
+    autocmd VimEnter * silent! iunmap <C-G>s
+    autocmd VimEnter * silent! iunmap <C-G>S
+    autocmd BufEnter * silent! iunmap <buffer> <C-G>g
+augroup END
+
+" jiangmiao/auto-pairs
+let g:AutoPairsMapBS              = 0
+let g:AutoPairsFlyMode            = 0
+let g:AutoPairsShortcutToggle     = '<M-p>'
+let g:AutoPairsShortcutJump       = '<M-n>'
+let g:AutoPairsShortcutFastWrap   = '<M-e>'
+let g:AutoPairsShortcutBackInsert = '<M-b>'
+
+autocmd BufEnter * execute 'inoremap <buffer> <silent> <BS> <C-R>=AutoPairsDelete()<CR>'
 
 " vim-scripts/DeleteTrailingWhitespace
 nnoremap <silent> <Leader>W :update<CR>:DeleteTrailingWhitespace<CR>
@@ -1272,68 +1225,8 @@ function! Multiple_cursors_after()
     endif
 endfunction
 
-" mhinz/vim-signify
-let g:signify_vcs_list              = [ 'git', 'hg' ]
-let g:signify_disable_by_default    = 0
-let g:signify_cursorhold_insert     = 0
-let g:signify_cursorhold_normal     = 0
-let g:signify_update_on_bufenter    = 0
-let g:signify_update_on_focusgained = 0
-
-nmap ]c <Plug>(signify-next-hunk)zz
-nmap ]C 999]c
-nmap [c <Plug>(signify-prev-hunk)zz
-nmap [C 999[c
-
-nnoremap <silent> cog :SignifyToggle<CR>
-
-" tpope/vim-fugitive
-augroup MyAutoCmd
-    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-R><C-G><CR>
-    autocmd BufReadPost fugitive://* set bufhidden=delete
-augroup END
-
-nnoremap          <Leader>G  :Git!<Space>
-nnoremap          <Leader>gi :Git<Space>
-nnoremap          <Leader>gu :Git commit -m ""<Left>
-nnoremap          <Leader>ga :Git add -p %<CR><CR>
-nnoremap          <Leader>ge :Gedit<Space>
-nnoremap <silent> <Leader>gd :Gdiff<CR>
-nnoremap          <Leader>gm :Gmerge<Space>
-nnoremap <silent> <Leader>gs :Gstatus<CR>
-nnoremap <silent> <Leader>gb :Gblame<CR>
-nnoremap <silent> <Leader>gB :echo fugitive#head()<CR>
-nnoremap <silent> <Leader>gw :Gwrite<CR>
-nnoremap <silent> <Leader>gr :Gread<CR>
-nnoremap <silent> <Leader>gR :Gremove<CR>
-nnoremap          <Leader>gM :Gmove<Space>
-nnoremap <silent> <Leader>gc :Gcommit<CR>
-nnoremap          <Leader>gC :Gcommit<Space>
-nnoremap <silent> <Leader>gf :Gfetch<CR>
-nnoremap <silent> <Leader>gF :Gfetch -p<CR>
-nnoremap <silent> <Leader>gp :Gpush<CR>
-nnoremap <silent> <Leader>gP :Gpull<CR>
-nnoremap          <Leader>g/ :Ggrep!<Space>
-nnoremap          <Leader>gg :Ggrep! <C-R>=GetWordForAck()<CR><Space>
-xnoremap          <Leader>gg <Esc>:Ggrep! <C-R>=GetSelectedTextForAck()<CR><Space>
-nnoremap          <Leader>gl :Glog!<Space>
-nnoremap          <Leader>gL :Gllog!<Space>
-
-if executable('gitk')
-    command! -nargs=* -complete=dir -complete=file Gitk !gitk <args>
-    nnoremap <silent> <Leader>gk :Gitk<CR><CR>
-    nnoremap          <Leader>gK :Gitk<Space>
-endif
-
-if !has('gui_running') && executable('tig')
-    command! -nargs=* -complete=dir -complete=file Tig !tig <args>
-    nnoremap <silent> <Leader>gt :Tig<CR><CR>
-    nnoremap          <Leader>gT :Tig<Space>
-endif
-
 if has('lua')
     " Shougo/neocomplete.vim
-    let g:neocomplete#data_directory                    = '~/.vim/cache/neocomplete'
     let g:neocomplete#enable_at_startup                 = 1 " Use neocomplete
     let g:neocomplete#enable_smart_case                 = 1 " Use smartcase
     let g:neocomplete#min_keyword_length                = 3 " Set minimum keyword length
@@ -1375,7 +1268,6 @@ if has('lua')
     let g:neocomplete#fallback_mappings = ["\<C-X>\<C-O>", "\<C-X>\<C-N>"]
 else
     " Shougo/neocomplcache.vim
-    let g:neocomplcache_data_directory     = '~/.vim/cache/neocomplcache'
     let g:neocomplcache_enable_at_startup  = 1 " Use neocomplcache
     let g:neocomplcache_enable_smart_case  = 1 " Use smartcase
     let g:neocomplcache_min_keyword_length = 3 " Set minimum keyword length
@@ -1432,6 +1324,51 @@ smap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
 
 nnoremap <silent> [Space]I :Unite -buffer-name=snippets neosnippet<CR>
 
+" tpope/vim-fugitive
+augroup MyAutoCmd
+    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-R><C-G><CR>
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+augroup END
+
+nnoremap          <Leader>G  :Git!<Space>
+nnoremap          <Leader>gi :Git<Space>
+nnoremap          <Leader>gu :Git commit -m ""<Left>
+nnoremap          <Leader>ga :Git add -p %<CR><CR>
+nnoremap          <Leader>ge :Gedit<Space>
+nnoremap <silent> <Leader>gd :Gdiff<CR>
+nnoremap          <Leader>gm :Gmerge<Space>
+nnoremap <silent> <Leader>gs :Gstatus<CR>
+nnoremap <silent> <Leader>gb :Gblame<CR>
+nnoremap <silent> <Leader>gB :echo fugitive#head()<CR>
+nnoremap <silent> <Leader>gw :Gwrite<CR>
+nnoremap <silent> <Leader>gr :Gread<CR>
+nnoremap <silent> <Leader>gR :Gremove<CR>
+nnoremap          <Leader>gM :Gmove<Space>
+nnoremap <silent> <Leader>gc :Gcommit<CR>
+nnoremap          <Leader>gC :Gcommit<Space>
+nnoremap <silent> <Leader>gf :Gfetch<CR>
+nnoremap <silent> <Leader>gF :Gfetch -p<CR>
+nnoremap <silent> <Leader>gp :Gpush<CR>
+nnoremap <silent> <Leader>gP :Gpull<CR>
+nnoremap          <Leader>g/ :Ggrep!<Space>
+nnoremap          <Leader>gg :Ggrep! <C-R>=GetWordForSearch()<CR><Space>
+xnoremap          <Leader>gg <Esc>:Ggrep! <C-R>=GetSelectedTextForSearch()<CR><Space>
+nnoremap          <Leader>gl :Glog!<Space>
+nnoremap          <Leader>gL :Gllog!<Space>
+
+" airblade/vim-gitgutter
+let g:gitgutter_map_keys  = 0
+let g:gitgutter_realtime  = 0
+let g:gitgutter_eager     = 0
+let g:gitgutter_max_signs = 200
+
+nmap ]c <Plug>GitGutterNextHunk zz
+nmap ]C 999]c
+nmap [c <Plug>GitGutterPrevHunk zz
+nmap [C 999[c
+
+nnoremap <silent> cog :GitGutterToggle<CR>
+
 if exists("$TMUX")
     " common tmux functions
     function! TmuxFormatCommand(text)
@@ -1455,32 +1392,27 @@ if exists("$TMUX")
     let g:VimuxUseNearest = 1
     let g:VimuxHeight     = 25
 
-    nnoremap [vimux] <Nop>
-    xnoremap [vimux] <Nop>
-    nmap     [App]v  [vimux]
-    xmap     [App]v  [vimux]
-
-    xnoremap <silent> [vimux]s "my:call VimuxSlime(@m)<CR>
-    nmap     <silent> [vimux]s vip[vimux]s
-    nnoremap <silent> [vimux]r :VimuxPromptCommand<CR>
-    nnoremap <silent> [vimux]R :VimuxRunLastCommand<CR>
-    nnoremap <silent> [vimux]q :call VimuxSendManyKeys('q C-u')<CR>
-    nnoremap <silent> [vimux]m :call VimuxSendManyKeys('Enter')<CR>
-    nnoremap <silent> [vimux]d :call VimuxSendManyKeys('C-d')<CR>
-    nnoremap <silent> [vimux]c :call VimuxSendManyKeys('C-c')<CR>
-    nnoremap <silent> [vimux]l :call VimuxSendManyKeys('C-c C-l')<CR>
-    nnoremap <silent> [vimux]k :call VimuxSendManyKeys(input('Keys? '))<CR>
+    xnoremap <silent> [App]vs "my:call VimuxSlime(@m)<CR>
+    nmap     <silent> [App]vs vip[App]vs
+    nnoremap <silent> [App]vr :VimuxPromptCommand<CR>
+    nnoremap <silent> [App]vR :VimuxRunLastCommand<CR>
+    nnoremap <silent> [App]vq :call VimuxSendManyKeys('q C-u')<CR>
+    nnoremap <silent> [App]vm :call VimuxSendManyKeys('Enter')<CR>
+    nnoremap <silent> [App]vd :call VimuxSendManyKeys('C-d')<CR>
+    nnoremap <silent> [App]vc :call VimuxSendManyKeys('C-c')<CR>
+    nnoremap <silent> [App]vl :call VimuxSendManyKeys('C-c C-l')<CR>
+    nnoremap <silent> [App]vk :call VimuxSendManyKeys(input('Keys? '))<CR>
 
     " Runner-related
-    nnoremap <silent> [vimux]o :call VimuxOpenRunner()<CR>
-    nnoremap <silent> [vimux]O :VimuxCloseRunner<CR>
-    nnoremap <silent> [vimux]p :VimuxTogglePane<CR>
-    nnoremap <silent> [vimux]i :VimuxInspectRunner<CR>
-    nnoremap <silent> [vimux]I :VimuxInterruptRunner<CR>
-    nnoremap <silent> [vimux]h :VimuxClearRunnerHistory<CR>
-    nnoremap <silent> [vimux]z :VimuxZoomRunner<CR>
-    nnoremap <silent> [vimux][ :VimuxScrollUpInspect<CR>
-    nnoremap <silent> [vimux]] :VimuxScrollDownInspect<CR>
+    nnoremap <silent> [App]vo :call VimuxOpenRunner()<CR>
+    nnoremap <silent> [App]vO :VimuxCloseRunner<CR>
+    nnoremap <silent> [App]vp :VimuxTogglePane<CR>
+    nnoremap <silent> [App]vi :VimuxInspectRunner<CR>
+    nnoremap <silent> [App]vI :VimuxInterruptRunner<CR>
+    nnoremap <silent> [App]vh :VimuxClearRunnerHistory<CR>
+    nnoremap <silent> [App]vz :VimuxZoomRunner<CR>
+    nnoremap <silent> [App]v[ :VimuxScrollUpInspect<CR>
+    nnoremap <silent> [App]v] :VimuxScrollDownInspect<CR>
 
     function! VimuxSlime(text)
         let cmd = TmuxFormatCommand(a:text)
@@ -1533,7 +1465,7 @@ if exists("$TMUX")
     xnoremap <silent> [App]ts "my:TxSend(@m)<CR>
     nnoremap <silent> [App]tu :TxSendKey 'q C-u'<CR>
     nnoremap <silent> [App]tm :TxSendKey 'Enter'<CR>
-    nnoremap <silent> [App]td :TxSendKeyl'C-d'<CR>
+    nnoremap <silent> [App]td :TxSendKey 'C-d'<CR>
 endif
 
 " janko-m/vim-tests
@@ -1544,30 +1476,24 @@ nmap <silent> [App]ta :TestSuite<CR>
 nmap <silent> [App]tg :TestVisit<CR>
 
 " sheerun/vim-polyglot
-let g:polyglot_disabled = ['go', 'swift']
+let g:polyglot_disabled = ['go']
 
 " tpope/rails.vim
 nnoremap <silent> [App]a :A<CR>
 nnoremap <silent> [App]r :R<CR>
 
-nnoremap [Rails]  <Nop>
-xnoremap [Rails]  <Nop>
-nmap     [App]e   [Rails]
-xmap     [App]e   [Rails]
-
-nnoremap [Rails]m :Emodel<Space>
-nnoremap [Rails]v :Eview<Space>
-nnoremap [Rails]c :Econtroller<Space>
-nnoremap [Rails]e :Emailer<Space>
-nnoremap [Rails]h :Ehelper<Space>
-nnoremap [Rails]d :Emigration<Space>
-nnoremap [Rails]l :Elib<Space>
-nnoremap [Rails]t :Etask<Space>
-nnoremap [Rails]j :Ejavascript<Space>
-nnoremap [Rails]s :Estylesheet<Space>
-nnoremap [Rails]t :Espec<Space>
-
-xnoremap [Rails]e :Rextract<Space>
+nnoremap [App]em :Emodel<Space>
+nnoremap [App]ev :Eview<Space>
+nnoremap [App]ec :Econtroller<Space>
+nnoremap [App]ee :Emailer<Space>
+nnoremap [App]eh :Ehelper<Space>
+nnoremap [App]ed :Emigration<Space>
+nnoremap [App]el :Elib<Space>
+nnoremap [App]et :Etask<Space>
+nnoremap [App]ej :Ejavascript<Space>
+nnoremap [App]es :Estylesheet<Space>
+nnoremap [App]et :Espec<Space>
+xnoremap [App]ee :Rextract<Space>
 
 " mattn/emmet-vim
 let g:user_emmet_install_global  = 1
@@ -1660,6 +1586,10 @@ autocmd MyAutoCmd FileType go call s:VimGoSetup()
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
+
+" junegunn/seoul256.vim
+let g:seoul256_background = 235
+let g:seoul256_light_background = 254
 
 function! s:xmllint_setup()
     let xmllint = 'setlocal equalprg=env\ XMLLINT_INDENT=''%s''\ xmllint\ --format\ --recover\ -\ 2>/dev/null'

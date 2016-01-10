@@ -23,8 +23,8 @@ My dotfiles for vim + tmux setup
 ## Setup vim and nvim folder
 
     mkdir -p ~/.vim/{plugged,snippets,cache}
-    mkdir -p ~/.vim/cache/{backup,undo,sessions,ctrlp,unite,neocomplete,neocomplcache,yankround}
-    touch ~/.vim/cache/{NERDTreeBookmarks,viminfo,nviminfo}
+    mkdir -p ~/.cache/{swap,backup,undo}
+    touch ~/.cache/NERDTreeBookmarks
 
     # nvim
     mkdir -p ~/.config
