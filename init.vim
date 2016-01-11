@@ -793,9 +793,10 @@ call unite#custom#source('line,outline', 'matchers', ['matcher_fuzzy'])
 let s:system_open_action = { 'is_selectable': 1 }
 
 function! s:system_open_action.func(candidates)
+    let cmd = has('mac') ? '!open' : '!xdg-open'
     for candidate in a:candidates
         if !isdirectory(candidate.action__path)
-            silent! execute "!open " . fnameescape(candidate.action__path) . " &"
+            silent! execute cmd . fnameescape(candidate.action__path) . " &"
         endif
     endfor
     redraw!
