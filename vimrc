@@ -815,12 +815,9 @@ nnoremap          [Space]K :CtrlPBookmarkDirAdd!<Space>
 
 nnoremap <silent> [Space]r :CtrlPMRUFiles<CR>
 
-nnoremap <silent> [Space]T :CtrlPBufTag<CR>
+nnoremap <silent> [Space]O :CtrlPBufTag<CR>
 nnoremap <silent> [Space]a :CtrlPBufTagAll<CR>
 nnoremap <silent> [Space]A :CtrlPTag<CR>
-
-nnoremap <silent> [Space]u :CtrlPUndo<CR>
-nnoremap <silent> [Space]U :CtrlPChange<CR>
 
 nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
 
