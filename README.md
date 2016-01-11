@@ -11,10 +11,10 @@ My dotfiles for vim + tmux setup
     gem install tmuxinator rubocop --no-rdoc --no-ri
 
     # Install vim
-    brew install vim --with-luajit --HEAD
+    brew install vim --with-lua --HEAD
 
     # Or install macvim
-    brew install macvim --with-luajit --with-override-system-vim --HEAD
+    brew install macvim --with-lua --HEAD
 
     # Or install neovim
     brew tap neovim/neovim
