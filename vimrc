@@ -4,7 +4,7 @@ if &compatible
 endif
 
 if &shell =~# 'fish$'
-    set shell=bash
+    set shell=/bin/bash
 endif
 
 " Set augroup
@@ -868,42 +868,40 @@ let g:goyo_linenr = 0
 nnoremap <silent> <F3> :Goyo<CR>
 inoremap <silent> <F3> <Esc>:Goyo<CR>
 
-autocmd! User GoyoEnter nested call <SID>CustomGoyoEnter()
-autocmd! User GoyoLeave nested call <SID>CustomGoyoLeave()
+autocmd! User GoyoEnter nested call <SID>custom_goyo_enter()
+autocmd! User GoyoLeave nested call <SID>custom_goyo_leave()
 
-function! s:CustomGoyoEnter()
+function! s:custom_goyo_enter()
     let s:goyo_settings = {
-                \ 'laststatus':  &laststatus,
-                \ 'showtabline': &showtabline,
                 \ 'showmode':    &showmode,
                 \ 'linespace':   &linespace,
-                \ 'ruler':       &ruler,
                 \ 'scrolloff':   &scrolloff,
                 \ }
 
-    if has('gui_running')
+    if has('fullscreen')
         set fullscreen
-        if &linespace == 0
-            set linespace=5
-        endif
-    elseif exists("$TMUX")
-        silent !tmux set -q status off
     endif
 
+    if &linespace == 0
+        set linespace=5
+    endif
     set scrolloff=999
     set showmode
-    set ruler
 
     if exists(':Limelight') == 2
-        Limelight
+        execute 'Limelight'
+    endif
+
+    if exists(':NeoCompleteLock') == 2
+        execute 'NeoCompleteLock'
+    elseif exists(':NeoComplCacheLock') == 2
+        execute 'NeoComplCacheLock'
     endif
 endfunction
 
-function! s:CustomGoyoLeave()
-    if has('gui_running')
+function! s:custom_goyo_leave()
+    if has('fullscreen')
         set nofullscreen
-    elseif exists("$TMUX")
-        silent !tmux set -q status on
     endif
 
     for [k, v] in items(s:goyo_settings)
@@ -911,7 +909,13 @@ function! s:CustomGoyoLeave()
     endfor
 
     if exists(':Limelight') == 2 || exists(':Limelight!')
-        Limelight!
+        execute 'Limelight!'
+    endif
+
+    if exists(':NeoCompleteUnlock') == 2
+        execute 'NeoCompleteUnlock'
+    elseif exists(':NeoComplCacheUnlock') == 2
+        execute 'NeoComplCacheUnlock'
     endif
 endfunction
 
@@ -1206,15 +1210,15 @@ xnoremap <F6> :MultipleCursorsFind<Space>
 
 " Called once right before you start selecting multiple cursors
 function! Multiple_cursors_before()
-    if exists(':NeoCompleteLock') == 2
-        execute 'NeoCompleteLock'
+    if exists(':NeoCompleteDisable') == 2
+        execute 'NeoCompleteDisable'
     endif
 endfunction
 
 " Called once only when the multiple selection is cancelled (default <Esc>)
 function! Multiple_cursors_after()
-    if exists(':NeoCompleteUnlock') == 2
-        execute 'NeoCompleteUnlock'
+    if exists(':NeoCompleteEnable') == 2
+        execute 'NeoCompleteEnable'
     endif
 endfunction
 
@@ -1462,7 +1466,9 @@ if exists("$TMUX")
 endif
 
 " janko-m/vim-tests
-if exists('*VimuxRunCommand')
+if has('nvim')
+    let g:test#strategy = 'neovim'
+elseif exists('*VimuxRunCommand')
     let g:test#strategy = 'vimux'
 elseif exists(':Dispatch')
     let g:test#strategy = 'dispatch'
