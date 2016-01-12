@@ -147,6 +147,9 @@ Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript' " f
 Plug 'poetic/vim-textobj-javascript'          " c, remapped to j
 
+" Vim plugin to copy current editing file path to clipboard (if support)
+Plug 'phongnh/vim-copypath'
+
 " Enable repeating supported plugin maps with "."
 Plug 'tpope/vim-repeat'
 
