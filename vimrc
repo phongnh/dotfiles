@@ -291,6 +291,8 @@ set nofoldenable        " Disable fold by default
 
 set fillchars=diff:⣿,vert:│
 
+set grepformat=%f:%l:%c:%m,%f:%l:%m
+
 " Turn off swapfile and backup
 set noswapfile
 set nobackup
@@ -643,6 +645,10 @@ nnoremap <silent> ]e :<C-U>execute 'move +'   . v:count1<CR>
 xnoremap <silent> [e :<C-U>execute "'<,'>move '<-1-" . v:count1<CR>gv
 xnoremap <silent> ]e :<C-U>execute "'<,'>move '>+"   . v:count1<CR>gv
 
+" s: remapped to Window command previx (CTRL-W)
+nmap s <C-W>
+vmap s <C-W>
+
 " Window navigation using arrows
 nnoremap <silent> <Left>  <C-W>h
 nnoremap <silent> <Down>  <C-W>j
@@ -652,26 +658,16 @@ nnoremap <silent> <Right> <C-W>l
 " gb: Last buffer
 nnoremap <silent> gb :buffer#<CR>
 
-" Horizontal/Vertical split
-nnoremap <silent> <Leader>- :sp<CR>
-nnoremap <silent> <Leader>\ :vsp<CR>
-
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
+
 " Save buffer
 nnoremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
-" Close buffer
-nnoremap <silent> <Leader>q :close<CR>
+
 " Unload buffer
-nnoremap <silent> <Leader><Backspace> :bdelete<CR>
-" Equal size windows
-nnoremap <silent> <Leader>= :wincmd =<CR>
-" All other windows are closed
-nnoremap <silent> <Leader>0 :only<CR>
-" Swap windows
-nnoremap <silent> <Leader>` :wincmd x<CR>
+nnoremap <silent> <Leader>- :bdelete<CR>
 
 " User-defined commands
 " Highlight current line
@@ -698,12 +694,10 @@ command! -bar Cls execute 'silent! !clear' | redraw!
 
 " Grep
 command! -bar -nargs=+ -complete=file Grep silent! grep! <args> | cwindow | redraw!
-set grepformat=%f:%l:%m
 
 if executable('ag')
     " https://github.com/ggreer/the_silver_searcher
     let &grepprg = 'ag --vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
 elseif executable('hw')
     " https://github.com/tkengo/highway
     let &grepprg = 'hw --no-color --no-group -n -i'
@@ -1465,6 +1459,12 @@ if exists("$TMUX")
 endif
 
 " janko-m/vim-tests
+if exists('*VimuxRunCommand')
+    let g:test#strategy = 'vimux'
+elseif exists(':Dispatch')
+    let g:test#strategy = 'dispatch'
+endif
+
 nmap <silent> [App]tt :TestFile<CR>
 nmap <silent> [App]tf :TestNearest<CR>
 nmap <silent> [App]tl :TestLast<CR>
