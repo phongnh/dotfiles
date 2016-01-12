@@ -1,7 +1,16 @@
+" Use cursor shape feature
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+
+" Use true color feature
+let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+
 " Set augroup
 augroup MyAutoCmd
     autocmd!
 augroup END
+
+" Share the histories
+autocmd MyAutoCmd CursorHold * if exists(':rshada') | rshada | wshada | endif
 
 " Disable system plugins
 let g:loaded_getscriptPlugin   = 1
@@ -18,6 +27,10 @@ let g:loaded_zipPlugin         = 1
 let g:omni_sql_no_default_maps = 1
 let g:ftplugin_sql_omni_key    = ''
 
+" Exit terminal mode
+tnoremap <Esc><Esc> <C-\><C-n>
+
+" https://github.com/rogual/neovim-dot-app
 if has('gui_running')
     set linespace=2         " Add some line space for easy reading
 
@@ -28,8 +41,6 @@ if has('gui_running')
 
     inoremap <Esc> <Esc>
 endif
-
-tnoremap <Esc> <C-\><C-N>
 
 call plug#begin()
 
