@@ -53,5 +53,5 @@ My dotfiles for vim + tmux setup
 
 ## Start vim and install plugins
 
-    vim -c 'PlugInstall'
-    nvim -c 'PlugInstall'
+    vim +PlugInstall +qall
+    nvim +PlugInstall +qall
