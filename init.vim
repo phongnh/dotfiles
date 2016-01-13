@@ -240,8 +240,8 @@ Plug 'morhetz/gruvbox'
 call plug#end()
 
 " Make ESC respond faster
-set timeoutlen=1000
-set ttimeoutlen=0
+set ttimeout
+set ttimeoutlen=100
 
 set lazyredraw               " Do not redraw while macro executing
 
