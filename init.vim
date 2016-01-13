@@ -1297,7 +1297,6 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
 let g:neocomplcache#fallback_mappings = ["\<C-X>\<C-O>", "\<C-X>\<C-N>"]
 
 " Shougo/neosnippet.vim
-let g:neosnippet#snippets_directory            = '~/.vim/plugged/vim-snippets/snippets,~/.vim/snippets'
 let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#enable_complete_done          = 1
 let g:neosnippet#expand_word_boundary          = 1
