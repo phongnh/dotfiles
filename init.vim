@@ -247,6 +247,8 @@ set ttimeoutlen=50
 set noerrorbells
 set visualbell
 
+set nomodeline               " Don't parse modelines because of vim modeline vulnerability
+
 set lazyredraw               " Do not redraw while macro executing
 
 set encoding=utf-8           " Default encoding for saving and reading file
