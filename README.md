@@ -53,5 +53,6 @@ My dotfiles for vim + tmux setup
 
 ## Start vim and install plugins
 
-    vim +PlugInstall +qall
+    vim  +PlugInstall +qall
+    mvim +PlugInstall +qall
     nvim +PlugInstall +qall
