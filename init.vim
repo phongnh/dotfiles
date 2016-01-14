@@ -1458,13 +1458,12 @@ if exists("$TMUX")
 endif
 
 " janko-m/vim-tests
-if has('nvim')
-    let g:test#strategy = 'neovim'
-elseif exists('*VimuxRunCommand')
-    let g:test#strategy = 'vimux'
-elseif exists(':Dispatch')
-    let g:test#strategy = 'dispatch'
-endif
+function! Neovim2Strategy(cmd)
+    botright 15new | call termopen(a:cmd) | startinsert
+endfunction
+
+let g:test#custom_strategies = { 'neovim2': function('Neovim2Strategy') }
+let g:test#strategy = 'neovim2'
 
 nmap <silent> [App]tt :TestFile<CR>
 nmap <silent> [App]tf :TestNearest<CR>

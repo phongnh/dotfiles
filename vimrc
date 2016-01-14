@@ -1465,9 +1465,7 @@ if exists("$TMUX")
 endif
 
 " janko-m/vim-tests
-if has('nvim')
-    let g:test#strategy = 'neovim'
-elseif exists('*VimuxRunCommand')
+if exists('*VimuxRunCommand')
     let g:test#strategy = 'vimux'
 elseif exists(':Dispatch')
     let g:test#strategy = 'dispatch'
