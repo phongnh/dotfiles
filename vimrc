@@ -245,7 +245,11 @@ call plug#end()
 
 " Make ESC respond faster
 set ttimeout
-set ttimeoutlen=100
+set ttimeoutlen=50
+
+" Disable error bells
+set noerrorbells
+set visualbell
 
 set lazyredraw               " Do not redraw while macro executing
 set ttyfast
@@ -701,9 +705,6 @@ command! -bar -nargs=+ -complete=file Grep silent! grep! <args> | cwindow | redr
 if executable('ag')
     " https://github.com/ggreer/the_silver_searcher
     let &grepprg = 'ag --vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-elseif executable('hw')
-    " https://github.com/tkengo/highway
-    let &grepprg = 'hw --no-color --no-group -n -i'
 elseif executable('sift')
     " https://github.com/svent/sift
     let &grepprg = 'sift --no-color --no-group --binary-skip --git -n -i $*'
@@ -1050,14 +1051,10 @@ map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 " mhinz/vim-grepper
 let g:grepper = {
             \ 'open': 1,
+            \ 'switch': 0,
             \ 'jump': 0,
             \ 'next_tool': '<C-J>',
-            \ 'tools': ['ag', 'hw', 'sift', 'git', 'grep', 'findstr'],
-            \ 'hw': {
-            \   'grepprg': 'hw --no-color --no-group -n -i $*',
-            \   'grepformat': '%f:%l:%m',
-            \   'escape': '\+*?^$%#()[]',
-            \ },
+            \ 'tools': ['ag', 'sift', 'git', 'grep', 'findstr'],
             \ 'sift': {
             \   'grepprg': 'sift --no-color --no-group --binary-skip --git -n -i $*'
             \ },
@@ -1066,9 +1063,9 @@ let g:grepper = {
 nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
-nnoremap <silent> [App]S :Grepper!<CR>
+nnoremap <silent> [App]S :Grepper<CR>
 
-nnoremap <silent> [App]s :Grepper! -cword<CR>
+nnoremap <silent> [App]s :Grepper -cword!<CR>
 xmap     <silent> [App]s <Plug>(GrepperOperator)
 
 " thinca/vim-textobj-between

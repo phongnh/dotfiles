@@ -241,7 +241,11 @@ call plug#end()
 
 " Make ESC respond faster
 set ttimeout
-set ttimeoutlen=100
+set ttimeoutlen=50
+
+" Disable error bells
+set noerrorbells
+set visualbell
 
 set lazyredraw               " Do not redraw while macro executing
 
@@ -676,9 +680,6 @@ command! -bar -nargs=+ -complete=file Grep silent! grep! <args> | cwindow | redr
 if executable('ag')
     " https://github.com/ggreer/the_silver_searcher
     let &grepprg = 'ag --vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-elseif executable('hw')
-    " https://github.com/tkengo/highway
-    let &grepprg = 'hw --no-color --no-group -n -i'
 elseif executable('sift')
     " https://github.com/svent/sift
     let &grepprg = 'sift --no-color --no-group --binary-skip --git -n -i $*'
@@ -746,13 +747,6 @@ let g:unite_source_rec_max_cache_files = 10000
 
 if executable('ag')
     let g:unite_source_rec_async_command  = ['ag', '-l', '--nocolor', '--nogroup', '--follow', '--hidden', '-g', '']
-endif
-
-if executable('hw')
-    let g:unite_source_grep_command       = 'hw'
-    let g:unite_source_grep_default_opts  = '--no-color --no-group -n -i'
-    let g:unite_source_grep_recursive_opt = ''
-elseif executable('ag')
     let g:unite_source_grep_command       = 'ag'
     let g:unite_source_grep_default_opts  = '--vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
     let g:unite_source_grep_recursive_opt = ''
@@ -1091,6 +1085,7 @@ map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 " mhinz/vim-grepper
 let g:grepper = {
             \ 'open': 1,
+            \ 'switch': 0,
             \ 'jump': 0,
             \ 'next_tool': '<C-J>',
             \ 'tools': ['ag', 'sift', 'git', 'grep', 'findstr'],
@@ -1102,9 +1097,9 @@ let g:grepper = {
 nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
-nnoremap <silent> [App]S :Grepper!<CR>
+nnoremap <silent> [App]S :Grepper<CR>
 
-nnoremap <silent> [App]s :Grepper! -cword<CR>
+nnoremap <silent> [App]s :Grepper -cword!<CR>
 xmap     <silent> [App]s <Plug>(GrepperOperator)
 
 " thinca/vim-textobj-between
