@@ -1067,7 +1067,7 @@ xmap <silent> gs <Plug>(GrepperOperator)
 
 nnoremap <silent> [App]S :Grepper<CR>
 
-nnoremap <silent> [App]s :Grepper -cword!<CR>
+nnoremap <silent> [App]s :Grepper -cword<CR>
 xmap     <silent> [App]s <Plug>(GrepperOperator)
 
 " thinca/vim-textobj-between
