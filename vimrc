@@ -1067,7 +1067,7 @@ xmap <silent> gs <Plug>(GrepperOperator)
 
 nnoremap <silent> [App]S :Grepper<CR>
 
-nnoremap <silent> [App]s :Grepper -cword<CR>
+nnoremap <silent> [App]s :Grepper -cword!<CR>:echo 'Searching...'<CR>
 xmap     <silent> [App]s <Plug>(GrepperOperator)
 
 " thinca/vim-textobj-between
@@ -1357,10 +1357,10 @@ let g:gitgutter_realtime  = 0
 let g:gitgutter_eager     = 0
 let g:gitgutter_max_signs = 200
 
-nmap ]c <Plug>GitGutterNextHunk zz
-nmap ]C 999]c
-nmap [c <Plug>GitGutterPrevHunk zz
-nmap [C 999[c
+nmap ]h <Plug>GitGutterNextHunk zz
+nmap ]H 999]h
+nmap [h <Plug>GitGutterPrevHunk zz
+nmap [H 999[h
 
 nnoremap <silent> cog :GitGutterToggle<CR>
 
@@ -1468,6 +1468,8 @@ if exists('*VimuxRunCommand')
     let g:test#strategy = 'vimux'
 elseif exists(':Dispatch')
     let g:test#strategy = 'dispatch'
+elseif has('gui_macvim')
+    let g:test#strategy = 'terminal'
 endif
 
 nmap <silent> [App]tt :TestFile<CR>
