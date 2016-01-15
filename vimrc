@@ -803,7 +803,7 @@ nnoremap <silent> [Space]f :CtrlP<CR>
 nnoremap          [Space]F :CtrlP<Space>
 
 nnoremap <silent> [Space]c :CtrlPCurFile<CR>
-nnoremap <silent> [Space]C :CtrlP <C-R>=fnamemodify(expand("%:h"), ':h')<CR><CR>
+nnoremap <silent> [Space]C :CtrlP <C-R>=expand("%:h:h")<CR><CR>
 
 nnoremap <silent> [Space]b :CtrlPBuffer<CR>
 
