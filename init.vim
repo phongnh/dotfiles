@@ -51,22 +51,18 @@ call plug#begin()
 " lean & mean status/tabline
 Plug 'bling/vim-airline'
 
-" CtrlP
-if has('python')
-    Plug 'FelikZ/ctrlp-py-matcher'
-endif
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'phongnh/ctrlp-finder'
-Plug 'h14i/vim-ctrlp-buftab'
-Plug 'DavidEGx/ctrlp-smarttabs'
-" Plug 'kaneshin/ctrlp-tabbed'
-" Plug 'fisadev/vim-ctrlp-cmdpalette'
-Plug 'ompugao/ctrlp-history'
-Plug 'mattn/ctrlp-register'
-Plug 'tacahiroy/ctrlp-funky'
-" Plug 'mattn/ctrlp-mark'
-" Plug 'mattn/ctrlp-launcher'
-Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
+" Interactive command execution
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+
+" Unite and create user interfaces
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/tabpagebuffer.vim'
+Plug 'Shougo/neomru.vim'
+Plug 'Shougo/unite-outline'
+Plug 'osyo-manga/unite-quickfix'
+Plug 'thinca/vim-unite-history'
+" Plug 'Shougo/neoinclude.vim'
+" Plug 'tsukkee/unite-tag'
 
 " logging registers and reusing them
 Plug 'LeafCage/yankround.vim'
@@ -236,6 +232,7 @@ Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
 " Color schemes
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'morhetz/gruvbox'
+Plug 'junegunn/seoul256.vim'
 
 call plug#end()
 
