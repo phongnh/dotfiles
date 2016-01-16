@@ -1260,6 +1260,36 @@ let g:neocomplcache_min_syntax_length  = 3 " Set minimum syntax keyword length
 
 call neocomplcache#custom_source('look', 'min_pattern_length', 4)
 
+if !exists('g:neocomplcache_omni_patterns')
+    let g:neocomplcache_omni_patterns = {}
+endif
+
+if !exists('g:neocomplcache_omni_functions')
+    let g:neocomplcache_omni_functions = {}
+endif
+
+if !exists('g:neocomplcache_force_omni_patterns')
+    let g:neocomplcache_force_omni_patterns = {}
+endif
+
+if !exists('g:neocomplcache_keyword_patterns')
+    let g:neocomplcache_keyword_patterns = {}
+endif
+
+let g:neocomplcache_force_overwrite_completefunc = 1
+
+let g:neocomplcache_force_omni_patterns.c        = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplcache_force_omni_patterns.cpp      = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplcache_force_omni_patterns.go       = '\h\w*\.\?'
+" let g:neocomplcache_force_omni_patterns.ruby     = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.ruby           = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_functions.go            = 'go#complete#Complete'
+let g:neocomplcache_keyword_patterns['default'] = '[0-9a-zA-Z:#_]\+'
+
+let g:neocomplcache_vim_completefuncs = {
+            \ 'Unite' : 'unite#complete_source',
+            \ }
+
 " CTRL-H, <BS>: close popup and delete backword char
 inoremap <expr> <C-H> neocomplcache#smart_close_popup()."\<C-H>"
 inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-H>"

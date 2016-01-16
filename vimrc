@@ -51,6 +51,9 @@ Plug 'phongnh/vim-iterm-cursor'
 " Asynchronous build and test dispatcher
 Plug 'tpope/vim-dispatch'
 
+" Interactive command execution
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+
 " CtrlP
 if has('python')
     Plug 'FelikZ/ctrlp-py-matcher'
@@ -1227,11 +1230,37 @@ if has('lua')
     let g:neocomplete#enable_smart_case                 = 1 " Use smartcase
     let g:neocomplete#min_keyword_length                = 3 " Set minimum keyword length
     let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length
+    let g:neocomplete#ignore_source_files               = []
+
+    call neocomplete#custom#source('look', 'min_pattern_length', 4)
+    call neocomplete#custom#source('_', 'converters',
+                \ [ 'converter_add_paren', 'converter_remove_overlap', 'converter_delimiter', 'converter_abbr' ])
+
+    if !exists('g:neocomplete#sources#omni#input_patterns')
+        let g:neocomplete#sources#omni#input_patterns = {}
+    endif
+
+    if !exists('g:neocomplete#sources#omni#functions')
+        let g:neocomplete#sources#omni#functions = {}
+    endif
+
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+    endif
+
+    if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
+    endif
+
+    " let g:neocomplete#force_omni_input_patterns.ruby     = '[^. *\t]\.\w*\|\h\w*::\w*'
+    " let g:neocomplete#sources#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::\w*'
+    let g:neocomplete#sources#omni#input_patterns.python = '[^. *\t]\.\w*\|\h\w*'
+    let g:neocomplete#sources#omni#functions.go          = 'go#complete#Complete'
+    let g:neocomplete#keyword_patterns._                 = '\h\k*(\?'
 
     let g:neocomplete#sources#vim#complete_functions = {
                 \ 'Unite' : 'unite#complete_source',
                 \ }
-    call neocomplete#custom#source('look', 'min_pattern_length', 4)
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-H> neocomplete#smart_close_popup()."\<C-H>"
@@ -1270,6 +1299,36 @@ else
     let g:neocomplcache_min_syntax_length  = 3 " Set minimum syntax keyword length
 
     call neocomplcache#custom_source('look', 'min_pattern_length', 4)
+
+    if !exists('g:neocomplcache_omni_patterns')
+        let g:neocomplcache_omni_patterns = {}
+    endif
+
+    if !exists('g:neocomplcache_omni_functions')
+        let g:neocomplcache_omni_functions = {}
+    endif
+
+    if !exists('g:neocomplcache_force_omni_patterns')
+        let g:neocomplcache_force_omni_patterns = {}
+    endif
+
+    if !exists('g:neocomplcache_keyword_patterns')
+        let g:neocomplcache_keyword_patterns = {}
+    endif
+
+    let g:neocomplcache_force_overwrite_completefunc = 1
+
+    let g:neocomplcache_force_omni_patterns.c        = '[^.[:digit:] *\t]\%(\.\|->\)'
+    let g:neocomplcache_force_omni_patterns.cpp      = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    let g:neocomplcache_force_omni_patterns.go       = '\h\w*\.\?'
+    " let g:neocomplcache_force_omni_patterns.ruby     = '[^. *\t]\.\w*\|\h\w*::'
+    let g:neocomplcache_omni_patterns.ruby           = '[^. *\t]\.\w*\|\h\w*::'
+    let g:neocomplcache_omni_functions.go            = 'go#complete#Complete'
+    let g:neocomplcache_keyword_patterns['default'] = '[0-9a-zA-Z:#_]\+'
+
+    let g:neocomplcache_vim_completefuncs = {
+                \ 'Unite' : 'unite#complete_source',
+                \ }
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-H> neocomplcache#smart_close_popup()."\<C-H>"
