@@ -105,6 +105,8 @@ Plug 'jlanzarotta/bufexplorer'
 " Delete buffers and close files in Vim without closing your windows or messing up your layout
 Plug 'moll/vim-bbye'
 
+" Pairs of handy bracket mappings
+Plug 'tpope/vim-unimpaired'
 " Toggle useful settings
 Plug 'phongnh/vim-toggler'
 
@@ -505,12 +507,6 @@ nnoremap U :redo<CR>
 " Yank to end line
 nnoremap Y y$
 
-" Paste with indent
-nnoremap <silent> ]p o<Esc>pm``[=`]``^
-nnoremap <silent> [p O<Esc>Pm``[=`]``^
-nnoremap <silent> ]P o<Esc>Pm``[=`]``^
-nnoremap <silent> [P O<Esc>pm``[=`]``^
-
 " Copy to clipboard
 nnoremap <silent> <Leader>y "+yy
 nnoremap <silent> <Leader>Y "+y$
@@ -591,44 +587,13 @@ nnoremap <silent> g,    g,zz
 nnoremap <silent> <C-O> <C-O>zz
 nnoremap <silent> <C-I> <C-I>zz
 
-
-" Buffer
-nnoremap [b :bprevious<CR>
-nnoremap ]b :bnext<CR>
-nnoremap [B :bfirst<CR>
-nnoremap ]B :blast<CR>
-
-" Tab
-nnoremap [t :tabprevious<CR>
-nnoremap ]t :tabnext<CR>
-nnoremap [T :tabfirst<CR>
-nnoremap ]T :tablast<CR>
-
-" Quickfix
-nnoremap [q :cprevious<CR>
-nnoremap ]q :cnext<CR>
-nnoremap [Q :cfirst<CR>
-nnoremap ]Q :clast<CR>
-
-" Location list
-nnoremap [l :lprevious<CR>
-nnoremap ]l :lnext<CR>
-nnoremap [L :lfirst<CR>
-nnoremap ]L :llast<CR>
-
-" Empty lines
-nnoremap <silent> [<Space> :<C-U>put! =<C-R>=repeat(nr2char(10), v:count1)<CR><CR>']+1
-nnoremap <silent> ]<Space> :<C-U>put  =<C-R>=repeat(nr2char(10), v:count1)<CR><CR>'[-1
-
-" Move lines
-nnoremap <silent> [e :<C-U>execute 'move -1-' . v:count1<CR>
-nnoremap <silent> ]e :<C-U>execute 'move +'   . v:count1<CR>
-xnoremap <silent> [e :<C-U>execute "'<,'>move '<-1-" . v:count1<CR>gv
-xnoremap <silent> ]e :<C-U>execute "'<,'>move '>+"   . v:count1<CR>gv
-
 " s: remapped to Window command previx (CTRL-W)
 nmap s <C-W>
 vmap s <C-W>
+
+" Next/previous window
+nnoremap <silent> ]w :wincmd w<CR>
+nnoremap <silent> [w :wincmd W<CR>
 
 " Window navigation using arrows
 nnoremap <silent> <Left>  <C-W>h
@@ -651,6 +616,9 @@ inoremap <silent> <C-S> <C-O>:update<CR>
 nnoremap <silent> <Leader>- :bdelete<CR>
 
 " User-defined commands
+" Copy yanked text to clipboard
+command! CopyYankedText let [@+, @*] = [@", @"]
+
 " Highlight current line
 command! HighlightLine call matchadd('Search', '\%' . line('.') . 'l')
 nnoremap <silent> <Leader>il :HighlightLine<CR>
@@ -1060,6 +1028,15 @@ nnoremap <silent> gl :ToggleBufExplorer<CR>
 
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
+
+" tpope/vim-unimpaired
+augroup MyAutoCmd
+    " Unmap unused mappings
+    autocmd VimEnter * silent! nunmap >P
+    autocmd VimEnter * silent! nunmap >p
+    autocmd VimEnter * silent! nunmap <P
+    autocmd VimEnter * silent! nunmap <p
+augroup END
 
 " haya14busa/incsearch.vim
 " let g:incsearch#magic                             = '\v'
