@@ -1577,16 +1577,7 @@ let g:gruvbox_contrast_dark  = 'hard'
 let g:seoul256_background = 235
 let g:seoul256_light_background = 254
 
-function! s:xmllint_setup()
-    let xmllint = 'setlocal equalprg=env\ XMLLINT_INDENT=''%s''\ xmllint\ --format\ --recover\ -\ 2>/dev/null'
-    if exists('*shiftwidth')
-        let xmllint = printf(xmllint, repeat('\ ', shiftwidth()))
-    else
-        let xmllint = printf(xmllint, repeat('\ ', &shiftwidth))
-    endif
-    execute xmllint
-endfunction
-
+" autocmd-related settings
 augroup MyAutoCmd
     " Set file type
     autocmd BufNewFile,BufRead *.nvim setlocal filetype=vim
@@ -1613,7 +1604,8 @@ augroup MyAutoCmd
 
     " XML
     if executable('xmllint')
-        autocmd FileType xml call s:xmllint_setup()
+        autocmd FileType xml nnoremap <silent> g=
+                    \ :execute 'silent! %' . printf("!env XMLLINT_INDENT='%s' xmllint --format --recover - 2>/dev/null", repeat(' ', exists('*shiftwidth') ? shiftwidth() : &shiftwidth))<CR>
     endif
 
     " Go
