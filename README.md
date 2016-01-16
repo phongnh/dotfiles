@@ -19,6 +19,8 @@ My dotfiles for vim + tmux setup
     # Or install neovim
     brew tap neovim/neovim
     brew install neovim --HEAD
+    sudo -H pip install --upgrade pip setuptools
+    pip install --user --upgrade neovim
 
 ## Setup vim and nvim folder
 
