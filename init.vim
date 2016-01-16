@@ -149,6 +149,9 @@ Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript' " f
 Plug 'poetic/vim-textobj-javascript'          " c, remapped to j
 
+" Ecliptic.vim: Amicable Clipboard Integration
+Plug 'richsoni/vim-ecliptic'
+
 " Vim plugin to copy current editing file path to clipboard (if support)
 Plug 'phongnh/vim-copypath'
 
@@ -507,22 +510,8 @@ nnoremap U :redo<CR>
 " Yank to end line
 nnoremap Y y$
 
-" Copy to clipboard
-nnoremap <silent> <Leader>y "+yy
-nnoremap <silent> <Leader>Y "+y$
-xnoremap <silent> <Leader>y "+y
-xnoremap <silent> <Leader>Y "+y$
-
-" Cut to clipboard
-nnoremap <silent> <Leader>x "+dd
-nnoremap <silent> <Leader>X "+D
-xnoremap <silent> <Leader>x "+d
-xnoremap <silent> <Leader>X "+D
-
 " Paste from clipboard
 inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
-nnoremap <silent> <Leader>p "+p
-nnoremap <silent> <Leader>P "+P
 nnoremap <silent> <Leader>v :set paste<CR>"+gp:set nopaste<CR>
 nnoremap <silent> <Leader>V :set paste<CR>"+gP:set nopaste<CR>
 
