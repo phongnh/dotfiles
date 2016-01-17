@@ -48,6 +48,9 @@ tnoremap <Esc><Esc> <C-\><C-n>
 
 call plug#begin()
 
+" rsi.vim: Readline style insertion
+Plug 'tpope/vim-rsi'
+
 " lean & mean status/tabline
 Plug 'bling/vim-airline'
 
@@ -389,59 +392,16 @@ nnoremap <F1> :help<Space>
 inoremap <F1> <Esc>:help<Space>
 
 " Command-line Mode Mappings
-" CTRL-[AE]: Move to Home/End
-cnoremap <C-A> <Home>
-cnoremap <C-E> <End>
-
-" CTRL-[FB]: Next/Previous char
-cnoremap <C-F> <Right>
-cnoremap <C-B> <Left>
-
-" CTRL-[HL]: Move left/right by word
-cnoremap <C-H> <S-Left>
-cnoremap <C-L> <S-Right>
-
 " CTRL-Space: Show history
 cnoremap <C-@> <C-F>
 
-" CTRL-[NP]: Next/Previous history
-cnoremap <C-N> <Down>
-cnoremap <C-P> <Up>
-
-" CTRL-D: Delete char
-cnoremap <C-D> <Del>
-
-" CTRL-K: Delete to end
-cnoremap <C-K> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
-
 " CTRL-V: Paste from clipboard
-cnoremap <C-V> <C-R>*
-
-" CTRL-Y: Paste from register "
-cnoremap <C-Y> <C-R>"
+cnoremap <C-V> <C-R>+
 
 " Insert Mode Mappings
 " Enable undo CTRL-W (Delete word) and CTRL-U (Delete line)
 inoremap <C-W> <C-G>u<C-W>
 inoremap <C-U> <C-G>u<C-U>
-
-" CTRL-/: Undo
-inoremap <C-_> <C-O>u
-
-" CTRL-[AE]: Move to Home/End
-inoremap <C-A> <Home>
-inoremap <C-E> <End>
-
-" CTRL-D: Delete char
-inoremap <C-D> <Del>
-
-" CTRL-b: Move cursor left
-inoremap <C-B> <Left>
-inoremap <expr> <C-B> pumvisible() ? "\<PageUp>"   : "\<Left>"
-
-" CTRL-F: Move cursor right
-inoremap <C-F> <Right>
-inoremap <expr> <C-F> pumvisible() ? "\<PageDown>" : "\<Right>"
 
 " CTRL-T: Insert tab
 inoremap <silent> <C-T> <C-V><Tab>
