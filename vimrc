@@ -603,8 +603,6 @@ endif
 " Clear terminal console
 if executable('clear')
     command! -bar Cls execute 'silent! !clear' | redraw!
-elseif executable('cls')
-    command! -bar Cls execute 'silent! !cls' | redraw!
 endif
 
 " Grep
