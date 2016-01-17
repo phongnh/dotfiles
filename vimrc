@@ -255,9 +255,7 @@ call plug#end()
 set ttimeout
 set ttimeoutlen=50
 
-" Disable error bells
-set noerrorbells
-set visualbell
+set visualbell               " Use visual bell instead of beeping
 
 set nomodeline               " Don't parse modelines because of vim modeline vulnerability
 
