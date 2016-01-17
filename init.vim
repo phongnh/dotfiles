@@ -347,7 +347,7 @@ set pumheight=20                " Set popup menu max height
 
 set wildmode=list:longest,full
 " Ingore the following stuff when tab completing
-set wildignore+=.hg,.git,.svn,*.o,*.obj,*.pyc,*.luac,*.jpg,*.jpeg,*.png,*.gif,*.bmp,*.pdf,*.class,*.dmg,*.DS_Store
+set wildignore+=.hg,.git,.svn,*.o,*.obj,*.pyc,*.luac,*.jpg,*.jpeg,*.png,*.gif,*.bmp,*.pdf,*.class,*.dmg,*.DS_Store,*.lnk,*.ini,*.dat
 
 " Adjust window size of preview and help
 set previewheight=8
