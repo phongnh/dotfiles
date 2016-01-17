@@ -422,15 +422,21 @@ nmap     Q  @q
 nnoremap gQ gq
 
 " .: repeats the last command on every line
-xnoremap . :normal.<CR>
+xnoremap . :normal .<CR>
 
 " @: repeats macro on every line
-xnoremap @ :normal@
+xnoremap @ :normal @
 
 " Disable ZZ, ZQ, CTRL-Z
 nnoremap ZZ    <Nop>
 nnoremap ZQ    <Nop>
 nnoremap <C-Z> <Nop>
+
+" Disable arrows
+nnoremap <Left>  <Nop>
+nnoremap <Down>  <Nop>
+nnoremap <Up>    <Nop>
+nnoremap <Right> <Nop>
 
 " H: Move to Home
 noremap  H ^
@@ -471,31 +477,6 @@ nnoremap U :redo<CR>
 " Yank to end line
 nnoremap Y y$
 
-" Paste from clipboard
-inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
-nnoremap <silent> <Leader>v :set paste<CR>"+gp:set nopaste<CR>
-nnoremap <silent> <Leader>V :set paste<CR>"+gP:set nopaste<CR>
-
-" Paste from clipboard with indent
-nnoremap <silent> ]v o<Esc>"+pm``[=`]``^
-nnoremap <silent> [v O<Esc>"+Pm``[=`]``^
-nnoremap <silent> ]V o<Esc>"+Pm``[=`]``^
-nnoremap <silent> [V O<Esc>"+pm``[=`]``^
-
-" Redraw
-nnoremap <silent> <Plug>(redraw-screen) :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-nmap <Leader><Space> <Plug>(redraw-screen)
-
-" Use <C-\> to do <C-]> but open it in a new split
-nnoremap <C-\> <C-W>v<C-]>zvzz
-
-" Search and Replace
-nnoremap <Leader>r :%s//gc<Left><Left><Left>
-nnoremap <Leader>R :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
-
-xnoremap <Leader>r :s/\%V/gc<Left><Left><Left>
-xnoremap <Leader>R <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
-
 " Folding
 " If press h on head, fold close
 "nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
@@ -526,12 +507,6 @@ nnoremap <silent> z] :let &foldcolumn = &foldcolumn + 1<CR>:echo 'foldcolumn = '
 nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:echo 'foldcolumn = ' . &foldcolumn<CR>
 
 " Auto center
-" nnoremap <silent> n     nzzzv
-" nnoremap <silent> N     Nzzzv
-" nnoremap <silent> *     *zzzv
-" nnoremap <silent> #     #zzzv
-" nnoremap <silent> g*    g*zzzv
-" nnoremap <silent> g#    g#zzzv
 nnoremap <silent> g;    g;zz
 nnoremap <silent> g,    g,zz
 nnoremap <silent> <C-O> <C-O>zz
@@ -544,12 +519,6 @@ vmap s <C-W>
 " Next/previous window
 nnoremap <silent> ]w :wincmd w<CR>
 nnoremap <silent> [w :wincmd W<CR>
-
-" Window navigation using arrows
-nnoremap <silent> <Left>  <C-W>h
-nnoremap <silent> <Down>  <C-W>j
-nnoremap <silent> <Up>    <C-W>k
-nnoremap <silent> <Right> <C-W>l
 
 " gb: Last buffer
 nnoremap <silent> gb :buffer#<CR>
@@ -564,6 +533,32 @@ inoremap <silent> <C-S> <C-O>:update<CR>
 
 " Unload buffer
 nnoremap <silent> <Leader>- :bdelete<CR>
+
+" Use <C-\> to do <C-]> but open it in a new split
+nnoremap <C-\> <C-W>v<C-]>zvzz
+
+" Search and Replace
+nnoremap <Leader>r :%s//gc<Left><Left><Left>
+nnoremap <Leader>R :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+
+xnoremap <Leader>r :s/\%V/gc<Left><Left><Left>
+xnoremap <Leader>R <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+
+" Paste from clipboard
+inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
+nnoremap <silent> <Leader>v :set paste<CR>"+gp:set nopaste<CR>
+nnoremap <silent> <Leader>V :set paste<CR>"+gP:set nopaste<CR>
+
+" Paste from clipboard with indent
+nnoremap <silent> ]v o<Esc>"+pm``[=`]``^
+nnoremap <silent> [v O<Esc>"+Pm``[=`]``^
+nnoremap <silent> ]V o<Esc>"+Pm``[=`]``^
+nnoremap <silent> [V O<Esc>"+pm``[=`]``^
+
+" Redraw
+if maparg('<C-L>', 'n') ==# ''
+    nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
 
 " User-defined commands
 " Copy yanked text to clipboard
