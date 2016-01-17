@@ -23,8 +23,10 @@ if has('gui_macvim')
     xnoremap <silent> <D-x> "*x
     nnoremap <silent> <D-v> "*gP
     inoremap <silent> <D-v> <C-G>u<C-O>"*gP
-elseif has("gui_gnome") || has('gui_gtk')
+elseif has('gui_gnome') || has('gui_gtk')
     set guifont=Source\ Code\ Pro\ 9
+elseif has('gui_win32') || has('gui_win64')
+    set guifont=Consolas:h12
 endif
 
 inoremap <Esc> <Esc>
