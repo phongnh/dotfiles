@@ -601,10 +601,16 @@ nnoremap <silent> <Leader>- :bdelete<CR>
 command! CopyYankedText let [@+, @*] = [@", @"]
 
 " Sudo write
-command! -bang SW w<bang> !sudo tee % >/dev/null
+if executable('sudo')
+    command! -bang SW w<bang> !sudo tee % >/dev/null
+endif
 
 " Clear terminal console
-command! -bar Cls execute 'silent! !clear' | redraw!
+if executable('clear')
+    command! -bar Cls execute 'silent! !clear' | redraw!
+elseif executable('cls')
+    command! -bar Cls execute 'silent! !cls' | redraw!
+endif
 
 " Grep
 command! -bar -nargs=+ -complete=file Grep silent! grep! <args> | cwindow | redraw!
