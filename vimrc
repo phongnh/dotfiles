@@ -1312,6 +1312,7 @@ nnoremap          <Leader>G  :Git!<Space>
 nnoremap          <Leader>gi :Git<Space>
 nnoremap          <Leader>gu :Git commit -m ""<Left>
 nnoremap          <Leader>ga :Git add -p %<CR><CR>
+nnoremap          <Leader>gA :Git add -p<CR><CR>
 nnoremap          <Leader>ge :Gedit<Space>
 nnoremap <silent> <Leader>gd :Gdiff<CR>
 nnoremap          <Leader>gm :Gmerge<Space>
