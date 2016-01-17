@@ -113,6 +113,9 @@ Plug 'tpope/vim-unimpaired'
 " Toggle useful settings
 Plug 'phongnh/vim-toggler'
 
+" Simple highlight plugin
+Plug 'phongnh/vim-simple-highlight'
+
 " extended % matching for HTML, LaTeX, and many other languages
 Plug 'vim-scripts/matchit.zip'
 
@@ -565,22 +568,6 @@ nnoremap <silent> <Leader>- :bdelete<CR>
 " User-defined commands
 " Copy yanked text to clipboard
 command! CopyYankedText let [@+, @*] = [@", @"]
-
-" Highlight current line
-command! HighlightLine call matchadd('Search', '\%' . line('.') . 'l')
-nnoremap <silent> <Leader>il :HighlightLine<CR>
-
-" Highlight the word underneath the cursor
-command! HighlightWord call matchadd('Search', '\<\w*\%' . line('.') . 'l\%' . col('.') . 'c\w*\>')
-nnoremap <silent> <Leader>iw :HighlightWord<CR>
-
-" Highlight the words contained in the virtual column
-command! HighlightColumns call matchadd('Search', '\<\w*\%' . virtcol('.') . 'v\w*\>')
-nnoremap <silent> <Leader>iv :HighlightColumns<CR>
-
-" Clear the permanent highlights
-command! ClearHightlights call clearmatches()
-nnoremap <silent> <Leader>ic :ClearHightlights<CR>
 
 " Sudo write
 command! -bang SW w<bang> !sudo tee % >/dev/null
