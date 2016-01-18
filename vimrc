@@ -478,7 +478,7 @@ noremap  L $
 xnoremap L g_
 
 " Select until end of current line in visual mode
-xnoremap v $h
+" xnoremap v $h
 " Select rectangle - Visual Block
 xnoremap r <C-V>
 
