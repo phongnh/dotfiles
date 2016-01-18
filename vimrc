@@ -1406,7 +1406,7 @@ if exists("$TMUX")
     nnoremap <silent> [App]td :TxSendKey 'C-d'<CR>
 endif
 
-" janko-m/vim-tests
+" janko-m/vim-test
 if exists('*VimuxRunCommand')
     let g:test#strategy = 'vimux'
 elseif exists(':Dispatch')

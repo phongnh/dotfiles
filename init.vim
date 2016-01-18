@@ -1365,7 +1365,7 @@ if exists("$TMUX")
     nnoremap <silent> [App]td :TxSendKey 'C-d'<CR>
 endif
 
-" janko-m/vim-tests
+" janko-m/vim-test
 function! Neovim2Strategy(cmd)
     botright 15new | call termopen(a:cmd) | startinsert
 endfunction
