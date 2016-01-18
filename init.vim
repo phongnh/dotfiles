@@ -135,6 +135,8 @@ Plug 'mhinz/vim-grepper'
 
 " Helpers for UNIX
 Plug 'tpope/vim-eunuch'
+" Phong's vim hlpers
+Plug 'phongnh/vim-helpers'
 
 " Text Objects
 Plug 'kana/vim-textobj-user'
@@ -558,42 +560,6 @@ nnoremap <silent> [V O<Esc>"+pm``[=`]``^
 " Redraw
 if maparg('<C-L>', 'n') ==# ''
     nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-endif
-
-" User-defined commands
-" Copy yanked text to clipboard
-command! CopyYankedText let [@+, @*] = [@", @"]
-
-" Sudo write
-if executable('sudo')
-    command! -bang SW w<bang> !sudo tee % >/dev/null
-endif
-
-" Clear terminal console
-if executable('clear')
-    command! -bar Cls execute 'silent! !clear' | redraw!
-endif
-
-" Grep
-command! -bar -nargs=+ -complete=file Grep silent! grep! <args> | cwindow | redraw!
-
-if executable('ag')
-    " https://github.com/ggreer/the_silver_searcher
-    let &grepprg = 'ag --vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-elseif executable('sift')
-    " https://github.com/svent/sift
-    let &grepprg = 'sift --no-color --no-group --binary-skip --git -n -i $*'
-endif
-
-" Gitk
-if executable('gitk')
-    command! -bar -nargs=* -complete=dir -complete=file Gitk execute "silent! !gitk <args>" | redraw!
-endif
-
-" Tig
-if executable('tig')
-    command! -bar -nargs=* -complete=dir -complete=file Tig tabnew | call termopen("tig <args>") | startinsert
-    autocmd MyAutoCmd TermClose term://*tig* tabclose
 endif
 
 " bling/vim-airline
