@@ -617,6 +617,11 @@ if executable('ag')
     let g:unite_source_grep_command       = 'ag'
     let g:unite_source_grep_default_opts  = '--vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
     let g:unite_source_grep_recursive_opt = ''
+elseif executable('pt')
+    let g:unite_source_grep_command       = 'pt'
+    let g:unite_source_grep_default_opts  = '--nogroup --nocolor'
+    let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_encoding      = 'utf-8'
 elseif executable('sift')
     let g:unite_source_grep_command       = 'sift'
     let g:unite_source_grep_default_opts  = '--no-color --no-group --binary-skip --git -n -i'
@@ -964,7 +969,7 @@ let g:grepper = {
             \ 'switch': 0,
             \ 'jump': 0,
             \ 'next_tool': '<C-J>',
-            \ 'tools': ['ag', 'sift', 'git', 'grep', 'findstr'],
+            \ 'tools': ['ag', 'pt', 'sift', 'git', 'grep', 'findstr'],
             \ 'sift': {
             \   'grepprg': 'sift --no-color --no-group --binary-skip --git -n -i $*'
             \ },

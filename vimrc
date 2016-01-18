@@ -936,7 +936,7 @@ let g:grepper = {
             \ 'switch': 0,
             \ 'jump': 0,
             \ 'next_tool': '<C-J>',
-            \ 'tools': ['ag', 'sift', 'git', 'grep', 'findstr'],
+            \ 'tools': ['ag', 'pt', 'sift', 'git', 'grep', 'findstr'],
             \ 'sift': {
             \   'grepprg': 'sift --no-color --no-group --binary-skip --git -n -i $*'
             \ },
