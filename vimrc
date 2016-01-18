@@ -65,13 +65,10 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'phongnh/ctrlp-finder'
 Plug 'h14i/vim-ctrlp-buftab'
 Plug 'DavidEGx/ctrlp-smarttabs'
-" Plug 'kaneshin/ctrlp-tabbed'
-" Plug 'fisadev/vim-ctrlp-cmdpalette'
+Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'ompugao/ctrlp-history'
 Plug 'mattn/ctrlp-register'
 Plug 'tacahiroy/ctrlp-funky'
-" Plug 'mattn/ctrlp-mark'
-" Plug 'mattn/ctrlp-launcher'
 Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
 
 " logging registers and reusing them
@@ -702,7 +699,7 @@ nnoremap <silent> [Space]B :CtrlPBufTab<CR>
 nnoremap <silent> [Space]t :CtrlPSmartTabs<CR>
 
 " fisadev/vim-ctrlp-cmdpalette
-" nnoremap <silent> [Space]M :CtrlPCmdPalette<CR>
+nnoremap <silent> [Space]M :CtrlPCmdPalette<CR>
 
 " ompugao/ctrlp-history
 nnoremap <silent> [Space]: :CtrlPCmdHistory<CR>
@@ -714,12 +711,6 @@ nnoremap <silent> [Space]i :CtrlPRegister<CR>
 " tacahiroy/ctrlp-funky
 nnoremap <silent> [Space]o :CtrlPFunky<CR>
 nnoremap <silent> [Space]O :CtrlPFunkyMulti<CR>
-
-" mattn/ctrlp-mark
-" nnoremap <silent> [Space]' :CtrlPMark<CR>
-
-" mattn/ctrlp-launcher
-" nnoremap <silent> [Space]O :CtrlPLauncher<CR>
 
 " slimane/ctrlp-locationlist
 nnoremap <silent> [Space]Q :CtrlPLocationlist<CR>
