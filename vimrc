@@ -1097,6 +1097,8 @@ xnoremap <F6> :MultipleCursorsFind<Space>
 function! Multiple_cursors_before()
     if exists(':NeoCompleteDisable') == 2
         execute 'NeoCompleteDisable'
+    elseif exists(':NeoComplCacheDisable') == 2
+        execute 'NeoComplCacheDisable'
     endif
 endfunction
 
@@ -1104,6 +1106,8 @@ endfunction
 function! Multiple_cursors_after()
     if exists(':NeoCompleteEnable') == 2
         execute 'NeoCompleteEnable'
+    elseif exists(':NeoComplCacheEnable') == 2
+        execute 'NeoComplCacheEnable'
     endif
 endfunction
 
