@@ -135,8 +135,8 @@ Plug 'mhinz/vim-grepper'
 
 " Helpers for UNIX
 Plug 'tpope/vim-eunuch'
-" Phong's vim hlpers
-Plug 'phongnh/vim-helpers'
+" Phong's vim command helpers
+Plug 'phongnh/vim-command-helpers'
 
 " Text Objects
 Plug 'kana/vim-textobj-user'
