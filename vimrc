@@ -686,9 +686,9 @@ nnoremap          [Space]K :CtrlPBookmarkDirAdd!<Space>
 
 nnoremap <silent> [Space]r :CtrlPMRUFiles<CR>
 
-nnoremap <silent> [Space]O :CtrlPBufTag<CR>
-nnoremap <silent> [Space]a :CtrlPBufTagAll<CR>
-nnoremap <silent> [Space]A :CtrlPTag<CR>
+nnoremap <silent> [Space]a :CtrlPBufTag<CR>
+nnoremap <silent> [Space]A :CtrlPBufTagAll<CR>
+nnoremap <silent> [Space]T :CtrlPTag<CR>
 
 nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
 
@@ -713,6 +713,7 @@ nnoremap <silent> [Space]i :CtrlPRegister<CR>
 
 " tacahiroy/ctrlp-funky
 nnoremap <silent> [Space]o :CtrlPFunky<CR>
+nnoremap <silent> [Space]O :CtrlPFunkyMulti<CR>
 
 " mattn/ctrlp-mark
 " nnoremap <silent> [Space]' :CtrlPMark<CR>
