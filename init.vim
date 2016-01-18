@@ -64,8 +64,6 @@ Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite-outline'
 Plug 'osyo-manga/unite-quickfix'
 Plug 'thinca/vim-unite-history'
-" Plug 'Shougo/neoinclude.vim'
-" Plug 'tsukkee/unite-tag'
 
 " logging registers and reusing them
 Plug 'LeafCage/yankround.vim'
@@ -742,11 +740,6 @@ nnoremap <silent> [Space][ :UnitePrevious<CR>
 nnoremap <silent> [Space]: :Unite history/command<CR>
 nnoremap <silent> [Space]/ :Unite history/search<CR>
 nnoremap <silent> [Space]h :Unite history/unite<CR>
-
-" tsukkee/unite-tag
-" nnoremap <silent> [Space]T :Unite -buffer-name=tags tag/include<CR>
-" nnoremap <silent> [Space]a :Unite -buffer-name=tags tag/file<CR>
-" nnoremap <silent> [Space]A :Unite -buffer-name=tags tag<CR>
 
 " LeafCage/yankround.vim
 let g:yankround_max_history = 100
