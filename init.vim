@@ -1408,6 +1408,7 @@ let g:user_emmet_mode            = 'i'
 let g:go_highlight_functions         = 1
 let g:go_highlight_methods           = 1
 let g:go_highlight_structs           = 1
+let g:go_highlight_interfaces        = 1
 let g:go_highlight_operators         = 1
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_extra_types       = 1
@@ -1419,7 +1420,8 @@ if globpath(&rtp, 'plugin/neosnippet.vim')
     let g:go_snippet_engine = 'neosnippet'
 endif
 
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_go_checkers     = ['golint', 'govet', 'errcheck']
+let g:neomake_go_enabled_makers = ['golint', 'govet', 'errcheck']
 
 function! s:VimGoSetup()
     nmap [App]R <Plug>(go-run)
