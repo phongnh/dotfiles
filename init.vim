@@ -614,18 +614,6 @@ let g:unite_source_rec_max_cache_files = 10000
 
 if executable('ag')
     let g:unite_source_rec_async_command  = ['ag', '-l', '--nocolor', '--nogroup', '--follow', '--hidden', '-g', '']
-    let g:unite_source_grep_command       = 'ag'
-    let g:unite_source_grep_default_opts  = '--vimgrep --smart-case --ignore ''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-    let g:unite_source_grep_recursive_opt = ''
-elseif executable('pt')
-    let g:unite_source_grep_command       = 'pt'
-    let g:unite_source_grep_default_opts  = '--nogroup --nocolor'
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_grep_encoding      = 'utf-8'
-elseif executable('sift')
-    let g:unite_source_grep_command       = 'sift'
-    let g:unite_source_grep_default_opts  = '--no-color --no-group --binary-skip --git -n -i'
-    let g:unite_source_grep_recursive_opt = ''
 endif
 
 call unite#custom#profile('default', 'context', {
@@ -641,7 +629,7 @@ call unite#custom#profile('files', 'context', { 'smartcase': 1 })
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 
-call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file,neomru/directory,buffer,grep',
+call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file,neomru/directory,buffer',
             \ 'ignore_pattern',
             \ join([
             \ '\.git/',
@@ -727,8 +715,6 @@ nnoremap <silent> [Space]t :Unite tab<CR>
 
 nnoremap <silent> [Space]l :Unite line<CR>
 nnoremap <silent> [Space]L :Unite line:buffers<CR>
-nnoremap          [Space]s :Unite -buffer-name=grep grep:.
-nnoremap          [Space]S :Unite -buffer-name=grep grep:.::<C-R><C-W>
 
 nnoremap <silent> [Space]m :Unite mapping<CR>
 nnoremap <silent> [Space]M :Unite command<CR>
