@@ -1206,7 +1206,9 @@ smap <expr> <Tab> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expa
 imap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
 smap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
 
-nnoremap <silent> [Space]I :Unite -buffer-name=snippets neosnippet<CR>
+if has_key(get(g:, 'plugs', {}), 'unite.vim')
+    nnoremap <silent> [Space]I :Unite -buffer-name=snippets neosnippet<CR>
+endif
 
 " tpope/vim-fugitive
 augroup MyAutoCmd
@@ -1404,7 +1406,7 @@ let g:go_highlight_extra_types       = 1
 let g:go_fmt_command       = 'goimports'
 let g:go_fmt_fail_silently = 1
 
-if globpath(&rtp, 'plugin/neosnippet.vim')
+if has_key(get(g:, 'plugs', {}), 'neosnippet.vim')
     let g:go_snippet_engine = 'neosnippet'
 endif
 
