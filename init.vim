@@ -541,11 +541,11 @@ nnoremap <silent> <Leader>- :bdelete<CR>
 nnoremap <C-\> <C-W>v<C-]>zvzz
 
 " Search and Replace
-nnoremap <Leader>r :%s//gc<Left><Left><Left>
-nnoremap <Leader>R :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+nnoremap <Leader>r :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+nnoremap <Leader>R :%s//gc<Left><Left><Left>
 
-xnoremap <Leader>r :s/\%V/gc<Left><Left><Left>
-xnoremap <Leader>R <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xnoremap <Leader>r <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xnoremap <Leader>R :s/\%V/gc<Left><Left><Left>
 
 " Paste from clipboard
 inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
@@ -1247,8 +1247,8 @@ nnoremap          <Leader>gl :Glog!<Space>
 nnoremap          <Leader>gL :Gllog!<Space>
 
 " cohama/agit.vim
-nnoremap <silent> <Leader>gk :Agit<CR>
-nnoremap <silent> <Leader>gK :AgitFile<CR>
+nnoremap <silent> <Leader>gk :AgitFile<CR>
+nnoremap <silent> <Leader>gK :Agit<CR>
 
 " airblade/vim-gitgutter
 let g:gitgutter_map_keys  = 0
