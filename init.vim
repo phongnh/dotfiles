@@ -1548,5 +1548,9 @@ augroup END
 set background=dark
 colorscheme gruvbox
 
+if filereadable(expand("~/.init.vim.local"))
+    source ~/.init.vim.local
+endif
+
 set secure
 
