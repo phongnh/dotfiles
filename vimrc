@@ -211,6 +211,9 @@ Plug 'honza/vim-snippets'
 " A awesome Git wrapper so awesome
 Plug 'tpope/vim-fugitive'
 
+" A powerful Git log viewer
+Plug 'cohama/agit.vim'
+
 " A Vim plugin which shows a git diff in the gutter (sign column) and stages/reverts hunks.
 Plug 'airblade/vim-gitgutter'
 
@@ -1291,6 +1294,10 @@ nnoremap          <Leader>gg :Ggrep! <C-R>=GetWordForSearch()<CR><Space>
 xnoremap          <Leader>gg <Esc>:Ggrep! <C-R>=GetSelectedTextForSearch()<CR><Space>
 nnoremap          <Leader>gl :Glog!<Space>
 nnoremap          <Leader>gL :Gllog!<Space>
+
+" cohama/agit.vim
+nnoremap <silent> <Leader>gk :Agit<CR>
+nnoremap <silent> <Leader>gK :AgitFile<CR>
 
 " airblade/vim-gitgutter
 let g:gitgutter_map_keys  = 0
