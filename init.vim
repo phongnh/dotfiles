@@ -499,12 +499,12 @@ noremap zj zjzz
 noremap zk zkzz
 
 " Invert 'foldenable'
-noremap zi zizz
+nnoremap <silent> zi zizz
 
-noremap zr zr :echo 'foldlevel = ' . &foldlevel<CR>
-noremap zm zm :echo 'foldlevel = ' . &foldlevel<CR>
-noremap zR zR :echo 'foldlevel = ' . &foldlevel<CR>
-noremap zM zM :echo 'foldlevel = ' . &foldlevel<CR>
+nnoremap <silent> zr zr:echo 'foldlevel = ' . &foldlevel<CR>
+nnoremap <silent> zm zm:echo 'foldlevel = ' . &foldlevel<CR>
+nnoremap <silent> zR zR:echo 'foldlevel = ' . &foldlevel<CR>
+nnoremap <silent> zM zM:echo 'foldlevel = ' . &foldlevel<CR>
 
 nnoremap <silent> z] :let &foldcolumn = &foldcolumn + 1<CR>:echo 'foldcolumn = ' . &foldcolumn<CR>
 nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:echo 'foldcolumn = ' . &foldcolumn<CR>
