@@ -1258,12 +1258,10 @@ nnoremap <silent> <Leader>gK :Agit<CR>
 let g:gitgutter_map_keys  = 0
 let g:gitgutter_realtime  = 0
 let g:gitgutter_eager     = 0
-let g:gitgutter_max_signs = 200
+let g:gitgutter_max_signs = 500
 
 nmap ]h <Plug>GitGutterNextHunk zz
-nmap ]H 999]h
 nmap [h <Plug>GitGutterPrevHunk zz
-nmap [H 999[h
 
 nnoremap <silent> cog :GitGutterToggle<CR>
 
