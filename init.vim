@@ -94,8 +94,10 @@ else
     Plug 'mbbill/undotree'
 endif
 
-" A class/symbol outline viewer
-Plug 'majutsushi/tagbar'
+if executable('ctags')
+    " A class outline viewer for Vim
+    Plug 'majutsushi/tagbar'
+endif
 
 " A tree explorer plugin for vim
 Plug 'scrooloose/nerdtree'
@@ -889,14 +891,47 @@ else
     inoremap <silent> <F7> <Esc>:UndotreeToggle<CR>
 endif
 
-" majutsushi/tagbar
-let g:tagbar_sort      = 0
-let g:tagbar_autofocus = 1
-let g:tagbar_autoclose = 0
-let g:tagbar_iconchars = ['▸', '▾']
+if has_key(g:plugs, 'tagbar')
+    " majutsushi/tagbar
+    let g:tagbar_sort      = 0
+    let g:tagbar_autofocus = 1
+    let g:tagbar_autoclose = 0
+    let g:tagbar_iconchars = ['▸', '▾']
 
-nnoremap <silent> <F8> :TagbarToggle<CR>
-inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
+    let g:tagbar_type_css = {
+                \ 'ctagstype' : 'Css',
+                \ 'kinds'     : [
+                \ 'c:classes',
+                \ 's:selectors',
+                \ 'i:identities'
+                \ ]
+                \ }
+
+    let g:tagbar_type_ruby = {
+                \ 'kinds' : [
+                \ 'm:modules',
+                \ 'c:classes',
+                \ 'd:describes',
+                \ 'C:contexts',
+                \ 'f:methods',
+                \ 'F:singleton methods'
+                \ ]
+                \ }
+
+    let g:tagbar_type_coffee = {
+                \ 'ctagstype' : 'coffee',
+                \ 'kinds'     : [
+                \ 'c:classes',
+                \ 'm:methods',
+                \ 'f:functions',
+                \ 'v:variables',
+                \ 'f:fields',
+                \ ]
+                \ }
+
+    nnoremap <silent> <F8> :TagbarToggle<CR>
+    inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
+endif
 
 " scrooloose/nerdtree
 let g:NERDTreeWinSize       = 35
