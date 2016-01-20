@@ -62,7 +62,6 @@ if has('python')
     Plug 'FelikZ/ctrlp-py-matcher'
 endif
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'phongnh/ctrlp-finder'
 Plug 'h14i/vim-ctrlp-buftab'
 Plug 'DavidEGx/ctrlp-smarttabs'
 Plug 'fisadev/vim-ctrlp-cmdpalette'
@@ -645,9 +644,8 @@ endfunction
 
 autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
-if has('python')
+if has_key(g:plugs, 'ctrlp-py-matcher')
     " FelikZ/ctrlp-py-matcher
-    " let g:ctrlp_lazy_update         = 350
     let g:ctrlp_clear_cache_on_exit = 0
     let g:ctrlp_max_files           = 0
     let g:ctrlp_match_func          = { 'match': 'pymatcher#PyMatch' }
@@ -658,14 +656,32 @@ let g:ctrlp_match_window      = 'bottom,order:btt,min:1,max:20,results:20'
 let g:ctrlp_map               = ''
 let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_reuse_window      = 'startify'
-let g:ctrlp_custom_ignore     = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-Z>', '<C-@>'], }
+let g:ctrlp_custom_ignore     = {
+            \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc'
+            \ }
 
 if executable('ag')
-    let g:ctrlp_user_command = "ag --ignore '.hg' --ignore '.svn' --ignore '.git' --ignore '.bzr' " .
-                \ '%s -l --nocolor --nogroup --follow --hidden -g ""'
-    let g:ctrlp_use_caching  = 0
+    let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
+elseif executable('ack-grep')
+    let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
+elseif executable('ack')
+    let s:ctrlp_fallback = 'ack %s --nocolor -f'
+elseif has('win32') || has('win64')
+    let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
+else
+    let s:ctrlp_fallback = 'find %s -type f'
 endif
+
+let g:ctrlp_use_caching  = 0
+let g:ctrlp_user_command = {
+            \ 'types': {
+            \   1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
+            \   2: ['.hg',  'hg --cwd %s locate -I .'],
+            \ },
+            \ 'fallback': s:ctrlp_fallback
+            \ }
 
 nnoremap <silent> [Space]R :CtrlPLastMode --dir<CR>
 
@@ -697,9 +713,6 @@ nnoremap <silent> [Space]A :CtrlPBufTagAll<CR>
 nnoremap <silent> [Space]T :CtrlPTag<CR>
 
 nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
-
-" phongnh/ctrlp-finder
-nnoremap <silent> [Space]e :CtrlPFinder<CR>
 
 " h14i/vim-ctrlp-buftab
 nnoremap <silent> [Space]B :CtrlPBufTab<CR>
