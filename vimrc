@@ -338,7 +338,7 @@ set listchars=tab:>\ ,trail:-,nbsp:+,extends:>,precedes:<
 
 if has('conceal')
     set listchars+=conceal:^
-    set conceallevel=2 concealcursor=nvi
+    set conceallevel=2 concealcursor=i
 endif
 
 set display+=lastline           " When a line is long, do not omit it in @

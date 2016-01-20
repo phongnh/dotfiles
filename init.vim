@@ -321,7 +321,7 @@ set listchars+=extends:>,precedes:<
 
 if has('conceal')
     set listchars+=conceal:^
-    set conceallevel=2 concealcursor=nvi
+    set conceallevel=2 concealcursor=i
 endif
 
 " Wrap conditions
