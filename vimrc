@@ -1159,7 +1159,7 @@ function! Multiple_cursors_after()
     endif
 endfunction
 
-if has('lua')
+if has_key(g:plugs, 'neocomplete.vim')
     " Shougo/neocomplete.vim
     let g:neocomplete#enable_at_startup                 = 1 " Use neocomplete
     let g:neocomplete#enable_smart_case                 = 1 " Use smartcase
