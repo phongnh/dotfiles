@@ -546,10 +546,6 @@ nnoremap <silent> g,    g,zz
 nnoremap <silent> <C-O> <C-O>zz
 nnoremap <silent> <C-I> <C-I>zz
 
-" s: remapped to Window command previx (CTRL-W)
-nmap s <C-W>
-vmap s <C-W>
-
 " Next/previous window
 nnoremap <silent> ]w :wincmd w<CR>
 nnoremap <silent> [w :wincmd W<CR>
@@ -558,19 +554,19 @@ nnoremap <silent> [w :wincmd W<CR>
 nnoremap <silent> <C-W>e :edit<CR>
 nnoremap <silent> <C-W>E :edit!<CR>
 
+" Unload buffer
+nnoremap <silent> <C-W><BS> :bdelete<CR>
+
 " gb: Last buffer
 nnoremap <silent> gb :buffer#<CR>
-
-" Quit Vim
-nnoremap <silent> <Leader>Q :confirm qall<CR>
 
 " Save buffer
 nnoremap <silent> <C-S> :update<CR>
 vnoremap <silent> <C-S> <C-C>:update<CR>
 inoremap <silent> <C-S> <C-O>:update<CR>
 
-" Unload buffer
-nnoremap <silent> <Leader>- :bdelete<CR>
+" Quit Vim
+nnoremap <silent> <Leader>Q :confirm qall<CR>
 
 " Use <C-\> to do <C-]> but open it in a new split
 nnoremap <C-\> <C-W>v<C-]>zvzz
