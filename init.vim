@@ -993,7 +993,7 @@ let g:grepper = {
             \ 'next_tool': '<C-J>',
             \ 'tools': ['ag', 'pt', 'sift', 'git', 'grep', 'findstr'],
             \ 'sift': {
-            \   'grepprg': 'sift --no-color --no-group --binary-skip --git -n -i $*'
+            \   'grepprg': 'sift --binary-skip --git --err-skip-line-length -n -i $*'
             \ },
             \ }
 
