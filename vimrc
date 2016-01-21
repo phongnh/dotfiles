@@ -62,8 +62,10 @@ if has('python')
     Plug 'FelikZ/ctrlp-py-matcher'
 endif
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'phongnh/ctrlp-finder'
 Plug 'h14i/vim-ctrlp-buftab'
 Plug 'DavidEGx/ctrlp-smarttabs'
+Plug 'kaneshin/ctrlp-tabbed'
 Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'ompugao/ctrlp-history'
 Plug 'mattn/ctrlp-register'
@@ -660,10 +662,6 @@ let g:ctrlp_custom_ignore     = {
 
 if executable('ag')
     let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
-elseif executable('ack-grep')
-    let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
-elseif executable('ack')
-    let s:ctrlp_fallback = 'ack %s --nocolor -f'
 elseif has('win32') || has('win64')
     let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
 else
@@ -706,15 +704,21 @@ nnoremap <silent> [Space]r :CtrlPMRUFiles<CR>
 
 nnoremap <silent> [Space]a :CtrlPBufTag<CR>
 nnoremap <silent> [Space]A :CtrlPBufTagAll<CR>
-nnoremap <silent> [Space]T :CtrlPTag<CR>
 
 nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
+
+" phongnh/ctrlp-finder
+nnoremap <silent> [Space]e :CtrlPFinder<CR>
+nnoremap          [Space]E :CtrlPFinder<Space>
 
 " h14i/vim-ctrlp-buftab
 nnoremap <silent> [Space]B :CtrlPBufTab<CR>
 
 " DavidEGx/ctrlp-smarttabs
 nnoremap <silent> [Space]t :CtrlPSmartTabs<CR>
+
+" kaneshin/ctrlp-tabbed
+nnoremap <silent> [Space]T :CtrlPTabbed<CR>
 
 " fisadev/vim-ctrlp-cmdpalette
 nnoremap <silent> [Space]M :CtrlPCmdPalette<CR>
