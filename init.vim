@@ -62,11 +62,9 @@ Plug 'Shougo/unite.vim'
 Plug 'Shougo/tabpagebuffer.vim'
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite-outline'
+Plug 'Shougo/neoyank.vim'
 Plug 'osyo-manga/unite-quickfix'
 Plug 'thinca/vim-unite-history'
-
-" logging registers and reusing them
-Plug 'LeafCage/yankround.vim'
 
 " Maximize current buffer
 Plug 'regedarek/ZoomWin'
@@ -613,35 +611,20 @@ endfunction
 autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
 " Shougo/unite.vim
-let g:unite_source_rec_min_cache_files = 500
-let g:unite_source_rec_max_cache_files = 10000
+let g:unite_source_rec_max_cache_files = -1
 
 if executable('ag')
     let g:unite_source_rec_async_command  = ['ag', '-l', '--nocolor', '--nogroup', '--follow', '--hidden', '-g', '']
 endif
 
 call unite#custom#profile('default', 'context', {
-            \ 'auto_resize': 1,
             \ 'start_insert': 1,
             \ 'prompt': '> ',
-            \ 'direction': 'botright',
+            \ 'direction': 'dynamicbottom',
             \ 'short_source_names': 1
             \ })
 
-call unite#custom#profile('files', 'context', { 'smartcase': 1 })
-
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
-
-call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file,neomru/directory,buffer',
-            \ 'ignore_pattern',
-            \ join([
-            \ '\.git/',
-            \ '\.hg/',
-            \ '\.svn/',
-            \ '\.DS_Store',
-            \ 'tmp/',
-            \ ], '\|'))
 
 call unite#custom#source('file_rec/neovim,file_rec/git,buffer', 'matchers', [
             \ 'converter_relative_word',
@@ -655,10 +638,9 @@ call unite#custom#source('neomru/file', 'matchers', [
             \ 'matcher_hide_current_file'
             \ ])
 
-call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file', 'converters', ['converter_file_directory'])
-
-" call unite#custom#source('line,outline', 'matchers', ['matcher_context'])
-call unite#custom#source('line,outline', 'matchers', ['matcher_fuzzy'])
+call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file', 'converters', [
+            \ 'converter_file_directory'
+            \ ])
 
 let s:system_open_action = { 'is_selectable': 1 }
 
@@ -736,6 +718,9 @@ nnoremap <silent> [Space]d :Unite -buffer-name=recent-folders -default-action=cd
 " Shougo/unite-outline
 nnoremap <silent> [Space]o :Unite outline<CR>
 
+" Shougo/unite-outline
+nnoremap <silent> [Space]y :Unite history/yank<CR>
+
 " osyo-manga/unite-quickfix
 nnoremap <silent> [Space]q :Unite -resume -buffer-name=quickfix quickfix<CR>
 nnoremap <silent> [Space]Q :Unite -resume -buffer-name=location-list location_list<CR>
@@ -746,11 +731,6 @@ nnoremap <silent> [Space][ :UnitePrevious<CR>
 nnoremap <silent> [Space]: :Unite history/command<CR>
 nnoremap <silent> [Space]/ :Unite history/search<CR>
 nnoremap <silent> [Space]h :Unite history/unite<CR>
-
-" LeafCage/yankround.vim
-let g:yankround_max_history = 100
-
-nnoremap <silent> [Space]y :Unite yankround<CR>
 
 " regedarek/ZoomWin
 let g:zoomwin_localoptlist = ["ai","ar","bh","bin","bl","bomb","bt","cfu","ci","cin","cink","cino","cinw","cms","com","cpt","diff","efm","eol","ep","et","fenc","fex","ff","flp","fo","ft","gp","imi","ims","inde","inex","indk","inf","isk","kmp","lisp","mps","ml","ma","mod","nf","ofu","pi","qe","ro","sw","si","sts","spc","spf","spl","sua","swf","smc","syn","ts","tw","udf","wfh","wfw","wm"]
