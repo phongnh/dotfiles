@@ -522,8 +522,9 @@ nnoremap <silent> ]w :wincmd w<CR>
 nnoremap <silent> [w :wincmd W<CR>
 
 " Reload buffer
-nnoremap <silent> <C-W>e :edit<CR>
-nnoremap <silent> <C-W>E :edit!<CR>
+nnoremap <silent> <C-W>e     :edit<CR>
+nnoremap <silent> <C-W><C-E> :edit<CR>
+nnoremap <silent> <C-W>E     :edit!<CR>
 
 " Unload buffer
 nnoremap <silent> <C-W><BS> :bdelete<CR>
