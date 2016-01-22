@@ -86,7 +86,7 @@ Plug 'benekastah/neomake'
 
 if has('python')
     " Visualize your Vim undo tree
-    Plug 'simnalamburt/vim-mundo'
+    Plug 'sjl/gundo.vim'
 else
     " The ultimate undo history visualizer for VIM
     Plug 'mbbill/undotree'
@@ -850,7 +850,7 @@ nnoremap <silent> <F6> :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
 inoremap <silent> <F6> <Esc>:Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
 
 if has('python')
-    " simnalamburt/vim-mundo
+    " sjl/gundo.vim
     let g:gundo_right          = 1
     let g:gundo_width          = 30
     let g:gundo_preview_bottom = 1
