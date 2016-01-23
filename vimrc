@@ -419,6 +419,9 @@ xmap     m     [App]
 nnoremap [App], ,
 nnoremap [App]; ;
 nnoremap [App]m m
+nnoremap [App]H H
+nnoremap [App]M M
+nnoremap [App]L L
 
 " <Space>: Other useful commands
 nnoremap [Space] <Nop>
