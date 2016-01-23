@@ -1502,9 +1502,8 @@ nnoremap [App]et :Espec<Space>
 xnoremap [App]ee :Rextract<Space>
 
 " mattn/emmet-vim
-let g:user_emmet_install_global  = 1
-let g:user_emmet_install_command = 0
-let g:user_emmet_mode            = 'i'
+let g:user_emmet_install_global  = 0
+autocmd MyAutoCmd FileType eruby,haml,slim,jade,html,xml,css,sass,scss,less,html.handlebars,mustache EmmetInstall
 
 " fatih/vim-go and garyburd/go-explorer
 let g:go_highlight_functions         = 1
