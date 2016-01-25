@@ -120,9 +120,6 @@ Plug 'vim-scripts/matchit.zip'
 " My vim functions for search and substitue
 Plug 'phongnh/vim-search-helpers'
 
-" Extended f, F, t and T key mappings for Vim.
-Plug 'rhysd/clever-f.vim'
-
 " Improved incremental searching for Vim
 Plug 'haya14busa/incsearch.vim'
 " Vim search status
