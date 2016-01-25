@@ -525,7 +525,7 @@ nnoremap <silent> <C-W><C-E> :edit<CR>
 nnoremap <silent> <C-W>E     :edit!<CR>
 
 " Unload buffer
-nnoremap <silent> <C-W><BS> :bdelete<CR>
+nnoremap <silent> <C-W>D :bdelete<CR>
 
 " gb: Last buffer
 nnoremap <silent> gb :buffer#<CR>
