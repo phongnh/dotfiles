@@ -202,8 +202,8 @@ Plug 'tpope/vim-fugitive'
 " A powerful Git log viewer
 Plug 'cohama/agit.vim'
 
-" A Vim plugin which shows a git diff in the gutter (sign column) and stages/reverts hunks.
-Plug 'airblade/vim-gitgutter'
+" Show a diff via Vim sign column
+Plug 'mhinz/vim-signify'
 
 " Tmux
 if exists("$TMUX")
@@ -1254,16 +1254,20 @@ nnoremap          <Leader>gL :Gllog!<Space>
 nnoremap <silent> <Leader>gk :AgitFile<CR>
 nnoremap <silent> <Leader>gK :Agit<CR>
 
-" airblade/vim-gitgutter
-let g:gitgutter_map_keys  = 0
-let g:gitgutter_realtime  = 0
-let g:gitgutter_eager     = 0
-let g:gitgutter_max_signs = 500
+" mhinz/vim-signify
+let g:signify_vcs_list              = [ 'git', 'hg' ]
+let g:signify_disable_by_default    = 0
+let g:signify_cursorhold_insert     = 0
+let g:signify_cursorhold_normal     = 0
+let g:signify_update_on_bufenter    = 0
+let g:signify_update_on_focusgained = 0
 
-nmap ]h <Plug>GitGutterNextHunk zz
-nmap [h <Plug>GitGutterPrevHunk zz
+nmap ]h <Plug>(signify-next-hunk)zz
+nmap ]H 999]h
+nmap [h <Plug>(signify-prev-hunk)zz
+nmap [H 999[h
 
-nnoremap <silent> cog :GitGutterToggle<CR>
+nnoremap <silent> cog :SignifyToggle<CR>
 
 if exists("$TMUX")
     " common tmux functions
