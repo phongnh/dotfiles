@@ -1348,11 +1348,6 @@ let g:signify_cursorhold_normal     = 0
 let g:signify_update_on_bufenter    = 0
 let g:signify_update_on_focusgained = 0
 
-nmap ]h <Plug>(signify-next-hunk)zz
-nmap ]H 999]h
-nmap [h <Plug>(signify-prev-hunk)zz
-nmap [H 999[h
-
 nnoremap <silent> cog :SignifyToggle<CR>
 
 if exists("$TMUX")
