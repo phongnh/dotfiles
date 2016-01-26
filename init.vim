@@ -447,18 +447,9 @@ noremap  H ^
 noremap  L $
 xnoremap L g_
 
-" Select until end of current line in visual mode
-" xnoremap v $h
-" Select rectangle - Visual Block
-xnoremap r <C-V>
-
-" Indent
-nnoremap >       >>
-nnoremap <       <<
-xnoremap >       >gv
-xnoremap <       <gv
-xnoremap <Tab>   >gv
-xnoremap <S-Tab> <gv
+" After indenting code, does not exit Visual mode
+vnoremap > >gv
+vnoremap < <gv
 
 " Indent whole file
 nnoremap g= gg=G``
@@ -470,9 +461,6 @@ nnoremap gI `.`
 " gV: Select the text that was last edited/pasted
 " http://vimcasts.org/episodes/bubbling-text/
 nmap gV `[v`]
-
-" D: Delete to end line
-nnoremap D  d$
 
 " U: Redo
 nnoremap U :redo<CR>
