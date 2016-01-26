@@ -1144,19 +1144,19 @@ xnoremap <F6> :MultipleCursorsFind<Space>
 
 " Called once right before you start selecting multiple cursors
 function! Multiple_cursors_before()
-    if exists(':NeoCompleteDisable') == 2
-        execute 'NeoCompleteDisable'
-    elseif exists(':NeoComplCacheDisable') == 2
-        execute 'NeoComplCacheDisable'
+    if exists(':NeoCompleteLock') == 2
+        silent! NeoCompleteLock
+    elseif exists(':NeoComplCacheLock') == 2
+        silent! NeoComplCacheLock
     endif
 endfunction
 
 " Called once only when the multiple selection is cancelled (default <Esc>)
 function! Multiple_cursors_after()
-    if exists(':NeoCompleteEnable') == 2
-        execute 'NeoCompleteEnable'
-    elseif exists(':NeoComplCacheEnable') == 2
-        execute 'NeoComplCacheEnable'
+    if exists(':NeoCompleteUnlock') == 2
+        silent! NeoCompleteUnlock
+    elseif exists(':NeoComplCacheUnlock') == 2
+        silent! NeoComplCacheUnlock
     endif
 endfunction
 
