@@ -963,7 +963,6 @@ map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 
 " mhinz/vim-grepper
 let g:grepper = {
-            \ 'dispatch': !has('nvim') && exists(':Dispatch') && exists("$TMUX"),
             \ 'open': 1,
             \ 'switch': 0,
             \ 'jump': 0,
@@ -979,7 +978,7 @@ xmap <silent> gs <Plug>(GrepperOperator)
 
 nnoremap <silent> [App]S :Grepper<CR>
 
-nnoremap <silent> [App]s :echo 'Searching...'<CR>:Grepper -cword!<CR>
+nnoremap <silent> [App]s :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
 xmap     <silent> [App]s <Plug>(GrepperOperator)
 
 " thinca/vim-textobj-between
