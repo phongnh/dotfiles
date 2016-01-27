@@ -1386,30 +1386,17 @@ augroup MyAutoCmd
     autocmd BufReadPost fugitive://* set bufhidden=delete
 augroup END
 
-nnoremap          <Leader>G  :Git!<Space>
-nnoremap          <Leader>gi :Git<Space>
-nnoremap          <Leader>gu :Git commit -m ""<Left>
-nnoremap          <Leader>ga :Git add -p %<CR><CR>
-nnoremap          <Leader>gA :Git add -p<CR><CR>
+nnoremap          <Leader>gi :Git add -p %<CR><CR>
+nnoremap          <Leader>ga :Git add -p<CR><CR>
 nnoremap          <Leader>ge :Gedit<Space>
 nnoremap <silent> <Leader>gd :Gdiff<CR>
-nnoremap          <Leader>gm :Gmerge<Space>
 nnoremap <silent> <Leader>gs :Gstatus<CR>
 nnoremap <silent> <Leader>gb :Gblame<CR>
-nnoremap <silent> <Leader>gB :echo fugitive#head()<CR>
 nnoremap <silent> <Leader>gw :Gwrite<CR>
 nnoremap <silent> <Leader>gr :Gread<CR>
-nnoremap <silent> <Leader>gR :Gremove<CR>
-nnoremap          <Leader>gM :Gmove<Space>
 nnoremap <silent> <Leader>gc :Gcommit<CR>
-nnoremap          <Leader>gC :Gcommit<Space>
 nnoremap <silent> <Leader>gf :Gfetch<CR>
-nnoremap <silent> <Leader>gF :Gfetch -p<CR>
 nnoremap <silent> <Leader>gp :Gpush<CR>
-nnoremap <silent> <Leader>gP :Gpull<CR>
-nnoremap          <Leader>g/ :Ggrep!<Space>
-nnoremap          <Leader>gg :Ggrep! <C-R>=GetWordForSearch()<CR><Space>
-xnoremap          <Leader>gg <Esc>:Ggrep! <C-R>=GetSelectedTextForSearch()<CR><Space>
 nnoremap          <Leader>gl :Glog!<Space>
 nnoremap          <Leader>gL :Gllog!<Space>
 
