@@ -1017,14 +1017,11 @@ augroup MyAutoCmd
 augroup END
 
 " jiangmiao/auto-pairs
-let g:AutoPairsMapBS              = 0
 let g:AutoPairsFlyMode            = 0
 let g:AutoPairsShortcutToggle     = '<M-t>'
 let g:AutoPairsShortcutJump       = '<M-j>'
 let g:AutoPairsShortcutFastWrap   = '<M-w>'
 let g:AutoPairsShortcutBackInsert = '<M-i>'
-
-autocmd MyAutoCmd BufEnter * execute 'inoremap <buffer> <silent> <BS> <C-R>=AutoPairsDelete()<CR>'
 
 " vim-scripts/DeleteTrailingWhitespace
 nnoremap <silent> <Leader>W :update<CR>:DeleteTrailingWhitespace<CR>
