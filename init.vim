@@ -1017,12 +1017,6 @@ augroup MyAutoCmd
 augroup END
 
 " jiangmiao/auto-pairs
-if !has('gui_running') && !has('nvim')
-    execute "set <M-t>=\<Esc>t"
-    execute "set <M-j>=\<Esc>j"
-    execute "set <M-w>=\<Esc>w"
-    execute "set <M-i>=\<Esc>i"
-endif
 let g:AutoPairsMapBS              = 0
 let g:AutoPairsFlyMode            = 0
 let g:AutoPairsShortcutToggle     = '<M-t>'
@@ -1231,6 +1225,8 @@ function! s:CleverTab() abort
         endif
     endif
 endfunction
+
+nnoremap <silent> <M-/> :NeoComplCacheToggle<CR>
 
 " Shougo/neosnippet.vim
 let g:neosnippet#enable_snipmate_compatibility = 1

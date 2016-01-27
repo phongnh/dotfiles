@@ -585,6 +585,18 @@ if maparg('<C-L>', 'n') ==# ''
     nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 
+" Meta workround
+if !has('gui_running') && !has('nvim')
+    " jiangmiao/auto-pairs
+    execute "set <M-t>=\<Esc>t"
+    execute "set <M-j>=\<Esc>j"
+    execute "set <M-w>=\<Esc>w"
+    execute "set <M-i>=\<Esc>i"
+
+    " Shougo/neocomplete.vim and Shougo/neocomplcache.vim
+    execute "set <M-/>=\<Esc>\/"
+endif
+
 " bling/vim-airline
 let g:airline#extensions#hunks#enabled      = 0
 let g:airline#extensions#tagbar#enabled     = 0
@@ -1034,12 +1046,6 @@ augroup MyAutoCmd
 augroup END
 
 " jiangmiao/auto-pairs
-if !has('gui_running') && !has('nvim')
-    execute "set <M-t>=\<Esc>t"
-    execute "set <M-j>=\<Esc>j"
-    execute "set <M-w>=\<Esc>w"
-    execute "set <M-i>=\<Esc>i"
-endif
 let g:AutoPairsMapBS              = 0
 let g:AutoPairsFlyMode            = 0
 let g:AutoPairsShortcutToggle     = '<M-t>'
@@ -1240,6 +1246,8 @@ if has_key(g:plugs, 'neocomplete.vim')
             endif
         endif
     endfunction
+
+    nnoremap <silent> <M-/> :NeoCompleteToggle<CR>
 else
     " Shougo/neocomplcache.vim
     let g:neocomplcache_enable_at_startup            = 1 " Use neocomplcache
@@ -1342,6 +1350,8 @@ else
             endif
         endif
     endfunction
+
+    nnoremap <silent> <M-/> :NeoComplCacheToggle<CR>
 endif
 
 " Shougo/neosnippet.vim
