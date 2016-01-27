@@ -453,9 +453,11 @@ inoremap <C-^> <C-C><C-^>
 " Useless command
 nnoremap M m
 
-" Q: qq to record, Q to replay and Disable Ex-mode
-nmap     Q  @q
-nnoremap gQ gq
+" Q: Disable Ex-mode. qq to record, Q to replay
+nmap Q @q
+
+" gQ: Q
+nnoremap gQ Q
 
 " .: repeats the last command on every line
 xnoremap . :normal .<CR>
