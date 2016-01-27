@@ -160,9 +160,6 @@ Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript' " f
 Plug 'poetic/vim-textobj-javascript'          " c, remapped to j
 
-" Ecliptic.vim: Amicable Clipboard Integration
-Plug 'richsoni/vim-ecliptic'
-
 " Vim plugin to copy current editing file path to clipboard (if support)
 Plug 'phongnh/vim-copypath'
 
@@ -571,8 +568,17 @@ nnoremap <Leader>R :%s//gc<Left><Left><Left>
 xnoremap <Leader>r <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
 xnoremap <Leader>R :s/\%V/gc<Left><Left><Left>
 
+" Copy / cut to clipboard
+nnoremap <silent> <Leader>y :let [@*, @+] = [@", @"]<CR>
+xnoremap <silent> <Leader>y "+y:let @* = @+<CR>
+xnoremap <silent> <Leader>Y "+y$:let @* = @+<CR>
+xnoremap <silent> <Leader>x "+d:let @* = @+<CR>
+xnoremap <silent> <Leader>X "+D:let @* = @+<CR>
+
 " Paste from clipboard
 inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
+nnoremap <silent> <Leader>p "+p
+nnoremap <silent> <Leader>P "+P
 nnoremap <silent> <Leader>v :set paste<CR>"+gp:set nopaste<CR>
 nnoremap <silent> <Leader>V :set paste<CR>"+gP:set nopaste<CR>
 
