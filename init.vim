@@ -5,7 +5,7 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 
 if &shell =~# 'fish$'
-    set shell=/bin/bash
+    set shell=bash
 endif
 
 " Set augroup
@@ -34,11 +34,12 @@ let g:ftplugin_sql_omni_key    = ''
 " https://github.com/rogual/neovim-dot-app
 if exists('neovim_dot_app')
     set linespace=2         " Add some line space for easy reading
+    set guifont=Source\ Code\ Pro:h14,Monaco:h14
 
-    xnoremap <silent> <D-c> "*y
-    xnoremap <silent> <D-x> "*x
-    nnoremap <silent> <D-v> "*gP
-    inoremap <silent> <D-v> <C-G>u<C-O>"*gP
+    xnoremap <silent> <D-c> "+y
+    xnoremap <silent> <D-x> "+d
+    nnoremap <silent> <D-v> :set paste<CR>"+gP:set nopaste<CR>
+    inoremap <silent> <D-v> <C-G>u<C-O>"+gP
 
     inoremap <Esc> <Esc>
 endif
@@ -51,14 +52,15 @@ call plug#begin()
 " rsi.vim: Readline style insertion
 Plug 'tpope/vim-rsi'
 
-" lean & mean status/tabline
-Plug 'bling/vim-airline'
+" lean & mean status/tabline for vim that's light as air
+Plug 'vim-airline/vim-airline'
 
 " Interactive command execution
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
 " Unite and create user interfaces
 Plug 'Shougo/unite.vim'
+Plug 'phongnh/unite-ag.vim'
 Plug 'Shougo/tabpagebuffer.vim'
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite-outline'
@@ -228,6 +230,7 @@ Plug 'moll/vim-node'
 
 " Go
 Plug 'fatih/vim-go'
+Plug 'rhysd/vim-go-impl'    " go get github.com/josharian/impl
 Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 
 " Others
@@ -284,7 +287,7 @@ set expandtab   " Expand tab to space
 
 set foldmethod=indent   " Fold by indent
 set foldlevel=1         " Starting fold level
-set foldnestmax=20      " Deepest fold is 20 levels
+set foldnestmax=99      " Deepest fold is 20 levels
 set foldlevelstart=99   " Open all folds by default
 set nofoldenable        " Disable fold by default
 
@@ -304,7 +307,7 @@ if has('persistent_undo')
     set undodir=~/.cache/undo
 endif
 
-set scrolloff=10                " Minimal number of screen lines to keep above and below the cursor
+set scrolloff=0                 " Minimal number of screen lines to keep above and below the cursor
 set sidescroll=1                " The minimal number of columns to scroll horizontally
 set sidescrolloff=15            " The minimal number of screen columns to keep to the left and to the right of the cursor
 
@@ -347,7 +350,7 @@ set wildmode=list:longest,full
 set wildignore+=.hg,.git,.svn,*.o,*.obj,*.pyc,*.luac,*.jpg,*.jpeg,*.png,*.gif,*.bmp,*.pdf,*.class,*.dmg,*.DS_Store,*.lnk,*.ini,*.dat
 
 " Adjust window size of preview and help
-set previewheight=8
+set previewheight=12
 set helpheight=12
 
 set nostartofline               " The cursor is kept in the same column (if possible)
@@ -361,47 +364,31 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
 endif
 
 " Map leader
-let g:mapleader = ','
+let g:mapleader      = ','
+let g:maplocalleader = '\'
 
-" Release keymappings for plug-in
-nnoremap , <Nop>
-xnoremap , <Nop>
+" Retain original behavior
+nnoremap <Leader><Leader> ,
 
-nnoremap m <Nop>
-xnoremap m <Nop>
+" Disable arrows
+nnoremap <Left>  <Nop>
+nnoremap <Down>  <Nop>
+nnoremap <Up>    <Nop>
+nnoremap <Right> <Nop>
 
-" m: App key
-nnoremap [App] <Nop>
-xnoremap [App] <Nop>
-nmap     m     [App]
-xmap     m     [App]
-
-" Retain orignal behaviors
-nnoremap [App], ,
-nnoremap [App]; ;
-nnoremap [App]m m
-nnoremap [App]H H
-nnoremap [App]M M
-nnoremap [App]L L
-
-" <Space>: Other useful commands
-nnoremap [Space] <Nop>
-xnoremap [Space] <Nop>
-nmap     <Space> [Space]
-xmap     <Space> [Space]
+" Enter command mode more quickly!?
+nnoremap <Leader>; :
 
 " F1: Help
 nnoremap <F1> :help<Space>
 inoremap <F1> <Esc>:help<Space>
 
-" Command-line Mode Mappings
 " CTRL-Space: Show history
 cnoremap <C-@> <C-F>
 
 " CTRL-V: Paste from clipboard
 cnoremap <C-V> <C-R>+
 
-" Insert Mode Mappings
 " Enable undo CTRL-W (Delete word) and CTRL-U (Delete line)
 inoremap <C-W> <C-G>u<C-W>
 inoremap <C-U> <C-G>u<C-U>
@@ -412,10 +399,6 @@ inoremap <silent> <C-T> <C-V><Tab>
 " Jump to last active buffer
 inoremap <C-^> <C-C><C-^>
 " inoremap <C-^> <C-C>:update<CR><C-^>
-
-" Normal Mode Mappings
-" Useless command
-nnoremap M m
 
 " Q: Disable Ex-mode. qq to record, Q to replay
 nmap Q @q
@@ -429,26 +412,12 @@ xnoremap . :normal .<CR>
 " @: repeats macro on every line
 xnoremap @ :normal @
 
-" Disable ZZ, ZQ, CTRL-Z
-nnoremap ZZ    <Nop>
-nnoremap ZQ    <Nop>
-nnoremap <C-Z> <Nop>
-
-" Disable arrows
-nnoremap <Left>  <Nop>
-nnoremap <Down>  <Nop>
-nnoremap <Up>    <Nop>
-nnoremap <Right> <Nop>
-
-" H: Move to Home
-noremap  H ^
-" L: Move to End
-noremap  L $
-xnoremap L g_
-
 " After indenting code, does not exit Visual mode
-vnoremap > >gv
-vnoremap < <gv
+xnoremap > >gv
+xnoremap < <gv
+
+xmap <Tab>   >
+xmap <S-Tab> <
 
 " Indent whole file
 nnoremap g= gg=G``
@@ -529,38 +498,42 @@ nnoremap <silent> <Leader>Q :confirm qall<CR>
 nnoremap <C-\> <C-W>v<C-]>zvzz
 
 " Search and Replace
-nnoremap <Leader>r :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
-nnoremap <Leader>R :%s//gc<Left><Left><Left>
+nnoremap <Leader>sr :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+nnoremap <Leader>R  :%s//gc<Left><Left><Left>
 
-xnoremap <Leader>r <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
-xnoremap <Leader>R :s/\%V/gc<Left><Left><Left>
+xnoremap <Leader>sr <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
 
 " Copy / cut to clipboard
-nnoremap <silent> <Leader>y :let [@*, @+] = [@", @"]<CR>
-xnoremap <silent> <Leader>y "+y:let @* = @+<CR>
-xnoremap <silent> <Leader>Y "+y$:let @* = @+<CR>
-xnoremap <silent> <Leader>x "+d:let @* = @+<CR>
-xnoremap <silent> <Leader>X "+D:let @* = @+<CR>
+nmap <silent> cy "+y
+nmap <silent> cd "+d
+
+xmap <silent> <Leader>y "+y
+xmap <silent> <Leader>d "+d
 
 " Paste from clipboard
-inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
-nnoremap <silent> <Leader>p "+p
-nnoremap <silent> <Leader>P "+P
-nnoremap <silent> <Leader>v :set paste<CR>"+gp:set nopaste<CR>
-nnoremap <silent> <Leader>V :set paste<CR>"+gP:set nopaste<CR>
-
-" Paste from clipboard with indent
-nnoremap <silent> ]v o<Esc>"+pm``[=`]``^
-nnoremap <silent> [v O<Esc>"+Pm``[=`]``^
-nnoremap <silent> ]V o<Esc>"+Pm``[=`]``^
-nnoremap <silent> [V O<Esc>"+pm``[=`]``^
+inoremap <silent> <C-V>      <C-G>u<C-O>"+gP
+nnoremap <silent> <Leader>p  :set paste<CR>"+p:set nopaste<CR>
+nnoremap <silent> <Leader>P  :set paste<CR>"+P:set nopaste<CR>
+nnoremap <silent> <Leader>cp "+p
+nnoremap <silent> <Leader>cP "+P
+nnoremap <silent> <Leader>cg "+gp
+nnoremap <silent> <Leader>cG "+gP
+nnoremap <silent> <Leader>ci o<Esc>"+pm``[=`]``^
+nnoremap <silent> <Leader>cI O<Esc>"+Pm``[=`]``^
 
 " Redraw
 if maparg('<C-L>', 'n') ==# ''
     nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 
-" bling/vim-airline
+" <Space>: Other useful commands
+nnoremap [Space] <Nop>
+xnoremap [Space] <Nop>
+nmap     <Space> [Space]
+xmap     <Space> [Space]
+
+" vim-airline/vim-airline
 let g:airline#extensions#hunks#enabled      = 0
 let g:airline#extensions#tagbar#enabled     = 0
 let g:airline#extensions#csv#enabled        = 0
@@ -577,6 +550,8 @@ let g:airline#extensions#tabline#enabled        = 1
 let g:airline#extensions#tabline#tab_nr_type    = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnamemod       = ':t'
+
+let g:airline_theme = 'dark'
 
 let g:airline_powerline_fonts = 0
 
@@ -607,11 +582,7 @@ endfunction
 autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
 " Shougo/unite.vim
-let g:unite_source_rec_max_cache_files = -1
-
-if executable('ag')
-    let g:unite_source_rec_async_command  = ['ag', '-l', '--nocolor', '--nogroup', '--follow', '--hidden', '-g', '']
-endif
+let g:unite_source_rec_min_cache_files = 1000
 
 call unite#custom#profile('default', 'context', {
             \ 'start_insert': 1,
@@ -683,8 +654,8 @@ nnoremap <silent> [Space]<Space> :Unite -buffer-name=files buffer bookmark neomr
 
 nnoremap <silent> [Space]D :Unite -resume -input= -buffer-name=folders directory_rec/async file/new<CR>
 
-nnoremap <silent> [Space]f :Unite -resume -input= -buffer-name=files file_rec/neovim file/new<CR>
-nnoremap          [Space]F :Unite -resume -buffer-name=files file_rec/neovim:
+nnoremap <silent> [Space]e :Unite -resume -input= -buffer-name=files file_rec/neovim file/new<CR>
+nnoremap          [Space]E :Unite -resume -buffer-name=files file_rec/neovim:
 
 nnoremap <silent> [Space]g :Unite -resume -input= -buffer-name=files file_rec/git file/new<CR>
 nnoremap          [Space]G :Unite -resume -buffer-name=files file_rec/git:
@@ -703,6 +674,12 @@ nnoremap <silent> [Space]M :Unite command<CR>
 nnoremap <silent> [Space]i :Unite register<CR>
 nnoremap <silent> [Space]k :Unite bookmark<CR>
 nnoremap          [Space]K :UniteBookmarkAdd<Space>
+
+" phongnh/unite-ag.vim
+let g:unite_source_ag_min_cache_files = 1000
+
+nnoremap <silent> [Space]f :Unite -resume -input= -buffer-name=files ag/neovim file/new<CR>
+nnoremap          [Space]F :Unite -resume -buffer-name=files ag/neovim:
 
 " Shougo/tabpagebuffer.vim
 nnoremap <silent> [Space]B :Unite buffer_tab<CR>
@@ -769,9 +746,9 @@ function! s:custom_goyo_enter()
     endif
 
     if exists(':NeoCompleteLock') == 2
-        execute 'NeoCompleteLock'
+        silent! NeoCompleteLock
     elseif exists(':NeoComplCacheLock') == 2
-        execute 'NeoComplCacheLock'
+        silent! NeoComplCacheLock
     endif
 endfunction
 
@@ -789,9 +766,9 @@ function! s:custom_goyo_leave()
     endif
 
     if exists(':NeoCompleteUnlock') == 2
-        execute 'NeoCompleteUnlock'
+        silent! NeoCompleteUnlock
     elseif exists(':NeoComplCacheUnlock') == 2
-        execute 'NeoComplCacheUnlock'
+        silent! NeoComplCacheUnlock
     endif
 endfunction
 
@@ -923,6 +900,7 @@ inoremap <silent> <F10> <Esc>:NERDTreeFind<CR>
 let g:bufExplorerDisableDefaultKeyMapping = 1
 let g:bufExplorerShowDirectories          = 0
 let g:bufExplorerShowRelativePath         = 1
+
 nnoremap <silent> gl :ToggleBufExplorer<CR>
 
 " moll/vim-bbye
@@ -972,10 +950,12 @@ let g:grepper = {
 nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
-nnoremap <silent> [App]S :Grepper<CR>
+nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
+xmap     <silent> <Leader>ss <Plug>(GrepperOperator)
+nnoremap <silent> <Leader>S  :Grepper<CR>
 
-nnoremap <silent> [App]s :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
-xmap     <silent> [App]s <Plug>(GrepperOperator)
+nnoremap <silent> <Leader>sl :echo 'Searching...'<CR>:Grepper -noquickfix -cword -noprompt<CR>
+nnoremap <silent> <Leader>L  :Grepper -noquickfix<CR>
 
 " thinca/vim-textobj-between
 let g:textobj_between_no_default_key_mappings = 1
@@ -1016,7 +996,8 @@ xmap ij <Plug>(textobj-chunkblock-i)
 let g:surround_indent             = 1
 let g:surround_no_insert_mappings = 1
 
-" nmap <C-Y><C-W> ysiw
+nmap <Leader>sw ysiw
+nmap <Leader>sW ysiW
 
 augroup MyAutoCmd
     autocmd VimEnter * silent! iunmap <C-G>s
@@ -1041,8 +1022,8 @@ let g:commentary_map_backslash = 0
 xnoremap <silent> <Enter> :EasyAlign<Enter>
 
 " godlygeek/tabular
-nnoremap [App]<Enter> :Tabularize /
-xnoremap [App]<Enter> :Tabularize /
+nnoremap <Leader><Enter> :Tabularize /
+xnoremap <Leader><Enter> :Tabularize /
 
 autocmd MyAutoCmd FileType cucumber inoremap <silent> <buffer> <Bar> <Bar><Esc>:call <SID>BarAlign()<CR>a
 
@@ -1060,55 +1041,55 @@ endfunction
 " terryma/vim-expand-region
 " Default settings
 let g:expand_region_text_objects = {
-            \ 'iw'  :0,
-            \ 'iW'  :0,
-            \ 'i"'  :0,
-            \ 'i''' :0,
-            \ 'i]'  :1,
-            \ 'ib'  :1,
-            \ 'iB'  :1,
-            \ 'il'  :0,
-            \ 'ip'  :0,
-            \ 'ie'  :0,
+            \ 'iw' : 0,
+            \ 'iW' : 0,
+            \ 'i"' : 0,
+            \ 'a"' : 0,
+            \ 'i`' : 0,
+            \ 'a`' : 0,
+            \ "i'" : 0,
+            \ "a'" : 0,
             \ }
 
-" Extend the global dictionary
-call expand_region#custom_text_objects({
-            \ "\/\\n\\n\<CR>": 1,
-            \ 'a]'  :1,
-            \ 'ab'  :1,
-            \ 'aB'  :1,
-            \ 'ii'  :0,
-            \ 'ai'  :0,
+for s:char in split("(){}[]bB", "\\zs")
+    let g:expand_region_text_objects = extend(g:expand_region_text_objects, { "i".s:char : 1, "a".s:char : 1 })
+endfor
+
+let g:expand_region_text_objects = extend(g:expand_region_text_objects, {
+            \ 'il' : 0,
+            \ 'is' : 0,
+            \ 'ip' : 0,
+            \ 'ie' : 0,
+            \ 'ii' : 0,
+            \ 'ai' : 0,
             \ })
 
 " Customize it further for ruby
 call expand_region#custom_text_objects('ruby', {
-            \ 'im' :0,
-            \ 'am' :0,
+            \ 'ir' : 1,
+            \ 'ar' : 1,
+            \ 'im' : 0,
+            \ 'am' : 0,
             \ })
 
-" Customize it further for ruby
+call expand_region#custom_text_objects('eruby', {
+            \ 'iy' : 0,
+            \ 'ay' : 0,
+            \ })
+
+" Customize it further for go
 call expand_region#custom_text_objects('go', {
-            \ 'if' :0,
-            \ 'af' :0,
+            \ 'if' : 0,
+            \ 'af' : 0,
             \ })
 
 " Customize it further for html
 call expand_region#custom_text_objects('html', {
-            \ 'it' :1,
+            \ 'it' : 1,
+            \ 'at' : 1,
             \ })
 
-map - <Plug>(expand_region_shrink)
-map + <Plug>(expand_region_expand)
-
 " terryma/vim-multiple-cursors
-let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_next_key            = '<C-N>'
-let g:multi_cursor_prev_key            = '<C-P>'
-let g:multi_cursor_skip_key            = '<C-X>'
-let g:multi_cursor_quit_key            = '<Esc>'
-
 xnoremap <F6> :MultipleCursorsFind<Space>
 
 " Called once right before you start selecting multiple cursors
@@ -1201,11 +1182,8 @@ endfunction
 inoremap <expr> <C-H> neocomplcache#close_popup()."\<C-H>"
 inoremap <expr> <BS>  neocomplcache#close_popup()."\<C-H>"
 
-inoremap <expr> <C-G> neocomplcache#undo_completion()
-inoremap <expr> <C-L> neocomplcache#complete_common_string()
-" inoremap <expr> <CR>  neocomplcache#complete_common_string()
-
-" <C-X><C-F>: complete file
+inoremap          <expr> <C-X><C-G> neocomplcache#undo_completion()
+inoremap          <expr> <C-X><C-@> neocomplcache#complete_common_string()
 inoremap <silent> <expr> <C-X><C-F> neocomplcache#start_manual_complete('file')
 
 " <Tab>: completion
@@ -1238,15 +1216,11 @@ let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#enable_complete_done          = 1
 let g:neosnippet#expand_word_boundary          = 1
 
-imap <C-J> <Plug>(neosnippet_jump_or_expand)
-smap <C-J> <Plug>(neosnippet_jump_or_expand)
-xmap <C-J> <Plug>(neosnippet_expand_target)
-
-imap <silent> <expr> <C-K> neosnippet#expandable_or_jumpable() ?
+imap <silent> <expr> <C-L> neosnippet#expandable_or_jumpable() ?
             \ "\<Plug>(neosnippet_expand_or_jump)" :
             \ (pumvisible() ? "\<C-E>" : "\<Plug>(neosnippet_expand_or_jump)")
-smap <C-K> <Plug>(neosnippet_expand_or_jump)
-xmap <C-K> <Plug>(neosnippet_expand_target)
+smap <C-L> <Plug>(neosnippet_jump_or_expand)
+xmap <C-L> <Plug>(neosnippet_expand_target)
 
 smap <Tab> <Plug>(neosnippet_jump)
 
@@ -1255,11 +1229,6 @@ if has_key(g:plugs, 'unite.vim')
 endif
 
 " tpope/vim-fugitive
-augroup MyAutoCmd
-    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-R><C-G><CR>
-    autocmd BufReadPost fugitive://* set bufhidden=delete
-augroup END
-
 nnoremap          <Leader>gi :Git add -p %<CR><CR>
 nnoremap          <Leader>ga :Git add -p<CR><CR>
 nnoremap          <Leader>ge :Gedit<Space>
@@ -1273,6 +1242,11 @@ nnoremap <silent> <Leader>gf :Gfetch<CR>
 nnoremap <silent> <Leader>gp :Gpush<CR>
 nnoremap          <Leader>gl :Glog!<Space>
 nnoremap          <Leader>gL :Gllog!<Space>
+
+augroup MyAutoCmd
+    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-R><C-G><CR>
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+augroup END
 
 " cohama/agit.vim
 nnoremap <silent> <Leader>gk :AgitFile<CR>
@@ -1289,102 +1263,64 @@ let g:signify_update_on_focusgained = 0
 nnoremap <silent> cog :SignifyToggle<CR>
 
 if exists("$TMUX")
-    " common tmux functions
-    function! TmuxFormatCommand(text)
+    " benmills/vimux
+    let g:VimuxUseNearest = 1
+    let g:VimuxHeight     = 25
+
+    xnoremap <silent> <Leader>vs "my:call VimuxSlime(@m)<CR>
+    nmap     <silent> <Leader>vs vip<Leader>vs
+    nnoremap <silent> <Leader>vr :VimuxPromptCommand<CR>
+    nnoremap <silent> <Leader>vl :VimuxRunLastCommand<CR>
+    nnoremap <silent> <Leader>vu :call VimuxSendKeys('q C-u')<CR>
+    nnoremap <silent> <Leader>vm :call VimuxSendKeys('Enter')<CR>
+    nnoremap <silent> <Leader>vd :call VimuxSendKeys('C-d')<CR>
+    nnoremap <silent> <Leader>vb :VimuxInterruptRunner<CR>
+    nnoremap <silent> <Leader>vc :call VimuxSendKeys('C-l')<CR>
+    nnoremap <silent> <Leader>vk :call VimuxSendKeys(input('Keys? '))<CR>
+
+    " Runner-related
+    nnoremap <silent> <Leader>vo :call VimuxOpenRunner()<CR>
+    nnoremap <silent> <Leader>vq :VimuxCloseRunner<CR>
+    nnoremap <silent> <Leader>vp :VimuxTogglePane<CR>
+    nnoremap <silent> <Leader>vi :VimuxInspectRunner<CR>
+    nnoremap <silent> <Leader>vh :VimuxClearRunnerHistory<CR>
+    nnoremap <silent> <Leader>vf :VimuxZoomRunner<CR>
+    nnoremap <silent> <Leader>v[ :VimuxScrollUpInspect<CR>
+    nnoremap <silent> <Leader>v] :VimuxScrollDownInspect<CR>
+
+    function! VimuxSlime(text)
         let cmd = substitute(a:text, '^\s*', '', '')
         let cmd = substitute(cmd, '\s*$', '', '')
         let cmd = substitute(cmd, '^\n*', '', '')
         let cmd = substitute(cmd, '\n*$', '', '')
         let cmd = substitute(cmd, '\n\+', '\n', '')
-        return cmd
-    endfunction
-
-    function! TmuxFormatKeys(text)
-        let keys = substitute(a:text, '\n+', ' ', '')
-        let keys = substitute(keys, '^\s*', '', '')
-        let keys = substitute(keys, '\s*$', '', '')
-        let keys = substitute(keys, '\s\+', ' ', '')
-        return keys
-    endfunction
-
-    " benmills/vimux
-    let g:VimuxUseNearest = 1
-    let g:VimuxHeight     = 25
-
-    xnoremap <silent> [App]vs "my:call VimuxSlime(@m)<CR>
-    nmap     <silent> [App]vs vip[App]vs
-    nnoremap <silent> [App]vr :VimuxPromptCommand<CR>
-    nnoremap <silent> [App]vR :VimuxRunLastCommand<CR>
-    nnoremap <silent> [App]vq :call VimuxSendManyKeys('q C-u')<CR>
-    nnoremap <silent> [App]vm :call VimuxSendManyKeys('Enter')<CR>
-    nnoremap <silent> [App]vd :call VimuxSendManyKeys('C-d')<CR>
-    nnoremap <silent> [App]vc :call VimuxSendManyKeys('C-c')<CR>
-    nnoremap <silent> [App]vl :call VimuxSendManyKeys('C-c C-l')<CR>
-    nnoremap <silent> [App]vk :call VimuxSendManyKeys(input('Keys? '))<CR>
-
-    " Runner-related
-    nnoremap <silent> [App]vo :call VimuxOpenRunner()<CR>
-    nnoremap <silent> [App]vO :VimuxCloseRunner<CR>
-    nnoremap <silent> [App]vp :VimuxTogglePane<CR>
-    nnoremap <silent> [App]vi :VimuxInspectRunner<CR>
-    nnoremap <silent> [App]vI :VimuxInterruptRunner<CR>
-    nnoremap <silent> [App]vh :VimuxClearRunnerHistory<CR>
-    nnoremap <silent> [App]vz :VimuxZoomRunner<CR>
-    nnoremap <silent> [App]v[ :VimuxScrollUpInspect<CR>
-    nnoremap <silent> [App]v] :VimuxScrollDownInspect<CR>
-
-    function! VimuxSlime(text)
-        let cmd = TmuxFormatCommand(a:text)
-
-        if empty(cmd)
-            return
+        if strlen(cmd)
+            call VimuxSendText(cmd)
+            call VimuxSendKeys('Enter')
         endif
-
-        if !exists("g:VimuxRunnerIndex") || _VimuxHasRunner(g:VimuxRunnerIndex) == -1
-            call VimuxOpenRunner()
-        endif
-
-        call VimuxSendText(cmd)
-        call VimuxSendKeys('Enter')
-    endfunction
-
-    function! VimuxSendManyKeys(text)
-        let keys = TmuxFormatKeys(a:text)
-
-        if empty(keys)
-            return
-        endif
-
-        if !exists("g:VimuxRunnerIndex") || _VimuxHasRunner(g:VimuxRunnerIndex) == -1
-            call VimuxOpenRunner()
-        endif
-
-        for key in split(keys, '\s')
-            call VimuxSendKeys(key)
-        endfor
     endfunction
 
     " mhinz/vim-tmuxify
     let g:tmuxify_custom_command = 'tmux split-window -d -p 20'
-    let g:tmuxify_map_prefix     = '[App]m'
+    let g:tmuxify_map_prefix     = '<Leader>m'
     let g:tmuxify_global_maps    = 1
 
-    nnoremap <silent> [App]mu :TxSendKey! 'q C-u'<CR>
-    nnoremap <silent> [App]mm :TxSendKey! 'Enter'<CR>
-    nnoremap <silent> [App]md :TxSendKey! 'C-d'<CR>
+    nnoremap <silent> <Leader>mu :TxSendKey! 'q C-u'<CR>
+    nnoremap <silent> <Leader>mm :TxSendKey! 'Enter'<CR>
+    nnoremap <silent> <Leader>md :TxSendKey! 'C-d'<CR>
 
-    nnoremap <silent> [App]tb :TxSigInt<CR>
-    nnoremap <silent> [App]tc :TxClear<CR>
-    nnoremap <silent> [App]tn :TxCreate<CR>
-    nnoremap <silent> [App]tp :TxSetPane<CR>
-    nnoremap <silent> [App]tq :TxKill<CR>
-    nnoremap <silent> [App]tr :TxRun<CR>
-    nnoremap <silent> [App]ts :TxSend<CR>
-    nnoremap <silent> [App]tk :TxSendKey<CR>
-    xnoremap <silent> [App]ts "my:TxSend(@m)<CR>
-    nnoremap <silent> [App]tu :TxSendKey 'q C-u'<CR>
-    nnoremap <silent> [App]tm :TxSendKey 'Enter'<CR>
-    nnoremap <silent> [App]td :TxSendKey 'C-d'<CR>
+    nnoremap <silent> <Leader>tb :TxSigInt<CR>
+    nnoremap <silent> <Leader>tc :TxClear<CR>
+    nnoremap <silent> <Leader>tn :TxCreate<CR>
+    nnoremap <silent> <Leader>tp :TxSetPane<CR>
+    nnoremap <silent> <Leader>tq :TxKill<CR>
+    nnoremap <silent> <Leader>tr :TxRun<CR>
+    nnoremap <silent> <Leader>ts :TxSend<CR>
+    nnoremap <silent> <Leader>tk :TxSendKey<CR>
+    xnoremap <silent> <Leader>ts "my:TxSend(@m)<CR>
+    nnoremap <silent> <Leader>tu :TxSendKey 'q C-u'<CR>
+    nnoremap <silent> <Leader>tm :TxSendKey 'Enter'<CR>
+    nnoremap <silent> <Leader>td :TxSendKey 'C-d'<CR>
 endif
 
 " janko-m/vim-test
@@ -1395,37 +1331,26 @@ endfunction
 let g:test#custom_strategies = { 'neovim2': function('Neovim2Strategy') }
 let g:test#strategy = 'neovim2'
 
-nmap <silent> [App]tt :TestFile<CR>
-nmap <silent> [App]tf :TestNearest<CR>
-nmap <silent> [App]tl :TestLast<CR>
-nmap <silent> [App]ta :TestSuite<CR>
-nmap <silent> [App]tg :TestVisit<CR>
+nmap <silent> <Leader>rt :TestFile<CR>
+nmap <silent> <Leader>rf :TestNearest<CR>
+nmap <silent> <Leader>rl :TestLast<CR>
+nmap <silent> <Leader>rs :TestSuite<CR>
+nmap <silent> <Leader>rg :TestVisit<CR>
 
 " sheerun/vim-polyglot
 let g:polyglot_disabled = ['go']
 
 " tpope/rails.vim
-nnoremap <silent> [App]a :A<CR>
-nnoremap <silent> [App]r :R<CR>
-
-nnoremap [App]em :Emodel<Space>
-nnoremap [App]ev :Eview<Space>
-nnoremap [App]ec :Econtroller<Space>
-nnoremap [App]ee :Emailer<Space>
-nnoremap [App]eh :Ehelper<Space>
-nnoremap [App]ed :Emigration<Space>
-nnoremap [App]el :Elib<Space>
-nnoremap [App]et :Etask<Space>
-nnoremap [App]ej :Ejavascript<Space>
-nnoremap [App]es :Estylesheet<Space>
-nnoremap [App]et :Espec<Space>
-xnoremap [App]ee :Rextract<Space>
+nnoremap <silent> <Leader>ra :AE<CR>
+nnoremap <silent> <Leader>rr :RE<CR>
+xnoremap          <Leader>re :Rextract<Space>
 
 " mattn/emmet-vim
 let g:user_emmet_install_global  = 0
+
 autocmd MyAutoCmd FileType eruby,haml,slim,jade,html,xml,css,sass,scss,less,html.handlebars,mustache EmmetInstall
 
-" fatih/vim-go and garyburd/go-explorer
+" fatih/vim-go, rhysd/vim-go-impl and garyburd/go-explorer
 let g:go_highlight_functions         = 1
 let g:go_highlight_methods           = 1
 let g:go_highlight_structs           = 1
@@ -1445,68 +1370,26 @@ let g:syntastic_go_checkers     = ['golint', 'govet', 'errcheck']
 let g:neomake_go_enabled_makers = ['golint', 'govet', 'errcheck']
 
 function! s:VimGoSetup()
-    nmap [App]R <Plug>(go-run)
-    nmap [App]B <Plug>(go-build)
-    nmap [App]G <Plug>(go-generate)
-    nmap [App]I <Plug>(go-install)
-    nmap [App]T <Plug>(go-test)
-    nmap [App]C <Plug>(go-coverage)
-    nmap [App]V <Plug>(go-vet)
-    nmap [App]N <Plug>(go-info)
-    nnoremap [App]D :GeDoc<Space>
-    nnoremap [App]P :GoPath<Space>
-    nnoremap <silent> [App]E :GoRename<CR>
-    nnoremap <silent> [App]F :GoImports<CR>
-    nnoremap <silent> [App]K :GoErrCheck<CR>
-    nnoremap <silent> [App]L :GoLint<CR>:GoMetaLinter<CR>
+    if has("nvim")
+        nmap <LocalLeader>R <Plug>(go-run-split)
+    endif
+    nmap <LocalLeader>r <Plug>(go-run)
+    nmap <LocalLeader>b <Plug>(go-build)
+    nmap <LocalLeader>t <Plug>(go-test)
+    nmap <LocalLeader>F <Plug>(go-test-func)
+    nmap <LocalLeader>T <Plug>(go-test-compile)
+    nmap <LocalLeader>c <Plug>(go-coverage)
+    nmap <LocalLeader>v <Plug>(go-vet)
 
-    nnoremap [App]gr :GoRun
-    nnoremap [App]gb :GoBuild
-    nnoremap [App]gg :GoGenerate
-    nnoremap [App]gi :GoInstall
-    nnoremap [App]ga :GoImportAs<Space>
-    nnoremap [App]g, :GoImport<Space>
-    nnoremap [App]g. :GoDrop<Space>
-    nnoremap [App]gp :GoPath<Space>
-    nnoremap [App]gs :GoOracleScope<Space>
-    nnoremap [App]gm :GoDoc<Space>
-    xnoremap <silent> [App]gm :GoDoc<CR>
+    nmap <LocalLeader>e <Plug>(go-rename)
 
-    nmap [App]gcr <Plug>(go-run)
-    nmap [App]gcb <Plug>(go-build)
-    nmap [App]gcg <Plug>(go-generate)
-    nmap [App]gci <Plug>(go-install)
-    nmap [App]gct <Plug>(go-test)
-    nmap [App]gcf <Plug>(go-test-func)
-    nmap [App]gcc <Plug>(go-test-compile)
-    nmap [App]gco <Plug>(go-coverage)
-    nmap [App]gcv <Plug>(go-vet)
+    nmap <LocalLeader>n <Plug>(go-info)
+    nmap <LocalLeader>i <Plug>(go-implements)
 
-    nmap [App]gtf <Plug>(go-files)
-    nmap [App]gtj <Plug>(go-deps)
-    nmap [App]gtn <Plug>(go-info)
-    nmap [App]gti <Plug>(go-import)
-    nmap [App]gtr <Plug>(go-rename)
+    nmap <LocalLeader>d <Plug>(go-doc-vertical)
+    nmap <LocalLeader>f <Plug>(go-def-vertical)
 
-    nmap [App]goi <Plug>(go-implements)
-    nmap [App]goe <Plug>(go-callees)
-    nmap [App]gor <Plug>(go-callers)
-    nmap [App]god <Plug>(go-describe)
-    nmap [App]goc <Plug>(go-callstack)
-    nmap [App]gof <Plug>(go-freevars)
-    nmap [App]goc <Plug>(go-channelpeers)
-    nmap [App]gos <Plug>(go-referrers)
-
-    nmap [App]gdo <Plug>(go-doc)
-    nmap [App]gds <Plug>(go-doc-split)
-    nmap [App]gdv <Plug>(go-doc-vertical)
-    nmap [App]gdt <Plug>(go-doc-tab)
-    nmap [App]gdb <Plug>(go-doc-browser)
-
-    nmap [App]gff <Plug>(go-def)
-    nmap [App]gfs <Plug>(go-def-split)
-    nmap [App]gfv <Plug>(go-def-vertical)
-    nmap [App]gft <Plug>(go-def-tab)
+    nmap <LocalLeader>l <Plug>(go-metalinter)
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()

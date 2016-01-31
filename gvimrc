@@ -21,8 +21,8 @@ if has('gui_macvim')
     endif
 
     xnoremap <silent> <D-c> "+y
-    xnoremap <silent> <D-x> "+x
-    nnoremap <silent> <D-v> "+gP
+    xnoremap <silent> <D-x> "+d
+    nnoremap <silent> <D-v> :set paste<CR>"+gP:set nopaste<CR>
     inoremap <silent> <D-v> <C-G>u<C-O>"+gP
 elseif has('gui_gnome') || has('gui_gtk')
     set guifont=Source\ Code\ Pro\ 9,Ubuntu\ Mono\ 11,Monospace\ 12
