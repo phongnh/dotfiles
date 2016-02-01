@@ -430,10 +430,10 @@ nnoremap gI `.`
 " http://vimcasts.org/episodes/bubbling-text/
 nmap gV `[v`]
 
-" U: Redo
+" U: Redo (remapped)
 nnoremap U :redo<CR>
 
-" Yank to end line
+" Y: Yank to end line (remapped)
 nnoremap Y y$
 
 " Folding
