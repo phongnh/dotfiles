@@ -1016,12 +1016,6 @@ let g:surround_no_insert_mappings = 1
 nmap <Leader>sw ysiw
 nmap <Leader>sW ysiW
 
-augroup MyAutoCmd
-    autocmd VimEnter * silent! iunmap <C-G>s
-    autocmd VimEnter * silent! iunmap <C-G>S
-    autocmd BufEnter * silent! iunmap <buffer> <C-G>g
-augroup END
-
 " jiangmiao/auto-pairs
 let g:AutoPairsFlyMode            = 0
 let g:AutoPairsShortcutToggle     = '<M-t>'
