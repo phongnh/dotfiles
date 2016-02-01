@@ -543,15 +543,16 @@ xmap <silent> <Leader>y "+y
 xmap <silent> <Leader>d "+d
 
 " Paste from clipboard
-inoremap <silent> <C-V>      <C-G>u<C-O>"+gP
-nnoremap <silent> <Leader>p  :set paste<CR>"+p:set nopaste<CR>
-nnoremap <silent> <Leader>P  :set paste<CR>"+P:set nopaste<CR>
-nnoremap <silent> <Leader>cp "+p
-nnoremap <silent> <Leader>cP "+P
-nnoremap <silent> <Leader>cg "+gp
-nnoremap <silent> <Leader>cG "+gP
-nnoremap <silent> <Leader>ci o<Esc>"+pm``[=`]``^
-nnoremap <silent> <Leader>cI O<Esc>"+Pm``[=`]``^
+nnoremap <silent> cp  "+p
+nnoremap <silent> cP  "+P
+nnoremap <silent> cgp "+gp
+nnoremap <silent> cgP "+gP
+nnoremap <silent> c=p o<Esc>"+pm``[=`]``^
+nnoremap <silent> c=P O<Esc>"+Pm``[=`]``^
+
+inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
+nnoremap <silent> <Leader>p :set paste<CR>"+p:set nopaste<CR>
+nnoremap <silent> <Leader>P :set paste<CR>"+P:set nopaste<CR>
 
 " Redraw
 if maparg('<C-L>', 'n') ==# ''
