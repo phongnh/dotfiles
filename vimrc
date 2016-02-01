@@ -420,7 +420,7 @@ cnoremap <C-@> <C-F>
 " CTRL-V: Paste from clipboard
 cnoremap <C-V> <C-R>+
 
-" Enable undo CTRL-W (Delete word) and CTRL-U (Delete line)
+" Enable undo for CTRL-W (Delete word) and CTRL-U (Delete line)
 inoremap <C-W> <C-G>u<C-W>
 inoremap <C-U> <C-G>u<C-U>
 
