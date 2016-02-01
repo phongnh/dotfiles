@@ -932,15 +932,6 @@ nnoremap <silent> gl :ToggleBufExplorer<CR>
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
 
-" tpope/vim-unimpaired
-augroup MyAutoCmd
-    " Unmap unused mappings
-    autocmd VimEnter * silent! nunmap >P
-    autocmd VimEnter * silent! nunmap >p
-    autocmd VimEnter * silent! nunmap <P
-    autocmd VimEnter * silent! nunmap <p
-augroup END
-
 " haya14busa/incsearch.vim
 " let g:incsearch#magic                             = '\v'
 let g:incsearch#auto_nohlsearch                   = 1
