@@ -1324,8 +1324,12 @@ let g:neosnippet#expand_word_boundary          = 1
 imap <silent> <expr> <C-L> neosnippet#expandable_or_jumpable() ?
             \ "\<Plug>(neosnippet_expand_or_jump)" :
             \ (pumvisible() ? "\<C-E>" : "\<Plug>(neosnippet_expand_or_jump)")
-smap <C-L> <Plug>(neosnippet_jump_or_expand)
+smap <C-L> <Plug>(neosnippet_expand_or_jump)
 xmap <C-L> <Plug>(neosnippet_expand_target)
+
+imap <C-J> <Plug>(neosnippet_jump_or_expand)
+smap <C-J> <Plug>(neosnippet_jump_or_expand)
+xmap <C-J> <Plug>(neosnippet_expand_target)
 
 smap <Tab> <Plug>(neosnippet_jump)
 
@@ -1429,12 +1433,12 @@ if exists("$TMUX")
 endif
 
 " janko-m/vim-test
-if has_key(g:plugs, 'vimux')
+if has('gui_macvim')
+    let g:test#strategy = 'terminal'
+elseif has_key(g:plugs, 'vimux')
     let g:test#strategy = 'vimux'
 elseif has_key(g:plugs, 'vim-dispatch')
     let g:test#strategy = 'dispatch'
-elseif has('gui_macvim')
-    let g:test#strategy = 'terminal'
 endif
 
 nmap <silent> <Leader>rt :TestFile<CR>

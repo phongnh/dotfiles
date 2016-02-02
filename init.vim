@@ -1205,8 +1205,12 @@ let g:neosnippet#expand_word_boundary          = 1
 imap <silent> <expr> <C-L> neosnippet#expandable_or_jumpable() ?
             \ "\<Plug>(neosnippet_expand_or_jump)" :
             \ (pumvisible() ? "\<C-E>" : "\<Plug>(neosnippet_expand_or_jump)")
-smap <C-L> <Plug>(neosnippet_jump_or_expand)
+smap <C-L> <Plug>(neosnippet_expand_or_jump)
 xmap <C-L> <Plug>(neosnippet_expand_target)
+
+imap <C-J> <Plug>(neosnippet_jump_or_expand)
+smap <C-J> <Plug>(neosnippet_jump_or_expand)
+xmap <C-J> <Plug>(neosnippet_expand_target)
 
 smap <Tab> <Plug>(neosnippet_jump)
 
