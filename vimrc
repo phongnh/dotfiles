@@ -1429,9 +1429,9 @@ if exists("$TMUX")
 endif
 
 " janko-m/vim-test
-if exists('*VimuxRunCommand')
+if has_key(g:plugs, 'vimux')
     let g:test#strategy = 'vimux'
-elseif exists(':Dispatch')
+elseif has_key(g:plugs, 'vim-dispatch')
     let g:test#strategy = 'dispatch'
 elseif has('gui_macvim')
     let g:test#strategy = 'terminal'
