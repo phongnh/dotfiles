@@ -1468,8 +1468,10 @@ let g:polyglot_disabled = ['go']
 
 " tpope/rails.vim
 nnoremap <silent> <Leader>ra :AE<CR>
-nnoremap <silent> <Leader>rr :RE<CR>
-xnoremap          <Leader>re :Rextract<Space>
+nnoremap <silent> <Leader>rv :AV<CR>
+nnoremap <silent> <Leader>re :RE<CR>
+nnoremap <silent> <Leader>rr :RV<CR>
+xnoremap          <Leader>rx :Rextract<Space>
 
 " mattn/emmet-vim
 let g:user_emmet_install_global  = 0
