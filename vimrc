@@ -84,8 +84,13 @@ Plug 'junegunn/goyo.vim'
 " Hyperfocus-writing
 Plug 'junegunn/limelight.vim'
 
-" Display the indention levels
-Plug 'Yggdroot/indentLine'
+if has('conceal')
+    " A vim plugin to display the indention levels with thin vertical lines
+    Plug 'Yggdroot/indentLine'
+else
+    " A Vim plugin for visually displaying indent levels in code
+    Plug 'nathanaelkane/vim-indent-guides'
+endif
 
 " A fancy start screen
 Plug 'mhinz/vim-startify'
@@ -799,17 +804,28 @@ let g:limelight_default_coefficient = 0.5
 let g:limelight_paragraph_span      = 1
 let g:limelight_priority            = -1
 
-" Yggdroot/indentLine
-let g:indentLine_enabled              = 0
-let g:indentLine_char                 = '│'
-let g:indentLine_first_char           = g:indentLine_char
-let g:indentLine_showFirstIndentLevel = 1
-let g:indentLine_noConcealCursor      = 1
-let g:indentLine_color_term           = 239
-" let g:indentLine_color_gui            = '#A4E57E'
+if has_key(g:plugs, 'indentLine')
+    " Yggdroot/indentLine
+    let g:indentLine_enabled              = 0
+    let g:indentLine_char                 = '│'
+    let g:indentLine_first_char           = g:indentLine_char
+    let g:indentLine_showFirstIndentLevel = 1
+    let g:indentLine_noConcealCursor      = 1
+    let g:indentLine_color_term           = 239
+    " let g:indentLine_color_gui            = '#A4E57E'
 
-nnoremap <silent> <F4> :IndentLinesToggle<CR>
-inoremap <silent> <F4> <Esc>:IndentLinesToggle<CR>
+    nnoremap <silent> <F4> :IndentLinesToggle<CR>
+    inoremap <silent> <F4> <Esc>:IndentLinesToggle<CR>
+else
+    " nathanaelkane/vim-indent-guides
+    let g:indent_guides_start_level           = 1
+    let g:indent_guides_guide_size            = 1
+    let g:indent_guides_enable_on_vim_startup = 0
+    let g:indent_guides_color_change_percent  = 3
+
+    nnoremap <silent> <F4> :IndentGuidesToggle<CR>
+    inoremap <silent> <F4> <Esc>:IndentGuidesToggle<CR>
+endif
 
 " mhinz/vim-startify
 let g:startify_skiplist = [
