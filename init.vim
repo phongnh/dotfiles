@@ -1386,6 +1386,8 @@ function! s:VimGoSetup()
     nmap <LocalLeader>t <Plug>(go-test)
     nmap <LocalLeader>F <Plug>(go-test-func)
     nmap <LocalLeader>T <Plug>(go-test-compile)
+    nmap <LocalLeader>a <Plug>(go-alternate-edit)
+    nmap <LocalLeader>A <Plug>(go-alternate-vertical)
     nmap <LocalLeader>c <Plug>(go-coverage)
     nmap <LocalLeader>v <Plug>(go-vet)
 
