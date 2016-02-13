@@ -244,10 +244,15 @@ Plug 'vim-scripts/fish-syntax'
 " Utility
 " A Vim plugin that provides a completion function for Unicode glyphs
 Plug 'chrisbra/unicode.vim'
+
 " An implementation of Sublime's PlainTasks plugin for Vim
 Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
+
 " Text outlining and task management for Vim based on Emacs' Org-Mode
 Plug 'jceb/vim-orgmode'
+
+" Zeal for Vim
+Plug 'KabbAmine/zeavim.vim'
 
 " Color schemes
 Plug 'NLKNguyen/papercolor-theme'
@@ -1414,6 +1419,14 @@ function! s:VimGoSetup()
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
+
+" KabbAmine/zeavim.vim
+let g:zv_disable_mapping = 1
+
+nmap <Leader>z <Plug>Zeavim
+vmap <Leader>z <Plug>ZVVisSelection
+nmap <Leader>Z <Plug>ZVKeyDocset
+nmap gz        <Plug>ZVMotion
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
