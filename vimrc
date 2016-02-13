@@ -961,8 +961,6 @@ map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
 " osyo-manga/vim-anzu
-let g:anzu_status_format = "%p(%i/%l) %w"
-
 map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)zzzv
 map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)zzzv
 map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
