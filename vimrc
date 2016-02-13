@@ -186,6 +186,9 @@ Plug 'jiangmiao/auto-pairs'
 " Delete unwanted whitespace at the end of lines
 Plug 'vim-scripts/DeleteTrailingWhitespace'
 
+" A vim plugin that simplifies the transition between multiline and single-line code
+Plug 'AndrewRadev/splitjoin.vim'
+
 " commentary.vim: comment stuff out
 Plug 'tpope/vim-commentary'
 
