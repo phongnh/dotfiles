@@ -1414,7 +1414,6 @@ augroup MyAutoCmd
     " Set file type
     autocmd BufNewFile,BufRead *.nvim setlocal filetype=vim
     autocmd BufNewFile,BufRead *.fastercsv,*.prawn setlocal filetype=ruby
-    " autocmd FileType json setlocal syntax=javascript
 
     " Vim
     autocmd FileType vim setlocal keywordprg=:help
@@ -1430,6 +1429,9 @@ augroup MyAutoCmd
 
     " CSS / Less
     autocmd FileType css,less setlocal iskeyword+=-
+
+    " JSON
+    autocmd FileType json setlocal conceallevel=0
 
     " SQL
     autocmd FileType sql setlocal omnifunc= commentstring=--\ %s
