@@ -199,6 +199,9 @@ Plug 'terryma/vim-expand-region'
 " True Sublime Text style multiple selections for Vim
 Plug 'terryma/vim-multiple-cursors'
 
+" A Narrow Region Plugin for vim (like Emacs Narrow Region)
+Plug 'chrisbra/NrrwRgn'
+
 " Code completion and Snippets
 if has('lua')
     Plug 'Shougo/neocomplete.vim'
@@ -1136,6 +1139,15 @@ function! Multiple_cursors_after()
         silent! NeoComplCacheUnlock
     endif
 endfunction
+
+" chrisbra/NrrwRgn
+let g:nrrw_topbot_leftright = 'botright'
+let g:nrrw_rgn_nomap_nr     = 1
+let g:nrrw_rgn_nomap_Nr     = 1
+
+nmap <Leader>n <Plug>NrrwrgnDo
+xmap <Leader>n <Plug>NrrwrgnDo
+xmap <Leader>N <Plug>NrrwrgnBangDo
 
 if has_key(g:plugs, 'neocomplete.vim')
     " Shougo/neocomplete.vim
