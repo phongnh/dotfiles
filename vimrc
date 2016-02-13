@@ -259,6 +259,8 @@ Plug 'vim-scripts/fish-syntax'
 Plug 'chrisbra/unicode.vim'
 " An implementation of Sublime's PlainTasks plugin for Vim
 Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
+" Text outlining and task management for Vim based on Emacs' Org-Mode
+Plug 'jceb/vim-orgmode'
 
 " Color schemes
 Plug 'NLKNguyen/papercolor-theme'
