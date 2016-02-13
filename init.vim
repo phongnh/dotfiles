@@ -697,7 +697,7 @@ nnoremap <silent> [Space]d :Unite -buffer-name=recent-folders -default-action=cd
 " Shougo/unite-outline
 nnoremap <silent> [Space]o :Unite outline<CR>
 
-" Shougo/unite-outline
+" Shougo/neoyank.vim
 nnoremap <silent> [Space]y :Unite history/yank<CR>
 
 " osyo-manga/unite-quickfix
