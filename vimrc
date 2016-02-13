@@ -252,6 +252,8 @@ Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 Plug 'vim-scripts/fish-syntax'
 
 " Utility
+" A Vim plugin that provides a completion function for Unicode glyphs
+Plug 'chrisbra/unicode.vim'
 " An implementation of Sublime's PlainTasks plugin for Vim
 Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
 
