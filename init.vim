@@ -1,3 +1,6 @@
+" Use cursor shape feature
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+
 if &shell =~# 'fish$'
     set shell=bash
 endif
@@ -39,7 +42,7 @@ if exists('neovim_dot_app')
 endif
 
 " Exit terminal mode
-tnoremap <Esc><Esc> <C-\><C-n>
+tnoremap <M-c> <C-\><C-N>
 
 call plug#begin()
 
