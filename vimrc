@@ -1525,6 +1525,8 @@ let g:neomake_go_enabled_makers = ['golint', 'govet', 'errcheck']
 function! s:VimGoSetup()
     if has("nvim")
         nmap <LocalLeader>R <Plug>(go-run-split)
+    else
+        nnoremap <silent> <LocalLeader>R :GoRun!<CR>:redraw!<CR>
     endif
     nmap <LocalLeader>r <Plug>(go-run)
     nmap <LocalLeader>b <Plug>(go-build)
