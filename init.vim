@@ -615,7 +615,7 @@ call unite#custom#profile('default', 'context', {
 
 call unite#filters#sorter_default#use(['sorter_rank'])
 
-call unite#custom#source('file_rec/neovim,file_rec/git,buffer', 'matchers', [
+call unite#custom#source('file_rec/async,file_rec/git,buffer', 'matchers', [
             \ 'converter_relative_word',
             \ 'matcher_fuzzy'
             \ ])
@@ -627,7 +627,7 @@ call unite#custom#source('neomru/file', 'matchers', [
             \ 'matcher_hide_current_file'
             \ ])
 
-call unite#custom#source('file_rec/neovim,file_rec/git,neomru/file', 'converters', [
+call unite#custom#source('file_rec/async,file_rec/git,neomru/file', 'converters', [
             \ 'converter_file_directory'
             \ ])
 
@@ -672,18 +672,18 @@ nnoremap <silent> [Space]- :UniteClose<CR>
 
 nnoremap <silent> [Space], :Unite source<CR>
 
-nnoremap <silent> [Space]<Space> :Unite -buffer-name=files buffer bookmark neomru/file file_rec/neovim<CR>
+nnoremap <silent> [Space]<Space> :Unite -buffer-name=files buffer bookmark neomru/file file_rec/async<CR>
 
 nnoremap <silent> [Space]D :Unite -resume -input= -buffer-name=folders directory_rec/async file/new<CR>
 
-nnoremap <silent> [Space]e :Unite -resume -input= -buffer-name=files file_rec/neovim file/new<CR>
-nnoremap          [Space]E :Unite -resume -buffer-name=files file_rec/neovim:
+nnoremap <silent> [Space]e :Unite -resume -input= -buffer-name=files file_rec/async file/new<CR>
+nnoremap          [Space]E :Unite -resume -buffer-name=files file_rec/async:
 
 nnoremap <silent> [Space]g :Unite -resume -input= -buffer-name=files file_rec/git file/new<CR>
 nnoremap          [Space]G :Unite -resume -buffer-name=files file_rec/git:
 
-nnoremap <silent> [Space]c :Unite file_rec/neovim:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
-nnoremap <silent> [Space]C :Unite file_rec/neovim:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
+nnoremap <silent> [Space]c :Unite file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
+nnoremap <silent> [Space]C :Unite file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
 
 nnoremap <silent> [Space]b :Unite buffer<CR>
 nnoremap <silent> [Space]t :Unite tab<CR>
@@ -692,7 +692,7 @@ nnoremap <silent> [Space]l :Unite line<CR>
 nnoremap <silent> [Space]L :Unite line:buffers<CR>
 
 nnoremap <silent> [Space]m :Unite mapping<CR>
-nnoremap <silent> [Space]M :Unite command<CR>
+nnoremap <silent> [Space]; :Unite command<CR>
 nnoremap <silent> [Space]i :Unite register<CR>
 nnoremap <silent> [Space]k :Unite bookmark<CR>
 nnoremap          [Space]K :UniteBookmarkAdd<Space>
@@ -700,8 +700,8 @@ nnoremap          [Space]K :UniteBookmarkAdd<Space>
 " phongnh/unite-ag.vim
 let g:unite_source_ag_min_cache_files = 1000
 
-nnoremap <silent> [Space]f :Unite -resume -input= -buffer-name=files ag/neovim file/new<CR>
-nnoremap          [Space]F :Unite -resume -buffer-name=files ag/neovim:
+nnoremap <silent> [Space]f :Unite -resume -input= -buffer-name=files ag/async file/new<CR>
+nnoremap          [Space]F :Unite -resume -buffer-name=files ag/async:
 
 " Shougo/tabpagebuffer.vim
 nnoremap <silent> [Space]B :Unite buffer_tab<CR>
