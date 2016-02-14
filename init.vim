@@ -52,6 +52,9 @@ Plug 'tpope/vim-rsi'
 " lean & mean status/tabline for vim that's light as air
 Plug 'vim-airline/vim-airline'
 
+" Asynchronous build and test dispatcher
+Plug 'tpope/vim-dispatch'
+
 " Interactive command execution
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
