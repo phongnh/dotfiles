@@ -1362,6 +1362,9 @@ let g:neosnippet#enable_snipmate_compatibility = 1
 let g:neosnippet#enable_complete_done          = 1
 let g:neosnippet#expand_word_boundary          = 1
 
+let g:neosnippet#scope_aliases = {}
+let g:neosnippet#scope_aliases['ruby'] = 'ruby,rails'
+
 imap <silent> <expr> <C-L> neosnippet#expandable_or_jumpable() ?
             \ "\<Plug>(neosnippet_expand_or_jump)" :
             \ (pumvisible() ? "\<C-E>" : "\<Plug>(neosnippet_expand_or_jump)")
