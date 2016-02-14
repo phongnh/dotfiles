@@ -606,6 +606,7 @@ autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 let g:unite_source_rec_min_cache_files = 1000
 
 call unite#custom#profile('default', 'context', {
+            \ 'auto_resize': 1,
             \ 'start_insert': 1,
             \ 'prompt': '> ',
             \ 'direction': 'dynamicbottom',
