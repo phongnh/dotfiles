@@ -240,6 +240,7 @@ Plug 'sheerun/vim-polyglot'
 " Ruby / Rails
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rails'
+Plug 'jgdavey/vim-turbux'
 
 " Web
 Plug 'mattn/emmet-vim'
@@ -1500,6 +1501,16 @@ nnoremap <silent> <Leader>rv :AV<CR>
 nnoremap <silent> <Leader>re :RE<CR>
 nnoremap <silent> <Leader>rr :RV<CR>
 xnoremap          <Leader>rx :Rextract<Space>
+
+" jgdavey/vim-turbux
+let g:no_turbux_mappings = 1
+
+nmap <Leader>tt <Plug>SendTestToTmux
+nmap <Leader>tf <Plug>SendFocusedTestToTmux
+
+if !has('gui_running') && has_key(g:plugs, 'vimux')
+    let g:turbux_runner = 'vimux'
+endif
 
 " mattn/emmet-vim
 let g:user_emmet_install_global  = 0
