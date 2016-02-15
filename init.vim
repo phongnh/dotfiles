@@ -68,6 +68,9 @@ Plug 'Shougo/neoyank.vim'
 Plug 'osyo-manga/unite-quickfix'
 Plug 'thinca/vim-unite-history'
 
+" A command-line fuzzy finder written in Go
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+
 " Maximize current buffer
 Plug 'regedarek/ZoomWin'
 
