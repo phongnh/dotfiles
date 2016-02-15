@@ -613,7 +613,7 @@ call unite#custom#profile('default', 'context', {
             \ 'auto_resize': 1,
             \ 'start_insert': 1,
             \ 'prompt': '> ',
-            \ 'direction': 'dynamicbottom',
+            \ 'direction': 'botright',
             \ 'short_source_names': 1
             \ })
 
