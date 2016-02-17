@@ -603,7 +603,7 @@ call airline#parts#define('mode', {
             \ 'accent':   'bold'
             \ })
 
-function! AirlineModeAndClipboard()
+function! AirlineModeAndClipboard() abort
     return airline#parts#mode() . (match(&clipboard, 'unnamed') > -1 ? ' @' : '')
 endfunction
 
@@ -640,7 +640,7 @@ call unite#custom#source('file_rec/async,file_rec/git,neomru/file', 'converters'
 
 let s:system_open_action = { 'is_selectable': 1 }
 
-function! s:system_open_action.func(candidates)
+function! s:system_open_action.func(candidates) abort
     let cmd = has('mac') ? '!open' : '!xdg-open'
     for candidate in a:candidates
         if !isdirectory(candidate.action__path)
@@ -650,7 +650,7 @@ function! s:system_open_action.func(candidates)
     redraw!
 endfunction
 
-function! s:my_unite_settings()
+function! s:my_unite_settings() abort
     call unite#custom#action('file', 'system-open', s:system_open_action)
 
     call unite#custom#alias('file', 'h', 'left')
@@ -753,7 +753,7 @@ inoremap <silent> <F3> <Esc>:Goyo<CR>
 autocmd! User GoyoEnter nested call <SID>custom_goyo_enter()
 autocmd! User GoyoLeave nested call <SID>custom_goyo_leave()
 
-function! s:custom_goyo_enter()
+function! s:custom_goyo_enter() abort
     let s:goyo_settings = {
                 \ 'showmode':    &showmode,
                 \ 'linespace':   &linespace,
@@ -781,7 +781,7 @@ function! s:custom_goyo_enter()
     endif
 endfunction
 
-function! s:custom_goyo_leave()
+function! s:custom_goyo_leave() abort
     if has('fullscreen')
         set nofullscreen
     endif
@@ -1050,7 +1050,7 @@ xnoremap <Leader><Enter> :Tabularize /
 
 autocmd MyAutoCmd FileType cucumber inoremap <silent> <buffer> <Bar> <Bar><Esc>:call <SID>BarAlign()<CR>a
 
-function! s:BarAlign()
+function! s:BarAlign() abort
     let p = '^\s*|\s.*\s|\s*$'
     if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
         let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
@@ -1116,7 +1116,7 @@ call expand_region#custom_text_objects('html', {
 xnoremap <F6> :MultipleCursorsFind<Space>
 
 " Called once right before you start selecting multiple cursors
-function! Multiple_cursors_before()
+function! Multiple_cursors_before() abort
     if exists(':NeoCompleteLock') == 2
         silent! NeoCompleteLock
     elseif exists(':NeoComplCacheLock') == 2
@@ -1125,7 +1125,7 @@ function! Multiple_cursors_before()
 endfunction
 
 " Called once only when the multiple selection is cancelled (default <Esc>)
-function! Multiple_cursors_after()
+function! Multiple_cursors_after() abort
     if exists(':NeoCompleteUnlock') == 2
         silent! NeoCompleteUnlock
     elseif exists(':NeoComplCacheUnlock') == 2
@@ -1327,7 +1327,7 @@ if exists("$TMUX")
     nnoremap <silent> <Leader>v[ :VimuxScrollUpInspect<CR>
     nnoremap <silent> <Leader>v] :VimuxScrollDownInspect<CR>
 
-    function! VimuxSlime(text)
+    function! VimuxSlime(text) abort
         let cmd = substitute(a:text, '^\s*', '', '')
         let cmd = substitute(cmd, '\s*$', '', '')
         let cmd = substitute(cmd, '^\n*', '', '')
@@ -1363,7 +1363,7 @@ if exists("$TMUX")
 endif
 
 " janko-m/vim-test
-function! Neovim2Strategy(cmd)
+function! Neovim2Strategy(cmd) abort
     botright 15new | call termopen(a:cmd) | startinsert
 endfunction
 
@@ -1392,7 +1392,7 @@ let g:no_turbux_mappings = 1
 nmap <Leader>tt <Plug>SendTestToTmux
 nmap <Leader>tf <Plug>SendFocusedTestToTmux
 
-function! TurbuxNeovimRunner(command)
+function! TurbuxNeovimRunner(command) abort
     botright 15new | call termopen(a:command) | startinsert
 endfunction
 
@@ -1422,7 +1422,7 @@ endif
 let g:syntastic_go_checkers     = ['golint', 'govet', 'errcheck']
 let g:neomake_go_enabled_makers = ['golint', 'govet', 'errcheck']
 
-function! s:VimGoSetup()
+function! s:VimGoSetup() abort
     if has("nvim")
         nmap <LocalLeader>R <Plug>(go-run-split)
     else
