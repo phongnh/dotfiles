@@ -137,6 +137,9 @@ Plug 'haya14busa/incsearch.vim'
 " Vim search status
 Plug 'osyo-manga/vim-anzu'
 
+" An ack.vim alternative mimics Ctrl-Shift-F on Sublime Text 2
+Plug 'dyng/ctrlsf.vim'
+
 " Helps you win at grep.
 Plug 'mhinz/vim-grepper'
 
@@ -982,6 +985,19 @@ map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)zzzv
 map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)zzzv
 map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
 map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
+
+" dyng/ctrlsf.vim
+nmap <Leader>s/ <Plug>CtrlSFPrompt
+nmap <Leader>sc <Plug>CtrlSFCwordPath
+nmap <Leader>sf <Plug>CtrlSFCwordExec
+vmap <Leader>sc <Plug>CtrlSFVwordPath
+vmap <Leader>sf <Plug>CtrlSFVwordExec
+nmap <Leader>sp <Plug>CtrlSFPwordPath
+nmap <Leader>sP <Plug>CtrlSFPwordExec
+nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
+nnoremap <silent> <Leader>st :CtrlSFToggle<CR>
+nnoremap <silent> <Leader>so :CtrlSFOpen<CR>
+nnoremap <silent> <Leader>sq :CtrlSFClose<CR>
 
 " mhinz/vim-grepper
 let g:grepper = {
