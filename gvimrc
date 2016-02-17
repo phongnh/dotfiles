@@ -6,6 +6,7 @@ set guioptions-=L       " Disable left-hand scrollbar
 set guioptions-=e       " No guitablabel
 set guioptions+=c       " Use console dialogs instead of popup dialogs for simple choices
 
+set cursorline          " Highlight the screen line of the cursor
 set linespace=2         " Add some line space for easy reading
 set lines=40 columns=120
 
