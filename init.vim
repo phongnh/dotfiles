@@ -64,6 +64,8 @@ Plug 'phongnh/unite-ag.vim'
 Plug 'Shougo/tabpagebuffer.vim'
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/unite-outline'
+Plug 'Shougo/neoinclude.vim'
+Plug 'tsukkee/unite-tag'
 Plug 'Shougo/neoyank.vim'
 Plug 'osyo-manga/unite-quickfix'
 Plug 'thinca/vim-unite-history'
@@ -385,6 +387,10 @@ set nostartofline               " The cursor is kept in the same column (if poss
 set splitbelow                  " Splitting a window will put the new window below the current one
 set splitright                  " Splitting a window will put the new window right the current one
 
+if has('path_extra')
+    setglobal tags-=./tags tags-=./tags; tags^=./tags;
+endif
+
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
     runtime! macros/matchit.vim
@@ -610,6 +616,7 @@ endfunction
 autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
 " Shougo/unite.vim
+let g:unite_enable_auto_select = 0
 let g:unite_source_rec_min_cache_files = 1000
 
 call unite#custom#profile('default', 'context', {
@@ -617,24 +624,32 @@ call unite#custom#profile('default', 'context', {
             \ 'start_insert': 1,
             \ 'prompt': '> ',
             \ 'direction': 'botright',
-            \ 'short_source_names': 1
+            \ 'hide_source_names': 1,
             \ })
+
+hi link uniteInputPrompt Special
 
 call unite#filters#sorter_default#use(['sorter_rank'])
 
-call unite#custom#source('file_rec/async,file_rec/git,buffer', 'matchers', [
+if has('python')
+    call unite#custom#source('file_rec/async,file_rec/git,neomru/file,tag/file', 'sorters', [
+                \ 'sorter_selecta'
+                \ ])
+endif
+
+call unite#custom#source('buffer,file_rec/async,file_rec/git,tag/file', 'matchers', [
             \ 'converter_relative_word',
             \ 'matcher_fuzzy'
             \ ])
 
 call unite#custom#source('neomru/file', 'matchers', [
+            \ 'converter_relative_word',
             \ 'matcher_project_files',
-            \ 'matcher_fuzzy',
-            \ 'matcher_hide_hidden_files',
-            \ 'matcher_hide_current_file'
+            \ 'matcher_hide_current_file',
+            \ 'matcher_fuzzy'
             \ ])
 
-call unite#custom#source('file_rec/async,file_rec/git,neomru/file', 'converters', [
+call unite#custom#source('file_rec/async,file_rec/git,neomru/file,tag/file', 'converters', [
             \ 'converter_file_directory'
             \ ])
 
@@ -665,63 +680,67 @@ function! s:my_unite_settings() abort
 
     inoremap <buffer> <expr> <C-S>
                 \ unite#mappings#set_current_matchers(
-                \ empty(unite#mappings#get_current_matchers()) ?
-                \ ['matcher_context'] : [])
+                \   empty(unite#mappings#get_current_matchers()) ? ['matcher_context'] : []
+                \ )
 
     inoremap <silent> <buffer> <expr> <C-O> unite#do_action('system-open')
 endfunction
 
 autocmd MyAutoCmd FileType unite call s:my_unite_settings()
 
-nnoremap <silent> [Space]R :Unite resume<CR>
-
 nnoremap <silent> [Space]- :UniteClose<CR>
 
-nnoremap <silent> [Space], :Unite source<CR>
+nnoremap <silent> [Space], :Unite -buffer-name=sources source<CR>
 
-nnoremap <silent> [Space]<Space> :Unite -buffer-name=files buffer bookmark neomru/file file_rec/async<CR>
+nnoremap <silent> [Space]<Space> :Unite -buffer-name=mixed buffer bookmark neomru/file file_rec/async<CR>
 
-nnoremap <silent> [Space]D :Unite -resume -input= -buffer-name=folders directory_rec/async file/new<CR>
+nnoremap <silent> [Space]e :Unite -no-restore -resume -input= -buffer-name=files file_rec/async file/new<CR>
+nnoremap          [Space]E :Unite -buffer-name=files file_rec/async:
 
-nnoremap <silent> [Space]e :Unite -resume -input= -buffer-name=files file_rec/async file/new<CR>
-nnoremap          [Space]E :Unite -resume -buffer-name=files file_rec/async:
+nnoremap <silent> [Space]g :Unite -no-restore -resume -input= -buffer-name=git file_rec/git file/new<CR>
 
-nnoremap <silent> [Space]g :Unite -resume -input= -buffer-name=files file_rec/git file/new<CR>
-nnoremap          [Space]G :Unite -resume -buffer-name=files file_rec/git:
+nnoremap <silent> [Space]c :Unite -buffer-name=parent-folder file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
+nnoremap <silent> [Space]C :Unite -buffer-name=parent-folder file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
 
-nnoremap <silent> [Space]c :Unite file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
-nnoremap <silent> [Space]C :Unite file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
+nnoremap <silent> [Space]b :Unite -buffer-name=buffers buffer<CR>
+nnoremap <silent> [Space]t :Unite -buffer-name=tabs tab<CR>
 
-nnoremap <silent> [Space]b :Unite buffer<CR>
-nnoremap <silent> [Space]t :Unite tab<CR>
+nnoremap <silent> [Space]l :Unite -buffer-name=lines line<CR>
+nnoremap <silent> [Space]L :Unite -buffer-name=lines line:buffers<CR>
 
-nnoremap <silent> [Space]l :Unite line<CR>
-nnoremap <silent> [Space]L :Unite line:buffers<CR>
-
-nnoremap <silent> [Space]m :Unite mapping<CR>
-nnoremap <silent> [Space]; :Unite command<CR>
-nnoremap <silent> [Space]i :Unite register<CR>
-nnoremap <silent> [Space]k :Unite bookmark<CR>
+nnoremap <silent> [Space]m :Unite -buffer-name=mappings mapping<CR>
+nnoremap <silent> [Space]; :Unite -buffer-name=commands command<CR>
+nnoremap <silent> [Space]i :Unite -buffer-name=register register<CR>
+nnoremap <silent> [Space]k :Unite -buffer-name=bookmarks bookmark<CR>
 nnoremap          [Space]K :UniteBookmarkAdd<Space>
 
 " phongnh/unite-ag.vim
 let g:unite_source_ag_min_cache_files = 1000
 
-nnoremap <silent> [Space]f :Unite -resume -input= -buffer-name=files ag/async file/new<CR>
-nnoremap          [Space]F :Unite -resume -buffer-name=files ag/async:
+nnoremap <silent> [Space]f :Unite -no-restore -resume -input= -buffer-name=ag ag/async file/new<CR>
+nnoremap          [Space]F :Unite -buffer-name=ag ag/async:
 
 " Shougo/tabpagebuffer.vim
-nnoremap <silent> [Space]B :Unite buffer_tab<CR>
+nnoremap <silent> [Space]B :Unite -buffer-name=buffers buffer_tab<CR>
 
 " Shougo/neomru.vim
-nnoremap <silent> [Space]r :Unite -buffer-name=recent-files neomru/file<CR>
-nnoremap <silent> [Space]d :Unite -buffer-name=recent-folders -default-action=cd neomru/directory directory_rec/async<CR>
+nnoremap <silent> [Space]r :Unite -buffer-name=mru neomru/file<CR>
+nnoremap <silent> [Space]d :Unite -buffer-name=dirs -default-action=cd neomru/directory directory_rec/async<CR>
+
+" tsukkee/unite-tag
+let g:unite_source_tag_max_fname_length = 70
+
+nnoremap <silent> <Leader>st :UniteWithCursorWord -immediately -sync -buffer-name=tag tag<CR>
+
+nnoremap <silent> [Space]a :Unite -no-restore -resume -input= -buffer-name=tags tag<CR>
+nnoremap <silent> [Space]A :Unite -no-restore -resume -input= -buffer-name=tag-files tag/file<CR>
+nnoremap <silent> [Space]O :Unite -buffer-name=inline-tags tag/include<CR>
 
 " Shougo/unite-outline
-nnoremap <silent> [Space]o :Unite outline<CR>
+nnoremap <silent> [Space]o :Unite -buffer-name=outline outline<CR>
 
 " Shougo/neoyank.vim
-nnoremap <silent> [Space]y :Unite history/yank<CR>
+nnoremap <silent> [Space]y :Unite -buffer-name=yanks history/yank<CR>
 
 " osyo-manga/unite-quickfix
 nnoremap <silent> [Space]q :Unite -resume -buffer-name=quickfix quickfix<CR>
@@ -730,9 +749,8 @@ nnoremap <silent> [Space]] :UniteNext<CR>
 nnoremap <silent> [Space][ :UnitePrevious<CR>
 
 " thinca/vim-unite-history
-nnoremap <silent> [Space]: :Unite history/command<CR>
-nnoremap <silent> [Space]/ :Unite history/search<CR>
-nnoremap <silent> [Space]h :Unite history/unite<CR>
+nnoremap <silent> [Space]: :Unite -buffer-name=command-history history/command<CR>
+nnoremap <silent> [Space]/ :Unite -buffer-name=search-history history/search<CR>
 
 " regedarek/ZoomWin
 let g:zoomwin_localoptlist = ["ai","ar","bh","bin","bl","bomb","bt","cfu","ci","cin","cink","cino","cinw","cms","com","cpt","diff","efm","eol","ep","et","fenc","fex","ff","flp","fo","ft","gp","imi","ims","inde","inex","indk","inf","isk","kmp","lisp","mps","ml","ma","mod","nf","ofu","pi","qe","ro","sw","si","sts","spc","spf","spl","sua","swf","smc","syn","ts","tw","udf","wfh","wfw","wm"]

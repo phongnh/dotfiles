@@ -410,6 +410,10 @@ set splitright                  " Splitting a window will put the new window rig
 
 set t_Co=256                    " Enable 256 colors
 
+if has('path_extra')
+    setglobal tags-=./tags tags-=./tags; tags^=./tags;
+endif
+
 " Remember where we are, support yankring
 set viminfo^=!
 
@@ -684,14 +688,11 @@ let g:ctrlp_user_command = {
             \ 'fallback': s:ctrlp_fallback
             \ }
 
-nnoremap <silent> [Space]R :CtrlPLastMode --dir<CR>
-
 nnoremap <silent> [Space]- :CtrlPClearAllCaches<CR>
 
 nnoremap <silent> [Space]<Space> :CtrlPMixed<CR>
 
 nnoremap <silent> [Space]d :CtrlPDir<CR>
-nnoremap          [Space]D :CtrlPDir<Space>
 
 nnoremap <silent> [Space]f :CtrlP<CR>
 nnoremap          [Space]F :CtrlP<Space>
@@ -711,6 +712,8 @@ nnoremap <silent> [Space]r :CtrlPMRUFiles<CR>
 
 nnoremap <silent> [Space]a :CtrlPBufTag<CR>
 nnoremap <silent> [Space]A :CtrlPBufTagAll<CR>
+
+nnoremap <silent> [Space]] :CtrlPTag<CR>
 
 nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
 
