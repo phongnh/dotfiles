@@ -522,7 +522,7 @@ inoremap <silent> <C-S> <C-O>:update<CR>
 nnoremap <silent> <Leader>Q :confirm qall<CR>
 
 " Use <C-\> to do <C-]> but open it in a new split
-nnoremap <C-\> <C-W>v<C-]>zvzz
+nmap <C-\> <C-W>v<C-]>zvzz
 
 " Search and Replace
 nnoremap <Leader>sr :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
