@@ -713,7 +713,7 @@ nnoremap <silent> [Space]r :CtrlPMRUFiles<CR>
 nnoremap <silent> [Space]a :CtrlPBufTag<CR>
 nnoremap <silent> [Space]A :CtrlPBufTagAll<CR>
 
-nnoremap <silent> [Space]] :CtrlPTag<CR>
+nnoremap <silent> [Space]\ :CtrlPTag<CR>
 
 nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
 

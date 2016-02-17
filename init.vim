@@ -730,7 +730,8 @@ nnoremap <silent> [Space]d :Unite -buffer-name=dirs -default-action=cd neomru/di
 " tsukkee/unite-tag
 let g:unite_source_tag_max_fname_length = 70
 
-nnoremap <silent> <Leader>st :UniteWithCursorWord -immediately -sync -buffer-name=tag tag<CR>
+nnoremap <silent> <Leader>st :UniteWithCursorWord -no-restore -resume -immediately -sync -buffer-name=tags tag<CR>
+nnoremap <silent> <Leader>sT :UniteWithCursorWord -no-restore -resume -immediately -sync -default-action=vsplit -buffer-name=tags tag<CR>
 
 nnoremap <silent> [Space]a :Unite -no-restore -resume -input= -buffer-name=tags tag<CR>
 nnoremap <silent> [Space]A :Unite -no-restore -resume -input= -buffer-name=tag-files tag/file<CR>
