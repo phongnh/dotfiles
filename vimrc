@@ -134,8 +134,10 @@ Plug 'vim-scripts/matchit.zip'
 " My vim functions for search and substitue
 Plug 'phongnh/vim-search-helpers'
 
-" vim-searchindex: display number of search matches & index of a current match
-Plug 'google/vim-searchindex'
+" Improved incremental searching for Vim
+Plug 'haya14busa/incsearch.vim'
+" Vim search status
+Plug 'osyo-manga/vim-anzu'
 
 " Helps you win at grep.
 Plug 'mhinz/vim-grepper'
@@ -967,6 +969,24 @@ nnoremap <silent> gl :ToggleBufExplorer<CR>
 
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
+
+" haya14busa/incsearch.vim
+" let g:incsearch#magic                             = '\v'
+let g:incsearch#auto_nohlsearch                   = 1
+let g:incsearch#do_not_save_error_message_history = 1
+
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
+
+" osyo-manga/vim-anzu
+map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)zzzv
+map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)zzzv
+map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
+map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 
 " mhinz/vim-grepper
 let g:grepper = {
