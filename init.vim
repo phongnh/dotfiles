@@ -999,7 +999,6 @@ nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
 nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
-xmap     <silent> <Leader>ss <Plug>(GrepperOperator)
 nnoremap <silent> <Leader>S  :Grepper<CR>
 
 nnoremap <silent> <Leader>sl :echo 'Searching...'<CR>:Grepper -noquickfix -cword -noprompt<CR>
