@@ -1084,8 +1084,16 @@ let g:commentary_map_backslash = 0
 xnoremap <silent> <Enter> :EasyAlign<Enter>
 
 " godlygeek/tabular
-nnoremap <Leader><Enter> :Tabularize /
-xnoremap <Leader><Enter> :Tabularize /
+nnoremap          <Leader>aa     :Tabularize /
+xnoremap          <Leader>aa     :Tabularize /
+nnoremap <silent> <Leader>a=     :Tabularize /=<CR>
+xnoremap <silent> <Leader>a=     :Tabularize /=<CR>
+nnoremap <silent> <Leader>a:     :Tabularize /:\zs<CR>
+xnoremap <silent> <Leader>a:     :Tabularize /:\zs<CR>
+nnoremap <silent> <Leader>a,     :Tabularize /:\zs<CR>
+xnoremap <silent> <Leader>a,     :Tabularize /:\zs<CR>
+nnoremap <silent> <Leader>a<Bar> :Tabularize /<Bar><CR>
+xnoremap <silent> <Leader>a<Bar> :Tabularize /<Bar><CR>
 
 autocmd MyAutoCmd FileType cucumber inoremap <silent> <buffer> <Bar> <Bar><Esc>:call <SID>BarAlign()<CR>a
 
