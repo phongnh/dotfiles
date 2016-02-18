@@ -1507,18 +1507,20 @@ endif
 nmap <silent> <Leader>rt :TestFile<CR>
 nmap <silent> <Leader>rf :TestNearest<CR>
 nmap <silent> <Leader>rl :TestLast<CR>
-nmap <silent> <Leader>rs :TestSuite<CR>
+nmap <silent> <Leader>ra :TestSuite<CR>
 nmap <silent> <Leader>rg :TestVisit<CR>
 
 " sheerun/vim-polyglot
 let g:polyglot_disabled = ['go', 'swift']
 
 " tpope/rails.vim
-nnoremap <silent> <Leader>ra :AE<CR>
-nnoremap <silent> <Leader>rv :AV<CR>
+nnoremap <silent> <Leader>ae :AE<CR>
+nnoremap <silent> <Leader>as :AS<CR>
+nnoremap <silent> <Leader>av :AV<CR>
 nnoremap <silent> <Leader>re :RE<CR>
-nnoremap <silent> <Leader>rr :RV<CR>
-xnoremap          <Leader>rx :Rextract<Space>
+nnoremap <silent> <Leader>rs :RS<CR>
+nnoremap <silent> <Leader>rv :RV<CR>
+xnoremap          <Leader>re :Rextract<Space>
 
 " jgdavey/vim-turbux
 let g:no_turbux_mappings = 1
