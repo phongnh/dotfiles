@@ -1488,8 +1488,8 @@ if exists("$TMUX")
     nnoremap <silent> <Leader>tq :TxKill<CR>
     nnoremap <silent> <Leader>tr :TxRun<CR>
     nnoremap <silent> <Leader>ts :TxSend<CR>
-    nnoremap <silent> <Leader>tk :TxSendKey<CR>
     xnoremap <silent> <Leader>ts "my:TxSend(@m)<CR>
+    nnoremap <silent> <Leader>tk :TxSendKey<CR>
     nnoremap <silent> <Leader>tu :TxSendKey 'q C-u'<CR>
     nnoremap <silent> <Leader>tm :TxSendKey 'Enter'<CR>
     nnoremap <silent> <Leader>td :TxSendKey 'C-d'<CR>
