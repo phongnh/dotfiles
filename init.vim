@@ -622,6 +622,24 @@ autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 let g:unite_enable_auto_select = 0
 let g:unite_source_rec_min_cache_files = 1000
 
+let g:unite_ignore_source_files = [
+            \ 'file_list.vim',
+            \ 'file_point.vim',
+            \ 'find.vim',
+            \ 'function.vim',
+            \ 'history_input.vim',
+            \ 'history_unite.vim',
+            \ 'interactive.vim',
+            \ 'jump_point.vim',
+            \ 'launcher.vim',
+            \ 'menu.vim',
+            \ 'output.vim',
+            \ 'output_shellcmd.vim',
+            \ 'process.vim',
+            \ 'runtimepath.vim',
+            \ 'script.vim',
+            \ ]
+
 call unite#custom#profile('default', 'context', {
             \ 'auto_resize': 1,
             \ 'start_insert': 1,
@@ -710,6 +728,8 @@ nnoremap <silent> [Space]t :Unite -buffer-name=tabs tab<CR>
 
 nnoremap <silent> [Space]l :Unite -buffer-name=lines line<CR>
 nnoremap <silent> [Space]L :Unite -buffer-name=lines line:buffers<CR>
+
+nnoremap <silent> [Space]j :Unite -buffer-name=jumps jump<CR>
 
 nnoremap <silent> [Space]m :Unite -buffer-name=mappings mapping<CR>
 nnoremap <silent> [Space]; :Unite -buffer-name=commands command<CR>
