@@ -872,8 +872,7 @@ let g:zoomwin_localoptlist = ["ai","ar","bh","bin","bl","bomb","bt","cfu","ci","
 
 nnoremap <silent> <F2> :ZoomWin<CR>
 inoremap <silent> <F2> <Esc>:ZoomWin<CR>
-
-nnoremap <silent> [Space]<Enter> :ZoomWin<CR>
+tnoremap <silent> <F2> <C-\><C-N>:ZoomWin<CR>
 
 " junegunn/goyo.vim
 let g:goyo_width  = '80%'

@@ -850,8 +850,6 @@ nnoremap <silent> [Space]y :CtrlPYankRound<CR>
 nnoremap <silent> <F2> :ZoomWin<CR>
 inoremap <silent> <F2> <Esc>:ZoomWin<CR>
 
-nnoremap <silent> [Space]<Enter> :ZoomWin<CR>
-
 " junegunn/goyo.vim
 let g:goyo_width  = '80%'
 let g:goyo_height = '96%'
