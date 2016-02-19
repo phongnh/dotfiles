@@ -530,9 +530,9 @@ nnoremap <silent> <C-W>D :bdelete<CR>
 nnoremap <silent> gb :buffer#<CR>
 
 " Save buffer
-nnoremap <silent> <C-S> :update<CR>
-vnoremap <silent> <C-S> <C-C>:update<CR>
-inoremap <silent> <C-S> <C-O>:update<CR>
+nmap <C-S> :update<CR>
+vmap <C-S> <ESC><C-S>gv
+imap <C-S> <ESC><C-S>
 
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
