@@ -538,8 +538,8 @@ imap <C-S> <ESC><C-S>
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
 
-" Use <C-\> to do <C-]> but open it in a new split
-nmap <C-\> <C-W>v<C-]>zvzz
+" Use <C-\><C-\> to do <C-]> but open it in a new split
+nmap <C-\><C-\> <C-W>v<C-]>zvzz
 
 " Search and Replace
 nnoremap <Leader>sr :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
@@ -579,6 +579,68 @@ nnoremap [Space] <Nop>
 xnoremap [Space] <Nop>
 nmap     <Space> [Space]
 xmap     <Space> [Space]
+
+" cscope settings
+if has('cscope')
+    set cscopetag
+    set cscopetagorder=0
+    set cscopeverbose
+
+    " The following maps all invoke one of the following cscope search types:
+    "   's'   symbol: find all references to the token under cursor
+    "   'g'   global: find global definition(s) of the token under cursor
+    "   'c'   calls:  find all calls to the function name under cursor
+    "   't'   text:   find all instances of the text under cursor
+    "   'e'   egrep:  egrep search for the word under cursor
+    "   'f'   file:   open the filename under cursor
+    "   'i'   includes: find files that include the filename under cursor
+    "   'd'   called: find functions that function under cursor calls
+
+    nnoremap <C-\>s :cscope find s <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\>g :cscope find g <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\>c :cscope find c <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\>t :cscope find t <C-R>=expand("<cword>")<CR><CR>
+    xnoremap <C-\>t y:cscope find t <C-R>"<CR>
+    nnoremap <C-\>e :cscope find e <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\>f :cscope find f <C-R>=expand("<cfile>")<CR><CR>
+    nnoremap <C-\>i :cscope find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nnoremap <C-\>d :cscope find d <C-R>=expand("<cword>")<CR><CR>
+
+    nnoremap <C-\>S :cscope find s <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\>G :cscope find g <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\>C :cscope find c <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\>T :cscope find t <C-R>=expand("<cword>")<CR><CR>
+    xnoremap <C-\>T y:cscope find t <C-R>"<CR>
+    nnoremap <C-\>E :cscope find e <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\>F :cscope find f <C-R>=expand("<cfile>")<CR><CR>
+    nnoremap <C-\>I :cscope find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nnoremap <C-\>D :cscope find d <C-R>=expand("<cword>")<CR><CR>
+
+    nnoremap <C-\><C-S> :vertical scscope find s <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\><C-G> :vertical scscope find g <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\><C-C> :vertical scscope find c <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\><C-T> :vertical scscope find t <C-R>=expand("<cword>")<CR><CR>
+    xnoremap <C-\><C-T> y:vertical scscope find t <C-R>"<CR>
+    nnoremap <C-\><C-E> :vertical scscope find e <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <C-\><C-F> :vertical scscope find f <C-R>=expand("<cfile>")<CR><CR>
+    nnoremap <C-\><C-I> :vertical scscope find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nnoremap <C-\><C-D> :vertical scscope find d <C-R>=expand("<cword>")<CR><CR>
+
+    " Add cscope database
+    function! s:add_cscope_db()
+        " add any database in current directory
+        let db = findfile('cscope.out', '.;')
+        if !empty(db)
+            silent cscope reset
+            silent! execute 'cscope add' db
+        elseif !empty($CSCOPE_DB)
+            silent cscope reset
+            silent! execute 'cscope add' $CSCOPE_DB
+        endif
+    endfunction
+
+    call s:add_cscope_db()
+endif
 
 " vim-airline/vim-airline
 let g:airline#extensions#hunks#enabled      = 0
