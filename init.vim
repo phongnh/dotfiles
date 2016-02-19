@@ -647,6 +647,18 @@ if has('cscope')
     endfunction
 
     call s:add_cscope_db()
+
+    command! -nargs=+ -complete=customlist,CscopeSearchTypes CsFind  cscope find <args>
+    command! -nargs=+ -complete=customlist,CscopeSearchTypes ScsFind scscope find <args>
+    command! -nargs=+ -complete=customlist,CscopeSearchTypes VcsFind vertical scscope find <args>
+
+    function! CscopeSearchTypes(A, L, P)
+        if a:L =~# '^\(Cs\|Scs\|Vcs\)Find\s*$'
+            return map(['s', 'g', 'c', 't', 'e', 'f', 'i', 'd'], 'v:val . " "')
+        else
+            return []
+        endif
+    endfunction
 endif
 
 " vim-airline/vim-airline
