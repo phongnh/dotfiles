@@ -1210,6 +1210,9 @@ if has_key(g:plugs, 'neocomplete.vim')
     let g:neocomplete#enable_auto_select                = 0
     let g:neocomplete#enable_auto_delimiter             = 1
 
+    " Disable tag completion
+    let g:neocomplete#ignore_source_files = ['tag.vim']
+
     call neocomplete#custom#source('look', 'min_pattern_length', 4)
     call neocomplete#custom#source('_', 'converters',
                 \ [ 'converter_add_paren', 'converter_remove_overlap', 'converter_delimiter', 'converter_abbr' ])
@@ -1302,6 +1305,12 @@ else
     let g:neocomplcache_skip_auto_completion_time    = '0.6'
     let g:neocomplcache_enable_auto_select           = 0
     let g:neocomplcache_enable_auto_delimiter        = 1
+
+    " Disable tag completion
+    if !exists('g:neocomplcache_disabled_sources_list')
+        let g:neocomplcache_disabled_sources_list = {}
+    endif
+    let g:neocomplcache_disabled_sources_list._ = ['tags_complete']
 
     call neocomplcache#custom_source('look', 'min_pattern_length', 4)
 

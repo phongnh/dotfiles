@@ -1225,6 +1225,12 @@ let g:neocomplcache_skip_auto_completion_time    = '0.6'
 let g:neocomplcache_enable_auto_select           = 0
 let g:neocomplcache_enable_auto_delimiter        = 1
 
+" Disable tag completion
+if !exists('g:neocomplcache_disabled_sources_list')
+    let g:neocomplcache_disabled_sources_list = {}
+endif
+let g:neocomplcache_disabled_sources_list._ = ['tags_complete']
+
 call neocomplcache#custom_source('look', 'min_pattern_length', 4)
 
 let g:neocomplcache_dictionary_filetype_lists = {
