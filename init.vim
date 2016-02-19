@@ -231,6 +231,7 @@ Plug 'cohama/agit.vim'
 Plug 'mhinz/vim-signify'
 
 " Tmux
+Plug 'christoomey/vim-tmux-navigator'
 if exists("$TMUX")
     Plug 'benmills/vimux'
     Plug 'jebaum/vim-tmuxify'
@@ -1093,8 +1094,8 @@ nmap <Leader>sW ysiW
 
 " jiangmiao/auto-pairs
 let g:AutoPairsFlyMode            = 0
-let g:AutoPairsShortcutToggle     = '<M-t>'
-let g:AutoPairsShortcutJump       = '<M-j>'
+let g:AutoPairsShortcutToggle     = '<M-a>'
+let g:AutoPairsShortcutJump       = '<M-g>'
 let g:AutoPairsShortcutFastWrap   = '<M-w>'
 let g:AutoPairsShortcutBackInsert = '<M-i>'
 
@@ -1371,6 +1372,15 @@ let g:signify_update_on_bufenter    = 0
 let g:signify_update_on_focusgained = 0
 
 nnoremap <silent> cog :SignifyToggle<CR>
+
+" christoomey/vim-tmux-navigator
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> <M-h> :TmuxNavigateLeft<CR>
+nnoremap <silent> <M-j> :TmuxNavigateDown<CR>
+nnoremap <silent> <M-k> :TmuxNavigateUp<CR>
+nnoremap <silent> <M-l> :TmuxNavigateRight<CR>
+nnoremap <silent> <M-\> :TmuxNavigatePrevious<CR>
 
 if exists("$TMUX")
     " benmills/vimux
