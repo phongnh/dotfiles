@@ -567,11 +567,13 @@ xnoremap <Leader>sr <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><
 xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
 
 " Copy / cut to clipboard
-nmap <silent> cy "+y
-nmap <silent> cd "+d
+nmap cy "+y
+nmap cx "+d
+nmap cd "+d
 
-xmap <silent> <Leader>y "+y
-xmap <silent> <Leader>d "+d
+xmap gy "+y
+" Overwrite netrw-gx behavior
+xmap gx "+d
 
 " Paste from clipboard
 nnoremap <silent> cp  "+p
@@ -580,10 +582,10 @@ nnoremap <silent> cgp "+gp
 nnoremap <silent> cgP "+gP
 nnoremap <silent> c=p o<Esc>"+pm``[=`]``^
 nnoremap <silent> c=P O<Esc>"+Pm``[=`]``^
+nnoremap <silent> c=v :set paste<CR>"+p:set nopaste<CR>
+nnoremap <silent> c=V :set paste<CR>"+P:set nopaste<CR>
 
-inoremap <silent> <C-V>     <C-G>u<C-O>"+gP
-nnoremap <silent> <Leader>p :set paste<CR>"+p:set nopaste<CR>
-nnoremap <silent> <Leader>P :set paste<CR>"+P:set nopaste<CR>
+inoremap <silent> <C-V> <C-G>u<C-O>"+gP
 
 " Redraw
 if maparg('<C-L>', 'n') ==# ''
