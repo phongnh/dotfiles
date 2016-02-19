@@ -1513,11 +1513,21 @@ endif
 
 " janko-m/vim-test
 function! Neovim2Strategy(cmd) abort
-    botright 15new | call termopen(a:cmd) | startinsert
+    if g:test_neovim_mode ==? 's'
+        let win = 'botright new'
+    elseif g:test_neovim_mode ==? 'v'
+        let win = 'vertical new'
+    elseif g:test_neovim_mode ==? 't'
+        let win = 'tabnew'
+    else
+        let win = 'botright 15new'
+    endif
+    execute win | call termopen(a:command) | startinsert
 endfunction
 
+let g:test_neovim_mode       = 'd'
 let g:test#custom_strategies = { 'neovim2': function('Neovim2Strategy') }
-let g:test#strategy = 'neovim2'
+let g:test#strategy          = 'neovim2'
 
 nmap <silent> <Leader>rt :TestFile<CR>
 nmap <silent> <Leader>rf :TestNearest<CR>
@@ -1544,10 +1554,20 @@ nmap <Leader>tt <Plug>SendTestToTmux
 nmap <Leader>tf <Plug>SendFocusedTestToTmux
 
 function! TurbuxNeovimRunner(command) abort
-    botright 15new | call termopen(a:command) | startinsert
+    if g:turbux_neovim_mode ==? 's'
+        let win = 'botright new'
+    elseif g:turbux_neovim_mode ==? 'v'
+        let win = 'vertical new'
+    elseif g:turbux_neovim_mode ==? 't'
+        let win = 'tabnew'
+    else
+        let win = 'botright 15new'
+    endif
+    execute win | call termopen(a:command) | startinsert
 endfunction
 
-let g:turbux_custom_runner = "TurbuxNeovimRunner"
+let g:turbux_neovim_mode   = 'd'
+let g:turbux_custom_runner = 'TurbuxNeovimRunner'
 
 " mattn/emmet-vim
 let g:user_emmet_install_global  = 0
