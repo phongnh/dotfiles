@@ -48,8 +48,8 @@ if exists('neovim_dot_app')
     inoremap <Esc> <Esc>
 endif
 
-" Exit terminal mode
-tnoremap <M-c> <C-\><C-N>
+" Exit (quit) terminal mode
+tnoremap <M-q> <C-\><C-N>
 
 " Window Navigation from terminal
 tnoremap <M-h> <C-\><C-N><C-W>h
