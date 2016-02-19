@@ -1529,7 +1529,7 @@ function! Neovim2Strategy(cmd) abort
     else
         let win = 'botright 15new'
     endif
-    execute win | call termopen(a:command) | startinsert
+    execute win | call termopen(a:cmd) | startinsert
 endfunction
 
 let g:test_neovim_mode       = 'd'
