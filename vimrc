@@ -558,8 +558,8 @@ nnoremap <silent> gb :buffer#<CR>
 
 " Save buffer
 nmap <C-S> :update<CR>
-vmap <C-S> <ESC><C-S>gv
-imap <C-S> <ESC><C-S>
+vmap <C-S> <Esc><C-S>gv
+imap <C-S> <Esc><C-S>
 
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>

@@ -50,6 +50,7 @@ endif
 
 " Exit (quit) terminal mode
 tnoremap <M-q> <C-\><C-N>
+tnoremap <Leader><Esc> <C-\><C-N>
 
 " Window Navigation from terminal
 tnoremap <M-h> <C-\><C-N><C-W>h
@@ -539,8 +540,8 @@ nnoremap <silent> gb :buffer#<CR>
 
 " Save buffer
 nmap <C-S> :update<CR>
-vmap <C-S> <ESC><C-S>gv
-imap <C-S> <ESC><C-S>
+vmap <C-S> <Esc><C-S>gv
+imap <C-S> <Esc><C-S>
 
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
