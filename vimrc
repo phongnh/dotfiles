@@ -557,9 +557,9 @@ nnoremap <silent> <C-W>D :bdelete<CR>
 nnoremap <silent> gb :buffer#<CR>
 
 " Save buffer
-nmap <C-S> :update<CR>
+nmap <silent> <C-S> :update<CR>
 vmap <C-S> <Esc><C-S>gv
-imap <C-S> <Esc><C-S>
+imap <C-S> <Esc><C-S>a
 
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
@@ -847,8 +847,9 @@ let g:yankround_max_history = 100
 nnoremap <silent> [Space]y :CtrlPYankRound<CR>
 
 " regedarek/ZoomWin
-nnoremap <silent> <F2> :ZoomWin<CR>
-inoremap <silent> <F2> <Esc>:ZoomWin<CR>
+nmap <silent> <F2> :ZoomWin<CR>
+vmap <F2> <Esc><F2>gv
+imap <F2> <Esc><F2>a
 
 " junegunn/goyo.vim
 let g:goyo_width  = '80%'
@@ -1757,7 +1758,7 @@ augroup MyAutoCmd
     autocmd FileType git,gitconfig setlocal tabstop=8
 
     " q to close
-    autocmd FileType help,qf,godoc,gedoc nmap <silent> <buffer> q :close<CR>
+    autocmd FileType help,qf,godoc,gedoc nnoremap <silent> <buffer> q :close<CR>
 
     " Folding
     autocmd FileType vim setlocal foldmethod=marker foldmarker={{{,}}}

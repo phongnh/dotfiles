@@ -50,7 +50,7 @@ endif
 
 " Exit (quit) terminal mode
 tnoremap <M-q> <C-\><C-N>
-tnoremap <Leader><Esc> <C-\><C-N>
+tnoremap <C-\><C-\> <C-\><C-N>
 
 " Window Navigation from terminal
 tnoremap <M-h> <C-\><C-N><C-W>h
@@ -58,6 +58,12 @@ tnoremap <M-j> <C-\><C-N><C-W>j
 tnoremap <M-k> <C-\><C-N><C-W>k
 tnoremap <M-l> <C-\><C-N><C-W>l
 tnoremap <M-\> <C-\><C-N><C-W>p
+
+augroup MyAutoCmd
+    autocmd BufWinEnter,WinEnter term://* startinsert
+    autocmd BufLeave term://* stopinsert
+    autocmd TermOpen * nnoremap <buffer> <C-\><C-\> :startinsert<CR>
+augroup END
 
 call plug#begin()
 
@@ -539,9 +545,9 @@ nnoremap <silent> <C-W>D :bdelete<CR>
 nnoremap <silent> gb :buffer#<CR>
 
 " Save buffer
-nmap <C-S> :update<CR>
+nmap <silent> <C-S> :update<CR>
 vmap <C-S> <Esc><C-S>gv
-imap <C-S> <Esc><C-S>
+imap <C-S> <Esc><C-S>a
 
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
@@ -871,8 +877,9 @@ nnoremap <silent> [Space]/ :Unite -buffer-name=search-history history/search<CR>
 " regedarek/ZoomWin
 let g:zoomwin_localoptlist = ["ai","ar","bh","bin","bl","bomb","bt","cfu","ci","cin","cink","cino","cinw","cms","com","cpt","diff","efm","eol","ep","et","fenc","fex","ff","flp","fo","ft","gp","imi","ims","inde","inex","indk","inf","isk","kmp","lisp","mps","ml","ma","mod","nf","ofu","pi","qe","ro","sw","si","sts","spc","spf","spl","sua","swf","smc","syn","ts","tw","udf","wfh","wfw","wm"]
 
-nnoremap <silent> <F2> :ZoomWin<CR>
-inoremap <silent> <F2> <Esc>:ZoomWin<CR>
+nmap <silent> <F2> :ZoomWin<CR>
+vmap <F2> <Esc><F2>gv
+imap <F2> <Esc><F2>a
 tnoremap <silent> <F2> <C-\><C-N>:ZoomWin<CR>
 
 " junegunn/goyo.vim
@@ -1698,7 +1705,7 @@ augroup MyAutoCmd
     autocmd FileType git,gitconfig setlocal tabstop=8
 
     " q to close
-    autocmd FileType help,qf,godoc,gedoc nmap <silent> <buffer> q :close<CR>
+    autocmd FileType help,qf,godoc,gedoc nnoremap <silent> <buffer> q :close<CR>
 
     " Folding
     autocmd FileType vim setlocal foldmethod=marker foldmarker={{{,}}}
