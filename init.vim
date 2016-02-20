@@ -62,7 +62,7 @@ tnoremap <M-\> <C-\><C-N><C-W>p
 augroup MyAutoCmd
     autocmd BufWinEnter,WinEnter term://* startinsert
     autocmd BufLeave term://* stopinsert
-    autocmd TermOpen * nnoremap <buffer> <C-\><C-\> :startinsert<CR>
+    autocmd TermOpen * nnoremap <silent> <buffer> <C-\><C-\> :startinsert<CR>
 augroup END
 
 call plug#begin()
@@ -547,7 +547,7 @@ nnoremap <silent> gb :buffer#<CR>
 " Save buffer
 nmap <silent> <C-S> :update<CR>
 vmap <C-S> <Esc><C-S>gv
-imap <C-S> <Esc><C-S>a
+imap <C-S> <Esc><C-S>
 
 " Quit Vim
 nnoremap <silent> <Leader>Q :confirm qall<CR>
