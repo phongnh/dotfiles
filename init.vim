@@ -750,12 +750,6 @@ hi link uniteInputPrompt Special
 
 call unite#filters#sorter_default#use(['sorter_rank'])
 
-if has('python')
-    call unite#custom#source('file_rec/async,file_rec/git,neomru/file,tag/file', 'sorters', [
-                \ 'sorter_selecta'
-                \ ])
-endif
-
 call unite#custom#source('buffer,file_rec/async,file_rec/git,tag/file', 'matchers', [
             \ 'converter_relative_word',
             \ 'matcher_fuzzy'
