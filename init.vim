@@ -772,7 +772,7 @@ function! s:system_open_action.func(candidates) abort
     let cmd = has('mac') ? '!open' : '!xdg-open'
     for candidate in a:candidates
         if !isdirectory(candidate.action__path)
-            silent! execute cmd . fnameescape(candidate.action__path) . " &"
+            silent! execute cmd . " " . fnameescape(candidate.action__path) . " &"
         endif
     endfor
     redraw!
