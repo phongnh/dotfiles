@@ -116,6 +116,7 @@ endif
 if executable('ctags')
     " A class outline viewer for Vim
     Plug 'majutsushi/tagbar'
+    Plug 'phongnh/vim-tagbar-settings'
 endif
 
 " A tree explorer plugin for vim
@@ -1004,37 +1005,6 @@ if has_key(g:plugs, 'tagbar')
     let g:tagbar_autofocus = 1
     let g:tagbar_autoclose = 0
     let g:tagbar_iconchars = ['▸', '▾']
-
-    let g:tagbar_type_css = {
-                \ 'ctagstype' : 'Css',
-                \ 'kinds'     : [
-                \ 'c:classes',
-                \ 's:selectors',
-                \ 'i:identities'
-                \ ]
-                \ }
-
-    let g:tagbar_type_ruby = {
-                \ 'kinds' : [
-                \ 'm:modules',
-                \ 'c:classes',
-                \ 'd:describes',
-                \ 'C:contexts',
-                \ 'f:methods',
-                \ 'F:singleton methods'
-                \ ]
-                \ }
-
-    let g:tagbar_type_coffee = {
-                \ 'ctagstype' : 'coffee',
-                \ 'kinds'     : [
-                \ 'c:classes',
-                \ 'm:methods',
-                \ 'f:functions',
-                \ 'v:variables',
-                \ 'f:fields',
-                \ ]
-                \ }
 
     nnoremap <silent> <F8> :TagbarToggle<CR>
     inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
