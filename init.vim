@@ -810,7 +810,7 @@ nnoremap <silent> [Space]<Space> :Unite -buffer-name=mixed buffer bookmark neomr
 nnoremap <silent> [Space]e :Unite -no-restore -resume -input= -buffer-name=files file_rec/async file/new<CR>
 nnoremap          [Space]E :Unite -buffer-name=files file_rec/async:
 
-nnoremap <silent> [Space]g :Unite -no-restore -resume -input= -buffer-name=git file_rec/git file/new<CR>
+nnoremap <silent> [Space]g :Unite -no-restore -resume -input= -buffer-name=git file_rec/git:--cached:--others:--exclude-standard file/new<CR>
 
 nnoremap <silent> [Space]c :Unite -buffer-name=parent-folder file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
 nnoremap <silent> [Space]C :Unite -buffer-name=parent-folder file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
