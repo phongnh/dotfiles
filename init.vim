@@ -276,9 +276,6 @@ Plug 'fatih/vim-go'
 Plug 'rhysd/vim-go-impl'    " go get github.com/josharian/impl
 Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 
-" Swift
-Plug 'kballard/vim-swift'
-
 " Others
 Plug 'vim-scripts/fish-syntax'
 
@@ -1526,7 +1523,7 @@ nmap <silent> <Leader>ra :TestSuite<CR>
 nmap <silent> <Leader>rg :TestVisit<CR>
 
 " sheerun/vim-polyglot
-let g:polyglot_disabled = ['go', 'swift']
+let g:polyglot_disabled = ['go']
 
 " tpope/rails.vim
 nnoremap <silent> <Leader>ae :AE<CR>
