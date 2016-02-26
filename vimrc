@@ -1566,13 +1566,20 @@ if has_key(g:plugs, 'vim-tmuxify')
     nnoremap <silent> <Leader>mm :TxSendKey! 'Enter'<CR>
     nnoremap <silent> <Leader>md :TxSendKey! 'C-d'<CR>
 
+    augroup MyAutoCmd
+        autocmd VimEnter * nnoremap <silent> <Leader>mi :TxSend!<CR>
+        autocmd VimEnter * nmap     <silent> <Leader>ms vip<Leader>ms
+    augroup END
+
     nnoremap <silent> <Leader>tb :TxSigInt<CR>
     nnoremap <silent> <Leader>tc :TxClear<CR>
     nnoremap <silent> <Leader>tn :TxCreate<CR>
     nnoremap <silent> <Leader>tp :TxSetPane<CR>
     nnoremap <silent> <Leader>tq :TxKill<CR>
     nnoremap <silent> <Leader>tr :TxRun<CR>
-    nnoremap <silent> <Leader>ts :TxSend<CR>
+    nnoremap <silent> <Leader>tR :TxSetRunCmd<CR>
+    nnoremap <silent> <Leader>ti :TxSend<CR>
+    nmap     <silent> <Leader>ts vip<Leader>ts
     xnoremap <silent> <Leader>ts "my:TxSend(@m)<CR>
     nnoremap <silent> <Leader>tk :TxSendKey<CR>
     nnoremap <silent> <Leader>tu :TxSendKey 'q C-u'<CR>
