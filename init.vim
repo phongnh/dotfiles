@@ -1659,6 +1659,9 @@ augroup MyAutoCmd
                     \ :execute 'silent! %' . printf("!env XMLLINT_INDENT='%s' xmllint --format --recover - 2>/dev/null", repeat(' ', exists('*shiftwidth') ? shiftwidth() : &shiftwidth))<CR>
     endif
 
+    " Clang
+    autocmd FileType c,cpp setlocal commentstring=//\ %s
+
     " Go
     autocmd FileType go,godoc,gedoc setlocal noexpandtab
     autocmd FileType godoc,gedoc    setlocal tabstop=8
