@@ -1517,7 +1517,7 @@ nnoremap <silent> <M-k> :TmuxNavigateUp<CR>
 nnoremap <silent> <M-l> :TmuxNavigateRight<CR>
 nnoremap <silent> <M-\> :TmuxNavigatePrevious<CR>
 
-if exists("$TMUX")
+if has_key(g:plugs, 'vimux')
     " benmills/vimux
     let g:VimuxUseNearest = 1
     let g:VimuxHeight     = 25
@@ -1554,8 +1554,10 @@ if exists("$TMUX")
             call VimuxSendKeys('Enter')
         endif
     endfunction
+endif
 
-    " mhinz/vim-tmuxify
+if has_key(g:plugs, 'vim-tmuxify')
+    " jebaum/vim-tmuxify
     let g:tmuxify_custom_command = 'tmux split-window -d -p 20'
     let g:tmuxify_map_prefix     = '<Leader>m'
     let g:tmuxify_global_maps    = 1
