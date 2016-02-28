@@ -670,7 +670,7 @@ if has('cscope')
     nnoremap <C-\><C-D> :vertical scscope find d <C-R>=expand("<cword>")<CR><CR>
 
     " Add cscope database
-    function! s:add_cscope_db()
+    function! s:AddCscopeDB()
         " add any database in current directory
         let db = findfile('cscope.out', '.;')
         if !empty(db)
@@ -682,18 +682,18 @@ if has('cscope')
         endif
     endfunction
 
-    call s:add_cscope_db()
+    call s:AddCscopeDB()
 
-    command! -nargs=+ -complete=customlist,CscopeSearchTypes CsFind  cscope find <args>
-    command! -nargs=+ -complete=customlist,CscopeSearchTypes ScsFind scscope find <args>
-    command! -nargs=+ -complete=customlist,CscopeSearchTypes VcsFind vertical scscope find <args>
+    command! -nargs=+ -complete=custom,<SID>CscopeSearchTypes CsFind  cscope find <args>
+    command! -nargs=+ -complete=custom,<SID>CscopeSearchTypes ScsFind scscope find <args>
+    command! -nargs=+ -complete=custom,<SID>CscopeSearchTypes VcsFind vertical scscope find <args>
 
-    function! CscopeSearchTypes(A, L, P)
-        if a:L =~# '^\(Cs\|Scs\|Vcs\)Find\s*$'
-            return map(['s', 'g', 'c', 't', 'e', 'f', 'i', 'd'], 'v:val . " "')
-        else
-            return []
+    function! s:CscopeSearchTypes(A, L, P)
+        let parts = split(a:L, '\s\+')
+        if len(parts) == 1
+            return join(['s', 'g', 'c', 't', 'e', 'f', 'i', 'd'], "\n")
         endif
+        return ""
     endfunction
 endif
 
