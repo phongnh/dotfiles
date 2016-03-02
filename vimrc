@@ -670,7 +670,7 @@ if has('cscope')
     nnoremap <C-\><C-D> :vertical scscope find d <C-R>=expand("<cword>")<CR><CR>
 
     " Add cscope database
-    function! s:AddCscopeDB()
+    function! s:AddCscopeDB() abort
         " add any database in current directory
         let db = findfile('cscope.out', '.;')
         if !empty(db)
@@ -688,7 +688,7 @@ if has('cscope')
     command! -nargs=+ -complete=custom,<SID>CscopeSearchTypes ScsFind scscope find <args>
     command! -nargs=+ -complete=custom,<SID>CscopeSearchTypes VcsFind vertical scscope find <args>
 
-    function! s:CscopeSearchTypes(A, L, P)
+    function! s:CscopeSearchTypes(A, L, P) abort
         let parts = split(a:L, '\s\+')
         if len(parts) == 1
             return join(['s', 'g', 'c', 't', 'e', 'f', 'i', 'd'], "\n")
