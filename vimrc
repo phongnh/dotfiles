@@ -273,6 +273,9 @@ Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 " Others
 Plug 'vim-scripts/fish-syntax'
 
+" Zeal for Vim
+Plug 'KabbAmine/zeavim.vim'
+
 " Utility
 " A Vim plugin that provides a completion function for Unicode glyphs
 Plug 'chrisbra/unicode.vim'
@@ -282,9 +285,6 @@ Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
 
 " Text outlining and task management for Vim based on Emacs' Org-Mode
 Plug 'jceb/vim-orgmode'
-
-" Zeal for Vim
-Plug 'KabbAmine/zeavim.vim'
 
 " Color schemes
 Plug 'NLKNguyen/papercolor-theme'
