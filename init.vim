@@ -131,6 +131,9 @@ if executable('ctags')
     Plug 'phongnh/vim-tagbar-settings'
 endif
 
+" projectionist.vim: project configuration
+Plug 'tpope/vim-projectionist'
+
 " A tree explorer plugin for vim
 Plug 'scrooloose/nerdtree'
 
