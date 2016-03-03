@@ -1621,6 +1621,10 @@ autocmd MyAutoCmd FileType go call s:VimGoSetup()
 " KabbAmine/zeavim.vim
 let g:zv_disable_mapping = 1
 
+if has('mac')
+    let g:zv_docsets_dir = '~/Library/Application Support/Zeal/Zeal/docsets'
+endif
+
 nmap <Leader>z <Plug>Zeavim
 vmap <Leader>z <Plug>ZVVisSelection
 nmap <Leader>Z <Plug>ZVKeyDocset
