@@ -1573,7 +1573,7 @@ let g:turbux_custom_runner = 'TurbuxNeovimRunner'
 " mattn/emmet-vim
 let g:user_emmet_install_global  = 0
 
-autocmd MyAutoCmd FileType haml,slim,jade,html,xml,css,sass,scss,less,html.handlebars,mustache EmmetInstall
+autocmd MyAutoCmd FileType eruby,haml,slim,jade,html,xml,css,sass,scss,less,html.handlebars,mustache EmmetInstall
 
 " fatih/vim-go, rhysd/vim-go-impl and garyburd/go-explorer
 let g:go_highlight_functions         = 1
