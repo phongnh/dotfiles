@@ -578,7 +578,9 @@ xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
 " Copy / cut to clipboard
 nmap cy "+y
 nmap cx "+d
-nmap cd "+d
+
+" Copy yanked text to clipboard
+nnoremap <silent> cY :let [@+, @*] = [@", @"]<CR>
 
 xmap gy "+y
 " Overwrite netrw-gx behavior
