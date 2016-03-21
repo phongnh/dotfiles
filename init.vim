@@ -985,6 +985,7 @@ let g:startify_change_to_vcs_root = 1
 let g:startify_relative_path      = 1
 let g:startify_update_oldfiles    = 1
 let g:startify_show_sessions      = 1
+let g:startify_custom_header      = [] " Disable random quotes header
 
 nnoremap <silent> <F5> :Startify<CR>
 inoremap <silent> <F5> <Esc>:Startify<CR>
