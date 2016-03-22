@@ -1613,6 +1613,9 @@ nmap <silent> <Leader>rg :TestVisit<CR>
 " sheerun/vim-polyglot
 let g:polyglot_disabled = ['go']
 
+" tpope/vim-markdown
+let g:markdown_fenced_languages = ['bash=sh', 'coffee', 'css', 'html', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'python', 'ruby', 'sass', 'sql', 'xml']
+
 " tpope/rails.vim
 nnoremap <silent> <Leader>ae :AE<CR>
 nnoremap <silent> <Leader>as :AS<CR>
