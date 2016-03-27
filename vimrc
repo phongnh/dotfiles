@@ -794,6 +794,8 @@ nnoremap <silent> [Space]d :CtrlPDir<CR>
 nnoremap <silent> [Space]f :CtrlP<CR>
 nnoremap          [Space]F :CtrlP<Space>
 
+nnoremap <silent> [Space]g :CtrlPRoot<CR>
+
 nnoremap <silent> [Space]c :CtrlPCurFile<CR>
 nnoremap <silent> [Space]C :CtrlP <C-R>=expand("%:h:h")<CR><CR>
 
