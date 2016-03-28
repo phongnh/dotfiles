@@ -1170,12 +1170,16 @@ nnoremap          <Leader>aa     :Tabularize /
 xnoremap          <Leader>aa     :Tabularize /
 nnoremap <silent> <Leader>a=     :Tabularize /=<CR>
 xnoremap <silent> <Leader>a=     :Tabularize /=<CR>
-nnoremap <silent> <Leader>a:     :Tabularize /:\zs<CR>
-xnoremap <silent> <Leader>a:     :Tabularize /:\zs<CR>
-nnoremap <silent> <Leader>a,     :Tabularize /:\zs<CR>
-xnoremap <silent> <Leader>a,     :Tabularize /:\zs<CR>
+nnoremap <silent> <Leader>a:     :Tabularize /:<CR>
+xnoremap <silent> <Leader>a:     :Tabularize /:<CR>
+nnoremap <silent> <Leader>a,     :Tabularize /,<CR>
+xnoremap <silent> <Leader>a,     :Tabularize /,<CR>
 nnoremap <silent> <Leader>a<Bar> :Tabularize /<Bar><CR>
 xnoremap <silent> <Leader>a<Bar> :Tabularize /<Bar><CR>
+nnoremap <silent> <Leader>ah     :Tabularize /=><CR>
+xnoremap <silent> <Leader>ah     :Tabularize /=><CR>
+nnoremap <silent> <Leader>aj     :Tabularize /:\zs<CR>
+xnoremap <silent> <Leader>aj     :Tabularize /:\zs<CR>
 
 autocmd MyAutoCmd FileType cucumber inoremap <silent> <buffer> <Bar> <Bar><Esc>:call <SID>BarAlign()<CR>a
 
