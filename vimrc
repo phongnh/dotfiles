@@ -1179,6 +1179,20 @@ function! s:BarAlign() abort
     endif
 endfunction
 
+command! -nargs=0 ToggleBarAlign call <SID>ToggleBarAlign()
+
+function! s:ToggleBarAlign() abort
+    if mapcheck('<Bar>', 'i') == ''
+        inoremap <silent> <buffer> <Bar> <Bar><Esc>:call <SID>BarAlign()<CR>a
+        echo "Enabled Bar Align!"
+    else
+        iunmap <buffer> <Bar>
+        echo "Disabled Bar Align!"
+    endif
+endfunction
+
+nnoremap <silent> <Leader>ab :ToggleBarAlign<CR>
+
 " terryma/vim-expand-region
 " Default settings
 let g:expand_region_text_objects = {
