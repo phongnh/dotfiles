@@ -702,6 +702,10 @@ if has('cscope')
     endfunction
 endif
 
+" junegunn/vim-plug
+nnoremap <silent> <Leader>ua :PlugUpgrade<CR>:PlugUpdate<CR>
+nnoremap <silent> <Leader>up :PlugUpdate<CR>
+
 " vim-airline/vim-airline
 let g:airline#extensions#hunks#enabled      = 0
 let g:airline#extensions#tagbar#enabled     = 0
