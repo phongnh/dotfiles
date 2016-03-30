@@ -1663,6 +1663,10 @@ vmap <Leader>z <Plug>ZVVisSelection
 nmap <Leader>Z <Plug>ZVKeyDocset
 nmap gz        <Plug>ZVMotion
 
+" chrisbra/unicode.vim
+nmap <Leader>K <Plug>(MakeDigraph)
+vmap <Leader>K <Plug>(MakeDigraph)
+
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
 
