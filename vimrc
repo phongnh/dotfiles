@@ -1063,13 +1063,11 @@ map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
 map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 
 " dyng/ctrlsf.vim
-nmap <Leader>s/ <Plug>CtrlSFPrompt
+nmap <Leader>sp <Plug>CtrlSFPrompt
 nmap <Leader>sc <Plug>CtrlSFCwordPath
 nmap <Leader>sf <Plug>CtrlSFCwordExec
-vmap <Leader>sc <Plug>CtrlSFVwordPath
 vmap <Leader>sf <Plug>CtrlSFVwordExec
-nmap <Leader>sp <Plug>CtrlSFPwordPath
-nmap <Leader>sP <Plug>CtrlSFPwordExec
+nmap <Leader>sy <Plug>CtrlSFPwordPath
 nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
 nnoremap <silent> <Leader>st :CtrlSFToggle<CR>
 nnoremap <silent> <Leader>so :CtrlSFOpen<CR>
