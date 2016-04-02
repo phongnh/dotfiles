@@ -459,10 +459,10 @@ inoremap <silent> <C-T> <C-V><Tab>
 inoremap <C-^> <C-C><C-^>
 " inoremap <C-^> <C-C>:update<CR><C-^>
 
-" Q: Disable Ex-mode. qq to record, Q to replay
+" Q: Disable Ex-mode. qq to record, Q to replay (remapped)
 nmap Q @q
 
-" gQ: Q
+" gQ: Q (remapped)
 nnoremap gQ Q
 
 " .: repeats the last command on every line
@@ -482,10 +482,10 @@ xmap <S-Tab> <
 nnoremap g= gg=G``
 
 " gi already moves to "last place you exited insert mode"
-" gI: Move to last change
+" gI: Move to last change (remapped)
 nnoremap gI `.`
 
-" gV: Select the text that was last edited/pasted
+" gV: Select the text that was last edited/pasted (remapped)
 " http://vimcasts.org/episodes/bubbling-text/
 nmap gV `[v`]
 
@@ -506,16 +506,6 @@ nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo0' : 'l'
 " If press l on fold, range fold open
 xnoremap <expr> l foldclosed(line('.')) != -1 ? 'zogv0' : 'l'
 
-" Toggle Fold
-noremap za zazz
-
-" Next / previous fold
-noremap zj zjzz
-noremap zk zkzz
-
-" Invert 'foldenable'
-nnoremap <silent> zi zizz
-
 nnoremap <silent> zr zr:echo 'foldlevel = ' . &foldlevel<CR>
 nnoremap <silent> zm zm:echo 'foldlevel = ' . &foldlevel<CR>
 nnoremap <silent> zR zR:echo 'foldlevel = ' . &foldlevel<CR>
@@ -523,12 +513,6 @@ nnoremap <silent> zM zM:echo 'foldlevel = ' . &foldlevel<CR>
 
 nnoremap <silent> z] :let &foldcolumn = &foldcolumn + 1<CR>:echo 'foldcolumn = ' . &foldcolumn<CR>
 nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:echo 'foldcolumn = ' . &foldcolumn<CR>
-
-" Auto center
-nnoremap <silent> g;    g;zz
-nnoremap <silent> g,    g,zz
-nnoremap <silent> <C-O> <C-O>zz
-nnoremap <silent> <C-I> <C-I>zz
 
 " Next/previous window
 nnoremap <silent> ]w :wincmd w<CR>
