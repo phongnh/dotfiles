@@ -1041,13 +1041,12 @@ map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 " dyng/ctrlsf.vim
 nmap <Leader>sp <Plug>CtrlSFPrompt
 nmap <Leader>sc <Plug>CtrlSFCwordPath
+vmap <Leader>sc <Plug>CtrlSFVwordPath
 nmap <Leader>sf <Plug>CtrlSFCwordExec
 vmap <Leader>sf <Plug>CtrlSFVwordExec
 nmap <Leader>sy <Plug>CtrlSFPwordPath
 nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
-nnoremap <silent> <Leader>st :CtrlSFToggle<CR>
-nnoremap <silent> <Leader>so :CtrlSFOpen<CR>
-nnoremap <silent> <Leader>sq :CtrlSFClose<CR>
+nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
 
 " mhinz/vim-grepper
 let g:grepper = {
