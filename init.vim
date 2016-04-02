@@ -855,6 +855,20 @@ nnoremap <silent> [Space][ :UnitePrevious<CR>
 nnoremap <silent> [Space]: :Unite -buffer-name=command-history history/command<CR>
 nnoremap <silent> [Space]/ :Unite -buffer-name=search-history history/search<CR>
 
+" junegunn/fzf
+let g:fzf_layout = { 'down': '~30%' }
+
+let g:fzf_action = {
+            \ 'ctrl-m': 'edit',
+            \ 'ctrl-x': 'split',
+            \ 'ctrl-v': 'vsplit',
+            \ 'ctrl-t': 'tabedit',
+            \ 'ctrl-o': has('mac') ? '!open' : '!xdg-open'
+            \ }
+
+nnoremap <silent> <Leader>p :FZF<CR>
+nnoremap          <Leader>P :FZF<Space>
+
 " regedarek/ZoomWin
 let g:zoomwin_localoptlist = ["ai","ar","bh","bin","bl","bomb","bt","cfu","ci","cin","cink","cino","cinw","cms","com","cpt","diff","efm","eol","ep","et","fenc","fex","ff","flp","fo","ft","gp","imi","ims","inde","inex","indk","inf","isk","kmp","lisp","mps","ml","ma","mod","nf","ofu","pi","qe","ro","sw","si","sts","spc","spf","spl","sua","swf","smc","syn","ts","tw","udf","wfh","wfw","wm"]
 
