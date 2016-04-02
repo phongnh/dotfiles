@@ -311,6 +311,10 @@ set nomodeline               " Don't parse modelines because of vim modeline vul
 
 set lazyredraw               " Do not redraw while macro executing
 
+set mouse=a                  " Enable mouse in every mode
+set mousehide                " Hide mouse pointer while typing
+set mousemodel=popup         " Right mouse button pops up a menu
+
 set encoding=utf-8           " Default encoding for saving and reading file
 set fileformat=unix          " Default fileformat
 set fileformats=unix,dos,mac
