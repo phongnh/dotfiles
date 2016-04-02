@@ -1664,10 +1664,11 @@ if has('mac')
     let g:zv_docsets_dir = '~/Library/Application Support/Zeal/Zeal/docsets'
 endif
 
-nmap <Leader>z <Plug>Zeavim
-vmap <Leader>z <Plug>ZVVisSelection
-nmap <Leader>Z <Plug>ZVKeyDocset
-nmap gz        <Plug>ZVMotion
+nmap gz <Plug>ZVMotion
+nmap <Leader>sd <Plug>Zeavim
+vmap <Leader>sd <Plug>ZVVisSelection
+nmap <Leader>sD <Plug>ZVKeyDocset
+nnoremap <Leader>se :Docset<Space>
 
 " chrisbra/unicode.vim
 nmap <Leader>K <Plug>(MakeDigraph)
