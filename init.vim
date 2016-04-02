@@ -607,16 +607,6 @@ if has('cscope')
     nnoremap <C-\>i :cscope find i ^<C-R>=expand("<cfile>")<CR>$<CR>
     nnoremap <C-\>d :cscope find d <C-R>=expand("<cword>")<CR><CR>
 
-    nnoremap <C-\>S :cscope find s <C-R>=expand("<cword>")<CR><CR>
-    nnoremap <C-\>G :cscope find g <C-R>=expand("<cword>")<CR><CR>
-    nnoremap <C-\>C :cscope find c <C-R>=expand("<cword>")<CR><CR>
-    nnoremap <C-\>T :cscope find t <C-R>=expand("<cword>")<CR><CR>
-    xnoremap <C-\>T y:cscope find t <C-R>"<CR>
-    nnoremap <C-\>E :cscope find e <C-R>=expand("<cword>")<CR><CR>
-    nnoremap <C-\>F :cscope find f <C-R>=expand("<cfile>")<CR><CR>
-    nnoremap <C-\>I :cscope find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-    nnoremap <C-\>D :cscope find d <C-R>=expand("<cword>")<CR><CR>
-
     nnoremap <C-\><C-S> :vertical scscope find s <C-R>=expand("<cword>")<CR><CR>
     nnoremap <C-\><C-G> :vertical scscope find g <C-R>=expand("<cword>")<CR><CR>
     nnoremap <C-\><C-C> :vertical scscope find c <C-R>=expand("<cword>")<CR><CR>
@@ -629,14 +619,17 @@ if has('cscope')
 
     " Add cscope database
     function! s:AddCscopeDB() abort
-        " add any database in current directory
-        let db = findfile('cscope.out', '.;')
-        if !empty(db)
-            silent cscope reset
-            silent! execute 'cscope add' db
-        elseif !empty($CSCOPE_DB)
+        " Add database specified via environment variable $CSCOPE_DB
+        if !empty($CSCOPE_DB)
             silent cscope reset
             silent! execute 'cscope add' $CSCOPE_DB
+        else
+            " Add any database in current directory
+            let db = findfile('cscope.out', '.;')
+            if !empty(db)
+                silent cscope reset
+                silent! execute 'cscope add' db
+            end
         endif
     endfunction
 
