@@ -1539,7 +1539,7 @@ if has_key(g:plugs, 'vim-tmuxify')
         autocmd VimEnter * nnoremap <silent> <Leader>mi :TxSend!<CR>
         autocmd VimEnter * nmap     <silent> <Leader>ms m`vip<Leader>ms
         autocmd VimEnter * nmap     <silent> <Leader>mS m`ggVG<Leader>ms
-        autocmd VimEnter * xnoremap <silent> <Leader>ms "my:TxSend(@m)<CR>``
+        autocmd VimEnter * xnoremap <silent> <Leader>ms "my:TxSend!(@m)<CR>``
     augroup END
 
     nnoremap <silent> <Leader>tb :TxSigInt<CR>
