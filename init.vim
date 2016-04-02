@@ -518,6 +518,9 @@ nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:echo 'foldcolumn = '
 nnoremap <silent> ]w :wincmd w<CR>
 nnoremap <silent> [w :wincmd W<CR>
 
+nmap <Tab>   <C-W>w
+nmap <S-Tab> <C-W>W
+
 " Reload buffer
 nnoremap <silent> <C-W>e     :edit<CR>
 nnoremap <silent> <C-W><C-E> :edit<CR>
