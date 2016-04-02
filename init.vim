@@ -1082,10 +1082,11 @@ nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
 nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
-nnoremap <silent> <Leader>S  :Grepper<CR>
+xmap     <silent> <Leader>ss <Plug>GrepperOperator
+nnoremap <silent> <Leader>S :Grepper<CR>
 
-nnoremap <silent> <Leader>sl :echo 'Searching...'<CR>:Grepper -noquickfix -cword -noprompt<CR>
-nnoremap <silent> <Leader>L  :Grepper -noquickfix<CR>
+nnoremap <silent> <Leader>sl :echo 'Searching...'<CR>:Grepper -noquickfix -switch -cword -noprompt<CR>
+nnoremap <silent> <Leader>L :Grepper -noquickfix -switch<CR>
 
 " thinca/vim-textobj-between
 let g:textobj_between_no_default_key_mappings = 1
