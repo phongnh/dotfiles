@@ -446,9 +446,6 @@ nnoremap <Down>  <Nop>
 nnoremap <Up>    <Nop>
 nnoremap <Right> <Nop>
 
-" Enter command mode more quickly!?
-nnoremap <Leader>; :
-
 " F1: Help
 nnoremap <F1> :help<Space>
 inoremap <F1> <Esc>:help<Space>
@@ -546,7 +543,7 @@ vmap <C-S> <Esc><C-S>gv
 imap <C-S> <Esc><C-S>
 
 " Quit Vim
-nnoremap <silent> <Leader>Q :confirm qall<CR>
+nnoremap <silent> <Leader>Z :confirm qall<CR>
 
 " Use <C-\><C-\> to do <C-]> but open it in a new split
 nmap <C-\><C-\> <C-W>v<C-]>zvzz
@@ -582,9 +579,7 @@ nnoremap <silent> c=V :set paste<CR>"+P:set nopaste<CR>
 inoremap <silent> <C-V> <C-G>u<C-O>"+gP
 
 " Redraw
-if maparg('<C-L>', 'n') ==# ''
-    nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-endif
+nnoremap <silent> <LocalLeader><LocalLeader> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 
 " <Space>: Other useful commands
 nnoremap [Space] <Nop>
