@@ -1537,9 +1537,9 @@ if has_key(g:plugs, 'vim-tmuxify')
 
     augroup MyAutoCmd
         autocmd VimEnter * nnoremap <silent> <Leader>mi :TxSend!<CR>
-        autocmd VimEnter * nmap     <silent> <Leader>ms m`vip<Leader>ms
-        autocmd VimEnter * nmap     <silent> <Leader>mS m`ggVG<Leader>ms
-        autocmd VimEnter * xnoremap <silent> <Leader>ms "my:TxSend!(@m)<CR>``
+        autocmd VimEnter * nmap     <silent> <Leader>ms m'vip<Leader>ms`'
+        autocmd VimEnter * nmap     <silent> <Leader>mS m'ggVG<Leader>ms`'
+        autocmd VimEnter * xnoremap <silent> <Leader>ms "my:TxSend!(@m)<CR>
     augroup END
 
     nnoremap <silent> <Leader>tb :TxSigInt<CR>
@@ -1550,9 +1550,9 @@ if has_key(g:plugs, 'vim-tmuxify')
     nnoremap <silent> <Leader>tr :TxRun<CR>
     nnoremap <silent> <Leader>tR :TxSetRunCmd<CR>
     nnoremap <silent> <Leader>ti :TxSend<CR>
-    nmap     <silent> <Leader>ts m`vip<Leader>ts
-    nmap     <silent> <Leader>tS m`ggVG<Leader>ts
-    xnoremap <silent> <Leader>ts "my:TxSend(@m)<CR>``
+    nmap     <silent> <Leader>ts m'vip<Leader>ts`'
+    nmap     <silent> <Leader>tS m'ggVG<Leader>ts`'
+    xnoremap <silent> <Leader>ts "my:TxSend(@m)<CR>
     nnoremap <silent> <Leader>tk :TxSendKey<CR>
     nnoremap <silent> <Leader>tu :TxSendKey 'q C-u'<CR>
     nnoremap <silent> <Leader>tm :TxSendKey 'Enter'<CR>
