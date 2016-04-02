@@ -780,6 +780,8 @@ function! s:my_unite_settings() abort
                 \ )
 
     inoremap <silent> <buffer> <expr> <C-O> unite#do_action('system-open')
+    inoremap <silent> <buffer> <expr> <C-X> unite#do_action('split')
+    inoremap <silent> <buffer> <expr> <C-V> unite#do_action('vsplit')
 endfunction
 
 autocmd MyAutoCmd FileType unite call s:my_unite_settings()
