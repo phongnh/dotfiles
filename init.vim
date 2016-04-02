@@ -1447,8 +1447,9 @@ if has_key(g:plugs, 'vimux')
     let g:VimuxUseNearest = 1
     let g:VimuxHeight     = 25
 
-    xnoremap <silent> <Leader>vs "my:call VimuxSlime(@m)<CR>
-    nmap     <silent> <Leader>vs vip<Leader>vs
+    xnoremap <silent> <Leader>vs "my:call VimuxSlime(@m)<CR>``
+    nmap     <silent> <Leader>vs m`vip<Leader>vs
+    nmap     <silent> <Leader>vS m`ggVG<Leader>vs
     nnoremap <silent> <Leader>vr :VimuxPromptCommand<CR>
     nnoremap <silent> <Leader>vl :VimuxRunLastCommand<CR>
     nnoremap <silent> <Leader>vu :call VimuxSendKeys('q C-u')<CR>
@@ -1483,7 +1484,7 @@ endif
 
 if has_key(g:plugs, 'vim-tmuxify')
     " jebaum/vim-tmuxify
-    let g:tmuxify_custom_command = 'tmux split-window -d -p 20'
+    let g:tmuxify_custom_command = 'tmux split-window -d -p 30'
     let g:tmuxify_map_prefix     = '<Leader>m'
     let g:tmuxify_global_maps    = 1
 
@@ -1493,7 +1494,9 @@ if has_key(g:plugs, 'vim-tmuxify')
 
     augroup MyAutoCmd
         autocmd VimEnter * nnoremap <silent> <Leader>mi :TxSend!<CR>
-        autocmd VimEnter * nmap     <silent> <Leader>ms vip<Leader>ms
+        autocmd VimEnter * nmap     <silent> <Leader>ms m`vip<Leader>ms
+        autocmd VimEnter * nmap     <silent> <Leader>mS m`ggVG<Leader>ms
+        autocmd VimEnter * xnoremap <silent> <Leader>ms "my:TxSend(@m)<CR>``
     augroup END
 
     nnoremap <silent> <Leader>tb :TxSigInt<CR>
@@ -1504,8 +1507,9 @@ if has_key(g:plugs, 'vim-tmuxify')
     nnoremap <silent> <Leader>tr :TxRun<CR>
     nnoremap <silent> <Leader>tR :TxSetRunCmd<CR>
     nnoremap <silent> <Leader>ti :TxSend<CR>
-    nmap     <silent> <Leader>ts vip<Leader>ts
-    xnoremap <silent> <Leader>ts "my:TxSend(@m)<CR>
+    nmap     <silent> <Leader>ts m`vip<Leader>ts
+    nmap     <silent> <Leader>tS m`ggVG<Leader>ts
+    xnoremap <silent> <Leader>ts "my:TxSend(@m)<CR>``
     nnoremap <silent> <Leader>tk :TxSendKey<CR>
     nnoremap <silent> <Leader>tu :TxSendKey 'q C-u'<CR>
     nnoremap <silent> <Leader>tm :TxSendKey 'Enter'<CR>
