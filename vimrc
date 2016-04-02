@@ -242,7 +242,6 @@ Plug 'mhinz/vim-signify'
 " Tmux
 Plug 'christoomey/vim-tmux-navigator'
 if exists("$TMUX")
-    Plug 'benmills/vimux'
     Plug 'jebaum/vim-tmuxify'
 endif
 
@@ -1524,46 +1523,6 @@ nnoremap <silent> <M-k> :TmuxNavigateUp<CR>
 nnoremap <silent> <M-l> :TmuxNavigateRight<CR>
 nnoremap <silent> <M-\> :TmuxNavigatePrevious<CR>
 
-if has_key(g:plugs, 'vimux')
-    " benmills/vimux
-    let g:VimuxUseNearest = 1
-    let g:VimuxHeight     = 25
-
-    xnoremap <silent> <Leader>vs "my:call VimuxSlime(@m)<CR>``
-    nmap     <silent> <Leader>vs m`vip<Leader>vs
-    nmap     <silent> <Leader>vS m`ggVG<Leader>vs
-    nnoremap <silent> <Leader>vr :VimuxPromptCommand<CR>
-    nnoremap <silent> <Leader>vl :VimuxRunLastCommand<CR>
-    nnoremap <silent> <Leader>vu :call VimuxSendKeys('q C-u')<CR>
-    nnoremap <silent> <Leader>vm :call VimuxSendKeys('Enter')<CR>
-    nnoremap <silent> <Leader>vd :call VimuxSendKeys('C-d')<CR>
-    nnoremap <silent> <Leader>vb :VimuxInterruptRunner<CR>
-    nnoremap <silent> <Leader>vc :call VimuxSendKeys('C-l')<CR>
-    nnoremap <silent> <Leader>vk :call VimuxSendKeys(input('Keys? '))<CR>
-
-    " Runner-related
-    nnoremap <silent> <Leader>vo :call VimuxOpenRunner()<CR>
-    nnoremap <silent> <Leader>vq :VimuxCloseRunner<CR>
-    nnoremap <silent> <Leader>vp :VimuxTogglePane<CR>
-    nnoremap <silent> <Leader>vi :VimuxInspectRunner<CR>
-    nnoremap <silent> <Leader>vh :VimuxClearRunnerHistory<CR>
-    nnoremap <silent> <Leader>vf :VimuxZoomRunner<CR>
-    nnoremap <silent> <Leader>v[ :VimuxScrollUpInspect<CR>
-    nnoremap <silent> <Leader>v] :VimuxScrollDownInspect<CR>
-
-    function! VimuxSlime(text) abort
-        let cmd = substitute(a:text, '^\s*', '', '')
-        let cmd = substitute(cmd, '\s*$', '', '')
-        let cmd = substitute(cmd, '^\n*', '', '')
-        let cmd = substitute(cmd, '\n*$', '', '')
-        let cmd = substitute(cmd, '\n\+', '\n', '')
-        if strlen(cmd)
-            call VimuxSendText(cmd)
-            call VimuxSendKeys('Enter')
-        endif
-    endfunction
-endif
-
 if has_key(g:plugs, 'vim-tmuxify')
     " jebaum/vim-tmuxify
     let g:tmuxify_custom_command = 'tmux split-window -d -p 30'
@@ -1596,13 +1555,19 @@ if has_key(g:plugs, 'vim-tmuxify')
     nnoremap <silent> <Leader>tu :TxSendKey 'q C-u'<CR>
     nnoremap <silent> <Leader>tm :TxSendKey 'Enter'<CR>
     nnoremap <silent> <Leader>td :TxSendKey 'C-d'<CR>
+
+    " Runner for janko-m/vim-test or jgdavey/vim-turbux
+    function! TmuxifyRunner(command) abort
+        execute 'TxRun! ' . shellescape(a:command)
+    endfunction
 endif
 
 " janko-m/vim-test
 if has('gui_running') && has('gui_macvim')
     let g:test#strategy = 'terminal'
-elseif has_key(g:plugs, 'vimux')
-    let g:test#strategy = 'vimux'
+elseif has_key(g:plugs, 'vim-tmuxify')
+    let g:test#custom_strategies = { 'tmuxify': function('TmuxifyRunner') }
+    let g:test#strategy          = 'tmuxify'
 elseif has_key(g:plugs, 'vim-dispatch')
     let g:test#strategy = 'dispatch'
 endif
@@ -1630,12 +1595,13 @@ xnoremap          <Leader>re :Rextract<Space>
 
 " jgdavey/vim-turbux
 let g:no_turbux_mappings = 1
+let g:turbux_command_prefix = 'bundle exec'
 
 nmap <Leader>tt <Plug>SendTestToTmux
 nmap <Leader>tf <Plug>SendFocusedTestToTmux
 
-if !has('gui_running') && has_key(g:plugs, 'vimux')
-    let g:turbux_runner = 'vimux'
+if !has('gui_running') && has_key(g:plugs, 'vim-tmuxify')
+    let g:turbux_custom_runner = 'TmuxifyRunner'
 endif
 
 " mattn/emmet-vim
