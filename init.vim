@@ -545,10 +545,10 @@ nmap <C-\><C-\> <C-W>v<C-]>zvzz
 
 " Search and Replace
 nnoremap <Leader>sr :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
-nnoremap <Leader>R  :%s//gc<Left><Left><Left>
+nnoremap <Leader>sR :%s//gc<Left><Left><Left>
 
 xnoremap <Leader>sr <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
-xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
+xnoremap <Leader>sR :s/\%V/gc<Left><Left><Left>
 
 " Copy / cut to clipboard
 nmap cy "+y
@@ -1072,12 +1072,13 @@ map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
 map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 
 " dyng/ctrlsf.vim
-nmap <Leader>sp <Plug>CtrlSFPrompt
-nmap <Leader>sc <Plug>CtrlSFCwordPath
-vmap <Leader>sc <Plug>CtrlSFVwordPath
-nmap <Leader>sf <Plug>CtrlSFCwordExec
-vmap <Leader>sf <Plug>CtrlSFVwordExec
-nmap <Leader>sy <Plug>CtrlSFPwordPath
+nmap <Leader>sf <Plug>CtrlSFPrompt
+nmap <Leader>sc <Plug>CtrlSFCwordExec
+nmap <Leader>sC <Plug>CtrlSFCwordPath
+vmap <Leader>sc <Plug>CtrlSFVwordExec
+vmap <Leader>sC <Plug>CtrlSFVwordPath
+nmap <Leader>sp <Plug>CtrlSFPwordExec
+nmap <Leader>sP <Plug>CtrlSFPwordPath
 nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
 nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
 
@@ -1098,10 +1099,10 @@ xmap <silent> gs <Plug>(GrepperOperator)
 
 nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
 xmap     <silent> <Leader>ss <Plug>GrepperOperator
-nnoremap <silent> <Leader>S :Grepper<CR>
+nnoremap <silent> <Leader>sS :Grepper<CR>
 
 nnoremap <silent> <Leader>sl :echo 'Searching...'<CR>:Grepper -noquickfix -switch -cword -noprompt<CR>
-nnoremap <silent> <Leader>L :Grepper -noquickfix -switch<CR>
+nnoremap <silent> <Leader>sL :Grepper -noquickfix -switch<CR>
 
 " thinca/vim-textobj-between
 let g:textobj_between_no_default_key_mappings = 1
@@ -1144,6 +1145,12 @@ let g:surround_no_insert_mappings = 1
 
 nmap <Leader>sw ysiw
 nmap <Leader>sW ysiW
+
+" tpope/vim-abolish
+nnoremap <Leader>A :%Abolish
+xnoremap <Leader>A :Abolish
+nnoremap <Leader>S :%Subvert
+xnoremap <Leader>S :Subvert
 
 " jiangmiao/auto-pairs
 let g:AutoPairsFlyMode            = 0
