@@ -776,7 +776,7 @@ nnoremap <silent> [Space]d :CtrlPDir<CR>
 nnoremap <silent> [Space]f :CtrlP<CR>
 nnoremap          [Space]F :CtrlP<Space>
 
-nnoremap <silent> [Space]g :CtrlPRoot<CR>
+nnoremap <silent> [Space]e :CtrlPRoot<CR>
 
 nnoremap <silent> [Space]c :CtrlPCurFile<CR>
 nnoremap <silent> [Space]C :CtrlP <C-R>=expand("%:h:h")<CR><CR>
@@ -799,8 +799,7 @@ nnoremap <silent> [Space]\ :CtrlPTag<CR>
 nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
 
 " phongnh/ctrlp-finder
-nnoremap <silent> [Space]e :CtrlPFinder<CR>
-nnoremap          [Space]E :CtrlPFinder<Space>
+nnoremap <silent> [Space]E :CtrlPFinder<CR>
 
 " h14i/vim-ctrlp-buftab
 nnoremap <silent> [Space]B :CtrlPBufTab<CR>

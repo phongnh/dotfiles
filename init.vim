@@ -735,7 +735,7 @@ hi link uniteInputPrompt Special
 
 call unite#filters#sorter_default#use(['sorter_rank'])
 
-call unite#custom#source('buffer,file_rec/async,file_rec/git,tag/file', 'matchers', [
+call unite#custom#source('buffer,file_rec/async,file_rec/git', 'matchers', [
             \ 'converter_relative_word',
             \ 'matcher_fuzzy'
             \ ])
@@ -747,7 +747,7 @@ call unite#custom#source('neomru/file', 'matchers', [
             \ 'matcher_fuzzy'
             \ ])
 
-call unite#custom#source('file_rec/async,file_rec/git,neomru/file,tag/file', 'converters', [
+call unite#custom#source('file_rec/async,file_rec/git,neomru/file', 'converters', [
             \ 'converter_file_directory'
             \ ])
 
@@ -794,13 +794,14 @@ nnoremap <silent> [Space], :Unite -buffer-name=sources source<CR>
 
 nnoremap <silent> [Space]<Space> :Unite -buffer-name=mixed buffer bookmark neomru/file file_rec/async<CR>
 
-nnoremap <silent> [Space]e :Unite -no-restore -resume -input= -buffer-name=files file_rec/async file/new<CR>
-nnoremap          [Space]E :Unite -buffer-name=files file_rec/async:
+nnoremap <silent> [Space]e :Unite -no-restore -resume -input= -buffer-name=git file_rec/git:--cached:--others:--exclude-standard file/new<CR>
 
-nnoremap <silent> [Space]g :Unite -no-restore -resume -input= -buffer-name=git file_rec/git:--cached:--others:--exclude-standard file/new<CR>
+nnoremap <silent> [Space]E :Unite -no-restore -resume -input= -buffer-name=explorer file_rec/async file/new<CR>
 
-nnoremap <silent> [Space]c :Unite -buffer-name=parent-folder file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
-nnoremap <silent> [Space]C :Unite -buffer-name=parent-folder file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
+nnoremap          [Space]F :Unite -buffer-name=files-in-folder file_rec/async:
+
+nnoremap <silent> [Space]c :Unite -buffer-name=files-in-folder file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
+nnoremap <silent> [Space]C :Unite -buffer-name=files-in-folder file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
 
 nnoremap <silent> [Space]b :Unite -buffer-name=buffers buffer<CR>
 nnoremap <silent> [Space]t :Unite -buffer-name=tabs tab<CR>
@@ -819,8 +820,7 @@ nnoremap          [Space]K :UniteBookmarkAdd<Space>
 " phongnh/unite-ag.vim
 let g:unite_source_ag_min_cache_files = 1000
 
-nnoremap <silent> [Space]f :Unite -no-restore -resume -input= -buffer-name=ag ag/async file/new<CR>
-nnoremap          [Space]F :Unite -buffer-name=ag ag/async:
+nnoremap <silent> [Space]f :Unite -no-restore -resume -input= -buffer-name=files ag/async file/new<CR>
 
 " Shougo/tabpagebuffer.vim
 nnoremap <silent> [Space]B :Unite -buffer-name=buffers buffer_tab<CR>
@@ -829,17 +829,16 @@ nnoremap <silent> [Space]B :Unite -buffer-name=buffers buffer_tab<CR>
 nnoremap <silent> [Space]r :Unite -buffer-name=mru neomru/file<CR>
 nnoremap <silent> [Space]d :Unite -buffer-name=dirs -default-action=cd neomru/directory directory_rec/async<CR>
 
+" Shougo/unite-outline
+nnoremap <silent> [Space]o :Unite -buffer-name=outline outline<CR>
+
 " tsukkee/unite-tag
 let g:unite_source_tag_max_fname_length = 70
 
+nnoremap <silent> [Space]O :Unite -buffer-name=outline tag/include<CR>
+nnoremap <silent> [Space]\ :Unite -no-restore -resume -input= -buffer-name=tags tag<CR>
+
 nnoremap <silent> <Leader>st :UniteWithCursorWord -no-restore -resume -immediately -sync -buffer-name=tags tag<CR>
-
-nnoremap <silent> [Space]a :Unite -no-restore -resume -input= -buffer-name=tags tag<CR>
-nnoremap <silent> [Space]A :Unite -no-restore -resume -input= -buffer-name=tag-files tag/file<CR>
-nnoremap <silent> [Space]O :Unite -buffer-name=inline-tags tag/include<CR>
-
-" Shougo/unite-outline
-nnoremap <silent> [Space]o :Unite -buffer-name=outline outline<CR>
 
 " Shougo/neoyank.vim
 nnoremap <silent> [Space]y :Unite -buffer-name=yanks history/yank<CR>
