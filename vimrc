@@ -1671,8 +1671,8 @@ nmap <Leader>sD <Plug>ZVKeyDocset
 nnoremap <Leader>se :Docset<Space>
 
 " chrisbra/unicode.vim
-nmap <Leader>K <Plug>(MakeDigraph)
-vmap <Leader>K <Plug>(MakeDigraph)
+nmap <Leader>ud <Plug>(MakeDigraph)
+vmap <Leader>ud <Plug>(MakeDigraph)
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'

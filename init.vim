@@ -185,7 +185,6 @@ Plug 'rhysd/vim-textobj-anyblock'             " b
 Plug 'thinca/vim-textobj-between'             " f{char}, remapped to n{char}
 Plug 'sgur/vim-textobj-parameter'             " ,
 Plug 'whatyouhide/vim-textobj-xmlattr'        " x
-" Plug 'tek/vim-textobj-ruby'                   " r: block, f: function, c: class/module, n: name
 Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
 Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y
 Plug 'kana/vim-textobj-function'
@@ -1625,8 +1624,8 @@ nmap <Leader>sD <Plug>ZVKeyDocset
 nnoremap <Leader>se :Docset<Space>
 
 " chrisbra/unicode.vim
-nmap <Leader>K <Plug>(MakeDigraph)
-vmap <Leader>K <Plug>(MakeDigraph)
+nmap <Leader>ud <Plug>(MakeDigraph)
+vmap <Leader>ud <Plug>(MakeDigraph)
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
