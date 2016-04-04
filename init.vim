@@ -1096,11 +1096,11 @@ nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
 nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
-xmap     <silent> <Leader>ss <Plug>GrepperOperator
-nnoremap <silent> <Leader>sS :Grepper<CR>
+xmap     <silent> <Leader>ss <Plug>(GrepperOperator)
+nnoremap <silent> <Leader>S  :Grepper<CR>
 
-nnoremap <silent> <Leader>sl :echo 'Searching...'<CR>:Grepper -noquickfix -switch -cword -noprompt<CR>
-nnoremap <silent> <Leader>sL :Grepper -noquickfix -switch<CR>
+nnoremap <silent> <Leader>sg :echo 'Searching...'<CR>:Grepper -noquickfix -switch -cword -noprompt<CR>
+nnoremap <silent> <Leader>G  :Grepper -noquickfix -switch<CR>
 
 " thinca/vim-textobj-between
 let g:textobj_between_no_default_key_mappings = 1
@@ -1145,10 +1145,10 @@ nmap <Leader>sw ysiw
 nmap <Leader>sW ysiW
 
 " tpope/vim-abolish
-nnoremap <Leader>A :%Abolish
-xnoremap <Leader>A :Abolish
-nnoremap <Leader>S :%Subvert
-xnoremap <Leader>S :Subvert
+nnoremap <Leader>ab :%Abolish
+xnoremap <Leader>ab :Abolish
+nnoremap <Leader>ar :%Subvert
+xnoremap <Leader>ar :Subvert
 
 " jiangmiao/auto-pairs
 let g:AutoPairsFlyMode            = 0
@@ -1207,7 +1207,7 @@ function! s:ToggleBarAlign() abort
     endif
 endfunction
 
-nnoremap <silent> <Leader>ab :ToggleBarAlign<CR>
+nnoremap <silent> <Leader>al :ToggleBarAlign<CR>
 
 " terryma/vim-expand-region
 " Default settings
