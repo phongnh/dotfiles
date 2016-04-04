@@ -426,11 +426,8 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
 endif
 
 " Map leader
-let g:mapleader      = ','
+let g:mapleader      = ' '
 let g:maplocalleader = '\'
-
-" Retain original behavior
-nnoremap <Leader><Leader> ,
 
 " Disable arrows
 nnoremap <Left>  <Nop>
@@ -575,12 +572,6 @@ inoremap <silent> <C-V> <C-G>u<C-O>"+gP
 
 " Redraw
 nnoremap <silent> <LocalLeader><LocalLeader> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-
-" <Space>: Other useful commands
-nnoremap [Space] <Nop>
-xnoremap [Space] <Nop>
-nmap     <Space> [Space]
-xmap     <Space> [Space]
 
 " cscope settings
 if has('cscope')
@@ -788,70 +779,72 @@ endfunction
 
 autocmd MyAutoCmd FileType unite call s:my_unite_settings()
 
-nnoremap <silent> [Space]- :UniteClose<CR>
+nnoremap <silent> <Leader>- :UniteClose<CR>
 
-nnoremap <silent> [Space], :Unite -buffer-name=sources source<CR>
+nnoremap <silent> <Leader>, :Unite -buffer-name=sources source<CR>
 
-nnoremap <silent> [Space]<Space> :Unite -buffer-name=mixed buffer bookmark neomru/file file_rec/async<CR>
+nnoremap <silent> <Leader><Leader> :Unite -buffer-name=mixed buffer bookmark neomru/file file_rec/async<CR>
 
-nnoremap <silent> [Space]e :Unite -no-restore -resume -input= -buffer-name=git file_rec/git:--cached:--others:--exclude-standard file/new<CR>
+nnoremap <silent> <Leader>e :Unite -no-restore -resume -input= -buffer-name=git file_rec/git:--cached:--others:--exclude-standard file/new<CR>
 
-nnoremap <silent> [Space]E :Unite -no-restore -resume -input= -buffer-name=explorer file_rec/async file/new<CR>
+nnoremap <silent> <Leader>E :Unite -no-restore -resume -input= -buffer-name=explorer file_rec/async file/new<CR>
 
-nnoremap          [Space]F :Unite -buffer-name=files-in-folder file_rec/async:
+nnoremap          <Leader>F :Unite -buffer-name=files-in-folder file_rec/async:
 
-nnoremap <silent> [Space]c :Unite -buffer-name=files-in-folder file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
-nnoremap <silent> [Space]C :Unite -buffer-name=files-in-folder file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
+nnoremap <silent> <Leader>c :Unite -buffer-name=files-in-folder file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
+nnoremap <silent> <Leader>C :Unite -buffer-name=files-in-folder file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
 
-nnoremap <silent> [Space]b :Unite -buffer-name=buffers buffer<CR>
-nnoremap <silent> [Space]t :Unite -buffer-name=tabs tab<CR>
+nnoremap <silent> <Leader>b :Unite -buffer-name=buffers buffer<CR>
+nnoremap <silent> <Leader>t :Unite -buffer-name=tabs tab<CR>
 
-nnoremap <silent> [Space]l :Unite -buffer-name=lines line<CR>
-nnoremap <silent> [Space]L :Unite -buffer-name=lines line:buffers<CR>
+nnoremap <silent> <Leader>l :Unite -buffer-name=lines line<CR>
+nnoremap <silent> <Leader>L :Unite -buffer-name=lines line:buffers<CR>
 
-nnoremap <silent> [Space]j :Unite -buffer-name=jumps jump<CR>
+nnoremap <silent> <Leader>j :Unite -buffer-name=jumps jump<CR>
+nnoremap <silent> <Leader>J :Unite -buffer-name=jumps jump<CR>
 
-nnoremap <silent> [Space]m :Unite -buffer-name=mappings mapping<CR>
-nnoremap <silent> [Space]; :Unite -buffer-name=commands command<CR>
-nnoremap <silent> [Space]i :Unite -buffer-name=register register<CR>
-nnoremap <silent> [Space]k :Unite -buffer-name=bookmarks bookmark<CR>
-nnoremap          [Space]K :UniteBookmarkAdd<Space>
+nnoremap <silent> <Leader>m :Unite -buffer-name=mappings mapping<CR>
+nnoremap <silent> <Leader>; :Unite -buffer-name=commands command<CR>
+nnoremap <silent> <Leader>i :Unite -buffer-name=register register<CR>
+nnoremap <silent> <Leader>k :Unite -buffer-name=bookmarks bookmark<CR>
+nnoremap          <Leader>K :UniteBookmarkAdd<Space>
 
 " phongnh/unite-ag.vim
 let g:unite_source_ag_min_cache_files = 1000
 
-nnoremap <silent> [Space]f :Unite -no-restore -resume -input= -buffer-name=files ag/async file/new<CR>
+nnoremap <silent> <Leader>f :Unite -no-restore -resume -input= -buffer-name=files ag/async file/new<CR>
 
 " Shougo/tabpagebuffer.vim
-nnoremap <silent> [Space]B :Unite -buffer-name=buffers buffer_tab<CR>
+nnoremap <silent> <Leader>B :Unite -buffer-name=buffers buffer_tab<CR>
 
 " Shougo/neomru.vim
-nnoremap <silent> [Space]r :Unite -buffer-name=mru neomru/file<CR>
-nnoremap <silent> [Space]d :Unite -buffer-name=dirs -default-action=cd neomru/directory directory_rec/async<CR>
+nnoremap <silent> <Leader>r :Unite -buffer-name=mru neomru/file<CR>
+nnoremap <silent> <Leader>R :Unite -buffer-name=mru neomru/file<CR>
+nnoremap <silent> <Leader>d :Unite -buffer-name=dirs -default-action=cd neomru/directory directory_rec/async<CR>
 
 " Shougo/unite-outline
-nnoremap <silent> [Space]o :Unite -buffer-name=outline outline<CR>
+nnoremap <silent> <Leader>o :Unite -buffer-name=outline outline<CR>
 
 " tsukkee/unite-tag
 let g:unite_source_tag_max_fname_length = 70
 
-nnoremap <silent> [Space]O :Unite -buffer-name=outline tag/include<CR>
-nnoremap <silent> [Space]\ :Unite -no-restore -resume -input= -buffer-name=tags tag<CR>
+nnoremap <silent> <Leader>O :Unite -buffer-name=outline tag/include<CR>
+nnoremap <silent> <Leader>\ :Unite -no-restore -resume -input= -buffer-name=tags tag<CR>
 
 nnoremap <silent> <Leader>st :UniteWithCursorWord -no-restore -resume -immediately -sync -buffer-name=tags tag<CR>
 
 " Shougo/neoyank.vim
-nnoremap <silent> [Space]y :Unite -buffer-name=yanks history/yank<CR>
+nnoremap <silent> <Leader>y :Unite -buffer-name=yanks history/yank<CR>
 
 " osyo-manga/unite-quickfix
-nnoremap <silent> [Space]q :Unite -resume -buffer-name=quickfix quickfix<CR>
-nnoremap <silent> [Space]Q :Unite -resume -buffer-name=location-list location_list<CR>
-nnoremap <silent> [Space]] :UniteNext<CR>
-nnoremap <silent> [Space][ :UnitePrevious<CR>
+nnoremap <silent> <Leader>q :Unite -resume -buffer-name=quickfix quickfix<CR>
+nnoremap <silent> <Leader>Q :Unite -resume -buffer-name=location-list location_list<CR>
+nnoremap <silent> <Leader>] :UniteNext<CR>
+nnoremap <silent> <Leader>[ :UnitePrevious<CR>
 
 " thinca/vim-unite-history
-nnoremap <silent> [Space]: :Unite -buffer-name=command-history history/command<CR>
-nnoremap <silent> [Space]/ :Unite -buffer-name=search-history history/search<CR>
+nnoremap <silent> <Leader>: :Unite -buffer-name=command-history history/command<CR>
+nnoremap <silent> <Leader>/ :Unite -buffer-name=search-history history/search<CR>
 
 " junegunn/fzf
 let g:fzf_layout = { 'down': '~30%' }
@@ -1418,7 +1411,7 @@ xmap <C-J> <Plug>(neosnippet_expand_target)
 smap <Tab> <Plug>(neosnippet_jump)
 
 if has_key(g:plugs, 'unite.vim')
-    nnoremap <silent> [Space]I :Unite -buffer-name=snippets neosnippet<CR>
+    nnoremap <silent> <Leader>I :Unite -buffer-name=snippets neosnippet<CR>
 endif
 
 " tpope/vim-fugitive

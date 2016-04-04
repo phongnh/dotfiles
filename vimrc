@@ -438,11 +438,8 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
 endif
 
 " Map leader
-let g:mapleader      = ','
+let g:mapleader      = ' '
 let g:maplocalleader = '\'
-
-" Retain original behavior
-nnoremap <Leader><Leader> ,
 
 " Disable arrows
 nnoremap <Left>  <Nop>
@@ -587,12 +584,6 @@ inoremap <silent> <C-V> <C-G>u<C-O>"+gP
 
 " Redraw
 nnoremap <silent> <LocalLeader><LocalLeader> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-
-" <Space>: Other useful commands
-nnoremap [Space] <Nop>
-xnoremap [Space] <Nop>
-nmap     <Space> [Space]
-xmap     <Space> [Space]
 
 " Meta workround
 if !has('gui_running') && !has('nvim')
@@ -767,70 +758,71 @@ let g:ctrlp_user_command = {
             \ 'fallback': s:ctrlp_fallback
             \ }
 
-nnoremap <silent> [Space]- :CtrlPClearAllCaches<CR>
+nnoremap <silent> <Leader>- :CtrlPClearAllCaches<CR>
 
-nnoremap <silent> [Space]<Space> :CtrlPMixed<CR>
+nnoremap <silent> <Leader><Leader> :CtrlPMixed<CR>
 
-nnoremap <silent> [Space]d :CtrlPDir<CR>
+nnoremap <silent> <Leader>d :CtrlPDir<CR>
 
-nnoremap <silent> [Space]f :CtrlP<CR>
-nnoremap          [Space]F :CtrlP<Space>
+nnoremap <silent> <Leader>f :CtrlP<CR>
+nnoremap          <Leader>F :CtrlP<Space>
 
-nnoremap <silent> [Space]e :CtrlPRoot<CR>
+nnoremap <silent> <Leader>e :CtrlPRoot<CR>
 
-nnoremap <silent> [Space]c :CtrlPCurFile<CR>
-nnoremap <silent> [Space]C :CtrlP <C-R>=expand("%:h:h")<CR><CR>
+nnoremap <silent> <Leader>c :CtrlPCurFile<CR>
+nnoremap <silent> <Leader>C :CtrlP <C-R>=expand("%:h:h")<CR><CR>
 
-nnoremap <silent> [Space]b :CtrlPBuffer<CR>
+nnoremap <silent> <Leader>b :CtrlPBuffer<CR>
 
-nnoremap <silent> [Space]l :CtrlPLine %<CR>
-nnoremap <silent> [Space]L :CtrlPLine<CR>
+nnoremap <silent> <Leader>l :CtrlPLine %<CR>
+nnoremap <silent> <Leader>L :CtrlPLine<CR>
 
-nnoremap <silent> [Space]k :CtrlPBookmarkDir<CR>
-nnoremap          [Space]K :CtrlPBookmarkDirAdd!<Space>
+nnoremap <silent> <Leader>k :CtrlPBookmarkDir<CR>
+nnoremap          <Leader>K :CtrlPBookmarkDirAdd!<Space>
 
-nnoremap <silent> [Space]r :CtrlPMRUFiles<CR>
+nnoremap <silent> <Leader>r :CtrlPMRUFiles<CR>
+nnoremap <silent> <Leader>R :CtrlPMRUFiles<CR>
 
-nnoremap <silent> [Space]a :CtrlPBufTag<CR>
-nnoremap <silent> [Space]A :CtrlPBufTagAll<CR>
+nnoremap <silent> <Leader>[ :CtrlPBufTag<CR>
+nnoremap <silent> <Leader>] :CtrlPBufTagAll<CR>
 
-nnoremap <silent> [Space]\ :CtrlPTag<CR>
+nnoremap <silent> <Leader>\ :CtrlPTag<CR>
 
-nnoremap <silent> [Space]q :CtrlPQuickfix<CR>
+nnoremap <silent> <Leader>q :CtrlPQuickfix<CR>
 
 " phongnh/ctrlp-finder
-nnoremap <silent> [Space]E :CtrlPFinder<CR>
+nnoremap <silent> <Leader>E :CtrlPFinder<CR>
 
 " h14i/vim-ctrlp-buftab
-nnoremap <silent> [Space]B :CtrlPBufTab<CR>
+nnoremap <silent> <Leader>B :CtrlPBufTab<CR>
 
 " DavidEGx/ctrlp-smarttabs
-nnoremap <silent> [Space]t :CtrlPSmartTabs<CR>
+nnoremap <silent> <Leader>t :CtrlPSmartTabs<CR>
 
 " kaneshin/ctrlp-tabbed
-nnoremap <silent> [Space]T :CtrlPTabbed<CR>
+nnoremap <silent> <Leader>T :CtrlPTabbed<CR>
 
 " fisadev/vim-ctrlp-cmdpalette
-nnoremap <silent> [Space]; :CtrlPCmdPalette<CR>
+nnoremap <silent> <Leader>; :CtrlPCmdPalette<CR>
 
 " ompugao/ctrlp-history
-nnoremap <silent> [Space]: :CtrlPCmdHistory<CR>
-nnoremap <silent> [Space]/ :CtrlPSearchHistory<CR>
+nnoremap <silent> <Leader>: :CtrlPCmdHistory<CR>
+nnoremap <silent> <Leader>/ :CtrlPSearchHistory<CR>
 
 " mattn/ctrlp-register
-nnoremap <silent> [Space]i :CtrlPRegister<CR>
+nnoremap <silent> <Leader>i :CtrlPRegister<CR>
 
 " tacahiroy/ctrlp-funky
-nnoremap <silent> [Space]o :CtrlPFunky<CR>
-nnoremap <silent> [Space]O :CtrlPFunkyMulti<CR>
+nnoremap <silent> <Leader>o :CtrlPFunky<CR>
+nnoremap <silent> <Leader>O :CtrlPFunkyMulti<CR>
 
 " slimane/ctrlp-locationlist
-nnoremap <silent> [Space]Q :CtrlPLocationlist<CR>
+nnoremap <silent> <Leader>Q :CtrlPLocationlist<CR>
 
 " LeafCage/yankround.vim
 let g:yankround_max_history = 100
 
-nnoremap <silent> [Space]y :CtrlPYankRound<CR>
+nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
 
 " regedarek/ZoomWin
 nmap <silent> <F2> :ZoomWin<CR>
@@ -1485,7 +1477,7 @@ xmap <C-J> <Plug>(neosnippet_expand_target)
 smap <Tab> <Plug>(neosnippet_jump)
 
 if has_key(g:plugs, 'unite.vim')
-    nnoremap <silent> [Space]I :Unite -buffer-name=snippets neosnippet<CR>
+    nnoremap <silent> <Leader>I :Unite -buffer-name=snippets neosnippet<CR>
 endif
 
 " tpope/vim-fugitive
