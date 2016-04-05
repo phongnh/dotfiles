@@ -1174,6 +1174,11 @@ xnoremap <silent> <Leader>ah     :Tabularize /=><CR>
 nnoremap <silent> <Leader>aj     :Tabularize /:\zs<CR>
 xnoremap <silent> <Leader>aj     :Tabularize /:\zs<CR>
 
+command! -nargs=1 -range AlignFirst execute <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+
+nnoremap <Leader>A :AlignFirst<Space>
+xnoremap <Leader>A :AlignFirst<Space>
+
 autocmd MyAutoCmd FileType cucumber inoremap <silent> <buffer> <Bar> <Bar><Esc>:call <SID>BarAlign()<CR>a
 
 function! s:BarAlign() abort
