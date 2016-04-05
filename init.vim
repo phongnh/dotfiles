@@ -72,6 +72,8 @@ Plug 'tpope/vim-rsi'
 
 " lean & mean status/tabline for vim that's light as air
 Plug 'vim-airline/vim-airline'
+" A collection of themes for vim-airline
+Plug 'vim-airline/vim-airline-themes'
 
 " Asynchronous build and test dispatcher
 Plug 'tpope/vim-dispatch'
@@ -663,8 +665,6 @@ let g:airline#extensions#tabline#enabled        = 1
 let g:airline#extensions#tabline#tab_nr_type    = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnamemod       = ':t'
-
-let g:airline_theme = 'dark'
 
 let g:airline_powerline_fonts = 0
 
