@@ -145,6 +145,9 @@ Plug 'vim-scripts/matchit.zip'
 " My vim functions for search and substitue
 Plug 'phongnh/vim-search-helpers'
 
+" The missing motion for Vim
+Plug 'justinmk/vim-sneak'
+
 " Improved incremental searching for Vim
 Plug 'haya14busa/incsearch.vim'
 " Vim search status
@@ -1012,6 +1015,9 @@ nnoremap <silent> gl :ToggleBufExplorer<CR>
 
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
+
+" justinmk/vim-sneak
+let g:sneak#streak = 1
 
 " haya14busa/incsearch.vim
 " let g:incsearch#magic                             = '\v'
