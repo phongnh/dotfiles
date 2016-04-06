@@ -102,9 +102,6 @@ Plug 'regedarek/ZoomWin'
 " Distraction-free writing
 Plug 'junegunn/goyo.vim'
 
-" Hyperfocus-writing
-Plug 'junegunn/limelight.vim'
-
 if has('conceal')
     " A vim plugin to display the indention levels with thin vertical lines
     Plug 'Yggdroot/indentLine'
@@ -897,16 +894,6 @@ function! s:custom_goyo_enter() abort
     endif
     set scrolloff=999
     set showmode
-
-    if exists(':Limelight') == 2
-        execute 'Limelight'
-    endif
-
-    if exists(':NeoCompleteLock') == 2
-        silent! NeoCompleteLock
-    elseif exists(':NeoComplCacheLock') == 2
-        silent! NeoComplCacheLock
-    endif
 endfunction
 
 function! s:custom_goyo_leave() abort
@@ -917,16 +904,6 @@ function! s:custom_goyo_leave() abort
     for [k, v] in items(s:goyo_settings)
         execute printf('let &%s = %s', k, string(v))
     endfor
-
-    if exists(':Limelight') == 2 || exists(':Limelight!')
-        execute 'Limelight!'
-    endif
-
-    if exists(':NeoCompleteUnlock') == 2
-        silent! NeoCompleteUnlock
-    elseif exists(':NeoComplCacheUnlock') == 2
-        silent! NeoComplCacheUnlock
-    endif
 endfunction
 
 " junegunn/limelight.vim
