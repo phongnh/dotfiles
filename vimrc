@@ -274,6 +274,11 @@ Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 " Others
 Plug 'vim-scripts/fish-syntax'
 
+if has('python')
+    " Provide easy code formatting in Vim by integrating existing code formatters.
+    Plug 'Chiel92/vim-autoformat'
+endif
+
 " Zeal for Vim
 Plug 'KabbAmine/zeavim.vim'
 
@@ -1635,6 +1640,18 @@ function! s:VimGoSetup() abort
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
+
+if has_key(g:plugs, 'vim-autoformat')
+    " Chiel92/vim-autoformat
+    let g:autoformat_autoindent  = 0
+    let g:autoformat_verbosemode = 0
+
+    let g:formatdef_autopep8 = "'autopep8 - --range ' . a:firstline . ' ' . a:lastline"
+    let g:formatters_python  = ['autopep8']
+
+    nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
+    nnoremap <Leader>aF :Autoformat<Space>
+endif
 
 " KabbAmine/zeavim.vim
 let g:zv_disable_mapping = 1
