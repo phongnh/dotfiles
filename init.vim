@@ -886,6 +886,7 @@ autocmd! User GoyoLeave nested call <SID>custom_goyo_leave()
 function! s:custom_goyo_enter() abort
     let s:goyo_settings = {
                 \ 'showmode':    &showmode,
+                \ 'showtabline': &showtabline,
                 \ 'linespace':   &linespace,
                 \ 'scrolloff':   &scrolloff,
                 \ }
