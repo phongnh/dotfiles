@@ -456,7 +456,7 @@ nnoremap <Right> <Nop>
 
 " F1: Help
 nnoremap <F1> :help<Space>
-inoremap <F1> <Esc>:help<Space>
+imap <F1> <Esc><F1>
 
 " CTRL-Space: Show history
 cnoremap <C-@> <C-F>
@@ -553,8 +553,8 @@ nmap <silent> <C-S> :update<CR>
 vmap <C-S> <Esc><C-S>gv
 imap <C-S> <Esc><C-S>
 
-" Quit Vim
-nnoremap <silent> <Leader>Z :confirm qall<CR>
+" Exit Vim.  Bring up a prompt when some buffers have been changed
+nnoremap <silent> ZC :confirm qall<CR>
 
 " Use <C-\><C-\> to do <C-]> but open it in a new split
 nmap <C-\><C-\> <C-W>v<C-]>zvzz
@@ -830,9 +830,10 @@ let g:yankround_max_history = 100
 nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
 
 " regedarek/ZoomWin
-nmap <silent> <F2> :ZoomWin<CR>
+nnoremap <silent> <F2> :ZoomWin<CR>
 vmap <F2> <Esc><F2>gv
 imap <F2> <Esc><F2>a
+nmap <silent> <Leader>z <F2>
 
 " junegunn/goyo.vim
 let g:goyo_width  = '80%'
@@ -840,7 +841,8 @@ let g:goyo_height = '96%'
 let g:goyo_linenr = 0
 
 nnoremap <silent> <F3> :Goyo<CR>
-inoremap <silent> <F3> <Esc>:Goyo<CR>
+imap <silent> <F3> <Esc><F3>
+nmap <silent> <Leader><CR> <F3>
 
 autocmd! User GoyoEnter nested call <SID>custom_goyo_enter()
 autocmd! User GoyoLeave nested call <SID>custom_goyo_leave()
@@ -885,7 +887,8 @@ if has_key(g:plugs, 'indentLine')
     " let g:indentLine_color_gui            = '#A4E57E'
 
     nnoremap <silent> <F4> :IndentLinesToggle<CR>
-    inoremap <silent> <F4> <Esc>:IndentLinesToggle<CR>
+    imap <silent> <F4> <Esc><F4>
+    nmap <silent> <Leader>ui <F4>
 else
     " nathanaelkane/vim-indent-guides
     let g:indent_guides_start_level           = 1
@@ -894,7 +897,8 @@ else
     let g:indent_guides_color_change_percent  = 3
 
     nnoremap <silent> <F4> :IndentGuidesToggle<CR>
-    inoremap <silent> <F4> <Esc>:IndentGuidesToggle<CR>
+    imap <silent> <F4> <Esc><F4>
+    nmap <silent> <Leader>ui <F4>
 endif
 
 " mhinz/vim-startify
@@ -915,7 +919,8 @@ let g:startify_show_sessions      = 1
 let g:startify_custom_header      = [] " Disable random quotes header
 
 nnoremap <silent> <F5> :Startify<CR>
-inoremap <silent> <F5> <Esc>:Startify<CR>
+imap <silent> <F5> <Esc><F5>
+nmap <silent> <Leader>us <F5>
 
 augroup MyAutoCmd
     autocmd FileType startify setlocal nofoldenable foldcolumn=0
@@ -935,7 +940,9 @@ let g:syntastic_warning_symbol           = '!!'
 let g:syntastic_style_warning_symbol     = 'S!'
 
 nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
-inoremap <silent> <F6> <Esc>:SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
+imap <silent> <F6> <Esc><F6>
+nmap <silent> <Leader>uc <F6>
+nnoremap <silent> <Leader>uC :SyntasticCheck<Space>
 
 if has('python')
     " sjl/gundo.vim
@@ -946,14 +953,16 @@ if has('python')
     let g:gundo_auto_preview   = 0
 
     nnoremap <silent> <F7> :GundoToggle<CR>
-    inoremap <silent> <F7> <Esc>:GundoToggle<CR>
+    imap <silent> <F7> <Esc><F7>
+    nmap <silent> <Leader>uu <F7>
 else
     " mbbill/undotree
     let g:undotree_WindowLayout       = 'botright'
     let g:undotree_SetFocusWhenToggle = 1
 
     nnoremap <silent> <F7> :UndotreeToggle<CR>
-    inoremap <silent> <F7> <Esc>:UndotreeToggle<CR>
+    imap <silent> <F7> <Esc><F7>
+    nmap <silent> <Leader>uu <F7>
 endif
 
 if has_key(g:plugs, 'tagbar')
@@ -964,7 +973,8 @@ if has_key(g:plugs, 'tagbar')
     let g:tagbar_iconchars = ['▸', '▾']
 
     nnoremap <silent> <F8> :TagbarToggle<CR>
-    inoremap <silent> <F8> <Esc>:TagbarToggle<CR>
+    imap <silent> <F8> <Esc><F8>
+    nmap <silent> <Leader>ut <F8>
 endif
 
 " scrooloose/nerdtree
@@ -975,10 +985,13 @@ let g:NERDTreeQuitOnOpen    = 0
 let g:NERDTreeChDirMode     = 0
 let g:NERDTreeShowBookmarks = 1
 
-nnoremap <silent> <F9>  :NERDTreeToggle<CR>
-inoremap <silent> <F9>  <Esc>:NERDTreeToggle<CR>
+nnoremap <silent> <F9> :NERDTreeToggle<CR>
+imap <silent> <F9> <Esc><F9>
+nmap <silent> <Leader>uo <F9>
+
 nnoremap <silent> <F10> :NERDTreeFind<CR>
-inoremap <silent> <F10> <Esc>:NERDTreeFind<CR>
+imap <silent> <F10> <Esc><F10>
+nmap <silent> <Leader>uf <F10>
 
 " jlanzarotta/bufexplorer
 let g:bufExplorerDisableDefaultKeyMapping = 1
