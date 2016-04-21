@@ -914,15 +914,6 @@ function! s:custom_goyo_leave() abort
     endfor
 endfunction
 
-" junegunn/limelight.vim
-let g:limelight_conceal_ctermfg     = 'gray'
-let g:limelight_conceal_ctermfg     = 240
-let g:limelight_conceal_guifg       = 'DarkGray'
-let g:limelight_conceal_guifg       = '#777777'
-let g:limelight_default_coefficient = 0.5
-let g:limelight_paragraph_span      = 1
-let g:limelight_priority            = -1
-
 if has_key(g:plugs, 'indentLine')
     " Yggdroot/indentLine
     let g:indentLine_enabled              = 0
