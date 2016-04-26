@@ -1338,6 +1338,8 @@ let g:neocomplcache_force_omni_patterns.go  = '\h\w*\.\?'
 " let g:neocomplcache_omni_patterns.ruby      = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.ruby      = '[^. *\t]\.\w*\|\h\w*::\w*'
 
+let g:neocomplcache_omni_functions.go = 'go#complete#Complete'
+
 let g:neocomplcache_vim_completefuncs = {
             \ 'Unite'    : 'unite#complete_source',
             \ 'VimShell' : 'vimshell#complete',
