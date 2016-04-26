@@ -1634,6 +1634,8 @@ function! s:VimGoSetup() abort
     endif
     nmap <LocalLeader>r <Plug>(go-run)
     nmap <LocalLeader>b <Plug>(go-build)
+    nmap <LocalLeader>g <Plug>(go-generate)
+    nmap <LocalLeader>i <Plug>(go-install)
     nmap <LocalLeader>t <Plug>(go-test)
     nmap <LocalLeader>F <Plug>(go-test-func)
     nmap <LocalLeader>T <Plug>(go-test-compile)
@@ -1645,7 +1647,7 @@ function! s:VimGoSetup() abort
     nmap <LocalLeader>e <Plug>(go-rename)
 
     nmap <LocalLeader>n <Plug>(go-info)
-    nmap <LocalLeader>i <Plug>(go-implements)
+    nmap <LocalLeader>s <Plug>(go-implements)
 
     nmap <LocalLeader>d <Plug>(go-doc-vertical)
     nmap <LocalLeader>f <Plug>(go-def-vertical)
