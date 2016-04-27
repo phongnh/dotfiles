@@ -1638,6 +1638,7 @@ function! s:VimGoSetup() abort
     nmap <LocalLeader>b <Plug>(go-build)
     nmap <LocalLeader>g <Plug>(go-generate)
     nmap <LocalLeader>i <Plug>(go-install)
+    nmap <LocalLeader>I <Plug>(go-import)
     nmap <LocalLeader>t <Plug>(go-test)
     nmap <LocalLeader>F <Plug>(go-test-func)
     nmap <LocalLeader>T <Plug>(go-test-compile)
