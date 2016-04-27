@@ -1690,6 +1690,7 @@ vmap <Leader>ud <Plug>(MakeDigraph)
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
+let g:gruvbox_contrast_light = 'hard'
 
 " junegunn/seoul256.vim
 let g:seoul256_background = 235
