@@ -279,9 +279,6 @@ Plug 'fatih/vim-go'
 Plug 'rhysd/vim-go-impl'    " go get github.com/josharian/impl
 Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 
-" Others
-Plug 'vim-scripts/fish-syntax'
-
 if has('python')
     " Provide easy code formatting in Vim by integrating existing code formatters.
     Plug 'Chiel92/vim-autoformat'
