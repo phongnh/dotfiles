@@ -1472,10 +1472,6 @@ xmap <C-J> <Plug>(neosnippet_expand_target)
 
 smap <Tab> <Plug>(neosnippet_jump)
 
-if has_key(g:plugs, 'unite.vim')
-    nnoremap <silent> <Leader>I :Unite -buffer-name=snippets neosnippet<CR>
-endif
-
 " tpope/vim-fugitive
 nnoremap          <Leader>gi :Git add -p %<CR><CR>
 nnoremap          <Leader>ga :Git add -p<CR><CR>

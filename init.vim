@@ -847,6 +847,11 @@ nnoremap <silent> <Leader>[ :UnitePrevious<CR>
 nnoremap <silent> <Leader>: :Unite -buffer-name=command-history history/command<CR>
 nnoremap <silent> <Leader>/ :Unite -buffer-name=search-history history/search<CR>
 
+if has_key(g:plugs, 'neosnippet.vim')
+    " Shougo/neosnippet.vim
+    nnoremap <silent> <Leader>I :Unite -buffer-name=snippets neosnippet<CR>
+endif
+
 " junegunn/fzf
 let g:fzf_layout = { 'down': '~30%' }
 
@@ -1402,10 +1407,6 @@ smap <C-J> <Plug>(neosnippet_jump_or_expand)
 xmap <C-J> <Plug>(neosnippet_expand_target)
 
 smap <Tab> <Plug>(neosnippet_jump)
-
-if has_key(g:plugs, 'unite.vim')
-    nnoremap <silent> <Leader>I :Unite -buffer-name=snippets neosnippet<CR>
-endif
 
 " tpope/vim-fugitive
 nnoremap          <Leader>gi :Git add -p %<CR><CR>
