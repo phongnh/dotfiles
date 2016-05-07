@@ -1651,7 +1651,15 @@ function! s:VimGoSetup() abort
     nmap <LocalLeader>d <Plug>(go-doc-vertical)
     nmap <LocalLeader>f <Plug>(go-def-vertical)
 
-    nmap <LocalLeader>l <Plug>(go-metalinter)
+    nmap     <LocalLeader>m <Plug>(go-metalinter)
+    nnoremap <LocalLeader>M :GoMetaLinter<Space>
+    nnoremap <LocalLeader>l :GoLint<Space>
+    nnoremap <LocalLeader>E :GoErrCheck<Space>
+
+    nnoremap <LocalLeader>G :GoGuruTags<Space>
+
+    nnoremap <LocalLeader>] :GoImport<Space>
+    nnoremap <LocalLeader>[ :GoDrop<Space>
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
