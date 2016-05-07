@@ -1259,6 +1259,11 @@ call expand_region#custom_text_objects('html', {
             \ 'at' : 1,
             \ })
 
+call expand_region#custom_text_objects('xml', {
+            \ 'it' : 1,
+            \ 'at' : 1,
+            \ })
+
 " terryma/vim-multiple-cursors
 xnoremap <F6> :MultipleCursorsFind<Space>
 
