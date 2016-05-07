@@ -536,6 +536,7 @@ nnoremap <silent> gb :buffer#<CR>
 nmap <silent> <C-S> :update<CR>
 vmap <C-S> <Esc><C-S>gv
 imap <C-S> <Esc><C-S>
+nmap <Leader>w <C-S>
 
 " Exit Vim.  Bring up a prompt when some buffers have been changed
 nnoremap <silent> ZC :confirm qall<CR>
