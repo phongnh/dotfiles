@@ -1275,6 +1275,11 @@ if has_key(g:plugs, 'neocomplete.vim')
     endif
     let g:neocomplete#keyword_patterns._ = '\h\k*(\?'
 
+    " Enable omni completion
+    augroup MyAutoCmd
+        autocmd FileType sql setlocal omnifunc=
+    augroup END
+
     " Enable heavy omni completion
     if !exists('g:neocomplete#sources#omni#input_patterns')
         let g:neocomplete#sources#omni#input_patterns = {}
@@ -1342,7 +1347,9 @@ if has_key(g:plugs, 'neocomplete.vim')
     endfunction
 
     nnoremap <silent> <M-/> :NeoCompleteToggle<CR>
-else
+endif
+
+if has_key(g:plugs, 'neocomplcache.vim')
     " Shougo/neocomplcache.vim
     let g:neocomplcache_enable_at_startup            = 1 " Use neocomplcache
     let g:neocomplcache_enable_smart_case            = 1 " Use smartcase
@@ -1379,8 +1386,8 @@ else
         autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
         autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
         autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-        autocmd FileType c setlocal omnifunc=ccomplete#Complete
         autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+        autocmd FileType sql setlocal omnifunc=
         autocmd Filetype * if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
     augroup END
 
@@ -1453,25 +1460,29 @@ else
     nnoremap <silent> <M-/> :NeoComplCacheToggle<CR>
 endif
 
-" Shougo/neosnippet.vim
-let g:neosnippet#enable_snipmate_compatibility = 1
-let g:neosnippet#enable_complete_done          = 1
-let g:neosnippet#expand_word_boundary          = 1
+if has_key(g:plugs, 'neosnippet.vim')
+    " Shougo/neosnippet.vim
+    let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#enable_complete_done          = 1
+    let g:neosnippet#expand_word_boundary          = 1
 
-let g:neosnippet#scope_aliases = {}
-let g:neosnippet#scope_aliases['ruby'] = 'ruby,rails'
+    let g:neosnippet#scope_aliases = {}
+    let g:neosnippet#scope_aliases['ruby'] = 'ruby,rails'
+    let g:neosnippet#scope_aliases['objc'] = 'objc,c'
+    let g:neosnippet#scope_aliases['objcpp'] = 'objc,c'
 
-imap <silent> <expr> <C-L> neosnippet#expandable_or_jumpable() ?
-            \ "\<Plug>(neosnippet_expand_or_jump)" :
-            \ (pumvisible() ? "\<C-E>" : "\<Plug>(neosnippet_expand_or_jump)")
-smap <C-L> <Plug>(neosnippet_expand_or_jump)
-xmap <C-L> <Plug>(neosnippet_expand_target)
+    imap <silent> <expr> <C-L> neosnippet#expandable_or_jumpable() ?
+                \ "\<Plug>(neosnippet_expand_or_jump)" :
+                \ (pumvisible() ? "\<C-E>" : "\<Plug>(neosnippet_expand_or_jump)")
+    smap <C-L> <Plug>(neosnippet_expand_or_jump)
+    xmap <C-L> <Plug>(neosnippet_expand_target)
 
-imap <C-J> <Plug>(neosnippet_jump_or_expand)
-smap <C-J> <Plug>(neosnippet_jump_or_expand)
-xmap <C-J> <Plug>(neosnippet_expand_target)
+    imap <C-J> <Plug>(neosnippet_jump_or_expand)
+    smap <C-J> <Plug>(neosnippet_jump_or_expand)
+    xmap <C-J> <Plug>(neosnippet_expand_target)
 
-smap <Tab> <Plug>(neosnippet_jump)
+    smap <Tab> <Plug>(neosnippet_jump)
+endif
 
 " tpope/vim-fugitive
 nnoremap          <Leader>gi :Git add -p %<CR><CR>
