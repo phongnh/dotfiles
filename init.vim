@@ -225,6 +225,9 @@ Plug 'junegunn/vim-easy-align'
 " Vim script for text filtering and alignment
 Plug 'godlygeek/tabular'
 
+" Smart selection of the closest text object
+Plug 'gcmt/wildfire.vim'
+
 " Vim plugin that allows you to visually select increasingly larger regions of text using the same key combination.
 Plug 'terryma/vim-expand-region'
 " True Sublime Text style multiple selections for Vim
@@ -1208,28 +1211,36 @@ endfunction
 
 nnoremap <silent> <Leader>al :ToggleBarAlign<CR>
 
+" gcmt/wildfire.vim
+let g:wildfire_objects = ["i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'al', 'ip']
+
+cal wildfire#triggers#Add('<Plug>(wildfire-fuel)', {
+            \ 'html,xml' : ['at', 'it'],
+            \ 'ruby'     : ['ir', 'im', 'am', 'iM', 'aM'],
+            \ 'eruby'    : ['iy', 'ay'],
+            \ 'go'       : ['if', 'af'],
+            \ })
+
+nmap <Leader>+ <Plug>(wildfire-quick-select)
+
 " terryma/vim-expand-region
 " Default settings
 let g:expand_region_text_objects = {
             \ 'iw' : 0,
             \ 'iW' : 0,
-            \ 'i"' : 0,
-            \ 'a"' : 0,
-            \ 'i`' : 0,
-            \ 'a`' : 0,
             \ "i'" : 0,
             \ "a'" : 0,
+            \ 'i"' : 0,
+            \ 'a"' : 0,
             \ }
 
-for s:char in split("(){}[]bB", "\\zs")
-    let g:expand_region_text_objects = extend(g:expand_region_text_objects, { "i".s:char : 1, "a".s:char : 1 })
+for s:char in split(") ] } b B")
+    call extend(g:expand_region_text_objects, { "i".s:char : 1, "a".s:char : 1 })
 endfor
 
-let g:expand_region_text_objects = extend(g:expand_region_text_objects, {
+call extend(g:expand_region_text_objects, {
             \ 'il' : 0,
             \ 'ip' : 0,
-            \ 'ii' : 0,
-            \ 'ai' : 0,
             \ 'ie' : 0,
             \ })
 
