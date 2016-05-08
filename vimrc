@@ -249,7 +249,6 @@ Plug 'cohama/agit.vim'
 Plug 'mhinz/vim-signify'
 
 " Tmux
-Plug 'christoomey/vim-tmux-navigator'
 if exists("$TMUX")
     Plug 'jebaum/vim-tmuxify'
 endif
@@ -1543,15 +1542,6 @@ let g:signify_update_on_bufenter    = 0
 let g:signify_update_on_focusgained = 0
 
 nnoremap <silent> cog :SignifyToggle<CR>
-
-" christoomey/vim-tmux-navigator
-let g:tmux_navigator_no_mappings = 1
-
-nnoremap <silent> <M-h> :TmuxNavigateLeft<CR>
-nnoremap <silent> <M-j> :TmuxNavigateDown<CR>
-nnoremap <silent> <M-k> :TmuxNavigateUp<CR>
-nnoremap <silent> <M-l> :TmuxNavigateRight<CR>
-nnoremap <silent> <M-\> :TmuxNavigatePrevious<CR>
 
 if has_key(g:plugs, 'vim-tmuxify')
     " jebaum/vim-tmuxify
