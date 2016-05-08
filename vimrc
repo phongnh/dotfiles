@@ -69,6 +69,10 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 " CtrlP
 if has('python')
     Plug 'FelikZ/ctrlp-py-matcher'
+
+    if executable('cmake')
+        Plug 'nixprime/cpsm', { 'do': './install.sh' }
+    endif
 endif
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'phongnh/ctrlp-finder'
@@ -731,6 +735,11 @@ if has_key(g:plugs, 'ctrlp-py-matcher')
     let g:ctrlp_clear_cache_on_exit = 0
     let g:ctrlp_max_files           = 0
     let g:ctrlp_match_func          = { 'match': 'pymatcher#PyMatch' }
+
+    if has_key(g:plugs, 'cpsm') && filereadable(g:plugs['cpsm']['dir'] + 'autoload/cpsm_py.so')
+        " nixprime/cpsm
+        let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
+    endif
 endif
 
 " ctrlpvim/ctrlp.vim
