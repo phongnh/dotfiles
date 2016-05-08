@@ -1211,6 +1211,9 @@ endfunction
 nnoremap <silent> <Leader>al :ToggleBarAlign<CR>
 
 " gcmt/wildfire.vim
+map  <M-l> <Plug>(wildfire-fuel)
+vmap <M-h> <Plug>(wildfire-water)
+
 let g:wildfire_objects = ["i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'al', 'ip']
 
 cal wildfire#triggers#Add('<Plug>(wildfire-fuel)', {
@@ -1220,7 +1223,7 @@ cal wildfire#triggers#Add('<Plug>(wildfire-fuel)', {
             \ 'go'       : ['if', 'af'],
             \ })
 
-nmap <Leader>+ <Plug>(wildfire-quick-select)
+nmap <M-s> <Plug>(wildfire-quick-select)
 
 " terryma/vim-expand-region
 " Default settings
@@ -1274,6 +1277,9 @@ call expand_region#custom_text_objects('xml', {
             \ 'it' : 1,
             \ 'at' : 1,
             \ })
+
+map <M-k> <Plug>(expand_region_expand)
+map <M-j> <Plug>(expand_region_shrink)
 
 " terryma/vim-multiple-cursors
 xnoremap <F6> :MultipleCursorsFind<Space>

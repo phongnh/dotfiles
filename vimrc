@@ -607,12 +607,14 @@ if !has('gui_running') && !has('nvim')
     " Shougo/neocomplete.vim and Shougo/neocomplcache.vim
     execute "set <M-/>=\<Esc>\/"
 
-    " christoomey/vim-tmux-navigator
+    " gcmt/wildfire.vim
     execute "set <M-h>=\<Esc>h"
+    execute "set <M-l>=\<Esc>l"
+    execute "set <M-s>=\<Esc>s"
+
+    " terryma/vim-expand-region
     execute "set <M-j>=\<Esc>j"
     execute "set <M-k>=\<Esc>k"
-    execute "set <M-l>=\<Esc>l"
-    execute "set <M-\\>=\<Esc>\\"
 endif
 
 " cscope settings
@@ -1178,6 +1180,9 @@ endfunction
 nnoremap <silent> <Leader>al :ToggleBarAlign<CR>
 
 " gcmt/wildfire.vim
+map  <M-l> <Plug>(wildfire-fuel)
+vmap <M-h> <Plug>(wildfire-water)
+
 let g:wildfire_objects = ["i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'al', 'ip']
 
 cal wildfire#triggers#Add('<Plug>(wildfire-fuel)', {
@@ -1187,7 +1192,7 @@ cal wildfire#triggers#Add('<Plug>(wildfire-fuel)', {
             \ 'go'       : ['if', 'af'],
             \ })
 
-nmap <Leader>+ <Plug>(wildfire-quick-select)
+nmap <M-s> <Plug>(wildfire-quick-select)
 
 " terryma/vim-expand-region
 " Default settings
@@ -1241,6 +1246,9 @@ call expand_region#custom_text_objects('xml', {
             \ 'it' : 1,
             \ 'at' : 1,
             \ })
+
+map <M-k> <Plug>(expand_region_expand)
+map <M-j> <Plug>(expand_region_shrink)
 
 " terryma/vim-multiple-cursors
 xnoremap <F6> :MultipleCursorsFind<Space>
