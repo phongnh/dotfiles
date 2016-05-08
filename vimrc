@@ -1185,11 +1185,10 @@ endfor
 
 let g:expand_region_text_objects = extend(g:expand_region_text_objects, {
             \ 'il' : 0,
-            \ 'is' : 0,
             \ 'ip' : 0,
-            \ 'ie' : 0,
             \ 'ii' : 0,
             \ 'ai' : 0,
+            \ 'ie' : 0,
             \ })
 
 " Customize it further for ruby
@@ -1198,6 +1197,8 @@ call expand_region#custom_text_objects('ruby', {
             \ 'ar' : 1,
             \ 'im' : 0,
             \ 'am' : 0,
+            \ 'iM' : 1,
+            \ 'aM' : 1,
             \ })
 
 call expand_region#custom_text_objects('eruby', {
