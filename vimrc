@@ -1692,6 +1692,8 @@ function! s:VimGoSetup() abort
 
     nnoremap <LocalLeader>] :GoImport<Space>
     nnoremap <LocalLeader>[ :GoDrop<Space>
+    nnoremap ]<LocalLeader> :GoImport<Space>
+    nnoremap [<LocalLeader> :GoDrop<Space>
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
