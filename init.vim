@@ -49,15 +49,14 @@ if exists('neovim_dot_app')
 endif
 
 " Exit (quit) terminal mode
-tnoremap <M-q> <C-\><C-N>
 tnoremap <C-\><C-\> <C-\><C-N>
 
 " Window Navigation from terminal
-tnoremap <M-h> <C-\><C-N><C-W>h
-tnoremap <M-j> <C-\><C-N><C-W>j
-tnoremap <M-k> <C-\><C-N><C-W>k
-tnoremap <M-l> <C-\><C-N><C-W>l
-tnoremap <M-\> <C-\><C-N><C-W>p
+tnoremap <M-]> <C-\><C-N><C-W>w
+tnoremap <M-[> <C-\><C-N><C-W>W
+
+nmap <M-]> <C-w>w
+nmap <M-[> <C-w>W
 
 augroup MyAutoCmd
     autocmd BufWinEnter,WinEnter term://* startinsert
