@@ -1308,11 +1308,6 @@ if has_key(g:plugs, 'neocomplete.vim')
     endif
     let g:neocomplete#keyword_patterns._ = '\h\k*(\?'
 
-    " Enable omni completion
-    augroup MyAutoCmd
-        autocmd FileType sql setlocal omnifunc=
-    augroup END
-
     " Enable heavy omni completion
     if !exists('g:neocomplete#sources#omni#input_patterns')
         let g:neocomplete#sources#omni#input_patterns = {}
@@ -1420,7 +1415,6 @@ if has_key(g:plugs, 'neocomplcache.vim')
         autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
         autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
         autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-        autocmd FileType sql setlocal omnifunc=
         autocmd Filetype * if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
     augroup END
 
@@ -1752,6 +1746,10 @@ augroup MyAutoCmd
     " Ruby-related
     autocmd FileType ruby,eruby,yaml,haml,markdown,less,sass,scss,coffee,html.handlebars setlocal tabstop=2 shiftwidth=2
 
+    autocmd FileType ruby,yaml,eruby,coffee,haml let b:surround_35 = "#{\r}"
+    autocmd FileType eruby let b:surround_45 = "<% \r %>"
+    autocmd FileType eruby let b:surround_61 = "<%= \r %>"
+
     " CSS / Less
     autocmd FileType css,less setlocal iskeyword+=-
 
@@ -1784,6 +1782,9 @@ augroup MyAutoCmd
     " Folding
     autocmd FileType vim setlocal foldmethod=marker foldmarker={{{,}}}
     autocmd FileType nginx,puppet,c,javascript,go,less,css setlocal foldmethod=marker foldmarker={,}
+
+    " nginx
+    autocmd FileType nginx setlocal noexpandtab commentstring=#\ %s
 augroup END
 
 set background=dark
