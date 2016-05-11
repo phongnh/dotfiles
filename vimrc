@@ -274,7 +274,6 @@ Plug 'moll/vim-node'
 
 " Go
 Plug 'fatih/vim-go'
-Plug 'rhysd/vim-go-impl'    " go get github.com/josharian/impl
 Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 
 if has('python')
@@ -1631,7 +1630,7 @@ let g:user_emmet_install_global  = 0
 
 autocmd MyAutoCmd FileType eruby,haml,slim,jade,html,xml,css,sass,scss,less,html.handlebars,mustache EmmetInstall
 
-" fatih/vim-go, rhysd/vim-go-impl and garyburd/go-explorer
+" fatih/vim-go and garyburd/go-explorer
 let g:go_highlight_functions         = 1
 let g:go_highlight_methods           = 1
 let g:go_highlight_structs           = 1
