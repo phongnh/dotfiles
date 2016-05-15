@@ -1492,6 +1492,10 @@ if has_key(g:plugs, 'neosnippet.vim')
     let g:neosnippet#enable_complete_done          = 1
     let g:neosnippet#expand_word_boundary          = 1
 
+    if isdirectory('~/.vim/snippets/neosnippets')
+        let g:neosnippet#snippets_directory = '~/.vim/snippets/neosnippets'
+    endif
+
     let g:neosnippet#scope_aliases = {}
     let g:neosnippet#scope_aliases['ruby'] = 'ruby,rails'
     let g:neosnippet#scope_aliases['objc'] = 'objc,c'

@@ -26,6 +26,7 @@ My dotfiles for vim + tmux setup
 ## Setup vim and nvim folder
 
     mkdir -p ~/.vim/{plugged,snippets,cache}
+    mkdir -p ~/.vim/snippets/{UltiSnips,snippets,neosnippets}
     mkdir -p ~/.cache/{swap,backup,undo}
     touch ~/.cache/NERDTreeBookmarks
 
