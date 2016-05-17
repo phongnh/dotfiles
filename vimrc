@@ -1282,20 +1282,31 @@ xmap <Leader>N <Plug>NrrwrgnBangDo
 if has_key(g:plugs, 'neocomplete.vim')
     " Shougo/neocomplete.vim
     let g:neocomplete#enable_at_startup                 = 1 " Use neocomplete
+    let g:neocomplete#disable_auto_complete             = 0
     let g:neocomplete#enable_smart_case                 = 1 " Use smartcase
+    let g:neocomplete#enable_camel_case                 = 1
+    let g:neocomplete#enable_fuzzy_completion           = 1
     let g:neocomplete#min_keyword_length                = 3 " Set minimum keyword length
     let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length
     let g:neocomplete#ignore_source_files               = []
     let g:neocomplete#force_overwrite_completefunc      = 1
-    let g:neocomplete#enable_auto_select                = 0
+    let g:neocomplete#enable_cursor_hold_i              = 0
+    let g:neocomplete#enable_auto_select                = 1
     let g:neocomplete#enable_auto_delimiter             = 1
+    let g:neocomplete#enable_auto_close_preview         = 1
+
+    let g:neocomplete#disable_auto_select_buffer_name_pattern = '\[Command Line\]'
 
     " Disable tag completion
     let g:neocomplete#ignore_source_files = ['tag.vim']
 
     call neocomplete#custom#source('look', 'min_pattern_length', 4)
-    call neocomplete#custom#source('_', 'converters',
-                \ [ 'converter_add_paren', 'converter_remove_overlap', 'converter_delimiter', 'converter_abbr' ])
+    call neocomplete#custom#source('_', 'converters', [
+                \ 'converter_add_paren',
+                \ 'converter_remove_overlap',
+                \ 'converter_delimiter',
+                \ 'converter_abbr'
+                \ ])
 
     let g:neocomplete#sources#dictionary#dictionaries = {
                 \ 'default'  : '',
@@ -1337,10 +1348,10 @@ if has_key(g:plugs, 'neocomplete.vim')
     let g:neocomplete#fallback_mappings = ["\<C-X>\<C-O>", "\<C-X>\<C-N>"]
 
     " <CR>: close popup
-    inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function() abort
-        return neocomplete#close_popup() . "\<CR>"
-    endfunction
+    " inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
+    " function! s:my_cr_function() abort
+    "     return neocomplete#close_popup() . "\<CR>"
+    " endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-H> neocomplete#close_popup()."\<C-H>"
@@ -1353,7 +1364,7 @@ if has_key(g:plugs, 'neocomplete.vim')
     " <Tab>: completion
     inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
     " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<S-Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
     " Clever Tab
     imap <expr> <Tab> <SID>CleverTab()
     function! s:CleverTab() abort
@@ -1379,14 +1390,23 @@ endif
 if has_key(g:plugs, 'neocomplcache.vim')
     " Shougo/neocomplcache.vim
     let g:neocomplcache_enable_at_startup            = 1 " Use neocomplcache
-    let g:neocomplcache_enable_smart_case            = 1 " Use smartcase
+    let g:neocomplcache_enable_smart_case            = 0 " Use smartcase
+    let g:neocomplcache_enable_camel_case_completion = 0 " Use camel case completion
+    let g:neocomplcache_enable_underbar_completion   = 0 " Use underbar completion
+    let g:neocomplcache_enable_fuzzy_completion      = 0 " Use fuzzy completion
     let g:neocomplcache_min_keyword_length           = 3 " Set minimum keyword length
     let g:neocomplcache_min_syntax_length            = 3 " Set minimum syntax keyword length
     let g:neocomplcache_force_overwrite_completefunc = 1
+    let g:neocomplcache_enable_cursor_hold_i         = 0
+    let g:neocomplcache_cursor_hold_i_time           = 300
+    let g:neocomplcache_enable_insert_char_pre       = 1
     let g:neocomplcache_enable_prefetch              = 1
     let g:neocomplcache_skip_auto_completion_time    = '0.6'
-    let g:neocomplcache_enable_auto_select           = 0
+    let g:neocomplcache_enable_auto_select           = 1
     let g:neocomplcache_enable_auto_delimiter        = 1
+    let g:neocomplcache_enable_auto_close_preview    = 1
+
+    let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
 
     " Disable tag completion
     if !exists('g:neocomplcache_disabled_sources_list')
@@ -1447,10 +1467,10 @@ if has_key(g:plugs, 'neocomplcache.vim')
     let g:neocomplcache#fallback_mappings = ["\<C-X>\<C-O>", "\<C-X>\<C-N>"]
 
     " <CR>: close popup
-    inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function() abort
-        return neocomplcache#close_popup() . "\<CR>"
-    endfunction
+    " inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
+    " function! s:my_cr_function() abort
+    "     return neocomplcache#close_popup() . "\<CR>"
+    " endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-H> neocomplcache#close_popup()."\<C-H>"
@@ -1463,7 +1483,7 @@ if has_key(g:plugs, 'neocomplcache.vim')
     " <Tab>: completion
     inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
     " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<S-Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
     " Clever Tab
     imap <expr> <Tab> <SID>CleverTab()
     function! s:CleverTab() abort
