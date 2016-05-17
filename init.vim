@@ -30,8 +30,7 @@ let g:loaded_vimballPlugin     = 1
 let g:loaded_zip               = 1
 let g:loaded_zipPlugin         = 1
 
-" Disable sql completion
-let g:loaded_sql_completion    = 1
+" Disable sql mappings
 let g:omni_sql_no_default_maps = 1
 let g:ftplugin_sql_omni_key    = ''
 
