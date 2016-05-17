@@ -1339,15 +1339,18 @@ if has_key(g:plugs, 'deoplete.nvim')
                 \ ])
 
     " <CR>: close popup
-    inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function() abort
-        return deoplete#mappings#close_popup() . "\<CR>"
-    endfunction
+    " inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
+    " function! s:my_cr_function() abort
+    "     return deoplete#mappings#close_popup() . "\<CR>"
+    "     " For no inserting <CR> key
+    "     " return pumvisible() ? deoplete#mappings#close_popup() : "\<CR>"
+    " endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-H> deoplete#mappings#smart_close_popup()."\<C-H>"
     inoremap <expr> <BS>  deoplete#mappings#smart_close_popup()."\<C-H>"
 
+    inoremap          <expr> <C-G>      deoplete#mappings#undo_completion()
     inoremap          <expr> <C-X><C-G> deoplete#mappings#undo_completion()
     inoremap          <expr> <C-X><C-@> deoplete#mappings#refresh()
     inoremap <silent> <expr> <C-X><C-F> deoplete#mappings#manual_completion('file')
@@ -1458,13 +1461,16 @@ if has_key(g:plugs, 'neocomplcache.vim')
     " <CR>: close popup
     " inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
     " function! s:my_cr_function() abort
-    "     return neocomplcache#close_popup() . "\<CR>"
+    "     return neocomplcache#smart_close_popup() . "\<CR>"
+    "     " For no inserting <CR> key
+    "     " return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
     " endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char
-    inoremap <expr> <C-H> neocomplcache#close_popup()."\<C-H>"
-    inoremap <expr> <BS>  neocomplcache#close_popup()."\<C-H>"
+    inoremap <expr> <C-H> neocomplcache#smart_close_popup()."\<C-H>"
+    inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-H>"
 
+    inoremap          <expr> <C-G>      neocomplcache#undo_completion()
     inoremap          <expr> <C-X><C-G> neocomplcache#undo_completion()
     inoremap          <expr> <C-X><C-@> neocomplcache#complete_common_string()
     inoremap <silent> <expr> <C-X><C-F> neocomplcache#start_manual_complete('file')
