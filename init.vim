@@ -1284,19 +1284,19 @@ xnoremap <F6> :MultipleCursorsFind<Space>
 
 " Called once right before you start selecting multiple cursors
 function! Multiple_cursors_before() abort
-    if exists(':NeoComplCacheLock') == 2
+    if exists('g:deoplete#disable_auto_complete')
+        let g:deoplete#disable_auto_complete = 1
+    elseif exists(':NeoComplCacheLock') == 2
         silent! NeoComplCacheLock
-    else
-	  let g:deoplete#disable_auto_complete = 1
     endif
 endfunction
 
 " Called once only when the multiple selection is cancelled (default <Esc>)
 function! Multiple_cursors_after() abort
-    if exists(':NeoComplCacheUnlock') == 2
+    if exists('g:deoplete#disable_auto_complete')
+        let g:deoplete#disable_auto_complete = 0
+    elseif exists(':NeoComplCacheUnlock') == 2
         silent! NeoComplCacheUnlock
-    else
-	  let g:deoplete#disable_auto_complete = 0
     endif
 endfunction
 
@@ -1313,6 +1313,7 @@ if has_key(g:plugs, 'deoplete.nvim')
     " Shougo/deoplete.nvim
     set completeopt+=noinsert
 
+    let g:deoplete#disable_auto_complete = 0
     let g:deoplete#enable_at_startup     = 1
     let g:deoplete#enable_refresh_always = 1
     let g:deoplete#enable_camel_case     = 1
