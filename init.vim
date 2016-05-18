@@ -1569,15 +1569,15 @@ if has_key(g:plugs, 'vim-tmuxify')
     let g:tmuxify_map_prefix     = '<Leader>m'
     let g:tmuxify_global_maps    = 1
 
+    nnoremap <silent> <Leader>mR :TxSetRunCmd<CR>
+    nnoremap <silent> <Leader>mi :TxSend!<CR>
+    nmap     <silent> <Leader>mS mmggVG<Leader>ms`m
     nnoremap <silent> <Leader>mu :TxSendKey! 'q C-u'<CR>
     nnoremap <silent> <Leader>mm :TxSendKey! 'Enter'<CR>
     nnoremap <silent> <Leader>md :TxSendKey! 'C-d'<CR>
 
     augroup MyAutoCmd
-        autocmd VimEnter * nnoremap <silent> <Leader>mi :TxSend!<CR>
-        autocmd VimEnter * nmap     <silent> <Leader>ms mmvip<Leader>ms`m
-        autocmd VimEnter * nmap     <silent> <Leader>mS mmggVG<Leader>ms`m
-        autocmd VimEnter * xnoremap <silent> <Leader>ms "my:TxSend!(@m)<CR>
+        autocmd VimEnter * nmap <silent> <Leader>ms mmvip<Leader>ms`m
     augroup END
 
     nnoremap <silent> <Leader>tb :TxSigInt<CR>
