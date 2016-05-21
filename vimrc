@@ -1623,8 +1623,8 @@ function! s:VimGoSetup() abort
     nmap <LocalLeader>i <Plug>(go-install)
     nmap <LocalLeader>I <Plug>(go-import)
     nmap <LocalLeader>t <Plug>(go-test)
-    nmap <LocalLeader>F <Plug>(go-test-func)
-    nmap <LocalLeader>T <Plug>(go-test-compile)
+    nmap <LocalLeader>T <Plug>(go-test-func)
+    nmap <LocalLeader>C <Plug>(go-test-compile)
     nmap <LocalLeader>a <Plug>(go-alternate-edit)
     nmap <LocalLeader>A <Plug>(go-alternate-vertical)
     nmap <LocalLeader>c <Plug>(go-coverage)
@@ -1633,10 +1633,16 @@ function! s:VimGoSetup() abort
     nmap <LocalLeader>e <Plug>(go-rename)
 
     nmap <LocalLeader>n <Plug>(go-info)
+    nmap <LocalLeader>N <Plug>(go-deps)
     nmap <LocalLeader>s <Plug>(go-implements)
 
+    nnoremap <LocalLeader>B :GoDocBrowser<Space>
+
     nmap <LocalLeader>d <Plug>(go-doc-vertical)
+    nmap <LocalLeader>D <Plug>(go-doc-tab)
+
     nmap <LocalLeader>f <Plug>(go-def-vertical)
+    nmap <LocalLeader>F <Plug>(go-def-tab)
 
     nmap     <LocalLeader>m <Plug>(go-metalinter)
     nnoremap <LocalLeader>M :GoMetaLinter<Space>
@@ -1645,10 +1651,28 @@ function! s:VimGoSetup() abort
 
     nnoremap <LocalLeader>G :GoGuruTags<Space>
 
+    nmap g> <Plug>(go-import)
+    nmap g< <Plug>(go-drop)
+    nmap g} <Plug>(go-import)
+    nmap g{ <Plug>(go-drop)
+
     nnoremap <LocalLeader>] :GoImport<Space>
     nnoremap <LocalLeader>[ :GoDrop<Space>
     nnoremap ]<LocalLeader> :GoImport<Space>
     nnoremap [<LocalLeader> :GoDrop<Space>
+
+    if has_key(g:plugs, 'ctrlp.vim')
+        nnoremap <silent> <LocalLeader>o :GoDecls<CR>
+        nnoremap <silent> <LocalLeader>O :GoDeclsDir<CR>
+        nnoremap          <LocalLeader>p :GoDeclsDir<Space>
+        nnoremap          <LocalLeader>P :GoDecls<Space>
+    endif
+
+    " go install
+    nnoremap <silent> <LocalLeader>u :update<CR>:execute "silent! !go install"<CR>:redraw!<CR>:echo '!go install'<CR>
+
+    " Toggle Location List
+    nmap <LocalLeader>q coQ
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
