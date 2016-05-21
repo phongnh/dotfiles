@@ -1243,7 +1243,7 @@ xmap <Leader>N <Plug>NrrwrgnBangDo
 
 if has_key(g:plugs, 'deoplete.nvim')
     " Shougo/deoplete.nvim
-    set completeopt+=noinsert
+    " set completeopt+=noinsert
 
     let g:deoplete#disable_auto_complete = 0
     let g:deoplete#enable_at_startup     = 1
