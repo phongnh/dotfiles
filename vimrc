@@ -1613,66 +1613,66 @@ let g:neomake_go_enabled_makers = ['golint', 'govet', 'errcheck']
 
 function! s:VimGoSetup() abort
     if has("nvim")
-        nmap <LocalLeader>R <Plug>(go-run-split)
+        nmap <buffer> <LocalLeader>R <Plug>(go-run-split)
     else
-        nnoremap <silent> <LocalLeader>R :GoRun!<CR>:redraw!<CR>
+        nnoremap <buffer> <silent> <LocalLeader>R :GoRun!<CR>:redraw!<CR>
     endif
-    nmap <LocalLeader>r <Plug>(go-run)
-    nmap <LocalLeader>b <Plug>(go-build)
-    nmap <LocalLeader>g <Plug>(go-generate)
-    nmap <LocalLeader>i <Plug>(go-install)
-    nmap <LocalLeader>I <Plug>(go-import)
-    nmap <LocalLeader>t <Plug>(go-test)
-    nmap <LocalLeader>T <Plug>(go-test-func)
-    nmap <LocalLeader>C <Plug>(go-test-compile)
-    nmap <LocalLeader>a <Plug>(go-alternate-edit)
-    nmap <LocalLeader>A <Plug>(go-alternate-vertical)
-    nmap <LocalLeader>c <Plug>(go-coverage)
-    nmap <LocalLeader>v <Plug>(go-vet)
+    nmap <buffer> <LocalLeader>r <Plug>(go-run)
+    nmap <buffer> <LocalLeader>b <Plug>(go-build)
+    nmap <buffer> <LocalLeader>g <Plug>(go-generate)
+    nmap <buffer> <LocalLeader>i <Plug>(go-install)
+    nmap <buffer> <LocalLeader>I <Plug>(go-import)
+    nmap <buffer> <LocalLeader>t <Plug>(go-test)
+    nmap <buffer> <LocalLeader>T <Plug>(go-test-func)
+    nmap <buffer> <LocalLeader>C <Plug>(go-test-compile)
+    nmap <buffer> <LocalLeader>a <Plug>(go-alternate-edit)
+    nmap <buffer> <LocalLeader>A <Plug>(go-alternate-vertical)
+    nmap <buffer> <LocalLeader>c <Plug>(go-coverage)
+    nmap <buffer> <LocalLeader>v <Plug>(go-vet)
 
-    nmap <LocalLeader>e <Plug>(go-rename)
+    nmap <buffer> <LocalLeader>e <Plug>(go-rename)
 
-    nmap <LocalLeader>n <Plug>(go-info)
-    nmap <LocalLeader>N <Plug>(go-deps)
-    nmap <LocalLeader>s <Plug>(go-implements)
+    nmap <buffer> <LocalLeader>n <Plug>(go-info)
+    nmap <buffer> <LocalLeader>N <Plug>(go-deps)
+    nmap <buffer> <LocalLeader>s <Plug>(go-implements)
 
-    nnoremap <LocalLeader>B :GoDocBrowser<Space>
+    nnoremap <buffer> <LocalLeader>B :GoDocBrowser<Space>
 
-    nmap <LocalLeader>d <Plug>(go-doc-vertical)
-    nmap <LocalLeader>D <Plug>(go-doc-tab)
+    nmap <buffer> <LocalLeader>d <Plug>(go-doc-vertical)
+    nmap <buffer> <LocalLeader>D <Plug>(go-doc-tab)
 
-    nmap <LocalLeader>f <Plug>(go-def-vertical)
-    nmap <LocalLeader>F <Plug>(go-def-tab)
+    nmap <buffer> <LocalLeader>f <Plug>(go-def-vertical)
+    nmap <buffer> <LocalLeader>F <Plug>(go-def-tab)
 
-    nmap     <LocalLeader>m <Plug>(go-metalinter)
-    nnoremap <LocalLeader>M :GoMetaLinter<Space>
-    nnoremap <LocalLeader>l :GoLint<Space>
-    nnoremap <LocalLeader>E :GoErrCheck<Space>
+    nmap     <buffer> <LocalLeader>m <Plug>(go-metalinter)
+    nnoremap <buffer> <LocalLeader>M :GoMetaLinter<Space>
+    nnoremap <buffer> <LocalLeader>l :GoLint<Space>
+    nnoremap <buffer> <LocalLeader>E :GoErrCheck<Space>
 
-    nnoremap <LocalLeader>G :GoGuruTags<Space>
+    nnoremap <buffer> <LocalLeader>G :GoGuruTags<Space>
 
-    nmap g> <Plug>(go-import)
-    nmap g< <Plug>(go-drop)
-    nmap g} <Plug>(go-import)
-    nmap g{ <Plug>(go-drop)
+    nmap <buffer> g> <Plug>(go-import)
+    nmap <buffer> g< <Plug>(go-drop)
+    nmap <buffer> g} <Plug>(go-import)
+    nmap <buffer> g{ <Plug>(go-drop)
 
-    nnoremap <LocalLeader>] :GoImport<Space>
-    nnoremap <LocalLeader>[ :GoDrop<Space>
-    nnoremap ]<LocalLeader> :GoImport<Space>
-    nnoremap [<LocalLeader> :GoDrop<Space>
+    nnoremap <buffer> <LocalLeader>] :GoImport<Space>
+    nnoremap <buffer> <LocalLeader>[ :GoDrop<Space>
+    nnoremap <buffer> ]<LocalLeader> :GoImport<Space>
+    nnoremap <buffer> [<LocalLeader> :GoDrop<Space>
 
     if has_key(g:plugs, 'ctrlp.vim')
-        nnoremap <silent> <LocalLeader>o :GoDecls<CR>
-        nnoremap <silent> <LocalLeader>O :GoDeclsDir<CR>
-        nnoremap          <LocalLeader>p :GoDeclsDir<Space>
-        nnoremap          <LocalLeader>P :GoDecls<Space>
+        nnoremap <buffer> <silent> <LocalLeader>o :GoDecls<CR>
+        nnoremap <buffer> <silent> <LocalLeader>O :GoDeclsDir<CR>
+        nnoremap <buffer>          <LocalLeader>p :GoDeclsDir<Space>
+        nnoremap <buffer>          <LocalLeader>P :GoDecls<Space>
     endif
 
     " go install
-    nnoremap <silent> <LocalLeader>u :update<CR>:execute "silent! !go install"<CR>:redraw!<CR>:echo '!go install'<CR>
+    nnoremap <buffer> <silent> <LocalLeader>u :update<CR>:execute "silent! !go install"<CR>:redraw!<CR>:echo '!go install'<CR>
 
     " Toggle Location List
-    nmap <LocalLeader>q coQ
+    nmap <buffer> <LocalLeader>q coQ
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
