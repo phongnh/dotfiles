@@ -242,6 +242,7 @@ if has('lua')
 else
     Plug 'Shougo/neocomplcache.vim'
 endif
+Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'

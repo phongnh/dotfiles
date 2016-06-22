@@ -255,6 +255,7 @@ if has('python3')
 else
     Plug 'Shougo/neocomplcache.vim'
 endif
+Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
