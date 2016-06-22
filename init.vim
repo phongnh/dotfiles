@@ -294,6 +294,7 @@ Plug 'moll/vim-node'
 
 " Go
 Plug 'fatih/vim-go'
+Plug 'zchee/vim-go-stdlib'  " go standard library syntax highlighting
 Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 
 if has('python')
