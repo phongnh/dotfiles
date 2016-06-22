@@ -15,6 +15,7 @@ if has('gui_macvim')
     set antialias
 
     set lines=999 columns=999
+    set macligatures    " Display ligatures if selected 'guifont' supports them
     set guifont=Iosevka:h13,Hasklig:h13,Cousine:h13,Roboto\ Mono:h13,Monaco:h13
 
     if has('transparency') || exists('+transparency')
