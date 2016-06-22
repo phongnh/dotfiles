@@ -28,10 +28,19 @@ let g:loaded_vimball           = 1
 let g:loaded_vimballPlugin     = 1
 let g:loaded_zip               = 1
 let g:loaded_zipPlugin         = 1
+" let g:loaded_spellfile_plugin  = 1
+let g:loaded_rrhelper          = 1
+let g:myscriptsfile            = 1
+let g:load_doxygen_syntax      = 0
+let g:loaded_less              = 1
 
-" Disable sql mappings
+" Disable sql completion and mappings
+let g:loaded_sql_completion    = 1
 let g:omni_sql_no_default_maps = 1
 let g:ftplugin_sql_omni_key    = ''
+
+" Disable syntax completion
+let g:loaded_syntax_completion = 1
 
 if has('gui_running')
     " Disable menu
