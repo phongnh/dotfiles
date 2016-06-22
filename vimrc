@@ -423,7 +423,7 @@ set undolevels=1000             " Maximum number of changes that can be undone
 set history=1000                " Store lots of command lines in history
 
 " Completion settings
-set completeopt=menuone
+set completeopt=menuone,noselect
 set complete=.,w,b,u,t
 set pumheight=20                " Set popup menu max height
 
@@ -1378,8 +1378,6 @@ if has_key(g:plugs, 'neocomplcache.vim')
         autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
         autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
         autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-        autocmd Filetype * if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
     augroup END
 
     " Enable heavy omni completion
@@ -1459,10 +1457,6 @@ if has_key(g:plugs, 'neosnippet.vim')
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#enable_complete_done          = 1
     let g:neosnippet#expand_word_boundary          = 1
-
-    if isdirectory('~/.vim/snippets/neosnippets')
-        let g:neosnippet#snippets_directory = '~/.vim/snippets/neosnippets'
-    endif
 
     let g:neosnippet#scope_aliases = {}
     let g:neosnippet#scope_aliases['ruby'] = 'ruby,rails'

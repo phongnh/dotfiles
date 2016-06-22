@@ -250,7 +250,8 @@ if has('python3')
     endfunction
 
     Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-    Plug 'zchee/deoplete-go', { 'do': 'make' }
+    Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
+    Plug 'zchee/deoplete-clang', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
 else
     Plug 'Shougo/neocomplcache.vim'
 endif
@@ -421,7 +422,7 @@ set cmdheight=2                 " Height of command-line (easy-readable)
 set undolevels=1000             " Maximum number of changes that can be undone
 
 " Completion settings
-set completeopt=menuone
+set completeopt=menuone,noselect
 set pumheight=20                " Set popup menu max height
 
 set wildmode=list:longest,full
@@ -1253,12 +1254,11 @@ xmap <Leader>N <Plug>NrrwrgnBangDo
 
 if has_key(g:plugs, 'deoplete.nvim')
     " Shougo/deoplete.nvim
-    " set completeopt+=noinsert
-
     let g:deoplete#disable_auto_complete = 0
     let g:deoplete#enable_at_startup     = 1
     let g:deoplete#enable_refresh_always = 1
     let g:deoplete#enable_camel_case     = 1
+    let g:deoplete#enable_profile        = 0
 
     let g:deoplete#keyword_patterns = {}
     let g:deoplete#keyword_patterns._ = '[a-zA-Z_]\k*\(?'
@@ -1267,6 +1267,9 @@ if has_key(g:plugs, 'deoplete.nvim')
     let g:deoplete#omni#input_patterns.python = ''
 
     let g:deoplete#omni#functions = {}
+
+    " Ignore sources
+    let g:deoplete#ignore_sources = {}
 
     " call deoplete#custom#set('_', 'converters', [
     "             \ 'converter_auto_paren',
@@ -1279,6 +1282,7 @@ if has_key(g:plugs, 'deoplete.nvim')
                 \ 'converter_remove_overlap',
                 \ 'converter_truncate_abbr',
                 \ 'converter_truncate_menu',
+                \ 'converter_auto_delimiter',
                 \ ])
 
     " <CR>: close popup
@@ -1320,6 +1324,22 @@ if has_key(g:plugs, 'deoplete.nvim')
             endif
         endif
     endfunction
+
+    " zchee/deoplete-go
+    let g:deoplete#ignore_sources.go            = ['buffer', 'dictionary', 'file', 'member', 'omni', 'tag', 'syntax']
+    let g:deoplete#sources#go#sort_class        = ['package', 'func', 'type', 'var', 'const']
+    let g:deoplete#sources#go#use_cache         = 1
+    " let g:deoplete#sources#go#gocode_binary     = $GOPATH . '/bin/gocode'
+    " let g:deoplete#sources#go#cgo               = 1
+    " let g:deoplete#sources#go#cgo#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
+
+    " zchee/deoplete-clang
+    let g:deoplete#ignore_sources.c            = ['buffer', 'dictionary', 'file', 'member', 'omni', 'tag', 'syntax']
+    let g:deoplete#ignore_sources.cpp          = g:deoplete#ignore_sources.c
+    let g:deoplete#ignore_sources.objc         = g:deoplete#ignore_sources.c
+    let g:deoplete#ignore_sources.objcpp       = g:deoplete#ignore_sources.c
+    let g:deoplete#sources#clang#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
+    let g:deoplete#sources#clang#clang_header  = '/usr/local/opt/llvm/include/clang'
 endif
 
 if has_key(g:plugs, 'neocomplcache.vim')
@@ -1368,8 +1388,6 @@ if has_key(g:plugs, 'neocomplcache.vim')
         autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
         autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
         autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-        autocmd Filetype * if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
     augroup END
 
     " Enable heavy omni completion
@@ -1449,10 +1467,6 @@ if has_key(g:plugs, 'neosnippet.vim')
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#enable_complete_done          = 1
     let g:neosnippet#expand_word_boundary          = 1
-
-    if isdirectory('~/.vim/snippets/neosnippets')
-        let g:neosnippet#snippets_directory = '~/.vim/snippets/neosnippets'
-    endif
 
     let g:neosnippet#scope_aliases = {}
     let g:neosnippet#scope_aliases['ruby'] = 'ruby,rails'
