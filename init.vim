@@ -1096,6 +1096,7 @@ let g:AutoPairsShortcutBackInsert = '<M-i>'
 
 " vim-scripts/DeleteTrailingWhitespace
 nnoremap <silent> <Leader>W :update<CR>:DeleteTrailingWhitespace<CR>
+xnoremap <silent> <Leader>W :DeleteTrailingWhitespace<CR>
 
 " tpope/vim-commentary
 let g:commentary_map_backslash = 0
