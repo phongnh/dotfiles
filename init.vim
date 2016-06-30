@@ -252,13 +252,15 @@ if has('python3')
     Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
     Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
     Plug 'zchee/deoplete-clang', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
-else
-    Plug 'Shougo/neocomplcache.vim'
+    Plug 'Shougo/echodoc.vim'
+    Plug 'Shougo/neosnippet.vim'
+    Plug 'Shougo/neosnippet-snippets'
+    Plug 'honza/vim-snippets'
+elseif has('python')
+    Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
 endif
-Plug 'Shougo/echodoc.vim'
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
-Plug 'honza/vim-snippets'
 
 " SCM
 " A awesome Git wrapper so awesome
@@ -1231,8 +1233,6 @@ xnoremap <F6> :MultipleCursorsFind<Space>
 function! Multiple_cursors_before() abort
     if exists('g:deoplete#disable_auto_complete')
         let g:deoplete#disable_auto_complete = 1
-    elseif exists(':NeoComplCacheLock') == 2
-        silent! NeoComplCacheLock
     endif
 endfunction
 
@@ -1240,8 +1240,6 @@ endfunction
 function! Multiple_cursors_after() abort
     if exists('g:deoplete#disable_auto_complete')
         let g:deoplete#disable_auto_complete = 0
-    elseif exists(':NeoComplCacheUnlock') == 2
-        silent! NeoComplCacheUnlock
     endif
 endfunction
 
@@ -1344,126 +1342,6 @@ if has_key(g:plugs, 'deoplete.nvim')
     let g:deoplete#sources#clang#clang_header  = '/usr/local/opt/llvm/include/clang'
 endif
 
-if has_key(g:plugs, 'neocomplcache.vim')
-    " Shougo/neocomplcache.vim
-    let g:neocomplcache_enable_at_startup            = 1 " Use neocomplcache
-    let g:neocomplcache_enable_smart_case            = 0 " Use smartcase
-    let g:neocomplcache_enable_camel_case_completion = 0 " Use camel case completion
-    let g:neocomplcache_enable_underbar_completion   = 0 " Use underbar completion
-    let g:neocomplcache_enable_fuzzy_completion      = 0 " Use fuzzy completion
-    let g:neocomplcache_min_keyword_length           = 3 " Set minimum keyword length
-    let g:neocomplcache_min_syntax_length            = 3 " Set minimum syntax keyword length
-    let g:neocomplcache_force_overwrite_completefunc = 1
-    let g:neocomplcache_enable_cursor_hold_i         = 0
-    let g:neocomplcache_cursor_hold_i_time           = 300
-    let g:neocomplcache_enable_insert_char_pre       = 1
-    let g:neocomplcache_enable_prefetch              = 1
-    let g:neocomplcache_skip_auto_completion_time    = '0.6'
-    let g:neocomplcache_enable_auto_select           = 1
-    let g:neocomplcache_enable_auto_delimiter        = 1
-    let g:neocomplcache_enable_auto_close_preview    = 1
-
-    let g:neocomplcache_disable_auto_select_buffer_name_pattern = '\[Command Line\]'
-
-    " Disable tag completion
-    if !exists('g:neocomplcache_disabled_sources_list')
-        let g:neocomplcache_disabled_sources_list = {}
-    endif
-    let g:neocomplcache_disabled_sources_list._ = ['tags_complete']
-
-    call neocomplcache#custom_source('look', 'min_pattern_length', 4)
-
-    let g:neocomplcache_dictionary_filetype_lists = {
-                \ 'default'  : '',
-                \ 'vimshell' : $HOME . '/.vimshell_history',
-                \ }
-
-    if !exists('g:neocomplcache_keyword_patterns')
-        let g:neocomplcache_keyword_patterns = {}
-    endif
-    " let g:neocomplcache_keyword_patterns._ = '[0-9a-zA-Z:#_]\+'
-    let g:neocomplcache_keyword_patterns._ = '\h\k*(\?'
-
-    " Enable omni completion
-    augroup MyAutoCmd
-        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-    augroup END
-
-    " Enable heavy omni completion
-    if !exists('g:neocomplcache_omni_patterns')
-        let g:neocomplcache_omni_patterns = {}
-    endif
-
-    if !exists('g:neocomplcache_omni_functions')
-        let g:neocomplcache_omni_functions = {}
-    endif
-
-    if !exists('g:neocomplcache_force_omni_patterns')
-        let g:neocomplcache_force_omni_patterns = {}
-    endif
-
-    let g:neocomplcache_force_omni_patterns.c   = '[^.[:digit:] *\t]\%(\.\|->\)'
-    let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-    let g:neocomplcache_force_omni_patterns.go  = '\h\w*\.\?'
-    " let g:neocomplcache_omni_patterns.ruby      = '[^. *\t]\.\w*\|\h\w*::'
-    let g:neocomplcache_omni_patterns.ruby      = '[^. *\t]\.\w*\|\h\w*::\w*'
-
-    let g:neocomplcache_omni_functions.go = 'go#complete#Complete'
-
-    let g:neocomplcache_vim_completefuncs = {
-                \ 'Unite'    : 'unite#complete_source',
-                \ 'VimShell' : 'vimshell#complete',
-                \ 'VimFiler' : 'vimfiler#complete',
-                \ }
-
-    let g:neocomplcache#fallback_mappings = ["\<C-X>\<C-O>", "\<C-X>\<C-N>"]
-
-    " <CR>: close popup
-    " inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
-    " function! s:my_cr_function() abort
-    "     return neocomplcache#smart_close_popup() . "\<CR>"
-    "     " For no inserting <CR> key
-    "     " return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-    " endfunction
-
-    " CTRL-H, <BS>: close popup and delete backword char
-    inoremap <expr> <C-H> neocomplcache#smart_close_popup()."\<C-H>"
-    inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-H>"
-
-    inoremap          <expr> <C-G>      neocomplcache#undo_completion()
-    inoremap          <expr> <C-X><C-G> neocomplcache#undo_completion()
-    inoremap          <expr> <C-X><C-@> neocomplcache#complete_common_string()
-    inoremap <silent> <expr> <C-X><C-F> neocomplcache#start_manual_complete('file')
-
-    " <Tab>: completion
-    inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
-    " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
-    " Clever Tab
-    imap <expr> <Tab> <SID>CleverTab()
-    function! s:CleverTab() abort
-        if pumvisible()
-            return "\<C-n>"
-        endif
-        let substr = strpart(getline('.'), 0, col('.') - 1)
-        let substr = matchstr(substr, '[^ \t]*$')
-        if strlen(substr) == 0
-            return "\<Tab>"
-        else
-            if neosnippet#expandable_or_jumpable()
-                return "\<Plug>(neosnippet_expand_or_jump)"
-            else
-                return neocomplcache#start_manual_complete()
-            endif
-        endif
-    endfunction
-
-    nnoremap <silent> <M-/> :NeoComplCacheToggle<CR>
-endif
-
 if has_key(g:plugs, 'neosnippet.vim')
     " Shougo/neosnippet.vim
     let g:neosnippet#enable_snipmate_compatibility = 1
@@ -1486,6 +1364,80 @@ if has_key(g:plugs, 'neosnippet.vim')
     xmap <C-J> <Plug>(neosnippet_expand_target)
 
     smap <Tab> <Plug>(neosnippet_jump)
+endif
+
+if has_key(g:plugs, 'YouCompleteMe')
+    " Valloric/YouCompleteMe
+    let g:ycm_confirm_extra_conf                  = 0
+    let g:ycm_complete_in_comments_and_strings    = 1
+    let g:ycm_collect_identifiers_from_tags_files = 1
+    let g:ycm_use_ultisnips_completer             = 1
+    let g:ycm_key_detailed_diagnostics            = ''
+    let g:ycm_extra_conf_vim_data                 = ['&filetype']
+    let g:ycm_global_ycm_extra_conf               = filereadable(expand('~/.ycm_extra_conf.py')) ? expand('~/.ycm_extra_conf') : ''
+    let g:ycm_filetype_blacklist                  = { 'unite': 1, 'ctrlp': 1 }
+
+    let g:ycm_semantic_triggers = {
+                \ 'objc' : [
+                \   're!\@"\.*"\s',
+                \   're!\@\w+\.*\w*\s',
+                \   're!\@\(\w+\.*\w*\)\s',
+                \   're!\@\(\s*',
+                \   're!\@\[.*\]\s',
+                \   're!\@\[\s*',
+                \   're!\@\{.*\}\s',
+                \   're!\@\{\s*',
+                \   "re!\@\'.*\'\s",
+                \   '#ifdef ',
+                \   're!:\s*',
+                \   're!=\s*',
+                \   're!,\s*',
+                \ ],
+                \ }
+
+    function! s:SetupClangMappings() abort
+        nnoremap <buffer>          <LocalLeader>y :YcmCompleter<Space>
+
+        nnoremap <buffer> <silent> <LocalLeader>g :YcmCompleter GoTo<CR>
+        nnoremap <buffer> <silent> <LocalLeader>s :YcmCompleter GoToImprecise<CR>
+        nnoremap <buffer> <silent> <LocalLeader>i :YcmCompleter GoToInclude<CR>
+        nnoremap <buffer> <silent> <LocalLeader>o :YcmCompleter GoToDeclaration<CR>
+        nnoremap <buffer> <silent> <LocalLeader>d :YcmCompleter GoToDefinition<CR>
+
+        nnoremap <buffer> <silent> <LocalLeader>t :YcmCompleter GetType<CR>
+        nnoremap <buffer> <silent> <LocalLeader>p :YcmCompleter GetParent<CR>
+        nnoremap <buffer> <silent> <LocalLeader>h :YcmCompleter GetDoc<CR>
+        nnoremap <buffer> <silent> <LocalLeader>q :YcmCompleter GetDocQuick<CR>
+
+        nnoremap <buffer> <silent> <LocalLeader>l :YcmCompleter ClearCompilationFlagCache<CR>
+
+        nnoremap <buffer> <silent> <LocalLeader>f :YcmCompleter FixIt<CR>
+
+        nnoremap <buffer> <silent> <LocalLeader>v :YcmDebugInfo<CR>
+        nnoremap <buffer> <silent> <LocalLeader>k :YcmShowDetailedDiagnostic<CR>
+        nnoremap <buffer> <silent> <LocalLeader>c :YcmForceCompileAndDiagnostics<CR>
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd FileType c,cpp,objc,objcpp call s:SetupClangMappings()
+    augroup END
+
+    " Enable omni completion
+    augroup MyAutoCmd
+        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+    augroup END
+endif
+
+if has_key(g:plugs, 'ultisnips')
+    " SirVer/ultisnips
+    let g:UltiSnipsExpandTrigger       = '<C-L>'
+    let g:UltiSnipsJumpForwardTrigger  = '<C-J>'
+    let g:UltiSnipsJumpBackwardTrigger = '<C-_>'
+
+    inoremap <C-X><C-K> <C-X><C-K>
 endif
 
 " tpope/vim-fugitive
