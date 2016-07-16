@@ -1583,6 +1583,7 @@ autocmd MyAutoCmd FileType eruby,haml,slim,jade,xhtml,html,xml,css,sass,scss,les
 " fatih/vim-go and garyburd/go-explorer
 let g:go_highlight_functions         = 1
 let g:go_highlight_methods           = 1
+let g:go_highlight_fields            = 1
 let g:go_highlight_structs           = 1
 let g:go_highlight_interfaces        = 1
 let g:go_highlight_operators         = 1
