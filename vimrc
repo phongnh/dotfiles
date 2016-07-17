@@ -184,6 +184,7 @@ Plug 'glts/vim-textobj-comment'               " c
 Plug 'mattn/vim-textobj-url'                  " u
 Plug 'Julian/vim-textobj-variable-segment'    " v
 Plug 'rhysd/vim-textobj-anyblock'             " b
+Plug 'rhysd/vim-textobj-conflict'             " =
 Plug 'thinca/vim-textobj-between'             " f{char}, remapped to n{char}
 Plug 'sgur/vim-textobj-parameter'             " ,
 Plug 'whatyouhide/vim-textobj-xmlattr'        " x
