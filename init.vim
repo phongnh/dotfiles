@@ -1,6 +1,11 @@
 " Use cursor shape feature
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
+" Use true color feature
+" if exists('+termguicolors')
+"     set termguicolors
+" endif
+
 if &shell =~# 'fish$'
     set shell=bash
 endif
@@ -140,8 +145,8 @@ endif
 " projectionist.vim: project configuration
 Plug 'tpope/vim-projectionist'
 
-" A tree explorer plugin for vim
-Plug 'scrooloose/nerdtree'
+" Powerful file explorer implemented by Vim script
+Plug 'Shougo/vimfiler.vim'
 
 " BufExplorer Plugin for Vim
 Plug 'jlanzarotta/bufexplorer'
@@ -965,21 +970,42 @@ if has_key(g:plugs, 'tagbar')
     nmap <Leader>ut <F8>
 endif
 
-" scrooloose/nerdtree
-let g:NERDTreeWinSize       = 35
-let g:NERDTreeMouseMode     = 2
-let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
-let g:NERDTreeQuitOnOpen    = 0
-let g:NERDTreeChDirMode     = 0
-let g:NERDTreeShowBookmarks = 1
+" Shougo/vimfiler.vim
+call vimfiler#custom#profile('default', 'context', { 'safe' : 0, 'auto_expand' : 1, 'parent' : 0 })
 
-nnoremap <silent> <F9> :NERDTreeToggle<CR>
+let g:vimfiler_enable_clipboard     = 0
+let g:vimfiler_as_default_explorer  = 1
+let g:vimfiler_tree_leaf_icon       = ' '
+let g:vimfiler_tree_opened_icon     = '▾'
+let g:vimfiler_tree_closed_icon     = '▸'
+let g:vimfiler_file_icon            = ' '
+let g:vimfiler_readonly_file_icon   = '✗'
+let g:vimfiler_marked_file_icon     = '✓'
+let g:vimfiler_quick_look_command   = has('mac') ? 'qlmanage -p' : 'gloobus-preview'
+
+nnoremap <silent> <F9> :VimFilerExplorer -parent -toggle<CR>
 imap <F9> <Esc><F9>
 nmap <Leader>uo <F9>
 
-nnoremap <silent> <F10> :NERDTreeFind<CR>
+nnoremap <silent> <F10> :VimFilerBufferDir -buffer-name=files-in-folder -parent -toggle -explorer -find<CR>
 imap <F10> <Esc><F10>
 nmap <Leader>uf <F10>
+
+autocmd MyAutoCmd FileType vimfiler call s:my_vimfiler_settings()
+
+function! s:my_vimfiler_settings() abort
+    setlocal nonumber
+
+    nnoremap <silent> <buffer> <expr> gy vimfiler#do_action('tabopen')
+    nnoremap <silent> <buffer> <expr> v  vimfiler#do_switch_action('vsplit')
+    nnoremap <silent> <buffer> <expr> s  vimfiler#do_switch_action('split')
+    nmap              <buffer>        p  <Plug>(vimfiler_quick_look)
+
+    " One key file operation.
+    " nmap <buffer> c <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_copy_file)
+    " nmap <buffer> m <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
+    " nmap <buffer> d <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
+endfunction
 
 " jlanzarotta/bufexplorer
 let g:bufExplorerDisableDefaultKeyMapping = 1
