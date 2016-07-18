@@ -256,8 +256,8 @@ if has('python3')
     endfunction
 
     Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-    Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
-    Plug 'zchee/deoplete-clang', { 'for': ['c', 'cpp', 'objc', 'objcpp'] }
+    Plug 'zchee/deoplete-go', { 'do': 'make' }
+    Plug 'zchee/deoplete-clang'
     Plug 'Shougo/neosnippet.vim'
     Plug 'Shougo/neosnippet-snippets'
     Plug 'honza/vim-snippets'
@@ -319,7 +319,7 @@ Plug 'KabbAmine/zeavim.vim'
 Plug 'chrisbra/unicode.vim'
 
 " An implementation of Sublime's PlainTasks plugin for Vim
-Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
+Plug 'elentok/plaintasks.vim'
 
 " Text outlining and task management for Vim based on Emacs' Org-Mode
 Plug 'jceb/vim-orgmode'

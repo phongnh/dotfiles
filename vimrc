@@ -301,7 +301,7 @@ Plug 'KabbAmine/zeavim.vim'
 Plug 'chrisbra/unicode.vim'
 
 " An implementation of Sublime's PlainTasks plugin for Vim
-Plug 'elentok/plaintasks.vim', { 'for': 'plaintasks' }
+Plug 'elentok/plaintasks.vim'
 
 " Text outlining and task management for Vim based on Emacs' Org-Mode
 Plug 'jceb/vim-orgmode'
