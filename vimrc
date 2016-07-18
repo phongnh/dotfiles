@@ -240,6 +240,7 @@ Plug 'chrisbra/NrrwRgn'
 " Code completion and Snippets
 if has('lua')
     Plug 'Shougo/neocomplete.vim'
+    Plug 'justmao945/vim-clang'
     Plug 'Shougo/neosnippet.vim'
     Plug 'Shougo/neosnippet-snippets'
     Plug 'honza/vim-snippets'
@@ -1273,11 +1274,14 @@ if has_key(g:plugs, 'neocomplete.vim')
         let g:neocomplete#force_omni_input_patterns = {}
     endif
 
-    let g:neocomplete#sources#omni#input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
-    let g:neocomplete#sources#omni#input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-    let g:neocomplete#sources#omni#input_patterns.python = '[^. *\t]\.\w*\|\h\w*'
-    let g:neocomplete#sources#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::\w*'
+    " let g:neocomplete#sources#omni#input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
+    " let g:neocomplete#sources#omni#input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    " let g:neocomplete#sources#omni#input_patterns.python = '[^. *\t]\.\w*\|\h\w*'
+    " let g:neocomplete#sources#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::\w*'
     " let g:neocomplete#force_omni_input_patterns.ruby     = '[^. *\t]\.\w*\|\h\w*::\w*'
+
+    let g:neocomplete#force_omni_input_patterns.c   = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 
     let g:neocomplete#sources#omni#functions.go = 'go#complete#Complete'
 
@@ -1330,6 +1334,13 @@ if has_key(g:plugs, 'neocomplete.vim')
     endfunction
 
     nnoremap <silent> <M-/> :NeoCompleteToggle<CR>
+
+    " justmao945/vim-clang
+    let g:clang_auto            = 0
+    let g:clang_c_completeopt   = 'menuone'
+    let g:clang_cpp_completeopt = 'menuone'
+    " let g:clang_c_options       = '-std=gnu11'
+    " let g:clang_cpp_options     = '-std=c++11 -stdlib=libc++'
 endif
 
 if has_key(g:plugs, 'neosnippet.vim')
