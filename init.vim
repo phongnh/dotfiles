@@ -972,10 +972,10 @@ if has_key(g:plugs, 'tagbar')
 endif
 
 " Shougo/vimfiler.vim
-call vimfiler#custom#profile('default', 'context', { 'safe' : 0, 'auto_expand' : 1, 'parent' : 0 })
+call vimfiler#custom#profile('default', 'context', { 'safe' : 0, 'auto_expand' : 1 })
 
-let g:vimfiler_enable_clipboard     = 0
 let g:vimfiler_as_default_explorer  = 1
+let g:vimfiler_enable_clipboard     = 0
 let g:vimfiler_tree_leaf_icon       = ' '
 let g:vimfiler_tree_opened_icon     = '▾'
 let g:vimfiler_tree_closed_icon     = '▸'
@@ -996,6 +996,9 @@ autocmd MyAutoCmd FileType vimfiler call s:my_vimfiler_settings()
 
 function! s:my_vimfiler_settings() abort
     setlocal nonumber
+
+    nunmap <buffer> <Space>
+    nmap   <buffer> <Space><Space> <Plug>(vimfiler_toggle_mark_current_line)
 
     nnoremap <silent> <buffer> <expr> gy vimfiler#do_action('tabopen')
     nnoremap <silent> <buffer> <expr> v  vimfiler#do_switch_action('vsplit')
