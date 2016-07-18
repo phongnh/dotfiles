@@ -240,7 +240,6 @@ Plug 'chrisbra/NrrwRgn'
 " Code completion and Snippets
 if has('lua')
     Plug 'Shougo/neocomplete.vim'
-    Plug 'Shougo/echodoc.vim'
     Plug 'Shougo/neosnippet.vim'
     Plug 'Shougo/neosnippet-snippets'
     Plug 'honza/vim-snippets'
