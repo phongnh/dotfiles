@@ -687,7 +687,8 @@ if has_key(g:plugs, 'ctrlp-py-matcher')
 
     if has_key(g:plugs, 'cpsm') && filereadable(g:plugs['cpsm']['dir'] + 'autoload/cpsm_py.so')
         " nixprime/cpsm
-        let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
+        let g:cpsm_highlight_mode = 'basic'
+        let g:ctrlp_match_func    = { 'match': 'cpsm#CtrlPMatch' }
     endif
 endif
 
