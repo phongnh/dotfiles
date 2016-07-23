@@ -933,7 +933,7 @@ endif
 let g:NERDTreeWinSize       = 35
 let g:NERDTreeMouseMode     = 2
 let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
-let g:NERDTreeQuitOnOpen    = 0
+let g:NERDTreeQuitOnOpen    = 1
 let g:NERDTreeChDirMode     = 0
 let g:NERDTreeShowBookmarks = 1
 
