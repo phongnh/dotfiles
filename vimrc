@@ -86,7 +86,6 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'phongnh/ctrlp-finder'
 Plug 'h14i/vim-ctrlp-buftab'
 Plug 'DavidEGx/ctrlp-smarttabs'
-Plug 'kaneshin/ctrlp-tabbed'
 Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'ompugao/ctrlp-history'
 Plug 'mattn/ctrlp-register'
@@ -760,9 +759,6 @@ nnoremap <silent> <Leader>B :CtrlPBufTab<CR>
 
 " DavidEGx/ctrlp-smarttabs
 nnoremap <silent> <Leader>t :CtrlPSmartTabs<CR>
-
-" kaneshin/ctrlp-tabbed
-nnoremap <silent> <Leader>T :CtrlPTabbed<CR>
 
 " fisadev/vim-ctrlp-cmdpalette
 nnoremap <silent> <Leader>; :CtrlPCmdPalette<CR>
