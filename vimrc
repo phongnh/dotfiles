@@ -840,7 +840,6 @@ if has_key(g:plugs, 'indentLine')
 
     nnoremap <silent> <F4> :IndentLinesToggle<CR>
     imap <F4> <Esc><F4>
-    nmap <Leader>ui <F4>
 else
     " nathanaelkane/vim-indent-guides
     let g:indent_guides_start_level           = 1
@@ -850,7 +849,6 @@ else
 
     nnoremap <silent> <F4> :IndentGuidesToggle<CR>
     imap <F4> <Esc><F4>
-    nmap <Leader>ui <F4>
 endif
 
 " mhinz/vim-startify
@@ -872,7 +870,6 @@ let g:startify_custom_header      = [] " Disable random quotes header
 
 nnoremap <silent> <F5> :Startify<CR>
 imap <F5> <Esc><F5>
-nmap <Leader>us <F5>
 
 augroup MyAutoCmd
     autocmd FileType startify setlocal nofoldenable foldcolumn=0
@@ -893,8 +890,6 @@ let g:syntastic_style_warning_symbol     = 'S!'
 
 nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 imap <F6> <Esc><F6>
-nmap <Leader>uc <F6>
-nnoremap <Leader>uC :SyntasticCheck<Space>
 
 if has('python')
     " sjl/gundo.vim
@@ -906,7 +901,6 @@ if has('python')
 
     nnoremap <silent> <F7> :GundoToggle<CR>
     imap <F7> <Esc><F7>
-    nmap <Leader>uu <F7>
 else
     " mbbill/undotree
     let g:undotree_WindowLayout       = 'botright'
@@ -914,7 +908,6 @@ else
 
     nnoremap <silent> <F7> :UndotreeToggle<CR>
     imap <F7> <Esc><F7>
-    nmap <Leader>uu <F7>
 endif
 
 if has_key(g:plugs, 'tagbar')
@@ -926,7 +919,6 @@ if has_key(g:plugs, 'tagbar')
 
     nnoremap <silent> <F8> :TagbarToggle<CR>
     imap <F8> <Esc><F8>
-    nmap <Leader>ut <F8>
 endif
 
 " scrooloose/nerdtree
@@ -939,11 +931,9 @@ let g:NERDTreeShowBookmarks = 1
 
 nnoremap <silent> <F9> :NERDTreeToggle<CR>
 imap <F9> <Esc><F9>
-nmap <Leader>uo <F9>
 
 nnoremap <silent> <F10> :NERDTreeFind<CR>
 imap <F10> <Esc><F10>
-nmap <Leader>uf <F10>
 
 " jlanzarotta/bufexplorer
 let g:bufExplorerDisableDefaultKeyMapping = 1
@@ -1194,8 +1184,6 @@ map <M-k> <Plug>(expand_region_expand)
 map <M-j> <Plug>(expand_region_shrink)
 
 " terryma/vim-multiple-cursors
-xnoremap <F6> :MultipleCursorsFind<Space>
-
 " Called once right before you start selecting multiple cursors
 function! Multiple_cursors_before() abort
     if exists(':NeoCompleteLock') == 2
