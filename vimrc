@@ -473,21 +473,21 @@ nnoremap <F1> :help<Space>
 imap <F1> <Esc><F1>
 
 " CTRL-Space: Show history
-cnoremap <C-@> <C-F>
+cnoremap <C-@> <C-f>
 
 " CTRL-V: Paste from clipboard
-cnoremap <C-V> <C-R>+
+cnoremap <C-v> <C-r>+
 
 " Enable undo for CTRL-W (Delete word) and CTRL-U (Delete line)
-inoremap <C-W> <C-G>u<C-W>
-inoremap <C-U> <C-G>u<C-U>
+inoremap <C-w> <C-g>u<C-w>
+inoremap <C-u> <C-g>u<C-u>
 
 " CTRL-T: Insert tab
-inoremap <silent> <C-T> <C-V><Tab>
+inoremap <silent> <C-t> <C-v><Tab>
 
 " Jump to last active buffer
-inoremap <C-^> <C-C><C-^>
-" inoremap <C-^> <C-C>:update<CR><C-^>
+inoremap <C-^> <C-c><C-^>
+" inoremap <C-^> <C-c>:update<CR><C-^>
 
 " Q: Disable Ex-mode. qq to record, Q to replay (remapped)
 nmap Q @q
@@ -548,37 +548,39 @@ nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:echo 'foldcolumn = '
 nnoremap <silent> ]w :wincmd w<CR>
 nnoremap <silent> [w :wincmd W<CR>
 
-nmap <Tab>   <C-W>w
-nmap <S-Tab> <C-W>W
+nmap <Tab>   <C-w>w
+nmap <S-Tab> <C-w>W
 
 " Reload buffer
-nnoremap <silent> <C-W>e     :edit<CR>
-nnoremap <silent> <C-W><C-E> :edit<CR>
-nnoremap <silent> <C-W>E     :edit!<CR>
+nnoremap <silent> <C-w>e     :edit<CR>
+nnoremap <silent> <C-w><C-e> :edit<CR>
+nnoremap <silent> <C-w>E     :edit!<CR>
 
 " Unload buffer
-nnoremap <silent> <C-W>D :bdelete<CR>
+nnoremap <silent> <C-w>u     :bdelete<CR>
+nnoremap <silent> <C-w><C-u> :bdelete<CR>
+nnoremap <silent> <C-w>U     :bdelete!<CR>
 
-" gb: Last buffer
-nnoremap <silent> gb :buffer#<CR>
+" gl: Go to Last buffer
+nnoremap <silent> gl :buffer#<CR>
 
 " Save buffer
-nnoremap <silent> <C-S> :update<CR>
-vmap <C-S> <Esc><C-S>gv
-imap <C-S> <Esc><C-S>
-nmap <Leader>w <C-S>
+nnoremap <silent> <C-s> :update<CR>
+vmap <C-s> <Esc><C-s>gv
+imap <C-s> <Esc><C-s>
+nmap <Leader>w <C-s>
 
 " Exit Vim. Bring up a prompt when some buffers have been changed
 nnoremap <silent> ZC :confirm qall<CR>
 
 " Use <C-\><C-\> to do <C-]> but open it in a new split
-nmap <C-\><C-\> <C-W>v<C-]>zvzz
+nmap <C-\><C-\> <C-w>v<C-]>zvzz
 
 " Search and Replace
-nnoremap <Leader>sr :%s/<C-R>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+nnoremap <Leader>sr :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
 nnoremap <Leader>sR :%s//gc<Left><Left><Left>
 
-xnoremap <Leader>sr <Esc>:%s/<C-R>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xnoremap <Leader>sr <Esc>:%s/<C-r>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
 xnoremap <Leader>sR :s/\%V/gc<Left><Left><Left>
 
 " Copy / cut to clipboard
@@ -602,10 +604,10 @@ nnoremap <silent> c=P O<Esc>"+Pm``[=`]``^
 nnoremap <silent> c=v :set paste<CR>"+p:set nopaste<CR>
 nnoremap <silent> c=V :set paste<CR>"+P:set nopaste<CR>
 
-inoremap <silent> <C-V> <C-G>u<C-O>"+gP
+inoremap <silent> <C-v> <C-g>u<C-o>"+gP
 
 " Redraw
-nnoremap <silent> <LocalLeader><LocalLeader> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+nnoremap <silent> <LocalLeader><LocalLeader> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
 
 " Meta workround
 if !has('gui_running') && !has('nvim')
@@ -940,7 +942,7 @@ let g:bufExplorerDisableDefaultKeyMapping = 1
 let g:bufExplorerShowDirectories          = 0
 let g:bufExplorerShowRelativePath         = 1
 
-nnoremap <silent> gl :ToggleBufExplorer<CR>
+nnoremap <silent> gb :ToggleBufExplorer<CR>
 
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
