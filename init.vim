@@ -978,10 +978,10 @@ let g:vimfiler_readonly_file_icon   = '✗'
 let g:vimfiler_marked_file_icon     = '✓'
 let g:vimfiler_quick_look_command   = has('mac') ? 'qlmanage -p' : 'gloobus-preview'
 
-nnoremap <silent> <F9> :VimFilerExplorer -parent -toggle<CR>
+nnoremap <silent> <F9> :VimFilerExplorer -force-hide -parent -toggle<CR>
 imap <F9> <Esc><F9>
 
-nnoremap <silent> <F10> :VimFilerBufferDir -buffer-name=files-in-folder -parent -toggle -explorer -find<CR>
+nnoremap <silent> <F10> :VimFilerBufferDir -buffer-name=files-in-folder -force-hide -parent -toggle -explorer -find<CR>
 imap <F10> <Esc><F10>
 
 autocmd MyAutoCmd FileType vimfiler call s:my_vimfiler_settings()
