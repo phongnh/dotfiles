@@ -1112,8 +1112,8 @@ nmap <Leader>sW ysiW
 " tpope/vim-abolish
 nnoremap <Leader>ab :%Abolish
 xnoremap <Leader>ab :Abolish
-nnoremap <Leader>ar :%Subvert
-xnoremap <Leader>ar :Subvert
+nnoremap <Leader>ar :%Subvert//gc<Left><Left><Left>
+xnoremap <Leader>ar :Subvert//gc<Left><Left><Left>
 
 " jiangmiao/auto-pairs
 let g:AutoPairsFlyMode            = 0
