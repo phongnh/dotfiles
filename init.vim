@@ -1035,6 +1035,9 @@ map *  <Plug>(incsearch-nohl)<Plug>(anzu-star-with-echo)zzzv
 map #  <Plug>(incsearch-nohl)<Plug>(anzu-sharp-with-echo)zzzv
 
 " dyng/ctrlsf.vim
+let g:ctrlsf_populate_qflist = 1
+
+nmap <Leader>sq <Plug>CtrlSFQuickfixPrompt
 nmap <Leader>sp <Plug>CtrlSFPrompt
 nmap <Leader>sf <Plug>CtrlSFCwordExec
 vmap <Leader>sf <Plug>CtrlSFVwordExec
@@ -1112,8 +1115,8 @@ nmap <Leader>sW ysiW
 " tpope/vim-abolish
 nnoremap <Leader>ab :%Abolish
 xnoremap <Leader>ab :Abolish
-nnoremap <Leader>ar :%Subvert//gc<Left><Left><Left>
-xnoremap <Leader>ar :Subvert//gc<Left><Left><Left>
+nnoremap <Leader>sv :%Subvert//gc<Left><Left><Left>
+xnoremap <Leader>sv :Subvert//gc<Left><Left><Left>
 
 " jiangmiao/auto-pairs
 let g:AutoPairsFlyMode            = 0
