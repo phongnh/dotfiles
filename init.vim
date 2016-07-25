@@ -126,7 +126,7 @@ endif
 Plug 'mhinz/vim-startify'
 
 " A plugin for asynchronous :make using Neovim's job-control functionality
-Plug 'benekastah/neomake'
+Plug 'neomake/neomake'
 
 if has('python')
     " Visualize your Vim undo tree
@@ -928,7 +928,7 @@ augroup MyAutoCmd
     autocmd User Startified setlocal buftype=
 augroup END
 
-" benekastah/neomake
+" neomake/neomake
 let g:neomake_list_height        = 5
 let g:neomake_echo_current_error = 1
 
