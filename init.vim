@@ -1566,8 +1566,9 @@ nnoremap <silent> <Leader>rg :TestVisit<CR>
 " sheerun/vim-polyglot
 let g:polyglot_disabled = ['go']
 
-" tpope/vim-markdown
-let g:markdown_fenced_languages = ['bash=sh', 'coffee', 'css', 'html', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'python', 'ruby', 'sass', 'sql', 'vim', 'xml']
+" plasticboy/vim-markdown
+let g:vim_markdown_no_default_key_mappings = 1
+let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
 
 " tpope/rails.vim
 nnoremap <silent> <Leader>ae :AE<CR>
