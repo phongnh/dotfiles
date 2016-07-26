@@ -82,31 +82,74 @@ call plug#begin()
 " rsi.vim: Readline style insertion
 Plug 'tpope/vim-rsi'
 
-" lean & mean status/tabline for vim that's light as air
-Plug 'vim-airline/vim-airline'
-" A collection of themes for vim-airline
-Plug 'vim-airline/vim-airline-themes'
-
 " Asynchronous build and test dispatcher
 Plug 'tpope/vim-dispatch'
 
 " Interactive command execution
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
-" Unite and create user interfaces
-Plug 'Shougo/unite.vim'
-Plug 'phongnh/unite-ag.vim'
-Plug 'Shougo/tabpagebuffer.vim'
-Plug 'Shougo/neomru.vim'
-Plug 'Shougo/unite-outline'
-Plug 'Shougo/neoinclude.vim'
-Plug 'tsukkee/unite-tag'
-Plug 'Shougo/neoyank.vim'
-Plug 'osyo-manga/unite-quickfix'
-Plug 'thinca/vim-unite-history'
+" lean & mean status/tabline for vim that's light as air
+Plug 'vim-airline/vim-airline'
+" A collection of themes for vim-airline
+Plug 'vim-airline/vim-airline-themes'
+
+" A fancy start screen
+Plug 'mhinz/vim-startify'
+
+" A tree explorer plugin for vim
+Plug 'scrooloose/nerdtree'
+
+" projectionist.vim: project configuration
+Plug 'tpope/vim-projectionist'
+
+" CtrlP
+if has('python')
+    Plug 'FelikZ/ctrlp-py-matcher'
+
+    if executable('cmake')
+        Plug 'nixprime/cpsm', { 'do': './install.sh' }
+    endif
+endif
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'phongnh/ctrlp-finder'
+Plug 'h14i/vim-ctrlp-buftab'
+Plug 'DavidEGx/ctrlp-smarttabs'
+Plug 'fisadev/vim-ctrlp-cmdpalette'
+Plug 'ompugao/ctrlp-history'
+Plug 'mattn/ctrlp-register'
+Plug 'tacahiroy/ctrlp-funky'
+Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
+
+" logging registers and reusing them
+Plug 'LeafCage/yankround.vim'
 
 " A command-line fuzzy finder written in Go
 Plug 'junegunn/fzf', { 'do': './install --bin' }
+
+if executable('ctags')
+    " A class outline viewer for Vim
+    Plug 'majutsushi/tagbar'
+    Plug 'phongnh/vim-tagbar-settings'
+endif
+
+if has('python')
+    " Visualize your Vim undo tree
+    Plug 'sjl/gundo.vim'
+else
+    " The ultimate undo history visualizer for VIM
+    Plug 'mbbill/undotree'
+endif
+
+" A plugin for asynchronous :make using Neovim's job-control functionality
+Plug 'neomake/neomake'
+
+if has('python')
+    " Provide easy code formatting in Vim by integrating existing code formatters.
+    Plug 'Chiel92/vim-autoformat'
+endif
+
+" BufExplorer Plugin for Vim
+Plug 'jlanzarotta/bufexplorer'
 
 " Maximize current buffer
 Plug 'regedarek/ZoomWin'
@@ -122,51 +165,30 @@ else
     Plug 'nathanaelkane/vim-indent-guides'
 endif
 
-" A fancy start screen
-Plug 'mhinz/vim-startify'
-
-" A plugin for asynchronous :make using Neovim's job-control functionality
-Plug 'neomake/neomake'
-
-if has('python')
-    " Visualize your Vim undo tree
-    Plug 'sjl/gundo.vim'
-else
-    " The ultimate undo history visualizer for VIM
-    Plug 'mbbill/undotree'
-endif
-
-if executable('ctags')
-    " A class outline viewer for Vim
-    Plug 'majutsushi/tagbar'
-    Plug 'phongnh/vim-tagbar-settings'
-endif
-
-" projectionist.vim: project configuration
-Plug 'tpope/vim-projectionist'
-
-" Powerful file explorer implemented by Vim script
-Plug 'Shougo/vimfiler.vim'
-
-" BufExplorer Plugin for Vim
-Plug 'jlanzarotta/bufexplorer'
-
 " Delete buffers and close files in Vim without closing your windows or messing up your layout
 Plug 'moll/vim-bbye'
+
+" Delete unwanted whitespace at the end of lines
+Plug 'vim-scripts/DeleteTrailingWhitespace'
+
+" Helpers for UNIX
+Plug 'tpope/vim-eunuch'
+" Phong's vim command helpers
+Plug 'phongnh/vim-command-helpers'
 
 " Pairs of handy bracket mappings
 Plug 'tpope/vim-unimpaired'
 " Toggle useful settings
 Plug 'phongnh/vim-toggler'
 
+" Vim plugin to copy current editing file path to clipboard (if support)
+Plug 'phongnh/vim-copypath'
+
 " Simple highlight plugin
 Plug 'phongnh/vim-simple-highlight'
 
 " extended % matching for HTML, LaTeX, and many other languages
 Plug 'vim-scripts/matchit.zip'
-
-" My vim functions for search and substitue
-Plug 'phongnh/vim-search-helpers'
 
 " The missing motion for Vim
 Plug 'justinmk/vim-sneak'
@@ -176,16 +198,55 @@ Plug 'haya14busa/incsearch.vim'
 " Vim search status
 Plug 'osyo-manga/vim-anzu'
 
+" My vim functions for search and substitue
+Plug 'phongnh/vim-search-helpers'
+
 " An ack.vim alternative mimics Ctrl-Shift-F on Sublime Text 2
 Plug 'dyng/ctrlsf.vim'
 
 " Helps you win at grep.
 Plug 'mhinz/vim-grepper'
 
-" Helpers for UNIX
-Plug 'tpope/vim-eunuch'
-" Phong's vim command helpers
-Plug 'phongnh/vim-command-helpers'
+" A Narrow Region Plugin for vim (like Emacs Narrow Region)
+Plug 'chrisbra/NrrwRgn'
+
+" Enable repeating supported plugin maps with "."
+Plug 'tpope/vim-repeat'
+
+" Enable repeating supported plugin maps with "."
+Plug 'tpope/vim-repeat'
+
+" commentary.vim: comment stuff out
+Plug 'tpope/vim-commentary'
+
+" A Vim alignment plugin
+Plug 'junegunn/vim-easy-align'
+" Vim script for text filtering and alignment
+Plug 'godlygeek/tabular'
+
+" True Sublime Text style multiple selections for Vim
+Plug 'terryma/vim-multiple-cursors'
+
+" quoting/parenthesizing made simple
+Plug 'tpope/vim-surround'
+
+" easily search for, substitute, and abbreviate multiple variants of a word
+Plug 'tpope/vim-abolish'
+
+" use CTRL-A/CTRL-X to increment dates, times, and more
+Plug 'tpope/vim-speeddating'
+
+" insert or delete brackets, parens, quotes in pair
+Plug 'jiangmiao/auto-pairs'
+
+" A vim plugin that simplifies the transition between multiline and single-line code
+Plug 'AndrewRadev/splitjoin.vim'
+
+" Smart selection of the closest text object
+Plug 'gcmt/wildfire.vim'
+
+" Vim plugin that allows you to visually select increasingly larger regions of text using the same key combination.
+Plug 'terryma/vim-expand-region'
 
 " Text Objects
 Plug 'kana/vim-textobj-user'
@@ -206,48 +267,8 @@ Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript' " f
 Plug 'poetic/vim-textobj-javascript'          " c, remapped to j
 
-" Vim plugin to copy current editing file path to clipboard (if support)
-Plug 'phongnh/vim-copypath'
-
-" Enable repeating supported plugin maps with "."
-Plug 'tpope/vim-repeat'
-
-" quoting/parenthesizing made simple
-Plug 'tpope/vim-surround'
-
-" easily search for, substitute, and abbreviate multiple variants of a word
-Plug 'tpope/vim-abolish'
-
-" use CTRL-A/CTRL-X to increment dates, times, and more
-Plug 'tpope/vim-speeddating'
-
-" insert or delete brackets, parens, quotes in pair
-Plug 'jiangmiao/auto-pairs'
-
-" Delete unwanted whitespace at the end of lines
-Plug 'vim-scripts/DeleteTrailingWhitespace'
-
-" A vim plugin that simplifies the transition between multiline and single-line code
-Plug 'AndrewRadev/splitjoin.vim'
-
-" commentary.vim: comment stuff out
-Plug 'tpope/vim-commentary'
-
-" A Vim alignment plugin
-Plug 'junegunn/vim-easy-align'
-" Vim script for text filtering and alignment
-Plug 'godlygeek/tabular'
-
-" Smart selection of the closest text object
-Plug 'gcmt/wildfire.vim'
-
-" Vim plugin that allows you to visually select increasingly larger regions of text using the same key combination.
-Plug 'terryma/vim-expand-region'
-" True Sublime Text style multiple selections for Vim
-Plug 'terryma/vim-multiple-cursors'
-
-" A Narrow Region Plugin for vim (like Emacs Narrow Region)
-Plug 'chrisbra/NrrwRgn'
+" A Vim plugin that provides a completion function for Unicode glyphs
+Plug 'chrisbra/unicode.vim'
 
 " Code completion and Snippets
 if has('python3')
@@ -306,23 +327,14 @@ Plug 'fatih/vim-go'
 Plug 'zchee/vim-go-stdlib'  " go standard library syntax highlighting
 Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 
-if has('python')
-    " Provide easy code formatting in Vim by integrating existing code formatters.
-    Plug 'Chiel92/vim-autoformat'
-endif
-
-" Zeal for Vim
-Plug 'KabbAmine/zeavim.vim'
-
-" Utility
-" A Vim plugin that provides a completion function for Unicode glyphs
-Plug 'chrisbra/unicode.vim'
-
 " An implementation of Sublime's PlainTasks plugin for Vim
 Plug 'elentok/plaintasks.vim'
 
 " Text outlining and task management for Vim based on Emacs' Org-Mode
 Plug 'jceb/vim-orgmode'
+
+" Zeal for Vim
+Plug 'KabbAmine/zeavim.vim'
 
 " Color schemes
 Plug 'NLKNguyen/papercolor-theme'
@@ -673,166 +685,157 @@ endfunction
 
 autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
-" Shougo/unite.vim
-let g:unite_enable_auto_select = 0
-let g:unite_source_rec_min_cache_files = 1000
-
-let g:unite_ignore_source_files = [
-            \ 'file_list.vim',
-            \ 'file_point.vim',
-            \ 'find.vim',
-            \ 'function.vim',
-            \ 'history_input.vim',
-            \ 'history_unite.vim',
-            \ 'interactive.vim',
-            \ 'jump_point.vim',
-            \ 'launcher.vim',
-            \ 'menu.vim',
-            \ 'output.vim',
-            \ 'output_shellcmd.vim',
-            \ 'process.vim',
-            \ 'runtimepath.vim',
-            \ 'script.vim',
+" mhinz/vim-startify
+let g:startify_skiplist = [
+            \ '.git/index',
+            \ '.git/config',
+            \ 'COMMIT_EDITMSG',
+            \ 'git-rebase-todo',
+            \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
             \ ]
 
-call unite#custom#profile('default', 'context', {
-            \ 'auto_resize': 1,
-            \ 'start_insert': 1,
-            \ 'prompt': '> ',
-            \ 'direction': 'botright',
-            \ 'hide_source_names': 1,
-            \ })
+let g:startify_enable_special     = 0
+let g:startify_change_to_dir      = 0
+let g:startify_change_to_vcs_root = 0
+let g:startify_relative_path      = 1
+let g:startify_update_oldfiles    = 1
+let g:startify_show_sessions      = 1
+let g:startify_custom_header      = [] " Disable random quotes header
 
-hi link uniteInputPrompt Special
+nnoremap <silent> <F5> :Startify<CR>
+imap              <F5> <Esc><F5>
 
-call unite#filters#sorter_default#use(['sorter_rank'])
+nnoremap <silent> <Leader>us :Startify<CR>
 
-call unite#custom#source('file_rec/async', 'ignore_globs', split(&wildignore, ','))
+augroup MyAutoCmd
+    autocmd FileType startify setlocal nofoldenable foldcolumn=0
+    autocmd User Startified setlocal buftype=
+augroup END
 
-call unite#custom#source('buffer,file_rec/async,file_rec/git', 'matchers', [
-            \ 'converter_relative_word',
-            \ 'matcher_fuzzy'
-            \ ])
+" scrooloose/nerdtree
+let g:NERDTreeWinSize       = 35
+let g:NERDTreeMouseMode     = 2
+let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
+let g:NERDTreeQuitOnOpen    = 0
+let g:NERDTreeChDirMode     = 0
+let g:NERDTreeShowBookmarks = 1
 
-call unite#custom#source('neomru/file', 'matchers', [
-            \ 'converter_relative_word',
-            \ 'matcher_project_files',
-            \ 'matcher_hide_current_file',
-            \ 'matcher_fuzzy'
-            \ ])
+nnoremap <silent> <F9> :NERDTreeToggle<CR>
+imap              <F9> <Esc><F9>
 
-call unite#custom#source('file_rec/async,file_rec/git,neomru/file', 'converters', [
-            \ 'converter_file_directory'
-            \ ])
+nnoremap <silent> <F10> :NERDTreeFind<CR>
+imap              <F10> <Esc><F10>
 
-let s:system_open_action = { 'is_selectable': 1 }
+nnoremap <silent> <Leader>fo :NERDTreeToggle<CR>
+nmap              <Leader>B  <Leader>fo
+nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
+nnoremap <silent> <Leader>bp :NERDTree %:p:h<CR>
 
-function! s:system_open_action.func(candidates) abort
-    let cmd = has('mac') ? '!open' : '!xdg-open'
-    for candidate in a:candidates
-        if !isdirectory(candidate.action__path)
-            silent! execute cmd . " " . fnameescape(candidate.action__path) . " &"
-        endif
-    endfor
-    redraw!
-endfunction
+if has_key(g:plugs, 'ctrlp-py-matcher')
+    " FelikZ/ctrlp-py-matcher
+    let g:ctrlp_clear_cache_on_exit = 0
+    let g:ctrlp_max_files           = 0
+    let g:ctrlp_match_func          = { 'match': 'pymatcher#PyMatch' }
 
-function! s:my_unite_settings() abort
-    call unite#custom#action('file', 'system-open', s:system_open_action)
+    if has_key(g:plugs, 'cpsm') && filereadable(g:plugs['cpsm']['dir'] + 'autoload/cpsm_py.so')
+        " nixprime/cpsm
+        let g:cpsm_highlight_mode = 'basic'
+        let g:ctrlp_match_func    = { 'match': 'cpsm#CtrlPMatch' }
+    endif
+endif
 
-    call unite#custom#alias('file', 'h', 'left')
-    call unite#custom#default_action('directory', 'narrow')
+" ctrlpvim/ctrlp.vim
+let g:ctrlp_match_window      = 'bottom,order:btt,min:1,max:20,results:20'
+let g:ctrlp_map               = ''
+let g:ctrlp_working_path_mode = 'w'
+let g:ctrlp_reuse_window      = 'startify'
+let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
+let g:ctrlp_custom_ignore     = {
+            \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc'
+            \ }
 
-    imap <buffer> <Esc> <Plug>(unite_exit)
-    imap <buffer> <C-r> <Plug>(unite_insert_leave)<Plug>(unite_restart)
-    imap <buffer> <Tab> <Plug>(unite_complete)
-    imap <buffer> '     <Plug>(unite_quick_match_default_action)
-    imap <buffer> <C-j> <Plug>(unite_select_next_line)
-    imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+if executable('ag')
+    let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
+elseif has('win32') || has('win64')
+    let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
+else
+    let s:ctrlp_fallback = 'find %s -type f'
+endif
 
-    inoremap <buffer> <expr> <C-s>
-                \ unite#mappings#set_current_matchers(
-                \   empty(unite#mappings#get_current_matchers()) ? ['matcher_context'] : []
-                \ )
+let g:ctrlp_use_caching  = 0
+let g:ctrlp_user_command = {
+            \ 'types': {
+            \   1: ['.git', 'cd %s && git ls-files . --cached --others --exclude-standard'],
+            \   2: ['.hg',  'hg --cwd %s locate -I .'],
+            \ },
+            \ 'fallback': s:ctrlp_fallback
+            \ }
 
-    inoremap <silent> <buffer> <expr> <C-o> unite#do_action('system-open')
-    inoremap <silent> <buffer> <expr> <C-x> unite#do_action('split')
-    inoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
-endfunction
+nnoremap <silent> <Leader>- :CtrlPClearAllCaches<CR>
 
-autocmd MyAutoCmd FileType unite call s:my_unite_settings()
+nnoremap <silent> <Leader><Leader> :CtrlPMixed<CR>
 
-nnoremap <silent> <Leader>- :UniteClose<CR>
+nnoremap          <Leader>F  :CtrlP<Space>
+nnoremap <silent> <Leader>ff :CtrlP<CR>
 
-nnoremap <silent> <Leader>, :Unite -buffer-name=sources source<CR>
+nnoremap <silent> <Leader>fp :CtrlPRoot<CR>
 
-nnoremap <silent> <Leader><Leader> :Unite -buffer-name=mixed buffer bookmark neomru/file file_rec/async<CR>
+nnoremap <silent> <Leader>fc :CtrlPCurFile<CR>
+nnoremap <silent> <Leader>fC :CtrlP <C-r>=expand("%:h:h")<CR><CR>
 
-nnoremap          <Leader>D  :Unite -buffer-name=dirs -default-action=cd directory_rec/async:
+nnoremap <silent> <Leader>fr :CtrlPMRUFiles<CR>
 
-nnoremap          <Leader>F  :Unite -buffer-name=files-in-folder file_rec/async:
-nnoremap <silent> <Leader>fe :Unite -no-restore -resume -input= -buffer-name=explorer file_rec/async file/new<CR>
+nnoremap          <Leader>D  :CtrlPDir<Space>
+nnoremap <silent> <Leader>fd :CtrlPDir<CR>
 
-nnoremap <silent> <Leader>fp :Unite -no-restore -resume -input= -buffer-name=git file_rec/git:--cached:--others:--exclude-standard file/new<CR>
+nnoremap <silent> <Leader>fb :CtrlPBuffer<CR>
 
-nnoremap <silent> <Leader>fc :Unite -buffer-name=files-in-folder file_rec/async:<C-r>=expand("%:h")<CR> file/new:<C-r>=expand("%:h")<CR><CR>
-nnoremap <silent> <Leader>fC :Unite -buffer-name=files-in-folder file_rec/async:<C-r>=expand("%:h:h")<CR> file/new:<C-r>=expand("%:h:h")<CR><CR>
+nnoremap <silent> <Leader>fk :CtrlPBookmarkDir<CR>
+nnoremap          <Leader>fK :CtrlPBookmarkDirAdd!<Space>
 
-nnoremap <silent> <Leader>fk :Unite -buffer-name=bookmarks bookmark<CR>
-nnoremap          <Leader>fK :UniteBookmarkAdd<Space>
+nnoremap <silent> <Leader>\ :CtrlPTag<CR>
 
-nnoremap <silent> <Leader>fb :Unite -buffer-name=buffers buffer<CR>
-nnoremap <silent> <Leader>ft :Unite -buffer-name=tabs tab<CR>
+nnoremap <silent> <Leader>fq :CtrlPQuickfix<CR>
 
 nmap              <Leader>bb <Leader>fb
 nmap              <Leader>bc <Leader>fc
 nmap              <Leader>bC <Leader>fC
-nnoremap <silent> <Leader>bl :Unite -buffer-name=lines line<CR>
-nnoremap <silent> <Leader>bL :Unite -buffer-name=lines line:buffers<CR>
+nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
+nnoremap <silent> <Leader>bL :CtrlPLine<CR>
+nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
+nnoremap <silent> <Leader>bT :CtrlPBufTagAll<CR>
 
-nnoremap <silent> <Leader>M :Unite -buffer-name=mappings mapping<CR>
-nnoremap <silent> <Leader>; :Unite -buffer-name=commands command<CR>
-nnoremap <silent> <Leader>i :Unite -buffer-name=register register<CR>
+" phongnh/ctrlp-finder
+nnoremap <silent> <Leader>fe :CtrlPFinder<CR>
 
-" phongnh/unite-ag.vim
-let g:unite_source_ag_min_cache_files = 1000
+" h14i/vim-ctrlp-buftab
+nnoremap <silent> <Leader>fB :CtrlPBufTab<CR>
 
-nnoremap <silent> <Leader>ff :Unite -no-restore -resume -input= -buffer-name=files ag/async file/new<CR>
+" DavidEGx/ctrlp-smarttabs
+nnoremap <silent> <Leader>ft :CtrlPSmartTabs<CR>
 
-" Shougo/tabpagebuffer.vim
-nnoremap <silent> <Leader>fB :Unite -buffer-name=buffers buffer_tab<CR>
+" fisadev/vim-ctrlp-cmdpalette
+nnoremap <silent> <Leader>; :CtrlPCmdPalette<CR>
 
-" Shougo/neomru.vim
-nnoremap <silent> <Leader>fr :Unite -buffer-name=mru neomru/file<CR>
-nnoremap <silent> <Leader>fd :Unite -buffer-name=dirs -default-action=cd neomru/directory directory_rec/async<CR>
+" ompugao/ctrlp-history
+nnoremap <silent> <Leader>: :CtrlPCmdHistory<CR>
+nnoremap <silent> <Leader>/ :CtrlPSearchHistory<CR>
 
-" Shougo/unite-outline
-nnoremap <silent> <Leader>bo :Unite -buffer-name=outline outline<CR>
+" mattn/ctrlp-register
+nnoremap <silent> <Leader>i :CtrlPRegister<CR>
 
-" tsukkee/unite-tag
-let g:unite_source_tag_max_fname_length = 70
+" tacahiroy/ctrlp-funky
+nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
+nnoremap <silent> <Leader>bO :CtrlPFunkyMulti<CR>
 
-nnoremap <silent> <Leader>bt :Unite -buffer-name=outline tag/include<CR>
+" slimane/ctrlp-locationlist
+nnoremap <silent> <Leader>fl :CtrlPLocationlist<CR>
 
-nnoremap <silent> <Leader>\ :Unite -no-restore -resume -input= -buffer-name=tags tag<CR>
+" LeafCage/yankround.vim
+let g:yankround_max_history = 100
 
-nnoremap <silent> <Leader>st :UniteWithCursorWord -no-restore -resume -immediately -sync -buffer-name=tags tag<CR>
-
-" Shougo/neoyank.vim
-nnoremap <silent> <Leader>y :Unite -buffer-name=yanks history/yank<CR>
-
-" osyo-manga/unite-quickfix
-nnoremap <silent> <Leader>fq :Unite -resume -buffer-name=quickfix quickfix<CR>
-nnoremap <silent> <Leader>fl :Unite -resume -buffer-name=location-list location_list<CR>
-
-" thinca/vim-unite-history
-nnoremap <silent> <Leader>: :Unite -buffer-name=command-history history/command<CR>
-nnoremap <silent> <Leader>/ :Unite -buffer-name=search-history history/search<CR>
-
-if has_key(g:plugs, 'neosnippet.vim')
-    " Shougo/neosnippet.vim
-    nnoremap <silent> <Leader>fs :Unite -buffer-name=snippets neosnippet<CR>
-endif
+nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
 
 " junegunn/fzf
 let g:fzf_layout = { 'down': '~30%' }
@@ -847,6 +850,71 @@ let g:fzf_action = {
 
 nnoremap <silent> <Leader>p :FZF<CR>
 nnoremap          <Leader>P :FZF<Space>
+
+if has_key(g:plugs, 'tagbar')
+    " majutsushi/tagbar
+    let g:tagbar_sort      = 0
+    let g:tagbar_autofocus = 1
+    let g:tagbar_autoclose = 0
+    let g:tagbar_iconchars = ['▸', '▾']
+
+    nnoremap <silent> <F8> :TagbarToggle<CR>
+    imap              <F8> <Esc><F8>
+
+    nnoremap <silent> <Leader>ut :TagbarToggle<CR>
+endif
+
+if has('python')
+    " sjl/gundo.vim
+    let g:gundo_right          = 1
+    let g:gundo_width          = 30
+    let g:gundo_preview_bottom = 1
+    let g:gundo_preview_height = 18
+    let g:gundo_auto_preview   = 0
+
+    nnoremap <silent> <F7> :GundoToggle<CR>
+    imap              <F7> <Esc><F7>
+
+    nnoremap <silent> <Leader>uu :GundoToggle<CR>
+else
+    " mbbill/undotree
+    let g:undotree_WindowLayout       = 'botright'
+    let g:undotree_SetFocusWhenToggle = 1
+
+    nnoremap <silent> <F7> :UndotreeToggle<CR>
+    imap              <F7> <Esc><F7>
+
+    nnoremap <silent> <Leader>uu :UndotreeToggle<CR>
+endif
+
+" neomake/neomake
+let g:neomake_list_height        = 5
+let g:neomake_echo_current_error = 1
+
+nnoremap <silent> <F6> :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
+imap              <F6> <Esc><F6>
+
+nnoremap <silent> <Leader>bs :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
+nnoremap          <Leader>bS :Neomake<Space>
+
+if has_key(g:plugs, 'vim-autoformat')
+    " Chiel92/vim-autoformat
+    let g:autoformat_autoindent             = 0
+    let g:autoformat_retab                  = 0
+    let g:autoformat_remove_trailing_spaces = 0
+    let g:autoformat_verbosemode            = 0
+
+    nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
+    nnoremap <Leader>aF :Autoformat<Space>
+endif
+
+" jlanzarotta/bufexplorer
+let g:bufExplorerDisableDefaultKeyMapping = 1
+let g:bufExplorerShowDirectories          = 0
+let g:bufExplorerShowRelativePath         = 1
+
+nnoremap <silent> gb :ToggleBufExplorer<CR>
+nnoremap <silent> <Leader>be :ToggleBufExplorer<CR>
 
 " regedarek/ZoomWin
 let g:zoomwin_localoptlist = ["ai","ar","bh","bin","bl","bomb","bt","cfu","ci","cin","cink","cino","cinw","cms","com","cpt","diff","efm","eol","ep","et","fenc","fex","ff","flp","fo","ft","gp","imi","ims","inde","inex","indk","inf","isk","kmp","lisp","mps","ml","ma","mod","nf","ofu","pi","qe","ro","sw","si","sts","spc","spf","spl","sua","swf","smc","syn","ts","tw","udf","wfh","wfw","wm"]
@@ -930,137 +998,15 @@ else
     vmap              <Leader>bi <Esc><Leader>bigv
 endif
 
-" mhinz/vim-startify
-let g:startify_skiplist = [
-            \ '.git/index',
-            \ '.git/config',
-            \ 'COMMIT_EDITMSG',
-            \ 'git-rebase-todo',
-            \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
-            \ ]
-
-let g:startify_enable_special     = 0
-let g:startify_change_to_dir      = 0
-let g:startify_change_to_vcs_root = 0
-let g:startify_relative_path      = 1
-let g:startify_update_oldfiles    = 1
-let g:startify_show_sessions      = 1
-let g:startify_custom_header      = [] " Disable random quotes header
-
-nnoremap <silent> <F5> :Startify<CR>
-imap              <F5> <Esc><F5>
-
-nnoremap <silent> <Leader>us :Startify<CR>
-
-augroup MyAutoCmd
-    autocmd FileType startify setlocal nofoldenable foldcolumn=0
-    autocmd User Startified setlocal buftype=
-augroup END
-
-" neomake/neomake
-let g:neomake_list_height        = 5
-let g:neomake_echo_current_error = 1
-
-nnoremap <silent> <F6> :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
-imap              <F6> <Esc><F6>
-
-nnoremap <silent> <Leader>bs :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
-nnoremap          <Leader>bS :Neomake<Space>
-
-if has('python')
-    " sjl/gundo.vim
-    let g:gundo_right          = 1
-    let g:gundo_width          = 30
-    let g:gundo_preview_bottom = 1
-    let g:gundo_preview_height = 18
-    let g:gundo_auto_preview   = 0
-
-    nnoremap <silent> <F7> :GundoToggle<CR>
-    imap              <F7> <Esc><F7>
-
-    nnoremap <silent> <Leader>uu :GundoToggle<CR>
-else
-    " mbbill/undotree
-    let g:undotree_WindowLayout       = 'botright'
-    let g:undotree_SetFocusWhenToggle = 1
-
-    nnoremap <silent> <F7> :UndotreeToggle<CR>
-    imap              <F7> <Esc><F7>
-
-    nnoremap <silent> <Leader>uu :UndotreeToggle<CR>
-endif
-
-if has_key(g:plugs, 'tagbar')
-    " majutsushi/tagbar
-    let g:tagbar_sort      = 0
-    let g:tagbar_autofocus = 1
-    let g:tagbar_autoclose = 0
-    let g:tagbar_iconchars = ['▸', '▾']
-
-    nnoremap <silent> <F8> :TagbarToggle<CR>
-    imap              <F8> <Esc><F8>
-
-    nnoremap <silent> <Leader>ut :TagbarToggle<CR>
-endif
-
-" Shougo/vimfiler.vim
-call vimfiler#custom#profile('default', 'context', { 'safe' : 0, 'auto_expand' : 1 })
-
-let g:vimfiler_as_default_explorer  = 1
-let g:vimfiler_enable_clipboard     = 0
-let g:vimfiler_tree_leaf_icon       = ' '
-let g:vimfiler_tree_opened_icon     = '▾'
-let g:vimfiler_tree_closed_icon     = '▸'
-let g:vimfiler_file_icon            = ' '
-let g:vimfiler_readonly_file_icon   = '✗'
-let g:vimfiler_marked_file_icon     = '✓'
-let g:vimfiler_quick_look_command   = has('mac') ? 'qlmanage -p' : 'gloobus-preview'
-
-nnoremap <silent> <F9> :VimFilerExplorer -parent -toggle<CR>
-imap              <F9> <Esc><F9>
-
-nnoremap <silent> <F10> :VimFilerBufferDir -buffer-name=files-in-folder -simple -parent -toggle -explorer -find<CR>
-imap              <F10> <Esc><F10>
-
-nnoremap <silent> <Leader>fo :VimFilerExplorer -parent -toggle<CR>
-nmap              <Leader>B  <Leader>fo
-nnoremap <silent> <Leader>bf :VimFilerBufferDir -buffer-name=files-in-folder -simple -parent -toggle -explorer -find<CR>
-nnoremap <silent> <Leader>bp :VimFilerBufferDir -buffer-name=files-in-folder -simple -parent -toggle -explorer<CR>
-nnoremap <silent> <Leader>bh :VimFilerSimple -buffer-name=vimfiler -direction=belowright -split -horizontal -parent -toggle<CR>
-nnoremap <silent> <Leader>bv :VimFilerSimple -buffer-name=vimfiler -direction=botright -split -parent -toggle<CR>
-
-autocmd MyAutoCmd FileType vimfiler call s:my_vimfiler_settings()
-
-function! s:my_vimfiler_settings() abort
-    setlocal nonumber
-
-    nunmap <buffer> <Space>
-    nmap   <buffer> <Space><Space> <Plug>(vimfiler_toggle_mark_current_line)
-
-    nnoremap <silent> <buffer> <expr> gy vimfiler#do_action('tabopen')
-    nnoremap <silent> <buffer> <expr> v  vimfiler#do_switch_action('vsplit')
-    nnoremap <silent> <buffer> <expr> s  vimfiler#do_switch_action('split')
-    nmap              <buffer>        p  <Plug>(vimfiler_quick_look)
-
-    " One key file operation.
-    " nmap <buffer> c <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_copy_file)
-    " nmap <buffer> m <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
-    " nmap <buffer> d <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
-endfunction
-
-" jlanzarotta/bufexplorer
-let g:bufExplorerDisableDefaultKeyMapping = 1
-let g:bufExplorerShowDirectories          = 0
-let g:bufExplorerShowRelativePath         = 1
-
-nnoremap <silent> gb :ToggleBufExplorer<CR>
-nnoremap <silent> <Leader>be :ToggleBufExplorer<CR>
-
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
 
 nnoremap <silent> <Leader>bd :Bdelete<CR>
 nnoremap <silent> <Leader>bD :Bdelete!<CR>
+
+" vim-scripts/DeleteTrailingWhitespace
+nnoremap <silent> <Leader>dw :update<CR>:DeleteTrailingWhitespace<CR>
+xnoremap <silent> <Leader>dw :DeleteTrailingWhitespace<CR>
 
 " justinmk/vim-sneak
 let g:sneak#streak = 1
@@ -1125,64 +1071,15 @@ nmap <Leader>L  <Leader>G
 nmap <Leader>ls <Leader>sg
 xmap <Leader>ls <Leader>sg
 
-" thinca/vim-textobj-between
-let g:textobj_between_no_default_key_mappings = 1
+" chrisbra/NrrwRgn
+let g:nrrw_rgn_nohl          = 1
+let g:nrrw_topbot_leftright  = 'belowright'
+let g:nrrw_rgn_nomap_Nr      = 1
+let g:nrrw_rgn_resize_window = 'relative'
+let g:nrrw_rgn_rel_min       = 50
+let g:nrrw_rgn_rel_max       = 50
 
-omap an <Plug>(textobj-between-a)
-omap in <Plug>(textobj-between-i)
-xmap an <Plug>(textobj-between-a)
-xmap in <Plug>(textobj-between-i)
-
-" Replace 'lucapette/vim-textobj-underscore'
-omap a_ <Plug>(textobj-between-a)_
-omap i_ <Plug>(textobj-between-i)_
-xmap a_ <Plug>(textobj-between-a)_
-xmap i_ <Plug>(textobj-between-i)_
-
-" rhysd/vim-textobj-ruby
-let g:textobj_ruby_more_mappings = 0
-
-" whatyouhide/vim-textobj-erb
-let g:textobj_erb_no_default_key_mappings = 1
-
-" Remap from 'E' to 'y'
-omap ay <Plug>(textobj-erb-a)
-omap iy <Plug>(textobj-erb-i)
-xmap ay <Plug>(textobj-erb-a)
-xmap iy <Plug>(textobj-erb-i)
-
-" poetic/vim-textobj-javascript
-let g:textobj_chunkblock_no_default_key_mappings = 1
-
-" Remap from 'c' to 'j'
-omap aj <Plug>(textobj-chunkblock-a)
-omap ij <Plug>(textobj-chunkblock-i)
-xmap aj <Plug>(textobj-chunkblock-a)
-xmap ij <Plug>(textobj-chunkblock-i)
-
-" tpope/vim-surround
-let g:surround_indent             = 1
-let g:surround_no_insert_mappings = 1
-
-nmap <Leader>sw ysiw
-nmap <Leader>sW ysiW
-
-" tpope/vim-abolish
-nnoremap <Leader>ab :%Abolish
-xnoremap <Leader>ab :Abolish
-nnoremap <Leader>sv :%Subvert//gc<Left><Left><Left>
-xnoremap <Leader>sv :Subvert//gc<Left><Left><Left>
-
-" jiangmiao/auto-pairs
-let g:AutoPairsFlyMode            = 0
-let g:AutoPairsShortcutToggle     = '<M-a>'
-let g:AutoPairsShortcutJump       = '<M-g>'
-let g:AutoPairsShortcutFastWrap   = '<M-w>'
-let g:AutoPairsShortcutBackInsert = '<M-i>'
-
-" vim-scripts/DeleteTrailingWhitespace
-nnoremap <silent> <Leader>dw :update<CR>:DeleteTrailingWhitespace<CR>
-xnoremap <silent> <Leader>dw :DeleteTrailingWhitespace<CR>
+nnoremap <silent> <Leader>ns :WidenRegion!<CR>
 
 " tpope/vim-commentary
 let g:commentary_map_backslash = 0
@@ -1237,6 +1134,41 @@ function! s:ToggleBarAlign() abort
 endfunction
 
 nnoremap <silent> <Leader>al :ToggleBarAlign<CR>
+
+" terryma/vim-multiple-cursors
+" Called once right before you start selecting multiple cursors
+function! Multiple_cursors_before() abort
+    if exists('g:deoplete#disable_auto_complete')
+        let g:deoplete#disable_auto_complete = 1
+    endif
+endfunction
+
+" Called once only when the multiple selection is cancelled (default <Esc>)
+function! Multiple_cursors_after() abort
+    if exists('g:deoplete#disable_auto_complete')
+        let g:deoplete#disable_auto_complete = 0
+    endif
+endfunction
+
+" tpope/vim-surround
+let g:surround_indent             = 1
+let g:surround_no_insert_mappings = 1
+
+nmap <Leader>sw ysiw
+nmap <Leader>sW ysiW
+
+" tpope/vim-abolish
+nnoremap <Leader>ab :%Abolish
+xnoremap <Leader>ab :Abolish
+nnoremap <Leader>sv :%Subvert//gc<Left><Left><Left>
+xnoremap <Leader>sv :Subvert//gc<Left><Left><Left>
+
+" jiangmiao/auto-pairs
+let g:AutoPairsFlyMode            = 0
+let g:AutoPairsShortcutToggle     = '<M-a>'
+let g:AutoPairsShortcutJump       = '<M-g>'
+let g:AutoPairsShortcutFastWrap   = '<M-w>'
+let g:AutoPairsShortcutBackInsert = '<M-i>'
 
 " gcmt/wildfire.vim
 map  <M-l> <Plug>(wildfire-fuel)
@@ -1309,30 +1241,44 @@ call expand_region#custom_text_objects('xml', {
 map <M-k> <Plug>(expand_region_expand)
 map <M-j> <Plug>(expand_region_shrink)
 
-" terryma/vim-multiple-cursors
-" Called once right before you start selecting multiple cursors
-function! Multiple_cursors_before() abort
-    if exists('g:deoplete#disable_auto_complete')
-        let g:deoplete#disable_auto_complete = 1
-    endif
-endfunction
+" thinca/vim-textobj-between
+let g:textobj_between_no_default_key_mappings = 1
 
-" Called once only when the multiple selection is cancelled (default <Esc>)
-function! Multiple_cursors_after() abort
-    if exists('g:deoplete#disable_auto_complete')
-        let g:deoplete#disable_auto_complete = 0
-    endif
-endfunction
+omap an <Plug>(textobj-between-a)
+omap in <Plug>(textobj-between-i)
+xmap an <Plug>(textobj-between-a)
+xmap in <Plug>(textobj-between-i)
 
-" chrisbra/NrrwRgn
-let g:nrrw_rgn_nohl          = 1
-let g:nrrw_topbot_leftright  = 'belowright'
-let g:nrrw_rgn_nomap_Nr      = 1
-let g:nrrw_rgn_resize_window = 'relative'
-let g:nrrw_rgn_rel_min       = 50
-let g:nrrw_rgn_rel_max       = 50
+" Replace 'lucapette/vim-textobj-underscore'
+omap a_ <Plug>(textobj-between-a)_
+omap i_ <Plug>(textobj-between-i)_
+xmap a_ <Plug>(textobj-between-a)_
+xmap i_ <Plug>(textobj-between-i)_
 
-nnoremap <silent> <Leader>ns :WidenRegion!<CR>
+" rhysd/vim-textobj-ruby
+let g:textobj_ruby_more_mappings = 0
+
+" whatyouhide/vim-textobj-erb
+let g:textobj_erb_no_default_key_mappings = 1
+
+" Remap from 'E' to 'y'
+omap ay <Plug>(textobj-erb-a)
+omap iy <Plug>(textobj-erb-i)
+xmap ay <Plug>(textobj-erb-a)
+xmap iy <Plug>(textobj-erb-i)
+
+" poetic/vim-textobj-javascript
+let g:textobj_chunkblock_no_default_key_mappings = 1
+
+" Remap from 'c' to 'j'
+omap aj <Plug>(textobj-chunkblock-a)
+omap ij <Plug>(textobj-chunkblock-i)
+xmap aj <Plug>(textobj-chunkblock-a)
+xmap ij <Plug>(textobj-chunkblock-i)
+
+" chrisbra/unicode.vim
+nmap <Leader>ud <Plug>(MakeDigraph)
+vmap <Leader>ud <Plug>(MakeDigraph)
 
 if has_key(g:plugs, 'deoplete.nvim')
     " Shougo/deoplete.nvim
@@ -1746,17 +1692,6 @@ endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
 
-if has_key(g:plugs, 'vim-autoformat')
-    " Chiel92/vim-autoformat
-    let g:autoformat_autoindent             = 0
-    let g:autoformat_retab                  = 0
-    let g:autoformat_remove_trailing_spaces = 0
-    let g:autoformat_verbosemode            = 0
-
-    nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
-    nnoremap <Leader>aF :Autoformat<Space>
-endif
-
 " KabbAmine/zeavim.vim
 let g:zv_disable_mapping = 1
 
@@ -1769,10 +1704,6 @@ nmap     gz         <Plug>ZVMotion
 nmap     <Leader>sd <Plug>Zeavim
 vmap     <Leader>sd <Plug>ZVVisSelection
 nmap     <Leader>sD <Plug>ZVKeyDocset
-
-" chrisbra/unicode.vim
-nmap <Leader>ud <Plug>(MakeDigraph)
-vmap <Leader>ud <Plug>(MakeDigraph)
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'

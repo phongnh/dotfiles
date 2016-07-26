@@ -60,6 +60,12 @@ call plug#begin()
 " rsi.vim: Readline style insertion
 Plug 'tpope/vim-rsi'
 
+" Asynchronous build and test dispatcher
+Plug 'tpope/vim-dispatch'
+
+" Interactive command execution
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+
 " lean & mean status/tabline for vim that's light as air
 Plug 'vim-airline/vim-airline'
 " A collection of themes for vim-airline
@@ -68,11 +74,14 @@ Plug 'vim-airline/vim-airline-themes'
 " Set vim cursor for iTerm
 Plug 'phongnh/vim-iterm-cursor'
 
-" Asynchronous build and test dispatcher
-Plug 'tpope/vim-dispatch'
+" A fancy start screen
+Plug 'mhinz/vim-startify'
 
-" Interactive command execution
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+" A tree explorer plugin for vim
+Plug 'scrooloose/nerdtree'
+
+" projectionist.vim: project configuration
+Plug 'tpope/vim-projectionist'
 
 " CtrlP
 if has('python')
@@ -95,6 +104,31 @@ Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
 " logging registers and reusing them
 Plug 'LeafCage/yankround.vim'
 
+if executable('ctags')
+    " A class outline viewer for Vim
+    Plug 'majutsushi/tagbar'
+    Plug 'phongnh/vim-tagbar-settings'
+endif
+
+if has('python')
+    " Visualize your Vim undo tree
+    Plug 'sjl/gundo.vim'
+else
+    " The ultimate undo history visualizer for VIM
+    Plug 'mbbill/undotree'
+endif
+
+" Syntax checking hacks for vim
+Plug 'scrooloose/syntastic'
+
+if has('python')
+    " Provide easy code formatting in Vim by integrating existing code formatters.
+    Plug 'Chiel92/vim-autoformat'
+endif
+
+" BufExplorer Plugin for Vim
+Plug 'jlanzarotta/bufexplorer'
+
 " Maximize current buffer
 Plug 'regedarek/ZoomWin'
 
@@ -109,51 +143,30 @@ else
     Plug 'nathanaelkane/vim-indent-guides'
 endif
 
-" A fancy start screen
-Plug 'mhinz/vim-startify'
-
-" Syntax checking hacks for vim
-Plug 'scrooloose/syntastic'
-
-if has('python')
-    " Visualize your Vim undo tree
-    Plug 'sjl/gundo.vim'
-else
-    " The ultimate undo history visualizer for VIM
-    Plug 'mbbill/undotree'
-endif
-
-if executable('ctags')
-    " A class outline viewer for Vim
-    Plug 'majutsushi/tagbar'
-    Plug 'phongnh/vim-tagbar-settings'
-endif
-
-" projectionist.vim: project configuration
-Plug 'tpope/vim-projectionist'
-
-" A tree explorer plugin for vim
-Plug 'scrooloose/nerdtree'
-
-" BufExplorer Plugin for Vim
-Plug 'jlanzarotta/bufexplorer'
-
 " Delete buffers and close files in Vim without closing your windows or messing up your layout
 Plug 'moll/vim-bbye'
+
+" Delete unwanted whitespace at the end of lines
+Plug 'vim-scripts/DeleteTrailingWhitespace'
+
+" Helpers for UNIX
+Plug 'tpope/vim-eunuch'
+" Phong's vim command helpers
+Plug 'phongnh/vim-command-helpers'
 
 " Pairs of handy bracket mappings
 Plug 'tpope/vim-unimpaired'
 " Toggle useful settings
 Plug 'phongnh/vim-toggler'
 
+" Vim plugin to copy current editing file path to clipboard (if support)
+Plug 'phongnh/vim-copypath'
+
 " Simple highlight plugin
 Plug 'phongnh/vim-simple-highlight'
 
 " extended % matching for HTML, LaTeX, and many other languages
 Plug 'vim-scripts/matchit.zip'
-
-" My vim functions for search and substitue
-Plug 'phongnh/vim-search-helpers'
 
 " The missing motion for Vim
 Plug 'justinmk/vim-sneak'
@@ -163,16 +176,55 @@ Plug 'haya14busa/incsearch.vim'
 " Vim search status
 Plug 'osyo-manga/vim-anzu'
 
+" My vim functions for search and substitue
+Plug 'phongnh/vim-search-helpers'
+
 " An ack.vim alternative mimics Ctrl-Shift-F on Sublime Text 2
 Plug 'dyng/ctrlsf.vim'
 
 " Helps you win at grep.
 Plug 'mhinz/vim-grepper'
 
-" Helpers for UNIX
-Plug 'tpope/vim-eunuch'
-" Phong's vim command helpers
-Plug 'phongnh/vim-command-helpers'
+" A Narrow Region Plugin for vim (like Emacs Narrow Region)
+Plug 'chrisbra/NrrwRgn'
+
+" Enable repeating supported plugin maps with "."
+Plug 'tpope/vim-repeat'
+
+" Enable repeating supported plugin maps with "."
+Plug 'tpope/vim-repeat'
+
+" commentary.vim: comment stuff out
+Plug 'tpope/vim-commentary'
+
+" A Vim alignment plugin
+Plug 'junegunn/vim-easy-align'
+" Vim script for text filtering and alignment
+Plug 'godlygeek/tabular'
+
+" True Sublime Text style multiple selections for Vim
+Plug 'terryma/vim-multiple-cursors'
+
+" quoting/parenthesizing made simple
+Plug 'tpope/vim-surround'
+
+" easily search for, substitute, and abbreviate multiple variants of a word
+Plug 'tpope/vim-abolish'
+
+" use CTRL-A/CTRL-X to increment dates, times, and more
+Plug 'tpope/vim-speeddating'
+
+" insert or delete brackets, parens, quotes in pair
+Plug 'jiangmiao/auto-pairs'
+
+" A vim plugin that simplifies the transition between multiline and single-line code
+Plug 'AndrewRadev/splitjoin.vim'
+
+" Smart selection of the closest text object
+Plug 'gcmt/wildfire.vim'
+
+" Vim plugin that allows you to visually select increasingly larger regions of text using the same key combination.
+Plug 'terryma/vim-expand-region'
 
 " Text Objects
 Plug 'kana/vim-textobj-user'
@@ -193,48 +245,8 @@ Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript' " f
 Plug 'poetic/vim-textobj-javascript'          " c, remapped to j
 
-" Vim plugin to copy current editing file path to clipboard (if support)
-Plug 'phongnh/vim-copypath'
-
-" Enable repeating supported plugin maps with "."
-Plug 'tpope/vim-repeat'
-
-" quoting/parenthesizing made simple
-Plug 'tpope/vim-surround'
-
-" easily search for, substitute, and abbreviate multiple variants of a word
-Plug 'tpope/vim-abolish'
-
-" use CTRL-A/CTRL-X to increment dates, times, and more
-Plug 'tpope/vim-speeddating'
-
-" insert or delete brackets, parens, quotes in pair
-Plug 'jiangmiao/auto-pairs'
-
-" Delete unwanted whitespace at the end of lines
-Plug 'vim-scripts/DeleteTrailingWhitespace'
-
-" A vim plugin that simplifies the transition between multiline and single-line code
-Plug 'AndrewRadev/splitjoin.vim'
-
-" commentary.vim: comment stuff out
-Plug 'tpope/vim-commentary'
-
-" A Vim alignment plugin
-Plug 'junegunn/vim-easy-align'
-" Vim script for text filtering and alignment
-Plug 'godlygeek/tabular'
-
-" Smart selection of the closest text object
-Plug 'gcmt/wildfire.vim'
-
-" Vim plugin that allows you to visually select increasingly larger regions of text using the same key combination.
-Plug 'terryma/vim-expand-region'
-" True Sublime Text style multiple selections for Vim
-Plug 'terryma/vim-multiple-cursors'
-
-" A Narrow Region Plugin for vim (like Emacs Narrow Region)
-Plug 'chrisbra/NrrwRgn'
+" A Vim plugin that provides a completion function for Unicode glyphs
+Plug 'chrisbra/unicode.vim'
 
 " Code completion and Snippets
 if has('lua')
@@ -288,23 +300,14 @@ Plug 'fatih/vim-go'
 Plug 'zchee/vim-go-stdlib'  " go standard library syntax highlighting
 Plug 'garyburd/go-explorer' " go get github.com/garyburd/go-explorer/src/getool
 
-if has('python')
-    " Provide easy code formatting in Vim by integrating existing code formatters.
-    Plug 'Chiel92/vim-autoformat'
-endif
-
-" Zeal for Vim
-Plug 'KabbAmine/zeavim.vim'
-
-" Utility
-" A Vim plugin that provides a completion function for Unicode glyphs
-Plug 'chrisbra/unicode.vim'
-
 " An implementation of Sublime's PlainTasks plugin for Vim
 Plug 'elentok/plaintasks.vim'
 
 " Text outlining and task management for Vim based on Emacs' Org-Mode
 Plug 'jceb/vim-orgmode'
+
+" Zeal for Vim
+Plug 'KabbAmine/zeavim.vim'
 
 " Color schemes
 Plug 'NLKNguyen/papercolor-theme'
@@ -697,6 +700,52 @@ endfunction
 
 autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
+" mhinz/vim-startify
+let g:startify_skiplist = [
+            \ '.git/index',
+            \ '.git/config',
+            \ 'COMMIT_EDITMSG',
+            \ 'git-rebase-todo',
+            \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
+            \ ]
+
+let g:startify_enable_special     = 0
+let g:startify_change_to_dir      = 0
+let g:startify_change_to_vcs_root = 0
+let g:startify_relative_path      = 1
+let g:startify_update_oldfiles    = 1
+let g:startify_show_sessions      = 1
+let g:startify_custom_header      = [] " Disable random quotes header
+
+nnoremap <silent> <F5> :Startify<CR>
+imap              <F5> <Esc><F5>
+
+nnoremap <silent> <Leader>us :Startify<CR>
+
+augroup MyAutoCmd
+    autocmd FileType startify setlocal nofoldenable foldcolumn=0
+    autocmd User Startified setlocal buftype=
+augroup END
+
+" scrooloose/nerdtree
+let g:NERDTreeWinSize       = 35
+let g:NERDTreeMouseMode     = 2
+let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
+let g:NERDTreeQuitOnOpen    = 0
+let g:NERDTreeChDirMode     = 0
+let g:NERDTreeShowBookmarks = 1
+
+nnoremap <silent> <F9> :NERDTreeToggle<CR>
+imap              <F9> <Esc><F9>
+
+nnoremap <silent> <F10> :NERDTreeFind<CR>
+imap              <F10> <Esc><F10>
+
+nnoremap <silent> <Leader>fo :NERDTreeToggle<CR>
+nmap              <Leader>B  <Leader>fo
+nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
+nnoremap <silent> <Leader>bp :NERDTree %:p:h<CR>
+
 if has_key(g:plugs, 'ctrlp-py-matcher')
     " FelikZ/ctrlp-py-matcher
     let g:ctrlp_clear_cache_on_exit = 0
@@ -803,6 +852,79 @@ let g:yankround_max_history = 100
 
 nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
 
+if has_key(g:plugs, 'tagbar')
+    " majutsushi/tagbar
+    let g:tagbar_sort      = 0
+    let g:tagbar_autofocus = 1
+    let g:tagbar_autoclose = 0
+    let g:tagbar_iconchars = ['▸', '▾']
+
+    nnoremap <silent> <F8> :TagbarToggle<CR>
+    imap              <F8> <Esc><F8>
+
+    nnoremap <silent> <Leader>ut :TagbarToggle<CR>
+endif
+
+if has('python')
+    " sjl/gundo.vim
+    let g:gundo_right          = 1
+    let g:gundo_width          = 30
+    let g:gundo_preview_bottom = 1
+    let g:gundo_preview_height = 18
+    let g:gundo_auto_preview   = 0
+
+    nnoremap <silent> <F7> :GundoToggle<CR>
+    imap              <F7> <Esc><F7>
+
+    nnoremap <silent> <Leader>uu :GundoToggle<CR>
+else
+    " mbbill/undotree
+    let g:undotree_WindowLayout       = 'botright'
+    let g:undotree_SetFocusWhenToggle = 1
+
+    nnoremap <silent> <F7> :UndotreeToggle<CR>
+    imap              <F7> <Esc><F7>
+
+    nnoremap <silent> <Leader>uu :UndotreeToggle<CR>
+endif
+
+" scrooloose/syntastic
+let g:syntastic_mode_map                 = { 'mode': 'passive', 'active_filetypes': [], }
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_loc_list_height          = 5
+let g:syntastic_check_on_open            = 0
+let g:syntastic_check_on_wq              = 0
+let g:syntastic_aggregate_errors         = 1
+let g:syntastic_error_symbol             = '>>'
+let g:syntastic_style_error_symbol       = 'S>'
+let g:syntastic_warning_symbol           = '!!'
+let g:syntastic_style_warning_symbol     = 'S!'
+
+nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
+imap              <F6> <Esc><F6>
+
+nnoremap <silent> <Leader>bs :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
+nnoremap          <Leader>bS :SyntasticCheck<Space>
+
+if has_key(g:plugs, 'vim-autoformat')
+    " Chiel92/vim-autoformat
+    let g:autoformat_autoindent             = 0
+    let g:autoformat_retab                  = 0
+    let g:autoformat_remove_trailing_spaces = 0
+    let g:autoformat_verbosemode            = 0
+
+    nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
+    nnoremap <Leader>aF :Autoformat<Space>
+endif
+
+" jlanzarotta/bufexplorer
+let g:bufExplorerDisableDefaultKeyMapping = 1
+let g:bufExplorerShowDirectories          = 0
+let g:bufExplorerShowRelativePath         = 1
+
+nnoremap <silent> gb :ToggleBufExplorer<CR>
+nnoremap <silent> <Leader>be :ToggleBufExplorer<CR>
+
 " regedarek/ZoomWin
 nnoremap <silent> <F2> :ZoomWin<CR>
 vmap              <F2> <Esc><F2>gv
@@ -882,119 +1004,15 @@ else
     vmap              <Leader>bi <Esc><Leader>bigv
 endif
 
-" mhinz/vim-startify
-let g:startify_skiplist = [
-            \ '.git/index',
-            \ '.git/config',
-            \ 'COMMIT_EDITMSG',
-            \ 'git-rebase-todo',
-            \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
-            \ ]
-
-let g:startify_enable_special     = 0
-let g:startify_change_to_dir      = 0
-let g:startify_change_to_vcs_root = 0
-let g:startify_relative_path      = 1
-let g:startify_update_oldfiles    = 1
-let g:startify_show_sessions      = 1
-let g:startify_custom_header      = [] " Disable random quotes header
-
-nnoremap <silent> <F5> :Startify<CR>
-imap              <F5> <Esc><F5>
-
-nnoremap <silent> <Leader>us :Startify<CR>
-
-augroup MyAutoCmd
-    autocmd FileType startify setlocal nofoldenable foldcolumn=0
-    autocmd User Startified setlocal buftype=
-augroup END
-
-" scrooloose/syntastic
-let g:syntastic_mode_map                 = { 'mode': 'passive', 'active_filetypes': [], }
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_loc_list_height          = 5
-let g:syntastic_check_on_open            = 0
-let g:syntastic_check_on_wq              = 0
-let g:syntastic_aggregate_errors         = 1
-let g:syntastic_error_symbol             = '>>'
-let g:syntastic_style_error_symbol       = 'S>'
-let g:syntastic_warning_symbol           = '!!'
-let g:syntastic_style_warning_symbol     = 'S!'
-
-nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
-imap              <F6> <Esc><F6>
-
-nnoremap <silent> <Leader>bs :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
-nnoremap          <Leader>bS :SyntasticCheck<Space>
-
-if has('python')
-    " sjl/gundo.vim
-    let g:gundo_right          = 1
-    let g:gundo_width          = 30
-    let g:gundo_preview_bottom = 1
-    let g:gundo_preview_height = 18
-    let g:gundo_auto_preview   = 0
-
-    nnoremap <silent> <F7> :GundoToggle<CR>
-    imap              <F7> <Esc><F7>
-
-    nnoremap <silent> <Leader>uu :GundoToggle<CR>
-else
-    " mbbill/undotree
-    let g:undotree_WindowLayout       = 'botright'
-    let g:undotree_SetFocusWhenToggle = 1
-
-    nnoremap <silent> <F7> :UndotreeToggle<CR>
-    imap              <F7> <Esc><F7>
-
-    nnoremap <silent> <Leader>uu :UndotreeToggle<CR>
-endif
-
-if has_key(g:plugs, 'tagbar')
-    " majutsushi/tagbar
-    let g:tagbar_sort      = 0
-    let g:tagbar_autofocus = 1
-    let g:tagbar_autoclose = 0
-    let g:tagbar_iconchars = ['▸', '▾']
-
-    nnoremap <silent> <F8> :TagbarToggle<CR>
-    imap              <F8> <Esc><F8>
-
-    nnoremap <silent> <Leader>ut :TagbarToggle<CR>
-endif
-
-" scrooloose/nerdtree
-let g:NERDTreeWinSize       = 35
-let g:NERDTreeMouseMode     = 2
-let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
-let g:NERDTreeQuitOnOpen    = 0
-let g:NERDTreeChDirMode     = 0
-let g:NERDTreeShowBookmarks = 1
-
-nnoremap <silent> <F9> :NERDTreeToggle<CR>
-imap              <F9> <Esc><F9>
-
-nnoremap <silent> <F10> :NERDTreeFind<CR>
-imap              <F10> <Esc><F10>
-
-nnoremap <silent> <Leader>fo :NERDTreeToggle<CR>
-nmap              <Leader>B  <Leader>fo
-nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
-nnoremap <silent> <Leader>bp :NERDTree %:p:h<CR>
-
-" jlanzarotta/bufexplorer
-let g:bufExplorerDisableDefaultKeyMapping = 1
-let g:bufExplorerShowDirectories          = 0
-let g:bufExplorerShowRelativePath         = 1
-
-nnoremap <silent> gb :ToggleBufExplorer<CR>
-nnoremap <silent> <Leader>be :ToggleBufExplorer<CR>
-
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
 
 nnoremap <silent> <Leader>bd :Bdelete<CR>
 nnoremap <silent> <Leader>bD :Bdelete!<CR>
+
+" vim-scripts/DeleteTrailingWhitespace
+nnoremap <silent> <Leader>dw :update<CR>:DeleteTrailingWhitespace<CR>
+xnoremap <silent> <Leader>dw :DeleteTrailingWhitespace<CR>
 
 " justinmk/vim-sneak
 let g:sneak#streak = 1
@@ -1059,64 +1077,15 @@ nmap <Leader>L  <Leader>G
 nmap <Leader>ls <Leader>sg
 xmap <Leader>ls <Leader>sg
 
-" thinca/vim-textobj-between
-let g:textobj_between_no_default_key_mappings = 1
+" chrisbra/NrrwRgn
+let g:nrrw_rgn_nohl          = 1
+let g:nrrw_topbot_leftright  = 'belowright'
+let g:nrrw_rgn_nomap_Nr      = 1
+let g:nrrw_rgn_resize_window = 'relative'
+let g:nrrw_rgn_rel_min       = 50
+let g:nrrw_rgn_rel_max       = 50
 
-omap an <Plug>(textobj-between-a)
-omap in <Plug>(textobj-between-i)
-xmap an <Plug>(textobj-between-a)
-xmap in <Plug>(textobj-between-i)
-
-" Replace 'lucapette/vim-textobj-underscore'
-omap a_ <Plug>(textobj-between-a)_
-omap i_ <Plug>(textobj-between-i)_
-xmap a_ <Plug>(textobj-between-a)_
-xmap i_ <Plug>(textobj-between-i)_
-
-" rhysd/vim-textobj-ruby
-let g:textobj_ruby_more_mappings = 0
-
-" whatyouhide/vim-textobj-erb
-let g:textobj_erb_no_default_key_mappings = 1
-
-" Remap from 'E' to 'y'
-omap ay <Plug>(textobj-erb-a)
-omap iy <Plug>(textobj-erb-i)
-xmap ay <Plug>(textobj-erb-a)
-xmap iy <Plug>(textobj-erb-i)
-
-" poetic/vim-textobj-javascript
-let g:textobj_chunkblock_no_default_key_mappings = 1
-
-" Remap from 'c' to 'j'
-omap aj <Plug>(textobj-chunkblock-a)
-omap ij <Plug>(textobj-chunkblock-i)
-xmap aj <Plug>(textobj-chunkblock-a)
-xmap ij <Plug>(textobj-chunkblock-i)
-
-" tpope/vim-surround
-let g:surround_indent             = 1
-let g:surround_no_insert_mappings = 1
-
-nmap <Leader>sw ysiw
-nmap <Leader>sW ysiW
-
-" tpope/vim-abolish
-nnoremap <Leader>ab :%Abolish
-xnoremap <Leader>ab :Abolish
-nnoremap <Leader>sv :%Subvert//gc<Left><Left><Left>
-xnoremap <Leader>sv :Subvert//gc<Left><Left><Left>
-
-" jiangmiao/auto-pairs
-let g:AutoPairsFlyMode            = 0
-let g:AutoPairsShortcutToggle     = '<M-a>'
-let g:AutoPairsShortcutJump       = '<M-g>'
-let g:AutoPairsShortcutFastWrap   = '<M-w>'
-let g:AutoPairsShortcutBackInsert = '<M-i>'
-
-" vim-scripts/DeleteTrailingWhitespace
-nnoremap <silent> <Leader>dw :update<CR>:DeleteTrailingWhitespace<CR>
-xnoremap <silent> <Leader>dw :DeleteTrailingWhitespace<CR>
+nnoremap <silent> <Leader>ns :WidenRegion!<CR>
 
 " tpope/vim-commentary
 let g:commentary_map_backslash = 0
@@ -1171,6 +1140,41 @@ function! s:ToggleBarAlign() abort
 endfunction
 
 nnoremap <silent> <Leader>al :ToggleBarAlign<CR>
+
+" terryma/vim-multiple-cursors
+" Called once right before you start selecting multiple cursors
+function! Multiple_cursors_before() abort
+    if exists(':NeoCompleteLock') == 2
+        silent! NeoCompleteLock
+    endif
+endfunction
+
+" Called once only when the multiple selection is cancelled (default <Esc>)
+function! Multiple_cursors_after() abort
+    if exists(':NeoCompleteUnlock') == 2
+        silent! NeoCompleteUnlock
+    endif
+endfunction
+
+" tpope/vim-surround
+let g:surround_indent             = 1
+let g:surround_no_insert_mappings = 1
+
+nmap <Leader>sw ysiw
+nmap <Leader>sW ysiW
+
+" tpope/vim-abolish
+nnoremap <Leader>ab :%Abolish
+xnoremap <Leader>ab :Abolish
+nnoremap <Leader>sv :%Subvert//gc<Left><Left><Left>
+xnoremap <Leader>sv :Subvert//gc<Left><Left><Left>
+
+" jiangmiao/auto-pairs
+let g:AutoPairsFlyMode            = 0
+let g:AutoPairsShortcutToggle     = '<M-a>'
+let g:AutoPairsShortcutJump       = '<M-g>'
+let g:AutoPairsShortcutFastWrap   = '<M-w>'
+let g:AutoPairsShortcutBackInsert = '<M-i>'
 
 " gcmt/wildfire.vim
 map  <M-l> <Plug>(wildfire-fuel)
@@ -1243,30 +1247,44 @@ call expand_region#custom_text_objects('xml', {
 map <M-k> <Plug>(expand_region_expand)
 map <M-j> <Plug>(expand_region_shrink)
 
-" terryma/vim-multiple-cursors
-" Called once right before you start selecting multiple cursors
-function! Multiple_cursors_before() abort
-    if exists(':NeoCompleteLock') == 2
-        silent! NeoCompleteLock
-    endif
-endfunction
+" thinca/vim-textobj-between
+let g:textobj_between_no_default_key_mappings = 1
 
-" Called once only when the multiple selection is cancelled (default <Esc>)
-function! Multiple_cursors_after() abort
-    if exists(':NeoCompleteUnlock') == 2
-        silent! NeoCompleteUnlock
-    endif
-endfunction
+omap an <Plug>(textobj-between-a)
+omap in <Plug>(textobj-between-i)
+xmap an <Plug>(textobj-between-a)
+xmap in <Plug>(textobj-between-i)
 
-" chrisbra/NrrwRgn
-let g:nrrw_rgn_nohl          = 1
-let g:nrrw_topbot_leftright  = 'belowright'
-let g:nrrw_rgn_nomap_Nr      = 1
-let g:nrrw_rgn_resize_window = 'relative'
-let g:nrrw_rgn_rel_min       = 50
-let g:nrrw_rgn_rel_max       = 50
+" Replace 'lucapette/vim-textobj-underscore'
+omap a_ <Plug>(textobj-between-a)_
+omap i_ <Plug>(textobj-between-i)_
+xmap a_ <Plug>(textobj-between-a)_
+xmap i_ <Plug>(textobj-between-i)_
 
-nnoremap <silent> <Leader>ns :WidenRegion!<CR>
+" rhysd/vim-textobj-ruby
+let g:textobj_ruby_more_mappings = 0
+
+" whatyouhide/vim-textobj-erb
+let g:textobj_erb_no_default_key_mappings = 1
+
+" Remap from 'E' to 'y'
+omap ay <Plug>(textobj-erb-a)
+omap iy <Plug>(textobj-erb-i)
+xmap ay <Plug>(textobj-erb-a)
+xmap iy <Plug>(textobj-erb-i)
+
+" poetic/vim-textobj-javascript
+let g:textobj_chunkblock_no_default_key_mappings = 1
+
+" Remap from 'c' to 'j'
+omap aj <Plug>(textobj-chunkblock-a)
+omap ij <Plug>(textobj-chunkblock-i)
+xmap aj <Plug>(textobj-chunkblock-a)
+xmap ij <Plug>(textobj-chunkblock-i)
+
+" chrisbra/unicode.vim
+nmap <Leader>ud <Plug>(MakeDigraph)
+vmap <Leader>ud <Plug>(MakeDigraph)
 
 if has_key(g:plugs, 'neocomplete.vim')
     " Shougo/neocomplete.vim
@@ -1691,17 +1709,6 @@ endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
 
-if has_key(g:plugs, 'vim-autoformat')
-    " Chiel92/vim-autoformat
-    let g:autoformat_autoindent             = 0
-    let g:autoformat_retab                  = 0
-    let g:autoformat_remove_trailing_spaces = 0
-    let g:autoformat_verbosemode            = 0
-
-    nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
-    nnoremap <Leader>aF :Autoformat<Space>
-endif
-
 " KabbAmine/zeavim.vim
 let g:zv_disable_mapping = 1
 
@@ -1714,10 +1721,6 @@ nmap     gz         <Plug>ZVMotion
 nmap     <Leader>sd <Plug>Zeavim
 vmap     <Leader>sd <Plug>ZVVisSelection
 nmap     <Leader>sD <Plug>ZVKeyDocset
-
-" chrisbra/unicode.vim
-nmap <Leader>ud <Plug>(MakeDigraph)
-vmap <Leader>ud <Plug>(MakeDigraph)
 
 " morhetz/gruvbox
 let g:gruvbox_contrast_dark  = 'hard'
