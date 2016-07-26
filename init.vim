@@ -289,7 +289,7 @@ elseif has('python')
 endif
 
 " SCM
-" A awesome Git wrapper so awesome
+" An awesome Git wrapper so awesome
 Plug 'tpope/vim-fugitive'
 
 " A powerful Git log viewer
