@@ -56,17 +56,17 @@ if exists('neovim_dot_app')
     xnoremap <silent> <D-c> "+y
     xnoremap <silent> <D-x> "+d
     nnoremap <silent> <D-v> :set paste<CR>"+gP:set nopaste<CR>
-    inoremap <silent> <D-v> <C-G>u<C-O>"+gP
+    inoremap <silent> <D-v> <C-g>u<C-o>"+gP
 
     inoremap <Esc> <Esc>
 endif
 
 " Exit (quit) terminal mode
-tnoremap <C-\><C-\> <C-\><C-N>
+tnoremap <C-\><C-\> <C-\><C-n>
 
 " Window Navigation from terminal
-tnoremap <M-]> <C-\><C-N><C-W>w
-tnoremap <M-[> <C-\><C-N><C-W>W
+tnoremap <M-]> <C-\><C-n><C-w>w
+tnoremap <M-[> <C-\><C-n><C-w>W
 
 nmap <M-]> <C-w>w
 nmap <M-[> <C-w>W
@@ -467,7 +467,7 @@ nnoremap <Right> <Nop>
 
 " F1: Help
 nnoremap <F1> :help<Space>
-imap <F1> <Esc><F1>
+imap     <F1> <Esc><F1>
 
 " CTRL-Space: Show history
 cnoremap <C-@> <C-f>
@@ -548,24 +548,25 @@ nnoremap <silent> [w :wincmd W<CR>
 nmap <Tab>   <C-w>w
 nmap <S-Tab> <C-w>W
 
-" Reload buffer
-nnoremap <silent> <C-w>e     :edit<CR>
-nnoremap <silent> <C-w><C-e> :edit<CR>
-nnoremap <silent> <C-w>E     :edit!<CR>
-
-" Unload buffer
-nnoremap <silent> <C-w>u     :bdelete<CR>
-nnoremap <silent> <C-w><C-u> :bdelete<CR>
-nnoremap <silent> <C-w>U     :bdelete!<CR>
-
+" Buffer-related mappings
 " gl: Go to Last buffer
 nnoremap <silent> gl :buffer#<CR>
 
+" Reload buffer
+nnoremap <silent> <Leader>br :edit<CR>
+nnoremap <silent> <Leader>bR :edit!<CR>
+
+" Unload and Delete buffer
+nnoremap <silent> <Leader>bq :bdelete<CR>
+nnoremap <silent> <Leader>bQ :bdelete!<CR>
+
 " Save buffer
 nnoremap <silent> <C-s> :update<CR>
-vmap <C-s> <Esc><C-s>gv
-imap <C-s> <Esc><C-s>
-nmap <Leader>w <C-s>
+vmap              <C-s> <Esc><C-s>gv
+imap              <C-s> <Esc><C-s>
+
+nnoremap <silent> <Leader>bw :update<CR>
+vmap              <Leader>bw <Esc><Leader>bwgv
 
 " Exit Vim. Bring up a prompt when some buffers have been changed
 nnoremap <silent> ZC :confirm qall<CR>
@@ -573,12 +574,28 @@ nnoremap <silent> ZC :confirm qall<CR>
 " Use <C-\><C-\> to do <C-]> but open it in a new split
 nmap <C-\><C-\> <C-w>v<C-]>zvzz
 
-" Search and Replace
-nnoremap <Leader>sr :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
-nnoremap <Leader>sR :%s//gc<Left><Left><Left>
+" Quickfix
+nnoremap <silent> <Leader>qo :copen<CR>
+nnoremap <silent> <Leader>qc :cclose<CR>
+nnoremap <silent> <Leader>qn :cnext<CR>
+nnoremap <silent> <Leader>qp :cprevious<CR>
+nnoremap <silent> <Leader>qf :cfirst<CR>
+nnoremap <silent> <Leader>ql :clast<CR>
 
+" Location List
+nnoremap <silent> <Leader>lo :lopen<CR>
+nnoremap <silent> <Leader>lc :lclose<CR>
+nnoremap <silent> <Leader>ln :lnext<CR>
+nnoremap <silent> <Leader>lp :lprevious<CR>
+nnoremap <silent> <Leader>lf :lfirst<CR>
+nnoremap <silent> <Leader>ll :llast<CR>
+
+" Search and Replace
+nnoremap <Leader>R  :%s//gc<Left><Left><Left>
+nnoremap <Leader>sr :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+
+xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
 xnoremap <Leader>sr <Esc>:%s/<C-r>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
-xnoremap <Leader>sR :s/\%V/gc<Left><Left><Left>
 
 " Copy / cut to clipboard
 nmap cy "+y
@@ -727,20 +744,20 @@ function! s:my_unite_settings() abort
     call unite#custom#default_action('directory', 'narrow')
 
     imap <buffer> <Esc> <Plug>(unite_exit)
-    imap <buffer> <C-R> <Plug>(unite_insert_leave)<Plug>(unite_restart)
+    imap <buffer> <C-r> <Plug>(unite_insert_leave)<Plug>(unite_restart)
     imap <buffer> <Tab> <Plug>(unite_complete)
     imap <buffer> '     <Plug>(unite_quick_match_default_action)
-    imap <buffer> <C-J> <Plug>(unite_select_next_line)
-    imap <buffer> <C-K> <Plug>(unite_select_previous_line)
+    imap <buffer> <C-j> <Plug>(unite_select_next_line)
+    imap <buffer> <C-k> <Plug>(unite_select_previous_line)
 
-    inoremap <buffer> <expr> <C-S>
+    inoremap <buffer> <expr> <C-s>
                 \ unite#mappings#set_current_matchers(
                 \   empty(unite#mappings#get_current_matchers()) ? ['matcher_context'] : []
                 \ )
 
-    inoremap <silent> <buffer> <expr> <C-O> unite#do_action('system-open')
-    inoremap <silent> <buffer> <expr> <C-X> unite#do_action('split')
-    inoremap <silent> <buffer> <expr> <C-V> unite#do_action('vsplit')
+    inoremap <silent> <buffer> <expr> <C-o> unite#do_action('system-open')
+    inoremap <silent> <buffer> <expr> <C-x> unite#do_action('split')
+    inoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
 endfunction
 
 autocmd MyAutoCmd FileType unite call s:my_unite_settings()
@@ -751,50 +768,52 @@ nnoremap <silent> <Leader>, :Unite -buffer-name=sources source<CR>
 
 nnoremap <silent> <Leader><Leader> :Unite -buffer-name=mixed buffer bookmark neomru/file file_rec/async<CR>
 
-nnoremap <silent> <Leader>e :Unite -no-restore -resume -input= -buffer-name=git file_rec/git:--cached:--others:--exclude-standard file/new<CR>
+nnoremap          <Leader>D  :Unite -buffer-name=dirs -default-action=cd directory_rec/async:
 
-nnoremap <silent> <Leader>E :Unite -no-restore -resume -input= -buffer-name=explorer file_rec/async file/new<CR>
+nnoremap          <Leader>F  :Unite -buffer-name=files-in-folder file_rec/async:
+nnoremap <silent> <Leader>fe :Unite -no-restore -resume -input= -buffer-name=explorer file_rec/async file/new<CR>
 
-nnoremap          <Leader>F :Unite -buffer-name=files-in-folder file_rec/async:
+nnoremap <silent> <Leader>fp :Unite -no-restore -resume -input= -buffer-name=git file_rec/git:--cached:--others:--exclude-standard file/new<CR>
 
-nnoremap <silent> <Leader>c :Unite -buffer-name=files-in-folder file_rec/async:<C-R>=expand("%:h")<CR> file/new:<C-R>=expand("%:h")<CR><CR>
-nnoremap <silent> <Leader>C :Unite -buffer-name=files-in-folder file_rec/async:<C-R>=expand("%:h:h")<CR> file/new:<C-R>=expand("%:h:h")<CR><CR>
+nnoremap <silent> <Leader>fc :Unite -buffer-name=files-in-folder file_rec/async:<C-r>=expand("%:h")<CR> file/new:<C-r>=expand("%:h")<CR><CR>
+nnoremap <silent> <Leader>fC :Unite -buffer-name=files-in-folder file_rec/async:<C-r>=expand("%:h:h")<CR> file/new:<C-r>=expand("%:h:h")<CR><CR>
 
-nnoremap <silent> <Leader>b :Unite -buffer-name=buffers buffer<CR>
-nnoremap <silent> <Leader>t :Unite -buffer-name=tabs tab<CR>
+nnoremap <silent> <Leader>fk :Unite -buffer-name=bookmarks bookmark<CR>
+nnoremap          <Leader>fK :UniteBookmarkAdd<Space>
 
-nnoremap <silent> <Leader>l :Unite -buffer-name=lines line<CR>
-nnoremap <silent> <Leader>L :Unite -buffer-name=lines line:buffers<CR>
+nnoremap <silent> <Leader>fb :Unite -buffer-name=buffers buffer<CR>
+nnoremap <silent> <Leader>ft :Unite -buffer-name=tabs tab<CR>
 
-nnoremap <silent> <Leader>j :Unite -buffer-name=jumps jump<CR>
-nnoremap <silent> <Leader>J :Unite -buffer-name=jumps jump<CR>
+nmap              <Leader>bb <Leader>fb
+nmap              <Leader>bc <Leader>fc
+nmap              <Leader>bC <Leader>fC
+nnoremap <silent> <Leader>bl :Unite -buffer-name=lines line<CR>
+nnoremap <silent> <Leader>bL :Unite -buffer-name=lines line:buffers<CR>
 
-nnoremap <silent> <Leader>m :Unite -buffer-name=mappings mapping<CR>
+nnoremap <silent> <Leader>M :Unite -buffer-name=mappings mapping<CR>
 nnoremap <silent> <Leader>; :Unite -buffer-name=commands command<CR>
 nnoremap <silent> <Leader>i :Unite -buffer-name=register register<CR>
-nnoremap <silent> <Leader>k :Unite -buffer-name=bookmarks bookmark<CR>
-nnoremap          <Leader>K :UniteBookmarkAdd<Space>
 
 " phongnh/unite-ag.vim
 let g:unite_source_ag_min_cache_files = 1000
 
-nnoremap <silent> <Leader>f :Unite -no-restore -resume -input= -buffer-name=files ag/async file/new<CR>
+nnoremap <silent> <Leader>ff :Unite -no-restore -resume -input= -buffer-name=files ag/async file/new<CR>
 
 " Shougo/tabpagebuffer.vim
-nnoremap <silent> <Leader>B :Unite -buffer-name=buffers buffer_tab<CR>
+nnoremap <silent> <Leader>fB :Unite -buffer-name=buffers buffer_tab<CR>
 
 " Shougo/neomru.vim
-nnoremap <silent> <Leader>r :Unite -buffer-name=mru neomru/file<CR>
-nnoremap <silent> <Leader>R :Unite -buffer-name=mru neomru/file<CR>
-nnoremap <silent> <Leader>d :Unite -buffer-name=dirs -default-action=cd neomru/directory directory_rec/async<CR>
+nnoremap <silent> <Leader>fr :Unite -buffer-name=mru neomru/file<CR>
+nnoremap <silent> <Leader>fd :Unite -buffer-name=dirs -default-action=cd neomru/directory directory_rec/async<CR>
 
 " Shougo/unite-outline
-nnoremap <silent> <Leader>o :Unite -buffer-name=outline outline<CR>
+nnoremap <silent> <Leader>bo :Unite -buffer-name=outline outline<CR>
 
 " tsukkee/unite-tag
 let g:unite_source_tag_max_fname_length = 70
 
-nnoremap <silent> <Leader>O :Unite -buffer-name=outline tag/include<CR>
+nnoremap <silent> <Leader>bt :Unite -buffer-name=outline tag/include<CR>
+
 nnoremap <silent> <Leader>\ :Unite -no-restore -resume -input= -buffer-name=tags tag<CR>
 
 nnoremap <silent> <Leader>st :UniteWithCursorWord -no-restore -resume -immediately -sync -buffer-name=tags tag<CR>
@@ -803,10 +822,8 @@ nnoremap <silent> <Leader>st :UniteWithCursorWord -no-restore -resume -immediate
 nnoremap <silent> <Leader>y :Unite -buffer-name=yanks history/yank<CR>
 
 " osyo-manga/unite-quickfix
-nnoremap <silent> <Leader>q :Unite -resume -buffer-name=quickfix quickfix<CR>
-nnoremap <silent> <Leader>Q :Unite -resume -buffer-name=location-list location_list<CR>
-nnoremap <silent> <Leader>] :UniteNext<CR>
-nnoremap <silent> <Leader>[ :UnitePrevious<CR>
+nnoremap <silent> <Leader>fq :Unite -resume -buffer-name=quickfix quickfix<CR>
+nnoremap <silent> <Leader>fl :Unite -resume -buffer-name=location-list location_list<CR>
 
 " thinca/vim-unite-history
 nnoremap <silent> <Leader>: :Unite -buffer-name=command-history history/command<CR>
@@ -814,7 +831,7 @@ nnoremap <silent> <Leader>/ :Unite -buffer-name=search-history history/search<CR
 
 if has_key(g:plugs, 'neosnippet.vim')
     " Shougo/neosnippet.vim
-    nnoremap <silent> <Leader>I :Unite -buffer-name=snippets neosnippet<CR>
+    nnoremap <silent> <Leader>fs :Unite -buffer-name=snippets neosnippet<CR>
 endif
 
 " junegunn/fzf
@@ -834,11 +851,13 @@ nnoremap          <Leader>P :FZF<Space>
 " regedarek/ZoomWin
 let g:zoomwin_localoptlist = ["ai","ar","bh","bin","bl","bomb","bt","cfu","ci","cin","cink","cino","cinw","cms","com","cpt","diff","efm","eol","ep","et","fenc","fex","ff","flp","fo","ft","gp","imi","ims","inde","inex","indk","inf","isk","kmp","lisp","mps","ml","ma","mod","nf","ofu","pi","qe","ro","sw","si","sts","spc","spf","spl","sua","swf","smc","syn","ts","tw","udf","wfh","wfw","wm"]
 
-tnoremap <silent> <F2> <C-\><C-N>:ZoomWin<CR>
+tnoremap <silent> <F2> <C-\><C-n>:ZoomWin<CR>
 nnoremap <silent> <F2> :ZoomWin<CR>
-vmap <F2> <Esc><F2>gv
-imap <F2> <Esc><F2>a
-nmap <Leader>z <F2>
+vmap              <F2> <Esc><F2>gv
+imap              <F2> <Esc><F2>a
+
+nnoremap <silent> <Leader>z :ZoomWin<CR>
+vnoremap          <Leader>z <Esc><Leader>zgv
 
 " junegunn/goyo.vim
 let g:goyo_width  = '80%'
@@ -846,8 +865,10 @@ let g:goyo_height = '96%'
 let g:goyo_linenr = 0
 
 nnoremap <silent> <F3> :Goyo<CR>
-imap <F3> <Esc><F3>
-nmap <Leader><CR> <F3>
+imap              <F3> <Esc><F3>
+
+nnoremap <silent> <Leader><CR> :Goyo<CR>
+vmap              <Leader><CR> <Leader><CR>gv
 
 autocmd! User GoyoEnter nested call <SID>custom_goyo_enter()
 autocmd! User GoyoLeave nested call <SID>custom_goyo_leave()
@@ -891,7 +912,10 @@ if has_key(g:plugs, 'indentLine')
     " let g:indentLine_color_gui            = '#A4E57E'
 
     nnoremap <silent> <F4> :IndentLinesToggle<CR>
-    imap <F4> <Esc><F4>
+    imap              <F4> <Esc><F4>
+
+    nnoremap <silent> <Leader>bi :IndentLinesToggle<CR>
+    vmap              <Leader>bi <Esc><Leader>bigv
 else
     " nathanaelkane/vim-indent-guides
     let g:indent_guides_start_level           = 1
@@ -900,7 +924,10 @@ else
     let g:indent_guides_color_change_percent  = 3
 
     nnoremap <silent> <F4> :IndentGuidesToggle<CR>
-    imap <F4> <Esc><F4>
+    imap              <F4> <Esc><F4>
+
+    nnoremap <silent> <Leader>bi :IndentGuidesToggle<CR>
+    vmap              <Leader>bi <Esc><Leader>bigv
 endif
 
 " mhinz/vim-startify
@@ -921,7 +948,9 @@ let g:startify_show_sessions      = 1
 let g:startify_custom_header      = [] " Disable random quotes header
 
 nnoremap <silent> <F5> :Startify<CR>
-imap <F5> <Esc><F5>
+imap              <F5> <Esc><F5>
+
+nnoremap <silent> <Leader>us :Startify<CR>
 
 augroup MyAutoCmd
     autocmd FileType startify setlocal nofoldenable foldcolumn=0
@@ -933,7 +962,10 @@ let g:neomake_list_height        = 5
 let g:neomake_echo_current_error = 1
 
 nnoremap <silent> <F6> :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
-imap <F6> <Esc><F6>
+imap              <F6> <Esc><F6>
+
+nnoremap <silent> <Leader>bs :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
+nnoremap          <Leader>bS :Neomake<Space>
 
 if has('python')
     " sjl/gundo.vim
@@ -944,14 +976,18 @@ if has('python')
     let g:gundo_auto_preview   = 0
 
     nnoremap <silent> <F7> :GundoToggle<CR>
-    imap <F7> <Esc><F7>
+    imap              <F7> <Esc><F7>
+
+    nnoremap <silent> <Leader>uu :GundoToggle<CR>
 else
     " mbbill/undotree
     let g:undotree_WindowLayout       = 'botright'
     let g:undotree_SetFocusWhenToggle = 1
 
     nnoremap <silent> <F7> :UndotreeToggle<CR>
-    imap <F7> <Esc><F7>
+    imap              <F7> <Esc><F7>
+
+    nnoremap <silent> <Leader>uu :UndotreeToggle<CR>
 endif
 
 if has_key(g:plugs, 'tagbar')
@@ -962,7 +998,9 @@ if has_key(g:plugs, 'tagbar')
     let g:tagbar_iconchars = ['▸', '▾']
 
     nnoremap <silent> <F8> :TagbarToggle<CR>
-    imap <F8> <Esc><F8>
+    imap              <F8> <Esc><F8>
+
+    nnoremap <silent> <Leader>ut :TagbarToggle<CR>
 endif
 
 " Shougo/vimfiler.vim
@@ -978,11 +1016,18 @@ let g:vimfiler_readonly_file_icon   = '✗'
 let g:vimfiler_marked_file_icon     = '✓'
 let g:vimfiler_quick_look_command   = has('mac') ? 'qlmanage -p' : 'gloobus-preview'
 
-nnoremap <silent> <F9> :VimFilerExplorer -force-hide -parent -toggle<CR>
-imap <F9> <Esc><F9>
+nnoremap <silent> <F9> :VimFilerExplorer -parent -toggle<CR>
+imap              <F9> <Esc><F9>
 
-nnoremap <silent> <F10> :VimFilerBufferDir -buffer-name=files-in-folder -force-hide -parent -toggle -explorer -find<CR>
-imap <F10> <Esc><F10>
+nnoremap <silent> <F10> :VimFilerBufferDir -buffer-name=files-in-folder -simple -parent -toggle -explorer -find<CR>
+imap              <F10> <Esc><F10>
+
+nnoremap <silent> <Leader>fo :VimFilerExplorer -parent -toggle<CR>
+nmap              <Leader>B  <Leader>fo
+nnoremap <silent> <Leader>bf :VimFilerBufferDir -buffer-name=files-in-folder -simple -parent -toggle -explorer -find<CR>
+nnoremap <silent> <Leader>bp :VimFilerBufferDir -buffer-name=files-in-folder -simple -parent -toggle -explorer<CR>
+nnoremap <silent> <Leader>bh :VimFilerSimple -buffer-name=vimfiler -direction=belowright -split -horizontal -parent -toggle<CR>
+nnoremap <silent> <Leader>bv :VimFilerSimple -buffer-name=vimfiler -direction=botright -split -parent -toggle<CR>
 
 autocmd MyAutoCmd FileType vimfiler call s:my_vimfiler_settings()
 
@@ -1009,9 +1054,13 @@ let g:bufExplorerShowDirectories          = 0
 let g:bufExplorerShowRelativePath         = 1
 
 nnoremap <silent> gb :ToggleBufExplorer<CR>
+nnoremap <silent> <Leader>be :ToggleBufExplorer<CR>
 
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
+
+nnoremap <silent> <Leader>bd :Bdelete<CR>
+nnoremap <silent> <Leader>bD :Bdelete!<CR>
 
 " justinmk/vim-sneak
 let g:sneak#streak = 1
@@ -1051,24 +1100,30 @@ nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
 " mhinz/vim-grepper
 let g:grepper = {
             \ 'open': 1,
-            \ 'switch': 0,
+            \ 'switch': 1,
             \ 'jump': 0,
-            \ 'next_tool': '<C-J>',
-            \ 'tools': ['ag', 'pt', 'sift', 'git', 'grep', 'findstr'],
-            \ 'sift': {
-            \   'grepprg': 'sift --binary-skip --git --err-skip-line-length -n -i $*'
-            \ },
+            \ 'next_tool': '<C-j>',
+            \ 'tools': ['ag', 'pt', 'git', 'ack', 'grep', 'findstr'],
             \ }
 
 nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
-nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
-xmap     <silent> <Leader>ss <Plug>(GrepperOperator)
 nnoremap <silent> <Leader>S  :Grepper<CR>
+nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
+xnoremap <silent> <Leader>ss <Esc>:echo 'Searching...'<CR>:Grepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
 
-nnoremap <silent> <Leader>sg :echo 'Searching...'<CR>:Grepper -noquickfix -switch -cword -noprompt<CR>
-nnoremap <silent> <Leader>G  :Grepper -noquickfix -switch<CR>
+nnoremap <silent> <Leader>G  :Grepper -noquickfix<CR>
+nnoremap <silent> <Leader>sg :echo 'Searching...'<CR>:Grepper -noquickfix -cword -noprompt<CR>
+xnoremap <silent> <Leader>sg <Esc>:echo 'Searching...'<CR>:Grepper -noquickfix -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+
+nmap <Leader>Q  <Leader>S
+nmap <Leader>qs <Leader>ss
+xmap <Leader>qs <Leader>ss
+
+nmap <Leader>L  <Leader>G
+nmap <Leader>ls <Leader>sg
+xmap <Leader>ls <Leader>sg
 
 " thinca/vim-textobj-between
 let g:textobj_between_no_default_key_mappings = 1
@@ -1126,8 +1181,8 @@ let g:AutoPairsShortcutFastWrap   = '<M-w>'
 let g:AutoPairsShortcutBackInsert = '<M-i>'
 
 " vim-scripts/DeleteTrailingWhitespace
-nnoremap <silent> <Leader>W :update<CR>:DeleteTrailingWhitespace<CR>
-xnoremap <silent> <Leader>W :DeleteTrailingWhitespace<CR>
+nnoremap <silent> <Leader>dw :update<CR>:DeleteTrailingWhitespace<CR>
+xnoremap <silent> <Leader>dw :DeleteTrailingWhitespace<CR>
 
 " tpope/vim-commentary
 let g:commentary_map_backslash = 0
@@ -1270,13 +1325,14 @@ function! Multiple_cursors_after() abort
 endfunction
 
 " chrisbra/NrrwRgn
-let g:nrrw_topbot_leftright = 'botright'
-let g:nrrw_rgn_nomap_nr     = 1
-let g:nrrw_rgn_nomap_Nr     = 1
+let g:nrrw_rgn_nohl          = 1
+let g:nrrw_topbot_leftright  = 'belowright'
+let g:nrrw_rgn_nomap_Nr      = 1
+let g:nrrw_rgn_resize_window = 'relative'
+let g:nrrw_rgn_rel_min       = 50
+let g:nrrw_rgn_rel_max       = 50
 
-nmap <Leader>n <Plug>NrrwrgnDo
-xmap <Leader>n <Plug>NrrwrgnDo
-xmap <Leader>N <Plug>NrrwrgnBangDo
+nnoremap <silent> <Leader>ns :WidenRegion!<CR>
 
 if has_key(g:plugs, 'deoplete.nvim')
     " Shougo/deoplete.nvim
@@ -1312,7 +1368,7 @@ if has_key(g:plugs, 'deoplete.nvim')
                 \ ])
 
     " <CR>: close popup
-    " inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
+    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
     " function! s:my_cr_function() abort
     "     return deoplete#mappings#close_popup() . "\<CR>"
     "     " For no inserting <CR> key
@@ -1320,18 +1376,18 @@ if has_key(g:plugs, 'deoplete.nvim')
     " endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char
-    inoremap <expr> <C-H> deoplete#mappings#smart_close_popup()."\<C-H>"
-    inoremap <expr> <BS>  deoplete#mappings#smart_close_popup()."\<C-H>"
+    inoremap <expr> <C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
+    inoremap <expr> <BS>  deoplete#mappings#smart_close_popup()."\<C-h>"
 
-    inoremap          <expr> <C-G>      deoplete#mappings#undo_completion()
-    inoremap          <expr> <C-X><C-G> deoplete#mappings#undo_completion()
-    inoremap          <expr> <C-X><C-@> deoplete#mappings#refresh()
-    inoremap <silent> <expr> <C-X><C-F> deoplete#mappings#manual_completion('file')
+    inoremap          <expr> <C-g>      deoplete#mappings#undo_completion()
+    inoremap          <expr> <C-x><C-g> deoplete#mappings#undo_completion()
+    inoremap          <expr> <C-x><C-@> deoplete#mappings#refresh()
+    inoremap <silent> <expr> <C-x><C-f> deoplete#mappings#manual_completion('file')
 
     " <Tab>: completion
-    inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
     " Clever Tab
     imap <expr> <Tab> <SID>CleverTab()
     function! s:CleverTab() abort
@@ -1379,15 +1435,15 @@ if has_key(g:plugs, 'neosnippet.vim')
     let g:neosnippet#scope_aliases['objc'] = 'objc,c'
     let g:neosnippet#scope_aliases['objcpp'] = 'objc,c'
 
-    imap <silent> <expr> <C-L> neosnippet#expandable_or_jumpable() ?
+    imap <silent> <expr> <C-l> neosnippet#expandable_or_jumpable() ?
                 \ "\<Plug>(neosnippet_expand_or_jump)" :
-                \ (pumvisible() ? "\<C-E>" : "\<Plug>(neosnippet_expand_or_jump)")
-    smap <C-L> <Plug>(neosnippet_expand_or_jump)
-    xmap <C-L> <Plug>(neosnippet_expand_target)
+                \ (pumvisible() ? "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
+    smap <C-l> <Plug>(neosnippet_expand_or_jump)
+    xmap <C-l> <Plug>(neosnippet_expand_target)
 
-    imap <C-J> <Plug>(neosnippet_jump_or_expand)
-    smap <C-J> <Plug>(neosnippet_jump_or_expand)
-    xmap <C-J> <Plug>(neosnippet_expand_target)
+    imap <C-j> <Plug>(neosnippet_jump_or_expand)
+    smap <C-j> <Plug>(neosnippet_jump_or_expand)
+    xmap <C-j> <Plug>(neosnippet_expand_target)
 
     smap <Tab> <Plug>(neosnippet_jump)
 endif
@@ -1459,11 +1515,11 @@ endif
 
 if has_key(g:plugs, 'ultisnips')
     " SirVer/ultisnips
-    let g:UltiSnipsExpandTrigger       = '<C-L>'
-    let g:UltiSnipsJumpForwardTrigger  = '<C-J>'
+    let g:UltiSnipsExpandTrigger       = '<C-l>'
+    let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
     let g:UltiSnipsJumpBackwardTrigger = '<C-_>'
 
-    inoremap <C-X><C-K> <C-X><C-K>
+    inoremap <C-x><C-k> <C-x><C-k>
 endif
 
 " tpope/vim-fugitive
@@ -1482,7 +1538,7 @@ nnoremap          <Leader>gl :Glog!<Space>
 nnoremap          <Leader>gL :Gllog!<Space>
 
 augroup MyAutoCmd
-    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-R><C-G><CR>
+    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-r><C-g><CR>
     autocmd BufReadPost fugitive://* set bufhidden=delete
 augroup END
 
@@ -1686,9 +1742,6 @@ function! s:VimGoSetup() abort
 
     " go install
     nnoremap <buffer> <silent> <LocalLeader>u :update<CR>:execute "silent! !go install"<CR>:redraw!<CR>:echo '!go install'<CR>
-
-    " Toggle Location List
-    nmap <buffer> <LocalLeader>q coQ
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
@@ -1711,11 +1764,11 @@ if has('mac')
     let g:zv_docsets_dir = '~/Library/Application Support/Zeal/Zeal/docsets'
 endif
 
-nmap gz <Plug>ZVMotion
-nmap <Leader>sd <Plug>Zeavim
-vmap <Leader>sd <Plug>ZVVisSelection
-nmap <Leader>sD <Plug>ZVKeyDocset
 nnoremap <Leader>se :Docset<Space>
+nmap     gz         <Plug>ZVMotion
+nmap     <Leader>sd <Plug>Zeavim
+vmap     <Leader>sd <Plug>ZVVisSelection
+nmap     <Leader>sD <Plug>ZVKeyDocset
 
 " chrisbra/unicode.vim
 nmap <Leader>ud <Plug>(MakeDigraph)

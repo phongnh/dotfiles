@@ -470,7 +470,7 @@ nnoremap <Right> <Nop>
 
 " F1: Help
 nnoremap <F1> :help<Space>
-imap <F1> <Esc><F1>
+imap     <F1> <Esc><F1>
 
 " CTRL-Space: Show history
 cnoremap <C-@> <C-f>
@@ -551,24 +551,25 @@ nnoremap <silent> [w :wincmd W<CR>
 nmap <Tab>   <C-w>w
 nmap <S-Tab> <C-w>W
 
-" Reload buffer
-nnoremap <silent> <C-w>e     :edit<CR>
-nnoremap <silent> <C-w><C-e> :edit<CR>
-nnoremap <silent> <C-w>E     :edit!<CR>
-
-" Unload buffer
-nnoremap <silent> <C-w>u     :bdelete<CR>
-nnoremap <silent> <C-w><C-u> :bdelete<CR>
-nnoremap <silent> <C-w>U     :bdelete!<CR>
-
+" Buffer-related mappings
 " gl: Go to Last buffer
 nnoremap <silent> gl :buffer#<CR>
 
+" Reload buffer
+nnoremap <silent> <Leader>br :edit<CR>
+nnoremap <silent> <Leader>bR :edit!<CR>
+
+" Unload and Delete buffer
+nnoremap <silent> <Leader>bq :bdelete<CR>
+nnoremap <silent> <Leader>bQ :bdelete!<CR>
+
 " Save buffer
 nnoremap <silent> <C-s> :update<CR>
-vmap <C-s> <Esc><C-s>gv
-imap <C-s> <Esc><C-s>
-nmap <Leader>w <C-s>
+vmap              <C-s> <Esc><C-s>gv
+imap              <C-s> <Esc><C-s>
+
+nnoremap <silent> <Leader>bw :update<CR>
+vmap              <Leader>bw <Esc><Leader>bwgv
 
 " Exit Vim. Bring up a prompt when some buffers have been changed
 nnoremap <silent> ZC :confirm qall<CR>
@@ -576,12 +577,28 @@ nnoremap <silent> ZC :confirm qall<CR>
 " Use <C-\><C-\> to do <C-]> but open it in a new split
 nmap <C-\><C-\> <C-w>v<C-]>zvzz
 
-" Search and Replace
-nnoremap <Leader>sr :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
-nnoremap <Leader>sR :%s//gc<Left><Left><Left>
+" Quickfix
+nnoremap <silent> <Leader>qo :copen<CR>
+nnoremap <silent> <Leader>qc :cclose<CR>
+nnoremap <silent> <Leader>qn :cnext<CR>
+nnoremap <silent> <Leader>qp :cprevious<CR>
+nnoremap <silent> <Leader>qf :cfirst<CR>
+nnoremap <silent> <Leader>ql :clast<CR>
 
+" Location List
+nnoremap <silent> <Leader>lo :lopen<CR>
+nnoremap <silent> <Leader>lc :lclose<CR>
+nnoremap <silent> <Leader>ln :lnext<CR>
+nnoremap <silent> <Leader>lp :lprevious<CR>
+nnoremap <silent> <Leader>lf :lfirst<CR>
+nnoremap <silent> <Leader>ll :llast<CR>
+
+" Search and Replace
+nnoremap <Leader>R  :%s//gc<Left><Left><Left>
+nnoremap <Leader>sr :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+
+xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
 xnoremap <Leader>sr <Esc>:%s/<C-r>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
-xnoremap <Leader>sR :s/\%V/gc<Left><Left><Left>
 
 " Copy / cut to clipboard
 nmap cy "+y
@@ -698,7 +715,7 @@ let g:ctrlp_match_window      = 'bottom,order:btt,min:1,max:20,results:20'
 let g:ctrlp_map               = ''
 let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_reuse_window      = 'startify'
-let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-Z>', '<C-@>'], }
+let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
 let g:ctrlp_custom_ignore     = {
             \ 'dir':  '\.git$\|\.hg$\|\.svn$',
             \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc'
@@ -725,42 +742,44 @@ nnoremap <silent> <Leader>- :CtrlPClearAllCaches<CR>
 
 nnoremap <silent> <Leader><Leader> :CtrlPMixed<CR>
 
-nnoremap <silent> <Leader>d :CtrlPDir<CR>
+nnoremap          <Leader>F  :CtrlP<Space>
+nnoremap <silent> <Leader>ff :CtrlP<CR>
 
-nnoremap <silent> <Leader>f :CtrlP<CR>
-nnoremap          <Leader>F :CtrlP<Space>
+nnoremap <silent> <Leader>fp :CtrlPRoot<CR>
 
-nnoremap <silent> <Leader>e :CtrlPRoot<CR>
+nnoremap <silent> <Leader>fc :CtrlPCurFile<CR>
+nnoremap <silent> <Leader>fC :CtrlP <C-r>=expand("%:h:h")<CR><CR>
 
-nnoremap <silent> <Leader>c :CtrlPCurFile<CR>
-nnoremap <silent> <Leader>C :CtrlP <C-R>=expand("%:h:h")<CR><CR>
+nnoremap <silent> <Leader>fr :CtrlPMRUFiles<CR>
 
-nnoremap <silent> <Leader>b :CtrlPBuffer<CR>
+nnoremap          <Leader>D  :CtrlPDir<Space>
+nnoremap <silent> <Leader>fd :CtrlPDir<CR>
 
-nnoremap <silent> <Leader>l :CtrlPLine %<CR>
-nnoremap <silent> <Leader>L :CtrlPLine<CR>
+nnoremap <silent> <Leader>fb :CtrlPBuffer<CR>
 
-nnoremap <silent> <Leader>k :CtrlPBookmarkDir<CR>
-nnoremap          <Leader>K :CtrlPBookmarkDirAdd!<Space>
-
-nnoremap <silent> <Leader>r :CtrlPMRUFiles<CR>
-nnoremap <silent> <Leader>R :CtrlPMRUFiles<CR>
-
-nnoremap <silent> <Leader>[ :CtrlPBufTag<CR>
-nnoremap <silent> <Leader>] :CtrlPBufTagAll<CR>
+nnoremap <silent> <Leader>fk :CtrlPBookmarkDir<CR>
+nnoremap          <Leader>fK :CtrlPBookmarkDirAdd!<Space>
 
 nnoremap <silent> <Leader>\ :CtrlPTag<CR>
 
-nnoremap <silent> <Leader>q :CtrlPQuickfix<CR>
+nnoremap <silent> <Leader>fq :CtrlPQuickfix<CR>
+
+nmap              <Leader>bb <Leader>fb
+nmap              <Leader>bc <Leader>fc
+nmap              <Leader>bC <Leader>fC
+nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
+nnoremap <silent> <Leader>bL :CtrlPLine<CR>
+nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
+nnoremap <silent> <Leader>bT :CtrlPBufTagAll<CR>
 
 " phongnh/ctrlp-finder
-nnoremap <silent> <Leader>E :CtrlPFinder<CR>
+nnoremap <silent> <Leader>fe :CtrlPFinder<CR>
 
 " h14i/vim-ctrlp-buftab
-nnoremap <silent> <Leader>B :CtrlPBufTab<CR>
+nnoremap <silent> <Leader>fB :CtrlPBufTab<CR>
 
 " DavidEGx/ctrlp-smarttabs
-nnoremap <silent> <Leader>t :CtrlPSmartTabs<CR>
+nnoremap <silent> <Leader>ft :CtrlPSmartTabs<CR>
 
 " fisadev/vim-ctrlp-cmdpalette
 nnoremap <silent> <Leader>; :CtrlPCmdPalette<CR>
@@ -773,11 +792,11 @@ nnoremap <silent> <Leader>/ :CtrlPSearchHistory<CR>
 nnoremap <silent> <Leader>i :CtrlPRegister<CR>
 
 " tacahiroy/ctrlp-funky
-nnoremap <silent> <Leader>o :CtrlPFunky<CR>
-nnoremap <silent> <Leader>O :CtrlPFunkyMulti<CR>
+nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
+nnoremap <silent> <Leader>bO :CtrlPFunkyMulti<CR>
 
 " slimane/ctrlp-locationlist
-nnoremap <silent> <Leader>Q :CtrlPLocationlist<CR>
+nnoremap <silent> <Leader>fl :CtrlPLocationlist<CR>
 
 " LeafCage/yankround.vim
 let g:yankround_max_history = 100
@@ -786,9 +805,11 @@ nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
 
 " regedarek/ZoomWin
 nnoremap <silent> <F2> :ZoomWin<CR>
-vmap <F2> <Esc><F2>gv
-imap <F2> <Esc><F2>a
-nmap <Leader>z <F2>
+vmap              <F2> <Esc><F2>gv
+imap              <F2> <Esc><F2>a
+
+nnoremap <silent> <Leader>z :ZoomWin<CR>
+vnoremap          <Leader>z <Esc><Leader>zgv
 
 " junegunn/goyo.vim
 let g:goyo_width  = '80%'
@@ -796,8 +817,10 @@ let g:goyo_height = '96%'
 let g:goyo_linenr = 0
 
 nnoremap <silent> <F3> :Goyo<CR>
-imap <F3> <Esc><F3>
-nmap <Leader><CR> <F3>
+imap              <F3> <Esc><F3>
+
+nnoremap <silent> <Leader><CR> :Goyo<CR>
+vmap              <Leader><CR> <Leader><CR>gv
 
 autocmd! User GoyoEnter nested call <SID>custom_goyo_enter()
 autocmd! User GoyoLeave nested call <SID>custom_goyo_leave()
@@ -841,7 +864,10 @@ if has_key(g:plugs, 'indentLine')
     " let g:indentLine_color_gui            = '#A4E57E'
 
     nnoremap <silent> <F4> :IndentLinesToggle<CR>
-    imap <F4> <Esc><F4>
+    imap              <F4> <Esc><F4>
+
+    nnoremap <silent> <Leader>bi :IndentLinesToggle<CR>
+    vmap              <Leader>bi <Esc><Leader>bigv
 else
     " nathanaelkane/vim-indent-guides
     let g:indent_guides_start_level           = 1
@@ -850,7 +876,10 @@ else
     let g:indent_guides_color_change_percent  = 3
 
     nnoremap <silent> <F4> :IndentGuidesToggle<CR>
-    imap <F4> <Esc><F4>
+    imap              <F4> <Esc><F4>
+
+    nnoremap <silent> <Leader>bi :IndentGuidesToggle<CR>
+    vmap              <Leader>bi <Esc><Leader>bigv
 endif
 
 " mhinz/vim-startify
@@ -871,7 +900,9 @@ let g:startify_show_sessions      = 1
 let g:startify_custom_header      = [] " Disable random quotes header
 
 nnoremap <silent> <F5> :Startify<CR>
-imap <F5> <Esc><F5>
+imap              <F5> <Esc><F5>
+
+nnoremap <silent> <Leader>us :Startify<CR>
 
 augroup MyAutoCmd
     autocmd FileType startify setlocal nofoldenable foldcolumn=0
@@ -891,7 +922,10 @@ let g:syntastic_warning_symbol           = '!!'
 let g:syntastic_style_warning_symbol     = 'S!'
 
 nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
-imap <F6> <Esc><F6>
+imap              <F6> <Esc><F6>
+
+nnoremap <silent> <Leader>bs :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
+nnoremap          <Leader>bS :SyntasticCheck<Space>
 
 if has('python')
     " sjl/gundo.vim
@@ -902,14 +936,18 @@ if has('python')
     let g:gundo_auto_preview   = 0
 
     nnoremap <silent> <F7> :GundoToggle<CR>
-    imap <F7> <Esc><F7>
+    imap              <F7> <Esc><F7>
+
+    nnoremap <silent> <Leader>uu :GundoToggle<CR>
 else
     " mbbill/undotree
     let g:undotree_WindowLayout       = 'botright'
     let g:undotree_SetFocusWhenToggle = 1
 
     nnoremap <silent> <F7> :UndotreeToggle<CR>
-    imap <F7> <Esc><F7>
+    imap              <F7> <Esc><F7>
+
+    nnoremap <silent> <Leader>uu :UndotreeToggle<CR>
 endif
 
 if has_key(g:plugs, 'tagbar')
@@ -920,22 +958,29 @@ if has_key(g:plugs, 'tagbar')
     let g:tagbar_iconchars = ['▸', '▾']
 
     nnoremap <silent> <F8> :TagbarToggle<CR>
-    imap <F8> <Esc><F8>
+    imap              <F8> <Esc><F8>
+
+    nnoremap <silent> <Leader>ut :TagbarToggle<CR>
 endif
 
 " scrooloose/nerdtree
 let g:NERDTreeWinSize       = 35
 let g:NERDTreeMouseMode     = 2
 let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
-let g:NERDTreeQuitOnOpen    = 1
+let g:NERDTreeQuitOnOpen    = 0
 let g:NERDTreeChDirMode     = 0
 let g:NERDTreeShowBookmarks = 1
 
 nnoremap <silent> <F9> :NERDTreeToggle<CR>
-imap <F9> <Esc><F9>
+imap              <F9> <Esc><F9>
 
 nnoremap <silent> <F10> :NERDTreeFind<CR>
-imap <F10> <Esc><F10>
+imap              <F10> <Esc><F10>
+
+nnoremap <silent> <Leader>fo :NERDTreeToggle<CR>
+nmap              <Leader>B  <Leader>fo
+nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
+nnoremap <silent> <Leader>bp :NERDTree %:p:h<CR>
 
 " jlanzarotta/bufexplorer
 let g:bufExplorerDisableDefaultKeyMapping = 1
@@ -943,9 +988,13 @@ let g:bufExplorerShowDirectories          = 0
 let g:bufExplorerShowRelativePath         = 1
 
 nnoremap <silent> gb :ToggleBufExplorer<CR>
+nnoremap <silent> <Leader>be :ToggleBufExplorer<CR>
 
 " moll/vim-bbye
 command! -bang -complete=buffer -nargs=? BD Bdelete<bang> <args>
+
+nnoremap <silent> <Leader>bd :Bdelete<CR>
+nnoremap <silent> <Leader>bD :Bdelete!<CR>
 
 " justinmk/vim-sneak
 let g:sneak#streak = 1
@@ -985,24 +1034,30 @@ nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
 " mhinz/vim-grepper
 let g:grepper = {
             \ 'open': 1,
-            \ 'switch': 0,
+            \ 'switch': 1,
             \ 'jump': 0,
-            \ 'next_tool': '<C-J>',
-            \ 'tools': ['ag', 'pt', 'sift', 'git', 'grep', 'findstr'],
-            \ 'sift': {
-            \   'grepprg': 'sift --binary-skip --git --err-skip-line-length -n -i $*'
-            \ },
+            \ 'next_tool': '<C-j>',
+            \ 'tools': ['ag', 'pt', 'git', 'ack', 'grep', 'findstr'],
             \ }
 
 nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
-nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
-xmap     <silent> <Leader>ss <Plug>(GrepperOperator)
 nnoremap <silent> <Leader>S  :Grepper<CR>
+nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
+xnoremap <silent> <Leader>ss <Esc>:echo 'Searching...'<CR>:Grepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
 
-nnoremap <silent> <Leader>sg :echo 'Searching...'<CR>:Grepper -noquickfix -switch -cword -noprompt<CR>
-nnoremap <silent> <Leader>G  :Grepper -noquickfix -switch<CR>
+nnoremap <silent> <Leader>G  :Grepper -noquickfix<CR>
+nnoremap <silent> <Leader>sg :echo 'Searching...'<CR>:Grepper -noquickfix -cword -noprompt<CR>
+xnoremap <silent> <Leader>sg <Esc>:echo 'Searching...'<CR>:Grepper -noquickfix -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+
+nmap <Leader>Q  <Leader>S
+nmap <Leader>qs <Leader>ss
+xmap <Leader>qs <Leader>ss
+
+nmap <Leader>L  <Leader>G
+nmap <Leader>ls <Leader>sg
+xmap <Leader>ls <Leader>sg
 
 " thinca/vim-textobj-between
 let g:textobj_between_no_default_key_mappings = 1
@@ -1060,8 +1115,8 @@ let g:AutoPairsShortcutFastWrap   = '<M-w>'
 let g:AutoPairsShortcutBackInsert = '<M-i>'
 
 " vim-scripts/DeleteTrailingWhitespace
-nnoremap <silent> <Leader>W :update<CR>:DeleteTrailingWhitespace<CR>
-xnoremap <silent> <Leader>W :DeleteTrailingWhitespace<CR>
+nnoremap <silent> <Leader>dw :update<CR>:DeleteTrailingWhitespace<CR>
+xnoremap <silent> <Leader>dw :DeleteTrailingWhitespace<CR>
 
 " tpope/vim-commentary
 let g:commentary_map_backslash = 0
@@ -1204,13 +1259,14 @@ function! Multiple_cursors_after() abort
 endfunction
 
 " chrisbra/NrrwRgn
-let g:nrrw_topbot_leftright = 'botright'
-let g:nrrw_rgn_nomap_nr     = 1
-let g:nrrw_rgn_nomap_Nr     = 1
+let g:nrrw_rgn_nohl          = 1
+let g:nrrw_topbot_leftright  = 'belowright'
+let g:nrrw_rgn_nomap_Nr      = 1
+let g:nrrw_rgn_resize_window = 'relative'
+let g:nrrw_rgn_rel_min       = 50
+let g:nrrw_rgn_rel_max       = 50
 
-nmap <Leader>n <Plug>NrrwrgnDo
-xmap <Leader>n <Plug>NrrwrgnDo
-xmap <Leader>N <Plug>NrrwrgnBangDo
+nnoremap <silent> <Leader>ns :WidenRegion!<CR>
 
 if has_key(g:plugs, 'neocomplete.vim')
     " Shougo/neocomplete.vim
@@ -1281,10 +1337,10 @@ if has_key(g:plugs, 'neocomplete.vim')
                 \ 'VimFiler' : 'vimfiler#complete',
                 \ }
 
-    let g:neocomplete#fallback_mappings = ["\<C-X>\<C-O>", "\<C-X>\<C-N>"]
+    let g:neocomplete#fallback_mappings = ["\<C-x>\<C-o>", "\<C-x>\<C-n>"]
 
     " <CR>: close popup
-    " inoremap <silent> <CR> <C-R>=<SID>my_cr_function()<CR>
+    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
     " function! s:my_cr_function() abort
     "     return neocomplete#smart_close_popup() . "\<CR>"
     "     " For no inserting <CR> key
@@ -1292,18 +1348,18 @@ if has_key(g:plugs, 'neocomplete.vim')
     " endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char
-    inoremap <expr> <C-H> neocomplete#smart_close_popup()."\<C-H>"
-    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-H>"
+    inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
 
-    inoremap          <expr> <C-G>      neocomplete#undo_completion()
-    inoremap          <expr> <C-X><C-G> neocomplete#undo_completion()
-    inoremap          <expr> <C-X><C-@> neocomplete#complete_common_string()
-    inoremap <silent> <expr> <C-X><C-F> neocomplete#start_manual_complete('file')
+    inoremap          <expr> <C-g>      neocomplete#undo_completion()
+    inoremap          <expr> <C-x><C-g> neocomplete#undo_completion()
+    inoremap          <expr> <C-x><C-@> neocomplete#complete_common_string()
+    inoremap <silent> <expr> <C-x><C-f> neocomplete#start_manual_complete('file')
 
     " <Tab>: completion
-    inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-P>" : "\<C-H>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
     " Clever Tab
     imap <expr> <Tab> <SID>CleverTab()
     function! s:CleverTab() abort
@@ -1344,15 +1400,15 @@ if has_key(g:plugs, 'neosnippet.vim')
     let g:neosnippet#scope_aliases['objc'] = 'objc,c'
     let g:neosnippet#scope_aliases['objcpp'] = 'objc,c'
 
-    imap <silent> <expr> <C-L> neosnippet#expandable_or_jumpable() ?
+    imap <silent> <expr> <C-l> neosnippet#expandable_or_jumpable() ?
                 \ "\<Plug>(neosnippet_expand_or_jump)" :
-                \ (pumvisible() ? "\<C-E>" : "\<Plug>(neosnippet_expand_or_jump)")
-    smap <C-L> <Plug>(neosnippet_expand_or_jump)
-    xmap <C-L> <Plug>(neosnippet_expand_target)
+                \ (pumvisible() ? "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
+    smap <C-l> <Plug>(neosnippet_expand_or_jump)
+    xmap <C-l> <Plug>(neosnippet_expand_target)
 
-    imap <C-J> <Plug>(neosnippet_jump_or_expand)
-    smap <C-J> <Plug>(neosnippet_jump_or_expand)
-    xmap <C-J> <Plug>(neosnippet_expand_target)
+    imap <C-j> <Plug>(neosnippet_jump_or_expand)
+    smap <C-j> <Plug>(neosnippet_jump_or_expand)
+    xmap <C-j> <Plug>(neosnippet_expand_target)
 
     smap <Tab> <Plug>(neosnippet_jump)
 endif
@@ -1424,11 +1480,11 @@ endif
 
 if has_key(g:plugs, 'ultisnips')
     " SirVer/ultisnips
-    let g:UltiSnipsExpandTrigger       = '<C-L>'
-    let g:UltiSnipsJumpForwardTrigger  = '<C-J>'
+    let g:UltiSnipsExpandTrigger       = '<C-l>'
+    let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
     let g:UltiSnipsJumpBackwardTrigger = '<C-_>'
 
-    inoremap <C-X><C-K> <C-X><C-K>
+    inoremap <C-x><C-k> <C-x><C-k>
 endif
 
 " tpope/vim-fugitive
@@ -1447,7 +1503,7 @@ nnoremap          <Leader>gl :Glog!<Space>
 nnoremap          <Leader>gL :Gllog!<Space>
 
 augroup MyAutoCmd
-    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-R><C-G><CR>
+    autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-r><C-g><CR>
     autocmd BufReadPost fugitive://* set bufhidden=delete
 augroup END
 
@@ -1631,9 +1687,6 @@ function! s:VimGoSetup() abort
 
     " go install
     nnoremap <buffer> <silent> <LocalLeader>u :update<CR>:execute "silent! !go install"<CR>:redraw!<CR>:echo '!go install'<CR>
-
-    " Toggle Location List
-    nmap <buffer> <LocalLeader>q coQ
 endfunction
 
 autocmd MyAutoCmd FileType go call s:VimGoSetup()
@@ -1656,11 +1709,11 @@ if has('mac')
     let g:zv_docsets_dir = '~/Library/Application Support/Zeal/Zeal/docsets'
 endif
 
-nmap gz <Plug>ZVMotion
-nmap <Leader>sd <Plug>Zeavim
-vmap <Leader>sd <Plug>ZVVisSelection
-nmap <Leader>sD <Plug>ZVKeyDocset
 nnoremap <Leader>se :Docset<Space>
+nmap     gz         <Plug>ZVMotion
+nmap     <Leader>sd <Plug>Zeavim
+vmap     <Leader>sd <Plug>ZVVisSelection
+nmap     <Leader>sD <Plug>ZVKeyDocset
 
 " chrisbra/unicode.vim
 nmap <Leader>ud <Plug>(MakeDigraph)
