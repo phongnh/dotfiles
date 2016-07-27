@@ -985,7 +985,8 @@ if has_key(g:plugs, 'indentLine')
     " let g:indentLine_color_gui            = '#A4E57E'
 
     nnoremap <silent> <F4> :IndentLinesToggle<CR>
-    imap              <F4> <Esc><F4>
+    vmap              <F4> <Esc><F4>gv
+    imap              <F4> <Esc><F4>a
 
     nnoremap <silent> <Leader>bi :IndentLinesToggle<CR>
     vmap              <Leader>bi <Esc><Leader>bigv
@@ -997,7 +998,8 @@ else
     let g:indent_guides_color_change_percent  = 3
 
     nnoremap <silent> <F4> :IndentGuidesToggle<CR>
-    imap              <F4> <Esc><F4>
+    vmap              <F4> <Esc><F4>gv
+    imap              <F4> <Esc><F4>a
 
     nnoremap <silent> <Leader>bi :IndentGuidesToggle<CR>
     vmap              <Leader>bi <Esc><Leader>bigv
