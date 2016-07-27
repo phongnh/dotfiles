@@ -191,9 +191,6 @@ Plug 'chrisbra/NrrwRgn'
 " Enable repeating supported plugin maps with "."
 Plug 'tpope/vim-repeat'
 
-" Enable repeating supported plugin maps with "."
-Plug 'tpope/vim-repeat'
-
 " commentary.vim: comment stuff out
 Plug 'tpope/vim-commentary'
 
