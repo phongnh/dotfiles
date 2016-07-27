@@ -727,9 +727,8 @@ nnoremap <silent> <F10> :NERDTreeFind<CR>
 imap              <F10> <Esc><F10>
 
 nnoremap <silent> <Leader>fo :NERDTreeToggle<CR>
-nmap              <Leader>B  <Leader>fo
+nmap              <Leader>bp  <Leader>fo
 nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
-nnoremap <silent> <Leader>bp :NERDTree %:p:h<CR>
 
 if has_key(g:plugs, 'ctrlp-py-matcher')
     " FelikZ/ctrlp-py-matcher
