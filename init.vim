@@ -245,9 +245,6 @@ Plug 'AndrewRadev/splitjoin.vim'
 " Smart selection of the closest text object
 Plug 'gcmt/wildfire.vim'
 
-" Vim plugin that allows you to visually select increasingly larger regions of text using the same key combination.
-Plug 'terryma/vim-expand-region'
-
 " Text Objects
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line'                  " l
@@ -1189,62 +1186,6 @@ cal wildfire#triggers#Add('<Plug>(wildfire-fuel)', {
             \ })
 
 nmap <M-s> <Plug>(wildfire-quick-select)
-
-" terryma/vim-expand-region
-" Default settings
-let g:expand_region_text_objects = {
-            \ 'iw' : 0,
-            \ 'iW' : 0,
-            \ "i'" : 0,
-            \ "a'" : 0,
-            \ 'i"' : 0,
-            \ 'a"' : 0,
-            \ }
-
-for s:char in split(") ] } b B")
-    call extend(g:expand_region_text_objects, { "i".s:char : 1, "a".s:char : 1 })
-endfor
-
-call extend(g:expand_region_text_objects, {
-            \ 'il' : 0,
-            \ 'ip' : 0,
-            \ 'ie' : 0,
-            \ })
-
-" Customize it further for ruby
-call expand_region#custom_text_objects('ruby', {
-            \ 'ir' : 1,
-            \ 'ar' : 1,
-            \ 'im' : 0,
-            \ 'am' : 0,
-            \ 'iM' : 1,
-            \ 'aM' : 1,
-            \ })
-
-call expand_region#custom_text_objects('eruby', {
-            \ 'iy' : 0,
-            \ 'ay' : 0,
-            \ })
-
-" Customize it further for go
-call expand_region#custom_text_objects('go', {
-            \ 'if' : 0,
-            \ 'af' : 0,
-            \ })
-
-" Customize it further for html
-call expand_region#custom_text_objects('html', {
-            \ 'it' : 1,
-            \ 'at' : 1,
-            \ })
-
-call expand_region#custom_text_objects('xml', {
-            \ 'it' : 1,
-            \ 'at' : 1,
-            \ })
-
-map <M-k> <Plug>(expand_region_expand)
-map <M-j> <Plug>(expand_region_shrink)
 
 " thinca/vim-textobj-between
 let g:textobj_between_no_default_key_mappings = 1
