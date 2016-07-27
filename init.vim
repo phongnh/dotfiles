@@ -724,7 +724,7 @@ nnoremap <silent> <F10> :NERDTreeFind<CR>
 imap              <F10> <Esc><F10>
 
 nnoremap <silent> <Leader>fo :NERDTreeToggle<CR>
-nmap              <Leader>bp  <Leader>fo
+nmap              <Leader>bp <Leader>fo
 nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
 
 if has_key(g:plugs, 'ctrlp-py-matcher')
