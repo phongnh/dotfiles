@@ -630,7 +630,7 @@ nnoremap <silent> c=V :set paste<CR>"+P:set nopaste<CR>
 inoremap <silent> <C-v> <C-g>u<C-o>"+gP
 
 " Redraw
-nnoremap <silent> <LocalLeader><LocalLeader> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
+nnoremap <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
 
 " junegunn/vim-plug
 nnoremap <silent> <Leader>ua :PlugUpgrade<CR>:PlugUpdate<CR>
