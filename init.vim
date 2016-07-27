@@ -904,7 +904,7 @@ if has_key(g:plugs, 'vim-autoformat')
     let g:autoformat_verbosemode            = 0
 
     nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
-    nnoremap <Leader>aF :Autoformat<Space>
+    nnoremap          <Leader>aF :Autoformat<Space>
 endif
 
 " jlanzarotta/bufexplorer
