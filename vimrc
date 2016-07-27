@@ -1092,7 +1092,11 @@ nnoremap <silent> <Leader>ns :WidenRegion!<CR>
 let g:commentary_map_backslash = 0
 
 " junegunn/vim-easy-align
-xnoremap <silent> <Enter> :EasyAlign<Enter>
+xnoremap <Enter> :EasyAlign<Space>
+
+" Overwrite ga behavior - call :ascii instead
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
 
 " godlygeek/tabular
 nnoremap          <Leader>aa     :Tabularize /
