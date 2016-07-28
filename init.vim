@@ -1083,10 +1083,8 @@ let g:commentary_map_backslash = 0
 xnoremap <silent> <Enter> :EasyAlign<CR>
 
 " Overwrite ga behavior - call :ascii instead
-nmap ga <Plug>(EasyAlign)
-xmap ga <Plug>(EasyAlign)
-
-nnoremap gA :EasyAlign<Space>
+nmap     ga <Plug>(EasyAlign)
+xmap     ga <Plug>(EasyAlign)
 xnoremap gA :EasyAlign<Space>
 
 " godlygeek/tabular
