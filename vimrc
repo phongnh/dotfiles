@@ -782,6 +782,7 @@ nnoremap <silent> <Leader><Leader> :CtrlPMixed<CR>
 
 nnoremap          <Leader>F  :CtrlP<Space>
 nnoremap <silent> <Leader>ff :CtrlP<CR>
+nmap              <Leader>o  <Leader>ff
 
 nnoremap <silent> <Leader>fp :CtrlPRoot<CR>
 
