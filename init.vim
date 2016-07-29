@@ -223,6 +223,9 @@ Plug 'tpope/vim-speeddating'
 " insert or delete brackets, parens, quotes in pair
 Plug 'jiangmiao/auto-pairs'
 
+" Plugin to move lines and selections up and down
+Plug 'matze/vim-move'
+
 " A vim plugin that simplifies the transition between multiline and single-line code
 Plug 'AndrewRadev/splitjoin.vim'
 

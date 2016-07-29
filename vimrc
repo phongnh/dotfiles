@@ -214,6 +214,9 @@ Plug 'tpope/vim-speeddating'
 " insert or delete brackets, parens, quotes in pair
 Plug 'jiangmiao/auto-pairs'
 
+" Plugin to move lines and selections up and down
+Plug 'matze/vim-move'
+
 " A vim plugin that simplifies the transition between multiline and single-line code
 Plug 'AndrewRadev/splitjoin.vim'
 
@@ -631,13 +634,17 @@ if !has('gui_running') && !has('nvim')
     execute "set <M-w>=\<Esc>w"
     execute "set <M-i>=\<Esc>i"
 
-    " Shougo/neocomplete.vim
-    execute "set <M-/>=\<Esc>\/"
+    " matze/vim-move
+    execute "set <M-j>=\<Esc>j"
+    execute "set <M-k>=\<Esc>k"
 
     " gcmt/wildfire.vim
     execute "set <M-h>=\<Esc>h"
     execute "set <M-l>=\<Esc>l"
     execute "set <M-s>=\<Esc>s"
+
+    " Shougo/neocomplete.vim
+    execute "set <M-/>=\<Esc>\/"
 endif
 
 " junegunn/vim-plug
