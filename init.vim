@@ -114,11 +114,11 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'phongnh/ctrlp-finder'
 Plug 'h14i/vim-ctrlp-buftab'
 Plug 'DavidEGx/ctrlp-smarttabs'
+Plug 'tacahiroy/ctrlp-funky'
+Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
 Plug 'fisadev/vim-ctrlp-cmdpalette'
 Plug 'ompugao/ctrlp-history'
 Plug 'mattn/ctrlp-register'
-Plug 'tacahiroy/ctrlp-funky'
-Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
 
 " logging registers and reusing them
 Plug 'LeafCage/yankround.vim'
@@ -809,6 +809,13 @@ nnoremap <silent> <Leader>fB :CtrlPBufTab<CR>
 " DavidEGx/ctrlp-smarttabs
 nnoremap <silent> <Leader>ft :CtrlPSmartTabs<CR>
 
+" tacahiroy/ctrlp-funky
+nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
+nnoremap <silent> <Leader>bO :CtrlPFunkyMulti<CR>
+
+" slimane/ctrlp-locationlist
+nnoremap <silent> <Leader>fl :CtrlPLocationlist<CR>
+
 " fisadev/vim-ctrlp-cmdpalette
 nnoremap <silent> <Leader>; :CtrlPCmdPalette<CR>
 
@@ -817,14 +824,7 @@ nnoremap <silent> <Leader>: :CtrlPCmdHistory<CR>
 nnoremap <silent> <Leader>/ :CtrlPSearchHistory<CR>
 
 " mattn/ctrlp-register
-nnoremap <silent> <Leader>i :CtrlPRegister<CR>
-
-" tacahiroy/ctrlp-funky
-nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
-nnoremap <silent> <Leader>bO :CtrlPFunkyMulti<CR>
-
-" slimane/ctrlp-locationlist
-nnoremap <silent> <Leader>fl :CtrlPLocationlist<CR>
+nnoremap <silent> <Leader>Y :CtrlPRegister<CR>
 
 " LeafCage/yankround.vim
 let g:yankround_max_history = 100
