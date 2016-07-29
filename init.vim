@@ -767,6 +767,7 @@ nnoremap <silent> <Leader>fp :CtrlPRoot<CR>
 
 nnoremap <silent> <Leader>fc :CtrlPCurFile<CR>
 nnoremap <silent> <Leader>fC :CtrlP <C-r>=expand("%:h:h")<CR><CR>
+nmap              <Leader>O  <Leader>fc
 
 nnoremap <silent> <Leader>fr :CtrlPMRUFiles<CR>
 
