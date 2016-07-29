@@ -48,19 +48,6 @@ let g:ftplugin_sql_omni_key    = ''
 " Disable syntax completion
 let g:loaded_syntax_completion = 1
 
-" https://github.com/rogual/neovim-dot-app
-if exists('neovim_dot_app')
-    set linespace=2         " Add some line space for easy reading
-    set guifont=Source\ Code\ Pro:h14,Monaco:h14
-
-    xnoremap <silent> <D-c> "+y
-    xnoremap <silent> <D-x> "+d
-    nnoremap <silent> <D-v> :set paste<CR>"+gP:set nopaste<CR>
-    inoremap <silent> <D-v> <C-g>u<C-o>"+gP
-
-    inoremap <Esc> <Esc>
-endif
-
 " Exit (quit) terminal mode
 tnoremap <C-\><C-\> <C-\><C-n>
 
