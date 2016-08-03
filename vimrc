@@ -7,6 +7,11 @@ if &shell =~# 'fish$'
     set shell=bash
 endif
 
+" Use true color feature
+" if exists('+termguicolors')
+"     set termguicolors
+" endif
+
 " Set augroup
 augroup MyAutoCmd
     autocmd!
@@ -1307,12 +1312,12 @@ if has_key(g:plugs, 'neocomplete.vim')
     let g:neocomplete#fallback_mappings = ["\<C-x>\<C-o>", "\<C-x>\<C-n>"]
 
     " <CR>: close popup
-    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    " function! s:my_cr_function() abort
-    "     return neocomplete#smart_close_popup() . "\<CR>"
-    "     " For no inserting <CR> key
-    "     " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-    " endfunction
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function() abort
+        return neocomplete#smart_close_popup() . "\<CR>"
+        " For no inserting <CR> key
+        " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+    endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"

@@ -1250,12 +1250,12 @@ if has_key(g:plugs, 'deoplete.nvim')
                 \ ])
 
     " <CR>: close popup
-    " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    " function! s:my_cr_function() abort
-    "     return deoplete#mappings#close_popup() . "\<CR>"
-    "     " For no inserting <CR> key
-    "     " return pumvisible() ? deoplete#mappings#close_popup() : "\<CR>"
-    " endfunction
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function() abort
+        return deoplete#mappings#close_popup() . "\<CR>"
+        " For no inserting <CR> key
+        " return pumvisible() ? deoplete#mappings#close_popup() : "\<CR>"
+    endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
