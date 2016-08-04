@@ -870,7 +870,7 @@ if has_key(g:plugs, 'tagbar')
     nnoremap <silent> <Leader>ut :TagbarToggle<CR>
 endif
 
-if has('python')
+if has_key(g:plugs, 'gundo.vim')
     " sjl/gundo.vim
     let g:gundo_right          = 1
     let g:gundo_width          = 30
