@@ -1228,6 +1228,8 @@ vmap <Leader>ud <Plug>(MakeDigraph)
 
 if has_key(g:plugs, 'deoplete.nvim')
     " Shougo/deoplete.nvim
+    set completeopt+=noinsert
+
     let g:deoplete#disable_auto_complete = 0
     let g:deoplete#enable_at_startup     = 1
     let g:deoplete#enable_refresh_always = 1
@@ -1263,8 +1265,6 @@ if has_key(g:plugs, 'deoplete.nvim')
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
     function! s:my_cr_function() abort
         return deoplete#mappings#close_popup() . "\<CR>"
-        " For no inserting <CR> key
-        " return pumvisible() ? deoplete#mappings#close_popup() : "\<CR>"
     endfunction
 
     " CTRL-H, <BS>: close popup and delete backword char

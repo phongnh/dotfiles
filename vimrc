@@ -1316,7 +1316,7 @@ if has_key(g:plugs, 'neocomplete.vim')
     " <CR>: close popup
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
     function! s:my_cr_function() abort
-        return neocomplete#smart_close_popup() . "\<CR>"
+        return neocomplete#close_popup() . "\<CR>"
         " For no inserting <CR> key
         " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
     endfunction
