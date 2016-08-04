@@ -10,6 +10,14 @@ if &shell =~# 'fish$'
     set shell=bash
 endif
 
+if executable('python3')
+    let g:python3_host_prog = substitute(system('which python3'), '\n\+$', '', '')
+endif
+
+if executable('python2')
+    let g:python_host_prog = substitute(system('which python2'), '\n\+$', '', '')
+endif
+
 " Set augroup
 augroup MyAutoCmd
     autocmd!
