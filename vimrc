@@ -261,6 +261,8 @@ elseif has('python')
     Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
+else
+    Plug 'ajh17/VimCompletesMe'
 endif
 
 " SCM
