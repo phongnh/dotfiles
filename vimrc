@@ -1085,7 +1085,6 @@ nmap <Leader>ls <Leader>sg
 xmap <Leader>ls <Leader>sg
 
 " chrisbra/NrrwRgn
-let g:nrrw_rgn_nohl          = 1
 let g:nrrw_topbot_leftright  = 'belowright'
 let g:nrrw_rgn_nomap_Nr      = 1
 let g:nrrw_rgn_resize_window = 'relative'
