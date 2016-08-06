@@ -268,6 +268,7 @@ if has('python3')
         UpdateRemotePlugins
     endfunction
 
+    Plug 'Shougo/context_filetype.vim'
     Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
     Plug 'zchee/deoplete-go', { 'do': 'make' }
     Plug 'zchee/deoplete-clang'
@@ -1244,7 +1245,7 @@ if has_key(g:plugs, 'deoplete.nvim')
     let g:deoplete#omni#functions = {}
 
     " Ignore sources
-    let g:deoplete#ignore_sources = {}
+    let g:deoplete#ignore_sources = { '_': ['tag'], }
 
     " call deoplete#custom#set('_', 'converters', [
     "             \ 'converter_auto_paren',

@@ -252,6 +252,7 @@ Plug 'chrisbra/unicode.vim'
 
 " Code completion and Snippets
 if has('lua')
+    Plug 'Shougo/context_filetype.vim'
     Plug 'Shougo/neocomplete.vim'
     Plug 'justmao945/vim-clang'
     Plug 'Shougo/neosnippet.vim'
