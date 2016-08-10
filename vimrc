@@ -315,8 +315,8 @@ Plug 'jceb/vim-orgmode'
 Plug 'KabbAmine/zeavim.vim'
 
 " Color schemes
-Plug 'NLKNguyen/papercolor-theme'
 Plug 'morhetz/gruvbox'
+Plug 'NLKNguyen/papercolor-theme'
 Plug 'junegunn/seoul256.vim'
 
 call plug#end()
