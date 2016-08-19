@@ -264,12 +264,8 @@ Plug 'chrisbra/unicode.vim'
 
 " Code completion and Snippets
 if has('python3')
-    function! DoRemote(arg)
-        UpdateRemotePlugins
-    endfunction
-
     Plug 'Shougo/context_filetype.vim'
-    Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'zchee/deoplete-go', { 'do': 'make' }
     Plug 'zchee/deoplete-clang'
     Plug 'Shougo/neosnippet.vim'
