@@ -568,6 +568,9 @@ nnoremap <silent> <C-s> :update<CR>
 vmap              <C-s> <Esc><C-s>gv
 imap              <C-s> <Esc><C-s>
 
+nnoremap <silent> <Leader>bu :update<CR>
+vmap              <Leader>bu <Esc><Leader>bugv
+
 nnoremap <silent> <Leader>bw :update<CR>
 vmap              <Leader>bw <Esc><Leader>bwgv
 
