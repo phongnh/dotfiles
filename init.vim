@@ -525,6 +525,29 @@ nnoremap U :redo<CR>
 " Y: Yank to end line (remapped)
 nnoremap Y y$
 
+" Copy / cut to clipboard
+nmap cy "+y
+nmap cx "+d
+
+" Copy yanked text to clipboard
+nnoremap <silent> cY :let [@+, @*] = [@", @"]<CR>
+
+xmap gy "+y
+" Overwrite netrw-gx behavior
+xmap gx "+d
+
+" Paste from clipboard
+nnoremap <silent> cp  "+p
+nnoremap <silent> cP  "+P
+nnoremap <silent> cgp "+gp
+nnoremap <silent> cgP "+gP
+nnoremap <silent> c=p o<Esc>"+pm``[=`]``^
+nnoremap <silent> c=P O<Esc>"+Pm``[=`]``^
+nnoremap <silent> c=v :set paste<CR>"+p:set nopaste<CR>
+nnoremap <silent> c=V :set paste<CR>"+P:set nopaste<CR>
+
+inoremap <silent> <C-v> <C-g>u<C-o>"+gP
+
 " Folding
 " If press h on head, fold close
 "nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
@@ -563,16 +586,22 @@ nnoremap <silent> <Leader>bR :edit!<CR>
 nnoremap <silent> <Leader>bq :bdelete<CR>
 nnoremap <silent> <Leader>bQ :bdelete!<CR>
 
+" New buffer
+nnoremap <silent> <Leader>bn :enew<CR>
+
+" Yank whole buffer (use previous gy mapping)
+nmap <Leader>by ggVGgy``
+
 " Save buffer
 nnoremap <silent> <C-s> :update<CR>
 vmap              <C-s> <Esc><C-s>gv
 imap              <C-s> <Esc><C-s>
 
-nnoremap <silent> <Leader>bu :update<CR>
-vmap              <Leader>bu <Esc><Leader>bugv
-
 nnoremap <silent> <Leader>bw :update<CR>
 vmap              <Leader>bw <Esc><Leader>bwgv
+
+nnoremap <silent> <Leader>bW :update!<CR>
+vmap              <Leader>bW <Esc><Leader>bWgv
 
 " Exit Vim. Bring up a prompt when some buffers have been changed
 nnoremap <silent> ZC :confirm qall<CR>
@@ -602,29 +631,6 @@ nnoremap <Leader>sr :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
 
 xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
 xnoremap <Leader>sr <Esc>:%s/<C-r>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
-
-" Copy / cut to clipboard
-nmap cy "+y
-nmap cx "+d
-
-" Copy yanked text to clipboard
-nnoremap <silent> cY :let [@+, @*] = [@", @"]<CR>
-
-xmap gy "+y
-" Overwrite netrw-gx behavior
-xmap gx "+d
-
-" Paste from clipboard
-nnoremap <silent> cp  "+p
-nnoremap <silent> cP  "+P
-nnoremap <silent> cgp "+gp
-nnoremap <silent> cgP "+gP
-nnoremap <silent> c=p o<Esc>"+pm``[=`]``^
-nnoremap <silent> c=P O<Esc>"+Pm``[=`]``^
-nnoremap <silent> c=v :set paste<CR>"+p:set nopaste<CR>
-nnoremap <silent> c=V :set paste<CR>"+P:set nopaste<CR>
-
-inoremap <silent> <C-v> <C-g>u<C-o>"+gP
 
 " Redraw
 nnoremap <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
@@ -722,6 +728,7 @@ imap              <F10> <Esc><F10>
 
 nnoremap <silent> <Leader>fo :NERDTreeToggle<CR>
 nmap              <Leader>bp <Leader>fo
+noremap  <silent> <Leader>bP :NERDTreeCWD<CR>
 nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
 
 if has_key(g:plugs, 'ctrlp-py-matcher')
@@ -798,8 +805,10 @@ nmap              <Leader>bc <Leader>fc
 nmap              <Leader>bC <Leader>fC
 nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
 nnoremap <silent> <Leader>bL :CtrlPLine<CR>
+nmap              <Leader>b/ <Leader>bL
 nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
 nnoremap <silent> <Leader>bT :CtrlPBufTagAll<CR>
+nmap              <Leader>b] <Leader>bT
 
 " phongnh/ctrlp-finder
 nnoremap <silent> <Leader>fe :CtrlPFinder<CR>
@@ -813,6 +822,7 @@ nnoremap <silent> <Leader>ft :CtrlPSmartTabs<CR>
 " tacahiroy/ctrlp-funky
 nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
 nnoremap <silent> <Leader>bO :CtrlPFunkyMulti<CR>
+nmap              <Leader>b[ <Leader>bO
 
 " slimane/ctrlp-locationlist
 nnoremap <silent> <Leader>fl :CtrlPLocationlist<CR>
@@ -871,6 +881,7 @@ if has_key(g:plugs, 'gundo.vim')
     imap              <F7> <Esc><F7>
 
     nnoremap <silent> <Leader>uu :GundoToggle<CR>
+    nmap              <Leader>bu <Leader>uu
 else
     " mbbill/undotree
     let g:undotree_WindowLayout       = 'botright'
@@ -880,6 +891,7 @@ else
     imap              <F7> <Esc><F7>
 
     nnoremap <silent> <Leader>uu :UndotreeToggle<CR>
+    nmap              <Leader>bu <Leader>uu
 endif
 
 " neomake/neomake
@@ -908,8 +920,9 @@ let g:bufExplorerDisableDefaultKeyMapping = 1
 let g:bufExplorerShowDirectories          = 0
 let g:bufExplorerShowRelativePath         = 1
 
-nnoremap <silent> gb :ToggleBufExplorer<CR>
-nnoremap <silent> <Leader>be :ToggleBufExplorer<CR>
+nnoremap <silent> gb         :ToggleBufExplorer<CR>
+nmap              <Leader>be gb
+nmap              <Leader>bg gb
 
 " regedarek/ZoomWin
 let g:zoomwin_localoptlist = ["ai","ar","bh","bin","bl","bomb","bt","cfu","ci","cin","cink","cino","cinw","cms","com","cpt","diff","efm","eol","ep","et","fenc","fex","ff","flp","fo","ft","gp","imi","ims","inde","inex","indk","inf","isk","kmp","lisp","mps","ml","ma","mod","nf","ofu","pi","qe","ro","sw","si","sts","spc","spf","spl","sua","swf","smc","syn","ts","tw","udf","wfh","wfw","wm"]
@@ -920,7 +933,10 @@ vmap              <F2> <Esc><F2>gv
 imap              <F2> <Esc><F2>a
 
 nnoremap <silent> <Leader>z :ZoomWin<CR>
-vnoremap          <Leader>z <Esc><Leader>zgv
+vmap              <Leader>z <Esc><Leader>zgv
+
+nnoremap <silent> <Leader>bm :ZoomWin<CR>
+vmap              <Leader>bm <Esc><Leader>bmgv
 
 " junegunn/goyo.vim
 let g:goyo_width  = '80%'
