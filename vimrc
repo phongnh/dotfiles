@@ -766,7 +766,7 @@ if has_key(g:plugs, 'ctrlp-py-matcher')
     let g:ctrlp_max_files           = 0
     let g:ctrlp_match_func          = { 'match': 'pymatcher#PyMatch' }
 
-    if has_key(g:plugs, 'cpsm') && filereadable(g:plugs['cpsm']['dir'] + 'autoload/cpsm_py.so')
+    if !has('nvim') && has_key(g:plugs, 'cpsm') && filereadable(g:plugs['cpsm']['dir'] . 'autoload/cpsm_py.so')
         " nixprime/cpsm
         let g:cpsm_highlight_mode = 'basic'
         let g:ctrlp_match_func    = { 'match': 'cpsm#CtrlPMatch' }
