@@ -1689,6 +1689,10 @@ augroup MyAutoCmd
     " Quickfix
     autocmd FileType qf setlocal winheight=15 nobuflisted
 
+    " tigrc
+    autocmd BufNewFile,BufRead {,*}.tigrc setfiletype tigrc
+    autocmd FileType tigrc setlocal noexpandtab tabstop=8 commentstring=#\ %s
+
     " Ruby-related
     autocmd FileType ruby,eruby,yaml,haml,markdown,less,sass,scss,coffee,html.handlebars setlocal tabstop=2 shiftwidth=2
 
