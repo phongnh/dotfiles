@@ -644,25 +644,22 @@ let g:dispatch_quickfix_height = 10
 let g:dispatch_tmux_height     = 1
 
 " vim-airline/vim-airline
-let g:airline#extensions#hunks#enabled      = 0
-let g:airline#extensions#tagbar#enabled     = 0
-let g:airline#extensions#csv#enabled        = 0
-let g:airline#extensions#bufferline#enabled = 0
-let g:airline#extensions#syntastic#enabled  = 0
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline#extensions#tmuxline#enabled   = 0
-let g:airline#extensions#promptline#enabled = 0
-let g:airline#extensions#capslock#enabled   = 0
-let g:airline#extensions#windowswap#enabled = 0
-let g:airline#extensions#anzu#enabled       = 0
+let g:airline_ignore_extensions = [
+            \ 'anzu', 'bufferline', 'capslock', 'commandt', 'csv', 'eclim',
+            \ 'hunks', 'netrw', 'obsession', 'po', 'promptline', 'syntastic',
+            \ 'tagbar', 'tmuxline', 'whitespace', 'windowswap', 'ycm'
+            \ ]
+
+for ext in g:airline_ignore_extensions
+    let g:airline#extensions#{ext}#enabled = 0
+endfor
 
 let g:airline#extensions#tabline#enabled        = 1
 let g:airline#extensions#tabline#tab_nr_type    = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnamemod       = ':t'
 
-let g:airline_powerline_fonts = 0
-
+let g:airline_powerline_fonts                 = 0
 let g:airline_left_sep                        = ''
 let g:airline_left_alt_sep                    = '|'
 let g:airline_right_sep                       = ''
@@ -670,22 +667,21 @@ let g:airline_right_alt_sep                   = '|'
 let g:airline#extensions#tabline#left_sep     = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-let g:airline_symbols.readonly   = 'RO'
-let g:airline_symbols.paste      = 'PASTE'
-let g:airline_symbols.whitespace = '*'
-
-call airline#parts#define('mode', {
-            \ 'function': 'AirlineModeAndClipboard',
-            \ 'accent':   'bold'
+call airline#parts#define('clipboard', {
+            \ 'function': 'AirlineClipboard',
+            \ 'accent':   'bold',
             \ })
 
-function! AirlineModeAndClipboard() abort
-    return airline#parts#mode() . (match(&clipboard, 'unnamed') > -1 ? ' @' : '')
+function! AirlineClipboard() abort
+    return match(&clipboard, 'unnamed') > -1 ? '@' : ''
 endfunction
+
+" Show only mode, clipboard, paste and spell
+let g:airline_section_a = airline#section#create_left(['mode', 'clipboard', 'paste', 'spell'])
+" Show only filetype
+let g:airline_section_x = airline#section#create_right(['filetype'])
+" Hide percentage, linenr, maxlinenr and column
+let g:airline_section_z = ''
 
 autocmd MyAutoCmd VimEnter * set showtabline=1 noshowmode
 
