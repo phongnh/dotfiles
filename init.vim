@@ -639,6 +639,10 @@ nnoremap <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR
 nnoremap <silent> <Leader>ua :PlugUpgrade<CR>:PlugUpdate<CR>
 nnoremap <silent> <Leader>up :PlugUpdate<CR>
 
+" tpope/vim-dispatch
+let g:dispatch_quickfix_height = 10
+let g:dispatch_tmux_height     = 1
+
 " vim-airline/vim-airline
 let g:airline#extensions#hunks#enabled      = 0
 let g:airline#extensions#tagbar#enabled     = 0
