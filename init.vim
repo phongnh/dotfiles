@@ -1434,6 +1434,7 @@ if has_key(g:plugs, 'ultisnips')
 endif
 
 " tpope/vim-fugitive
+nnoremap          <Leader>gg :echo fugitive#head()<CR>
 nnoremap          <Leader>gi :Git add -p %<CR><CR>
 nnoremap          <Leader>ga :Git add -p<CR><CR>
 nnoremap          <Leader>ge :Gedit<Space>
@@ -1445,8 +1446,8 @@ nnoremap <silent> <Leader>gr :Gread<CR>
 nnoremap <silent> <Leader>gc :Gcommit<CR>
 nnoremap <silent> <Leader>gf :Gfetch<CR>
 nnoremap <silent> <Leader>gp :Gpush<CR>
-nnoremap          <Leader>gl :Glog!<Space>
-nnoremap          <Leader>gL :Gllog!<Space>
+nnoremap          <Leader>gl :Glog<Space>
+nnoremap          <Leader>gL :Gllog<Space>
 
 augroup MyAutoCmd
     autocmd FileType gitcommit nmap <silent> <buffer> U :Git checkout -- <C-r><C-g><CR>
