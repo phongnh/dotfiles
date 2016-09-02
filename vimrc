@@ -676,7 +676,7 @@ let g:dispatch_tmux_height     = 1
 let g:airline_ignore_extensions = [
             \ 'anzu', 'bufferline', 'capslock', 'commandt', 'csv', 'eclim',
             \ 'hunks', 'netrw', 'obsession', 'po', 'promptline', 'syntastic',
-            \ 'tagbar', 'tmuxline', 'whitespace', 'windowswap', 'ycm'
+            \ 'tagbar', 'tmuxline', 'whitespace', 'windowswap', 'wordcount', 'ycm'
             \ ]
 
 for ext in g:airline_ignore_extensions
