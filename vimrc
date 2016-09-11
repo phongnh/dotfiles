@@ -441,7 +441,9 @@ set pumheight=20                " Set popup menu max height
 set wildmenu
 set wildmode=list:longest,full
 " Ingore the following stuff when tab completing
-set wildignore+=.hg,.git,.svn,*.o,*.obj,*.pyc,*.luac,*.jpg,*.jpeg,*.png,*.gif,*.bmp,*.pdf,*.class,*.dmg,*.DS_Store,*.lnk,*.ini,*.dat
+set wildignore+=.hg/*,.git/*,.svn/*,.built/*,node_modules/*
+set wildignore+=*.o,*.obj,*.pyc,*.luac,*.jpg,*.jpeg,*.png,*.gif,*.bmp,*.pdf,*.class
+set wildignore+=*.DS_Store,*.dmg,*.pkg,*dll,*.exe,*.lnk,*.ini,*.dat
 
 " Adjust window size of preview and help
 set previewheight=12
@@ -779,18 +781,41 @@ let g:ctrlp_map               = ''
 let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_reuse_window      = 'startify'
 let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
-let g:ctrlp_custom_ignore     = {
-            \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc'
-            \ }
+let g:ctrlp_follow_symlinks   = 0
 
-if executable('ag')
-    let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
-elseif has('win32') || has('win64')
-    let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
-else
-    let s:ctrlp_fallback = 'find %s -type f'
-endif
+function! s:ctrlp_fallback() abort
+    if executable('ag')
+        if g:ctrlp_follow_symlinks == 0
+            return 'ag %s --nocolor -l -g ""'
+        else
+            return 'ag %s --nocolor -f -l -g ""'
+        endif
+    elseif has('win32') || has('win64')
+        return 'dir %s /-n /b /s /a-d'
+    else
+        if g:ctrlp_follow_symlinks == 0
+            return 'find %s -type f'
+        else
+            return 'find -L %s -type f'
+        endif
+    endif
+endfunction
+
+function! s:toggle_ctrlp_follow_symlinks() abort
+    if g:ctrlp_follow_symlinks == 0
+        let g:ctrlp_follow_symlinks = 1
+        echo 'CtrlP follows symlinks!'
+    else
+        let g:ctrlp_follow_symlinks = 0
+        echo 'CtrlP does not symlinks!'
+    endif
+
+    let g:ctrlp_user_command['fallback'] = s:ctrlp_fallback()
+endfunction
+
+command! -nargs=0 ToggleCtrlPFollowSymlinks call <SID>toggle_ctrlp_follow_symlinks()
+
+nnoremap <silent> coL :ToggleCtrlPFollowSymlinks<CR>
 
 let g:ctrlp_use_caching  = 0
 let g:ctrlp_user_command = {
@@ -798,7 +823,7 @@ let g:ctrlp_user_command = {
             \   1: ['.git', 'cd %s && git ls-files . --cached --others --exclude-standard'],
             \   2: ['.hg',  'hg --cwd %s locate -I .'],
             \ },
-            \ 'fallback': s:ctrlp_fallback
+            \ 'fallback': s:ctrlp_fallback()
             \ }
 
 nnoremap <silent> <Leader>- :CtrlPClearAllCaches<CR>
@@ -1346,15 +1371,17 @@ if has_key(g:plugs, 'neocomplete.vim')
 
     inoremap          <expr> <C-g>      neocomplete#undo_completion()
     inoremap          <expr> <C-x><C-g> neocomplete#undo_completion()
-    inoremap          <expr> <C-x><C-@> neocomplete#complete_common_string()
+    inoremap          <expr> <C-x><C-r> neocomplete#mappings#refresh()
+    inoremap          <expr> <C-x><C-_> neocomplete#complete_common_string()
     inoremap <silent> <expr> <C-x><C-f> neocomplete#start_manual_complete('file')
+    inoremap <silent> <expr> <C-_>      neocomplete#start_manual_complete()
 
     " <Tab>: completion
     inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
     " Clever Tab
-    imap <expr> <Tab> <SID>CleverTab()
+    inoremap <silent> <expr> <Tab> <SID>CleverTab()
     function! s:CleverTab() abort
         if pumvisible()
             return "\<C-n>"
