@@ -607,11 +607,17 @@ nnoremap <silent> <C-s> :update<CR>
 vmap              <C-s> <Esc><C-s>gv
 imap              <C-s> <Esc><C-s>
 
-nnoremap <silent> <Leader>bw :update<CR>
-vmap              <Leader>bw <Esc><Leader>bwgv
+nnoremap <silent> <Leader>bs :update<CR>
+vmap              <Leader>bs <Esc><Leader>bsgv
 
-nnoremap <silent> <Leader>bW :update!<CR>
-vmap              <Leader>bW <Esc><Leader>bWgv
+nnoremap <silent> <Leader>bS :update!<CR>
+vmap              <Leader>bS <Esc><Leader>bSgv
+
+nnoremap <silent> <Leader>w :update<CR>
+vmap              <Leader>w <Esc><Leader>wgv
+
+nnoremap <silent> <Leader>W :update!<CR>
+vmap              <Leader>W <Esc><Leader>Wgv
 
 " Exit Vim. Bring up a prompt when some buffers have been changed
 nnoremap <silent> ZC :confirm qall<CR>
@@ -757,9 +763,8 @@ imap              <F9> <Esc><F9>
 nnoremap <silent> <F10> :NERDTreeFind<CR>
 imap              <F10> <Esc><F10>
 
-nnoremap <silent> <Leader>fo :NERDTreeToggle<CR>
-nmap              <Leader>bp <Leader>fo
-noremap  <silent> <Leader>bP :NERDTreeCWD<CR>
+nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
+noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
 nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
 
 if has_key(g:plugs, 'ctrlp-py-matcher')
@@ -815,7 +820,7 @@ endfunction
 
 command! -nargs=0 ToggleCtrlPFollowSymlinks call <SID>toggle_ctrlp_follow_symlinks()
 
-nnoremap <silent> coL :ToggleCtrlPFollowSymlinks<CR>
+nnoremap <silent> coa :ToggleCtrlPFollowSymlinks<CR>
 
 let g:ctrlp_use_caching  = 0
 let g:ctrlp_user_command = {
@@ -836,27 +841,26 @@ nmap              <Leader>o  <Leader>ff
 
 nnoremap <silent> <Leader>fp :CtrlPRoot<CR>
 
-nnoremap <silent> <Leader>fc :CtrlPCurFile<CR>
-nnoremap <silent> <Leader>fC :CtrlP <C-r>=expand("%:h:h")<CR><CR>
-nmap              <Leader>O  <Leader>fc
-
 nnoremap <silent> <Leader>fr :CtrlPMRUFiles<CR>
+
+nnoremap <silent> <Leader>O  :CtrlPCurFile<CR>
+
+nnoremap <silent> <Leader>fb :CtrlPBuffer<CR>
 
 nnoremap          <Leader>D  :CtrlPDir<Space>
 nnoremap <silent> <Leader>fd :CtrlPDir<CR>
 
-nnoremap <silent> <Leader>fb :CtrlPBuffer<CR>
-
 nnoremap <silent> <Leader>fk :CtrlPBookmarkDir<CR>
 nnoremap          <Leader>fK :CtrlPBookmarkDirAdd!<Space>
 
-nnoremap <silent> <Leader>\ :CtrlPTag<CR>
+nnoremap <silent> <Leader>\  :CtrlPTag<CR>
 
 nnoremap <silent> <Leader>fq :CtrlPQuickfix<CR>
 
+" Buffer-related mappings
 nmap              <Leader>bb <Leader>fb
-nmap              <Leader>bc <Leader>fc
-nmap              <Leader>bC <Leader>fC
+nmap              <Leader>bp <Leader>O
+nnoremap <silent> <Leader>bg :CtrlP <C-r>=expand("%:h:h")<CR><CR>
 nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
 nnoremap <silent> <Leader>bL :CtrlPLine<CR>
 nmap              <Leader>b/ <Leader>bL
@@ -949,8 +953,8 @@ let g:syntastic_style_warning_symbol     = 'S!'
 nnoremap <silent> <F6> :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 imap              <F6> <Esc><F6>
 
-nnoremap <silent> <Leader>bs :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
-nnoremap          <Leader>bS :SyntasticCheck<Space>
+nnoremap <silent> <Leader>bc :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
+nnoremap          <Leader>bC :SyntasticCheck<Space>
 
 if has_key(g:plugs, 'vim-autoformat')
     " Chiel92/vim-autoformat
@@ -970,7 +974,6 @@ let g:bufExplorerShowRelativePath         = 1
 
 nnoremap <silent> gb         :ToggleBufExplorer<CR>
 nmap              <Leader>be gb
-nmap              <Leader>bg gb
 
 " regedarek/ZoomWin
 nnoremap <silent> <F2> :ZoomWin<CR>
@@ -1063,8 +1066,8 @@ nnoremap <silent> <Leader>bd :Bdelete<CR>
 nnoremap <silent> <Leader>bD :Bdelete!<CR>
 
 " vim-scripts/DeleteTrailingWhitespace
-nnoremap <silent> <Leader>dw :update<CR>:DeleteTrailingWhitespace<CR>
-xnoremap <silent> <Leader>dw :DeleteTrailingWhitespace<CR>
+nnoremap <silent> <Leader>bw :update<CR>:DeleteTrailingWhitespace<CR>
+xnoremap <silent> <Leader>bw :DeleteTrailingWhitespace<CR>
 
 " justinmk/vim-sneak
 let g:sneak#streak = 1
@@ -1541,6 +1544,11 @@ let g:signify_update_on_bufenter    = 0
 let g:signify_update_on_focusgained = 0
 
 nnoremap <silent> cog :SignifyToggle<CR>
+
+nmap <Leader>bj <Plug>(signify-next-hunk)
+nmap <Leader>bk <Plug>(signify-prev-hunk)
+nmap <Leader>bJ 9999<Leader>bj
+nmap <Leader>bK 9999<Leader>bk
 
 if has_key(g:plugs, 'vim-tmuxify')
     " jebaum/vim-tmuxify
