@@ -721,12 +721,16 @@ augroup MyAutoCmd
 augroup END
 
 " scrooloose/nerdtree
-let g:NERDTreeWinSize       = 35
-let g:NERDTreeMouseMode     = 2
-let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
-let g:NERDTreeQuitOnOpen    = 0
-let g:NERDTreeChDirMode     = 0
-let g:NERDTreeShowBookmarks = 1
+let g:NERDTreeWinSize             = 35
+let g:NERDTreeMouseMode           = 2
+let g:NERDTreeMapChangeRoot       = '.' " Map . for changing root in NERDTree
+let g:NERDTreeQuitOnOpen          = 0
+let g:NERDTreeChDirMode           = 0
+let g:NERDTreeShowBookmarks       = 1
+let g:NERDTreeDirArrowExpandable  = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+" let g:NERDTreeDirArrowExpandable  = '+'
+" let g:NERDTreeDirArrowCollapsible = '~'
 
 nnoremap <silent> <F9> :NERDTreeToggle<CR>
 imap              <F9> <Esc><F9>
