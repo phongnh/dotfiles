@@ -1090,31 +1090,33 @@ nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
 
 " mhinz/vim-grepper
 let g:grepper = {
-            \ 'open': 1,
-            \ 'switch': 1,
-            \ 'jump': 0,
+            \ 'open':      1,
+            \ 'switch':    1,
+            \ 'jump':      0,
             \ 'next_tool': '<C-j>',
-            \ 'tools': ['ag', 'pt', 'git', 'ack', 'grep', 'findstr'],
+            \ 'tools':     ['ag', 'pt', 'git', 'ack', 'grep', 'findstr'],
             \ }
 
 nmap <silent> gs <Plug>(GrepperOperator)
 xmap <silent> gs <Plug>(GrepperOperator)
 
 nnoremap <silent> <Leader>S  :Grepper<CR>
-nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -cword -noprompt<CR>
+nnoremap <silent> <Leader>ss :echo 'Searching...'<CR>:Grepper -noprompt -cword<CR>
 xnoremap <silent> <Leader>ss <Esc>:echo 'Searching...'<CR>:Grepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+nnoremap <silent> <Leader>sc :Grepper -prompt -cword<CR>
+xnoremap <silent> <Leader>sc :Grepper -prompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
 
-nnoremap <silent> <Leader>G  :Grepper -noquickfix<CR>
-nnoremap <silent> <Leader>sg :echo 'Searching...'<CR>:Grepper -noquickfix -cword -noprompt<CR>
-xnoremap <silent> <Leader>sg <Esc>:echo 'Searching...'<CR>:Grepper -noquickfix -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+nnoremap <silent> <Leader>L  :Grepper -noquickfix<CR>
+nnoremap <silent> <Leader>ls :echo 'Searching...'<CR>:Grepper -noquickfix -noprompt -cword<CR>
+xnoremap <silent> <Leader>ls <Esc>:echo 'Searching...'<CR>:Grepper -noquickfix -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+nnoremap <silent> <Leader>lw :Grepper -noquickfix -prompt -cword<CR>
+xnoremap <silent> <Leader>lw :Grepper -noquickfix -prompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
 
 nmap <Leader>Q  <Leader>S
 nmap <Leader>qs <Leader>ss
 xmap <Leader>qs <Leader>ss
-
-nmap <Leader>L  <Leader>G
-nmap <Leader>ls <Leader>sg
-xmap <Leader>ls <Leader>sg
+nmap <Leader>qw <Leader>sc
+xmap <Leader>qw <Leader>sc
 
 " chrisbra/NrrwRgn
 let g:nrrw_topbot_leftright  = 'belowright'
