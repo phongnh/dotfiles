@@ -258,7 +258,7 @@ if has('lua')
     Plug 'Shougo/neosnippet.vim'
     Plug 'Shougo/neosnippet-snippets'
     Plug 'honza/vim-snippets'
-elseif has('python')
+elseif has('python') && v:version > 704 && executable('cmake')
     Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
