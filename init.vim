@@ -143,6 +143,10 @@ if has('python')
     Plug 'Chiel92/vim-autoformat'
 endif
 
+if executable('clang-format')
+    Plug 'rhysd/vim-clang-format'
+endif
+
 " BufExplorer Plugin for Vim
 Plug 'jlanzarotta/bufexplorer'
 
@@ -258,6 +262,8 @@ Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript' " f
 Plug 'poetic/vim-textobj-javascript'          " c, remapped to j
+
+Plug 'kana/vim-operator-user'
 
 " A Vim plugin that provides a completion function for Unicode glyphs
 Plug 'chrisbra/unicode.vim'
@@ -946,6 +952,26 @@ if has_key(g:plugs, 'vim-autoformat')
 
     nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
     nnoremap          <Leader>aF :Autoformat<Space>
+endif
+
+if has_key(g:plugs, 'vim-clang-format')
+    " rhysd/vim-clang-format
+    " Disable ClangFormat command and settings from justmao945/vim-clang
+    let g:clang_enable_format_command = 0
+    let g:clang_format_auto           = 0
+
+    function! s:SetupClangFormat() abort
+        nnoremap <silent> <buffer> <LocalLeader>f :<C-u>ClangFormat<CR>:update<CR>
+        vnoremap <silent> <buffer> <LocalLeader>f :ClangFormat<CR>:update<CR>
+
+        " Require vim-operator-user
+        map <buffer> <LocalLeader>x <Plug>(operator-clang-format)
+
+        " Toggle auto formatting
+        nnoremap <LocalLeader>F :ClangFormatAutoToggle<CR>
+    endfunction
+
+    autocmd MyAutoCmd FileType c,cpp,objc call s:SetupClangFormat()
 endif
 
 " jlanzarotta/bufexplorer
