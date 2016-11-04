@@ -957,6 +957,7 @@ if has_key(g:plugs, 'vim-autoformat')
     let g:autoformat_verbosemode            = 0
 
     nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
+    vnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
     nnoremap          <Leader>aF :Autoformat<Space>
 endif
 
@@ -970,11 +971,11 @@ if has_key(g:plugs, 'vim-clang-format')
         nnoremap <silent> <buffer> <LocalLeader>f :<C-u>ClangFormat<CR>:update<CR>
         vnoremap <silent> <buffer> <LocalLeader>f :ClangFormat<CR>:update<CR>
 
-        " Require vim-operator-user
-        map <buffer> <LocalLeader>x <Plug>(operator-clang-format)
+        " Require kana/vim-operator-user
+        map <buffer> g\ <Plug>(operator-clang-format)
 
         " Toggle auto formatting
-        nnoremap <LocalLeader>F :ClangFormatAutoToggle<CR>
+        nnoremap <LocalLeader>a :ClangFormatAutoToggle<CR>
     endfunction
 
     autocmd MyAutoCmd FileType c,cpp,objc call s:SetupClangFormat()
@@ -1469,7 +1470,7 @@ if has_key(g:plugs, 'YouCompleteMe')
 
         nnoremap <buffer> <silent> <LocalLeader>l :YcmCompleter ClearCompilationFlagCache<CR>
 
-        nnoremap <buffer> <silent> <LocalLeader>f :YcmCompleter FixIt<CR>
+        nnoremap <buffer> <silent> <LocalLeader>x :YcmCompleter FixIt<CR>
 
         nnoremap <buffer> <silent> <LocalLeader>v :YcmDebugInfo<CR>
         nnoremap <buffer> <silent> <LocalLeader>k :YcmShowDetailedDiagnostic<CR>
