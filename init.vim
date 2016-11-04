@@ -770,7 +770,13 @@ let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
 let g:ctrlp_follow_symlinks   = 0
 
 function! s:ctrlp_fallback() abort
-    if executable('ag')
+    if executable('rg')
+        if g:ctrlp_follow_symlinks == 0
+            return 'rg %s --color=never --files -g ""'
+        else
+            return 'rg %s --color=never --follow --files -g ""'
+        endif
+    elseif executable('ag')
         if g:ctrlp_follow_symlinks == 0
             return 'ag %s --nocolor -l -g ""'
         else
@@ -1120,7 +1126,7 @@ let g:grepper = {
             \ 'switch':    1,
             \ 'jump':      0,
             \ 'next_tool': '<C-j>',
-            \ 'tools':     ['ag', 'pt', 'git', 'ack', 'grep', 'findstr'],
+            \ 'tools':     ['rg', 'ag', 'pt', 'git', 'ack', 'grep', 'findstr'],
             \ }
 
 nmap <silent> gs <Plug>(GrepperOperator)
