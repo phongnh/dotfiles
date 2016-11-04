@@ -193,6 +193,8 @@ Plug 'dyng/ctrlsf.vim'
 
 " Helps you win at grep.
 Plug 'mhinz/vim-grepper'
+" Open a Quickfix item in a window you choose. (Vim plugin)
+Plug 'yssl/QFEnter'
 
 " A Narrow Region Plugin for vim (like Emacs Narrow Region)
 Plug 'chrisbra/NrrwRgn'
@@ -1170,6 +1172,11 @@ nmap <Leader>qs <Leader>ss
 xmap <Leader>qs <Leader>ss
 nmap <Leader>qw <Leader>sc
 xmap <Leader>qw <Leader>sc
+
+" yssl/QFEnter
+let g:qfenter_vopen_map = ['<C-v>']
+let g:qfenter_hopen_map = ['<C-CR>', '<C-s>', '<C-x>']
+let g:qfenter_topen_map = ['<C-t>']
 
 " chrisbra/NrrwRgn
 let g:nrrw_topbot_leftright  = 'belowright'
