@@ -1147,6 +1147,9 @@ xnoremap <silent> <Leader>ls <Esc>:echo 'Searching...'<CR>:Grepper -noquickfix -
 nnoremap <silent> <Leader>lw :Grepper -noquickfix -prompt -cword<CR>
 xnoremap <silent> <Leader>lw :Grepper -noquickfix -prompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
 
+nnoremap <silent> <Leader>B  :Grepper -buffer -noquickfix<CR>
+nnoremap <silent> <Leader>sb :echo 'Searching...'<CR>:Grepper -buffer -noquickfix -noprompt -cword<CR>
+
 nmap <Leader>Q  <Leader>S
 nmap <Leader>qs <Leader>ss
 xmap <Leader>qs <Leader>ss
