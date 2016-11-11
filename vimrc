@@ -1149,7 +1149,7 @@ let g:grepper = {
             \ 'switch':    1,
             \ 'jump':      0,
             \ 'next_tool': '<C-j>',
-            \ 'tools':     ['rg', 'ag', 'pt', 'git', 'ack', 'grep', 'findstr'],
+            \ 'tools':     ['rg', 'ag', 'sift', 'pt', 'git', 'ack', 'grep', 'findstr'],
             \ }
 
 nmap <silent> gs <Plug>(GrepperOperator)
