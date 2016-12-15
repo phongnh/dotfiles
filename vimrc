@@ -124,7 +124,7 @@ else
 endif
 
 " Syntax checking hacks for vim
-Plug 'scrooloose/syntastic'
+Plug 'vim-syntastic/syntastic'
 
 if has('python')
     " Provide easy code formatting in Vim by integrating existing code formatters.
@@ -956,7 +956,7 @@ else
     nmap              <Leader>bu <Leader>uu
 endif
 
-" scrooloose/syntastic
+" vim-syntastic/syntastic
 let g:syntastic_mode_map                 = { 'mode': 'passive', 'active_filetypes': [], }
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_loc_list_height          = 5
