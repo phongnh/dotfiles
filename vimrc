@@ -753,7 +753,7 @@ imap              <F5> <Esc><F5>
 nnoremap <silent> <Leader>us :Startify<CR>
 
 augroup MyAutoCmd
-    autocmd User Startified setlocal buftype= nofoldenable foldcolumn=0
+    autocmd User Startified setlocal buftype=nofile nofoldenable foldcolumn=0
 augroup END
 
 " scrooloose/nerdtree
