@@ -649,7 +649,7 @@ set encoding=utf-8           " Default encoding for saving and reading file
 set fileformat=unix          " Default fileformat
 set fileformats=unix,dos,mac
 
-set nrformats-=octal nrformats+=alpha
+set nrformats-=octal
 
 " Don't try to highlight lines longer than 1000 characters
 set synmaxcol=1000

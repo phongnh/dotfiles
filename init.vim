@@ -634,7 +634,6 @@ set mousemodel=popup         " Right mouse button pops up a menu
 set encoding=utf-8           " Default encoding for saving and reading file
 set fileformat=unix          " Default fileformat
 set fileformats=unix,dos,mac
-set nrformats+=alpha
 
 " Don't try to highlight lines longer than 1000 characters
 set synmaxcol=1000
