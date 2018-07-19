@@ -115,7 +115,6 @@ if !exists('g:zero_vim_groups')
                 \ 'web',
                 \ 'go',
                 \ 'git',
-                \ 'agit',
                 \ 'gitgutter',
                 \ 'diff-enhanced',
                 \ 'writing',
@@ -314,20 +313,25 @@ call plug#begin()
 " }
 
 " Fuzzy finder {
-    if s:python
-        Plug 'FelikZ/ctrlp-py-matcher'
+    if s:Use('leaderf') && s:python
+        " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
+        Plug 'Yggdroot/LeaderF', { 'do': './install.sh'  }
+    else
+        if s:python
+            Plug 'FelikZ/ctrlp-py-matcher'
+        endif
 
-        if executable('cmake')
+        if s:python && executable('cmake')
             execute printf("Plug 'nixprime/cpsm', { 'do': 'env %s ./install.sh' }", s:python3 ? 'PY3=ON' : 'PY3=OFF')
         endif
-    endif
 
-    Plug 'ctrlpvim/ctrlp.vim'
-    Plug 'phongnh/ctrlp-settings.vim'
-    Plug 'DavidEGx/ctrlp-smarttabs'
-    Plug 'tacahiroy/ctrlp-funky'
-    Plug 'mattn/ctrlp-register'
-    Plug 'LeafCage/yankround.vim'
+        " Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
+        Plug 'ctrlpvim/ctrlp.vim'
+        Plug 'DavidEGx/ctrlp-smarttabs'
+        Plug 'tacahiroy/ctrlp-funky'
+        Plug 'mattn/ctrlp-register'
+        Plug 'LeafCage/yankround.vim'
+    endif
 
     if s:Use('fzf')
         " A command-line fuzzy finder written in Go
@@ -1256,41 +1260,119 @@ if s:IsPlugged('vaffle.vim')
     nnoremap <silent> <Leader>bf :Vaffle <C-r>=expand("%:p:h")<CR><CR>
 endif
 
+if s:IsPlugged('LeaderF')
+    " Yggdroot/LeaderF
+    let g:Lf_WindowHeight  = 0.30
+    let g:Lf_MruMaxFiles   = 200
+    let g:Lf_CursorBlink   = 0
+    " let g:Lf_PreviewCode   = 1 " Preview Tag
+    let g:Lf_StlSeparator  = { 'left': '', 'right': '' }
+
+    let g:Lf_UseCache      = 0 " rg/ag is enough fast, we don't need cache
+    let g:Lf_NeedCacheTime = 5 " 5 seconds
+
+    " These options are passed to external tools (rg, ag and pt, ...)
+    let g:Lf_FollowLinks = 0
+    let g:Lf_ShowHidden  = 0
+
+    let g:Lf_WildIgnore = {
+                \ 'dir': ['.svn','.git','.hg', '.node_modules', '.gems'],
+                \ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+                \ }
+
+    let g:Lf_ShortcutF = '<Leader>f'
+    let g:Lf_ShortcutB = '<Leader>bb'
+
+    function! s:LeaderfRoot()
+        let current = get(g:, 'Lf_WorkingDirectoryMode', 'c')
+        try
+            let g:Lf_WorkingDirectoryMode = 'Ac'
+            call leaderf#File#startExpl(g:Lf_WindowPosition)
+        finally
+            let g:Lf_WorkingDirectoryMode = current
+        endtry
+    endfunction
+    command! -bar -nargs=0 LeaderfRoot call <SID>LeaderfRoot()
+
+    nmap <Leader><Leader> <Leader>f
+
+    nnoremap          <Leader>F :LeaderfFile<Space>
+    nnoremap <silent> <Leader>p :LeaderfRoot<CR>
+    nmap              <C-p>     <Leader>p
+    nnoremap <silent> <Leader>o :LeaderfMruCwd<CR>
+    nnoremap <silent> <Leader>O :LeaderfMru<CR>
+    nnoremap <silent> <Leader>d :LeaderfFile <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :LeaderfFile <C-r>=expand("%:h:h")<CR><CR>
+
+    nnoremap <silent> <Leader>\ :LeaderfTag<CR>
+
+    " Buffer-related mappings
+    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bp <Leader>p
+    nnoremap <silent> <Leader>bl :LeaderfLine<CR>
+    nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
+
+    nnoremap <silent> <Leader><Tab> :LeaderfTabBufferAll<CR>
+
+    nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
+
+    nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
+    nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
+endif
+
 if s:IsPlugged('ctrlp.vim')
-    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'autoload/cpsm_py.so')
-        " nixprime/cpsm
-        let g:cpsm_match_empty_query    = 0
-        let g:ctrlp_clear_cache_on_exit = 0
-        let g:ctrlp_max_files           = 0
-        let g:cpsm_highlight_mode       = 'basic'
-        let g:ctrlp_match_func          = { 'match': 'cpsm#CtrlPMatch' }
-    elseif s:IsPlugged('ctrlp-py-matcher')
-        " FelikZ/ctrlp-py-matcher
-        let g:ctrlp_clear_cache_on_exit = 0
-        let g:ctrlp_max_files           = 0
-        let g:ctrlp_match_func          = { 'match': 'pymatcher#PyMatch' }
+    " ctrlpvim/ctrlp.vim
+    let g:ctrlp_match_window      = 'max:20'
+    let g:ctrlp_working_path_mode = 'w'
+    let g:ctrlp_reuse_window      = 'startify'
+    let g:ctrlp_cmd               = 'CtrlPRoot'
+    let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
+
+    let g:ctrlp_use_caching         = 0 " rg/ag is enough fast, we don't need cache
+    let g:ctrlp_max_files           = 0
+    let g:ctrlp_clear_cache_on_exit = 0
+
+    if executable('rg')
+        let g:ctrlp_user_command = 'rg %s --color=never --no-ignore-vcs --hidden --files'
+    elseif executable('ag')
+        let g:ctrlp_user_command = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
+    elseif executable('fd')
+        let g:ctrlp_user_command = 'fd --color=never --no-ignore-vcs --hidden --type file . %s'
+    elseif has('win64') || has('win32')
+        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+    elseif executable('find')
+        let ignores = '-path "*/.git/*" -o -path "*/.hg/*" -o -path "*/.svn/*"'
+        let ignores .= ' -o -path "*/gems/*" -o -path "*/.gems/*"'
+        let ignores .= ' -o -path "*/node_modules/*" -o -path "*/.built/*" -o -path "*.DS_Store"'
+        let g:ctrlp_user_command = 'find %s ' . ignores . ' -prune -o -type f -print'
     endif
 
-    " ctrlpvim/ctrlp.vim
-    nnoremap <silent> <Leader>- :CtrlPClearAllCaches<CR>
+    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so')
+        " nixprime/cpsm
+        let g:cpsm_match_empty_query = 0
+        let g:cpsm_highlight_mode    = 'basic'
+        let g:ctrlp_match_func       = { 'match': 'cpsm#CtrlPMatch' }
+    elseif s:IsPlugged('ctrlp-py-matcher')
+        " FelikZ/ctrlp-py-matcher
+        let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+    endif
 
-    nmap              <Leader><Leader> <Leader>f
-    nnoremap <silent> <Leader>f        :CtrlP<CR>
-    nnoremap          <Leader>F        :CtrlP<Space>
-    nnoremap <silent> <Leader>p        :CtrlPRoot<CR>
-    nnoremap <silent> <Leader>o        :CtrlPCurWD<CR>
-    nnoremap <silent> <Leader>O        :CtrlPMRUFiles<CR>
-    nnoremap <silent> <Leader>d        :CtrlPCurFile<CR>
-    nnoremap <silent> <Leader>D        :CtrlP <C-r>=expand("%:h:h")<CR><CR>
+    nmap <Leader><Leader> <Leader>f
+
+    nnoremap <silent> <Leader>f :CtrlP<CR>
+    nnoremap          <Leader>F :CtrlP<Space>
+    nnoremap <silent> <Leader>p :CtrlPRoot<CR>
+    nnoremap <silent> <Leader>o :CtrlPCurWD<CR>
+    nnoremap <silent> <Leader>O :CtrlPMRUFiles<CR>
+    nnoremap <silent> <Leader>d :CtrlPCurFile<CR>
+    nnoremap <silent> <Leader>D :CtrlP <C-r>=expand("%:h:h")<CR><CR>
 
     nnoremap <silent> <Leader>\ :CtrlPTag<CR>
 
     " Buffer-related mappings
-    nmap              <Leader>j  <Leader>bb
     nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
     nmap              <Leader>bh <Leader>d
-    nmap              <Leader>bp <Leader>d
-    nmap              <Leader>bg <Leader>D
+    nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
     nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
 
@@ -1727,15 +1809,15 @@ endif
 
 if s:IsPlugged('ale')
     " w0rp/ale
-    let g:ale_list_window_size         = 5
     let g:ale_lint_on_filetype_changed = g:zero_vim_autolint
     let g:ale_lint_on_text_changed     = 'never'
     let g:ale_lint_on_enter            = g:zero_vim_autolint
     let g:ale_lint_on_save             = g:zero_vim_autolint
     let g:ale_set_loclist              = 1
     let g:ale_set_quickfix             = 0
-    let g:ale_open_list                = !g:zero_vim_autolint
+    let g:ale_list_window_size         = 5
     let g:ale_keep_list_window_open    = 0
+    let g:ale_open_list                = 'on_save'
     let g:ale_fix_on_save              = 1
 
     let g:ale_sign_error   = '●' " •
