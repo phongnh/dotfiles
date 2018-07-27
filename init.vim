@@ -104,13 +104,11 @@ if !exists('g:zero_vim_groups')
                 \ 'airline',
                 \ 'distraction-free',
                 \ 'startify',
-                \ 'syntax',
-                \ 'ale',
+                \ 'lint',
                 \ 'format',
                 \ 'tagbar',
                 \ 'undo',
                 \ 'indent',
-                \ 'polyglot',
                 \ 'ruby',
                 \ 'web',
                 \ 'go',
@@ -409,15 +407,13 @@ call plug#begin()
     endif
 " }
 
-" Syntax {
-    if s:Use('syntax')
-        if s:Use('ale')
-            " Asynchronous Lint Engine
-            Plug 'w0rp/ale'
-        else
-            " Syntax checking hacks for vim
-            Plug 'vim-syntastic/syntastic'
-        endif
+" Syntax Checking/Linting {
+    if s:Use('syntastic ')
+        " Syntax checking hacks for vim
+        Plug 'vim-syntastic/syntastic'
+    elseif s:Use('lint')
+        " Asynchronous Lint Engine
+        Plug 'w0rp/ale'
     endif
 " }
 
@@ -480,7 +476,7 @@ call plug#begin()
 " Run your tests at the speed of thought
 Plug 'janko-m/vim-test'
 
-if s:Use('polyglot')
+if s:Use('syntax')
     " A solid language pack for Vim
     Plug 'sheerun/vim-polyglot'
 endif

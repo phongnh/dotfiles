@@ -108,12 +108,11 @@ if !exists('g:zero_vim_groups')
                 \ 'airline',
                 \ 'distraction-free',
                 \ 'startify',
-                \ 'syntax',
+                \ 'lint',
                 \ 'format',
                 \ 'tagbar',
                 \ 'undo',
                 \ 'indent',
-                \ 'polyglot',
                 \ 'ruby',
                 \ 'web',
                 \ 'go',
@@ -356,7 +355,6 @@ call plug#begin()
         Plug 'honza/vim-snippets'
         Plug 'Shougo/neosnippet-snippets'
         Plug 'Shougo/neosnippet.vim'
-        let s:zero_vim_snippet_engine = 'neosnippet'
     elseif s:Use('snipmate')
         Plug 'honza/vim-snippets'
         Plug 'MarcWeber/vim-addon-mw-utils'
@@ -421,9 +419,12 @@ call plug#begin()
     endif
 " }
 
-" Syntax {
-    if s:Use('syntax')
-        if s:Use('ale') && has('job')
+" Syntax Checking/Linting {
+    if s:Use('syntastic')
+        " Syntax checking hacks for vim
+        Plug 'vim-syntastic/syntastic'
+    elseif s:Use('lint')
+        if has('job')
             " Asynchronous Lint Engine
             Plug 'w0rp/ale'
         else
@@ -492,7 +493,7 @@ call plug#begin()
 " Run your tests at the speed of thought
 Plug 'janko-m/vim-test'
 
-if s:Use('polyglot')
+if s:Use('syntax')
     " A solid language pack for Vim
     Plug 'sheerun/vim-polyglot'
 endif
