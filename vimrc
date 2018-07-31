@@ -52,6 +52,8 @@ let g:loaded_less              = 1
 
 " Disable highlighting matching parens in 'matchpairs' option like (), {}, and []
 let g:loaded_matchparen = 1
+" Disable matchit.vim
+let g:loaded_matchit    = 1
 
 " Disable Netrw plugin
 let g:loaded_netrw             = 1
@@ -388,7 +390,6 @@ call plug#begin()
         endif
     elseif s:Use('supertab')
         Plug 'ervandew/supertab'
-        Plug 'tpope/vim-endwise'
     endif
 " }
 
@@ -455,6 +456,8 @@ call plug#begin()
     if s:Use('ctags') && executable('ctags')
         " A Vim plugin that manages your tag files
         Plug 'ludovicchabant/vim-gutentags'
+        " The right way to use gtags with gutentags
+        Plug 'skywind3000/gutentags_plus'
     endif
 " }
 
@@ -818,7 +821,11 @@ inoremap <C-u> <C-g>u<C-u>
 inoremap <silent> <C-t> <C-v><Tab>
 
 " CTRL-L: Redraw
-nnoremap <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
+if &diff
+    nnoremap <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
+else
+    nnoremap <silent> <C-l> :nohlsearch<CR><C-l>
+endif
 
 " Q: Disable Ex-mode. qq to record, Q to replay (remapped)
 nmap Q @q
@@ -1293,6 +1300,16 @@ if s:IsPlugged('LeaderF')
     let g:Lf_UseCache      = 0 " rg/ag is enough fast, we don't need cache
     let g:Lf_NeedCacheTime = 5 " 5 seconds
 
+    let g:Lf_WorkingDirectoryMode = 'c'
+
+    if executable('rg')
+        let g:Lf_ExternalCommand = 'rg %s --color=never --no-ignore-vcs --hidden --files'
+    elseif executable('ag')
+        let g:Lf_ExternalCommand = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
+    elseif executable('fd')
+        let g:Lf_ExternalCommand = 'fd --color=never --no-ignore-vcs --hidden --type file . %s'
+    endif
+
     " These options are passed to external tools (rg, ag and pt, ...)
     let g:Lf_FollowLinks = 0
     let g:Lf_ShowHidden  = 0
@@ -1360,13 +1377,6 @@ if s:IsPlugged('ctrlp.vim')
         let g:ctrlp_user_command = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
     elseif executable('fd')
         let g:ctrlp_user_command = 'fd --color=never --no-ignore-vcs --hidden --type file . %s'
-    elseif has('win64') || has('win32')
-        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-    elseif executable('find')
-        let ignores = '-path "*/.git/*" -o -path "*/.hg/*" -o -path "*/.svn/*"'
-        let ignores .= ' -o -path "*/gems/*" -o -path "*/.gems/*"'
-        let ignores .= ' -o -path "*/node_modules/*" -o -path "*/.built/*" -o -path "*.DS_Store"'
-        let g:ctrlp_user_command = 'find %s ' . ignores . ' -prune -o -type f -print'
     endif
 
     if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so')
@@ -1447,25 +1457,18 @@ if s:IsPlugged('fzf')
         return extend(s:fzf_file_preview_options(a:bang), { 'source': a:user_command })
     endfunction
 
-    let s:fzf_files_command = ''
+    let s:fzf_files_command     = ''
     let s:fzf_all_files_command = ''
 
     if executable('rg')
-        let s:fzf_files_command = 'rg --color=never --no-ignore-vcs --hidden --files'
+        let s:fzf_files_command     = 'rg --color=never --no-ignore-vcs --hidden --files'
         let s:fzf_all_files_command = 'rg --color=never --no-ignore --hidden --files'
     elseif executable('ag')
-        let s:fzf_files_command = 'ag --nocolor --skip-vcs-ignores --hidden -l -g ""'
+        let s:fzf_files_command     = 'ag --nocolor --skip-vcs-ignores --hidden -l -g ""'
         let s:fzf_all_files_command = 'ag --nocolor --unrestricted --hidden -l -g ""'
     elseif executable('fd')
-        let s:fzf_files_command = 'fd --color=never --no-ignore-vcs --hidden --type file'
+        let s:fzf_files_command     = 'fd --color=never --no-ignore-vcs --hidden --type file'
         let s:fzf_all_files_command = 'fd --color=never --no-ignore --hidden --type file'
-    elseif has('win64') || has('win32')
-        let s:fzf_files_command = 'dir /-n /b /s /a-d'
-    elseif executable('find')
-        let ignores = '-path "*/.git/*" -o -path "*/.hg/*" -o -path "*/.svn/*"'
-        let ignores .= ' -o -path "*/gems/*" -o -path "*/.gems/*"'
-        let ignores .= ' -o -path "*/node_modules/*" -o -path "*/.built/*" -o -path "*.DS_Store"'
-        let s:fzf_files_command = 'find ' . ignores . ' -prune -o -type f -print'
     endif
 
     if s:fzf_files_command != ''
@@ -2108,6 +2111,21 @@ if s:IsPlugged('vim-prettier')
     nmap <Leader>ap <Plug>(PrettierAsync)
 endif
 
+if s:Use('vim-gutentags')
+    " ludovicchabant/vim-gutentags
+    " Enable gtags module
+    let g:gutentags_modules = ['ctags', 'gtags_cscope']
+
+    " Generate datebases in my cache directory, prevent gtags files polluting my project
+    let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+    " Prevent gutentags adding gtags databases
+    let g:gutentags_auto_add_gtags_cscope = 0
+
+    " skywind3000/gutentags_plus
+    let g:gutentags_plus_nomap = 1
+endif
+
 if s:IsPlugged('tagbar')
     " majutsushi/tagbar
     let g:tagbar_sort      = 0
@@ -2207,13 +2225,16 @@ endif
 if s:IsPlugged('vim-rails')
     " tpope/vim-rails
     function! s:SetupRailsMappings() abort
-        nnoremap <buffer> <silent> <Leader>ba :AE<CR>
-        nnoremap <buffer> <silent> <Leader>br :RE<CR>
-        xnoremap <buffer>          <Leader>x  :Extract<Space>
+        if exists('b:rails_root') && !get(b:, 'setup_rails_mappings', 0)
+            nnoremap <buffer> <silent> <Leader>ba :AE<CR>
+            nnoremap <buffer> <silent> <Leader>br :RE<CR>
+            xnoremap <buffer>          <Leader>x  :Extract<Space>
+            let b:setup_rails_mappings = 1
+        endif
     endfunction
 
     augroup MyAutoCmd
-        autocmd BufEnter * if exists('b:rails_root') | call <SID>SetupRailsMappings() | endif
+        autocmd BufEnter * call <SID>SetupRailsMappings()
     augroup END
 endif
 
