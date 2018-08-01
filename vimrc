@@ -91,6 +91,7 @@ augroup END
 let g:zero_vim_solarized         = !empty($SOLARIZED)
 let g:zero_vim_autocomplete      = 1
 let g:zero_vim_autolint          = 0
+let g:zero_vim_autofix           = 0
 let g:zero_vim_git_gutter        = 1
 let g:zero_vim_indent_char       = '┊'
 let g:zero_vim_indent_first_char = '│'
@@ -2020,8 +2021,8 @@ if s:IsPlugged('ale')
     let g:ale_set_quickfix             = 0
     let g:ale_list_window_size         = 5
     let g:ale_keep_list_window_open    = 0
-    let g:ale_open_list                = 'on_save'
-    let g:ale_fix_on_save              = 1
+    let g:ale_open_list                = (g:zero_vim_autolint ? 'on_save' : 0)
+    let g:ale_fix_on_save              = g:zero_vim_autofix
 
     let g:ale_sign_error   = '●' " •
     let g:ale_sign_warning = '.'
@@ -2051,11 +2052,11 @@ if s:IsPlugged('syntastic')
     " vim-syntastic/syntastic
     let g:syntastic_mode_map                 = { 'mode': 'passive', }
     let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_auto_loc_list            = 1
+    let g:syntastic_auto_loc_list            = g:zero_vim_autolint
     let g:syntastic_auto_jump                = 1
     let g:syntastic_loc_list_height          = 5
-    let g:syntastic_check_on_open            = 0
-    let g:syntastic_check_on_wq              = 0
+    let g:syntastic_check_on_open            = g:zero_vim_autolint
+    let g:syntastic_check_on_wq              = g:zero_vim_autolint
     let g:syntastic_aggregate_errors         = 1
     let g:syntastic_echo_current_error       = 1
     let g:syntastic_error_symbol             = '●' " •
@@ -2224,18 +2225,8 @@ endif
 
 if s:IsPlugged('vim-rails')
     " tpope/vim-rails
-    function! s:SetupRailsMappings() abort
-        if exists('b:rails_root') && !get(b:, 'setup_rails_mappings', 0)
-            nnoremap <buffer> <silent> <Leader>ba :AE<CR>
-            nnoremap <buffer> <silent> <Leader>br :RE<CR>
-            xnoremap <buffer>          <Leader>x  :Extract<Space>
-            let b:setup_rails_mappings = 1
-        endif
-    endfunction
-
-    augroup MyAutoCmd
-        autocmd BufEnter * call <SID>SetupRailsMappings()
-    augroup END
+    nnoremap <silent> <Leader>ba :AE<CR>
+    nnoremap <silent> <Leader>br :RE<CR>
 endif
 
 if s:IsPlugged('vim-go')
@@ -2452,11 +2443,6 @@ let g:gruvbox_italic         = 1
 " lifepillar/vim-solarized8
 let g:solarized_use16        = 1
 let g:solarized_term_italics = 1
-
-" ajmwagar/vim-deus
-let g:deus_contrast_dark  = 'medium'
-let g:deus_contrast_light = 'medium'
-let g:deus_italic         = 1
 
 " drewtempelmeyer/palenight.vim
 let g:palenight_terminal_italics = 1
