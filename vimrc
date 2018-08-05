@@ -185,13 +185,13 @@ call plug#begin()
 
     " A Narrow Region Plugin for vim (like Emacs Narrow Region)
     Plug 'chrisbra/NrrwRgn'
+
+    " Open a Quickfix item in a window you choose. (Vim plugin)
+    Plug 'yssl/QFEnter'
 " }
 
 " Search {
     if s:Use('grep')
-        " Open a Quickfix item in a window you choose. (Vim plugin)
-        Plug 'yssl/QFEnter'
-
         " Helps you win at grep.
         Plug 'mhinz/vim-grepper'
 
@@ -347,6 +347,7 @@ call plug#begin()
         " A command-line fuzzy finder written in Go
         Plug 'junegunn/fzf', { 'do': './install --bin' }
         Plug 'junegunn/fzf.vim'
+        Plug 'phongnh/fzf-settings.vim'
     endif
 " }
 
@@ -367,15 +368,25 @@ call plug#begin()
 
     if s:Use('neocomplete') && has('lua')
         Plug 'Shougo/neocomplete.vim'
-    elseif s:Use('deoplete') && s:python3 && s:vim8
+    elseif s:Use('deoplete') && s:vim8 && s:python3
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
         Plug 'Shougo/deoplete.nvim'
         Plug 'zchee/deoplete-go', { 'do': 'make' }
         Plug 'zchee/deoplete-clang'
         Plug 'wokalski/autocomplete-flow'
-    elseif s:Use('YouCompleteMe') && s:python3 && v:version > 704 && executable('python3') && executable('cmake')
-        Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
+    elseif s:Use('ncm2') && s:vim8 && s:python3
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc'
+        Plug 'ncm2/ncm2'
+        Plug 'ncm2/ncm2-bufword'
+        Plug 'ncm2/ncm2-path'
+
+        if s:Use('ultisnips')
+            Plug 'ncm2/ncm2-ultisnips'
+        elseif s:Use('snipmate')
+            Plug 'ncm2/ncm2-snipmate'
+        endif
     elseif s:Use('asyncomplete') && s:vim8
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
@@ -389,6 +400,14 @@ call plug#begin()
         elseif s:Use('neosnippet')
             Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
         endif
+    elseif s:Use('completor') && s:vim8 && s:python
+        Plug 'maralla/completor.vim'
+
+        if s:Use('neosnippet')
+            Plug 'maralla/completor-neosnippet'
+        endif
+    elseif s:Use('YouCompleteMe') && v:version > 704 && s:python3 && executable('python3') && executable('cmake')
+        Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
     elseif s:Use('supertab')
         Plug 'ervandew/supertab'
     endif
@@ -822,8 +841,8 @@ inoremap <C-u> <C-g>u<C-u>
 inoremap <silent> <C-t> <C-v><Tab>
 
 " CTRL-L: Redraw
-if &diff
-    nnoremap <silent> <C-l> :nohlsearch<C-r>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-l>
+if has('diff') && &diff
+    nnoremap <silent> <C-l> :nohlsearch<CR>:diffupdate<CR><C-l>
 else
     nnoremap <silent> <C-l> :nohlsearch<CR><C-l>
 endif
@@ -1000,9 +1019,11 @@ let g:dispatch_quickfix_height = 10
 let g:dispatch_tmux_height     = 1
 
 " phongnh/vim-command-helpers
+nnoremap          <Leader>G  :Grep<Space>
 nnoremap          <Leader>S  :Grep<Space>
 nnoremap <silent> <Leader>ss :GrepCword<CR>
 xnoremap <silent> <Leader>ss <Esc>:Grep <C-r>=GetSelectedTextForAg()<CR><CR>
+nnoremap <silent> <Leader>s/ <Esc>:Grep <C-r>=GetSearchTextForAg()<CR><CR>
 
 nnoremap          <Leader>L  :LGrep<Space>
 nnoremap <silent> <Leader>sl :LGrepCword<CR>
@@ -1049,15 +1070,14 @@ augroup MyAutoCmd
     autocmd FileType * let b:nrrw_aucmd_create = 'nnoremap <buffer> <silent> <Leader>bn :WidenRegion!<CR>'
 augroup END
 
-if s:IsPlugged('QFEnter')
-    " yssl/QFEnter
-    let g:qfenter_enable_autoquickfix = 0
+" yssl/QFEnter
+let g:qfenter_enable_autoquickfix = 0
 
-    let g:qfenter_keymap = {}
-    let g:qfenter_keymap.vopen = ['<C-v>']
-    let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
-    let g:qfenter_keymap.topen = ['<C-t>']
-endif
+let g:qfenter_keymap = {}
+let g:qfenter_keymap.vopen = ['<C-v>']
+let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
+let g:qfenter_keymap.topen = ['<C-t>']
+
 
 if s:IsPlugged('vim-grepper')
     " mhinz/vim-grepper
@@ -1072,9 +1092,11 @@ if s:IsPlugged('vim-grepper')
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
     command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
 
+    nnoremap <silent> <Leader>G  :Grepper<CR>
     nnoremap <silent> <Leader>S  :Grepper<CR>
     nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
     xnoremap <silent> <Leader>ss <Esc>:Grepper -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+    nnoremap <silent> <Leader>s/ :Grepper -query <C-r>=GetSearchTextForGrepper()<CR><CR>
 
     nnoremap <silent> <Leader>L  :LGrepper<CR>
     nnoremap <silent> <Leader>sl :LGrepper -noprompt -cword<CR>
@@ -1094,7 +1116,6 @@ if s:IsPlugged('ctrlsf.vim')
     nmap              <Leader>sp <Plug>CtrlSFPrompt
     nmap              <Leader>sf <Plug>CtrlSFCwordExec
     vmap              <Leader>sf <Plug>CtrlSFVwordExec
-    nnoremap          <Leader>s/ :CtrlSF <C-r>=GetSearchTextForCtrlSF()<CR><CR>
     nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
     nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
 endif
@@ -1204,7 +1225,7 @@ function! Multiple_cursors_after() abort
 endfunction
 
 " mattn/emmet-vim
-let g:user_emmet_leader_key = '<C-\>'
+let g:user_emmet_leader_key = '<C-y>'
 let g:user_emmet_settings = {
             \ 'javascript.jsx': {
             \   'extends': 'jsx',
@@ -1295,7 +1316,7 @@ if s:IsPlugged('LeaderF')
     let g:Lf_WindowHeight  = 0.30
     let g:Lf_MruMaxFiles   = 200
     let g:Lf_CursorBlink   = 0
-    " let g:Lf_PreviewCode   = 1 " Preview Tag
+    let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
     let g:Lf_StlSeparator  = { 'left': '', 'right': '' }
 
     let g:Lf_UseCache      = 0 " rg/ag is enough fast, we don't need cache
@@ -1316,8 +1337,8 @@ if s:IsPlugged('LeaderF')
     let g:Lf_ShowHidden  = 0
 
     let g:Lf_WildIgnore = {
-                \ 'dir': ['.svn','.git','.hg', '.node_modules', '.gems'],
-                \ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+                \ 'dir': ['.svn', '.git', '.hg', '.node_modules', '.gems'],
+                \ 'file': ['*.sw?', '~$*', '*.bak', '*.exe', '*.o', '*.so', '*.py[co]']
                 \ }
 
     let g:Lf_ShortcutF = '<Leader>f'
@@ -1337,9 +1358,9 @@ if s:IsPlugged('LeaderF')
     nmap <Leader><Leader> <Leader>f
 
     nnoremap          <Leader>F :LeaderfFile<Space>
+    nnoremap <silent> <C-p>     :LeaderfRoot<CR>
     nnoremap <silent> <Leader>p :LeaderfRoot<CR>
-    nmap              <C-p>     <Leader>p
-    nnoremap <silent> <Leader>o :LeaderfMruCwd<CR>
+    nnoremap <silent> <Leader>o :LeaderfBuffer<CR>
     nnoremap <silent> <Leader>O :LeaderfMru<CR>
     nnoremap <silent> <Leader>d :LeaderfFile <C-r>=expand("%:h")<CR><CR>
     nnoremap <silent> <Leader>D :LeaderfFile <C-r>=expand("%:h:h")<CR><CR>
@@ -1395,7 +1416,7 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>f :CtrlP<CR>
     nnoremap          <Leader>F :CtrlP<Space>
     nnoremap <silent> <Leader>p :CtrlPRoot<CR>
-    nnoremap <silent> <Leader>o :CtrlPCurWD<CR>
+    nnoremap <silent> <Leader>o :CtrlPBuffer<CR>
     nnoremap <silent> <Leader>O :CtrlPMRUFiles<CR>
     nnoremap <silent> <Leader>d :CtrlPCurFile<CR>
     nnoremap <silent> <Leader>D :CtrlP <C-r>=expand("%:h:h")<CR><CR>
@@ -1426,75 +1447,13 @@ endif
 
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
-    let g:fzf_action = {
-                \ 'ctrl-m': 'edit',
-                \ 'ctrl-x': 'split',
-                \ 'ctrl-v': 'vsplit',
-                \ 'ctrl-t': 'tabedit',
-                \ 'ctrl-o': has('mac') ? '!open' : '!xdg-open',
-                \ }
-
-    let g:fzf_colors = {
-                \ 'fg':      ['fg', 'Normal'],
-                \ 'bg':      ['bg', 'Normal'],
-                \ 'hl':      ['fg', 'Comment'],
-                \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-                \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-                \ 'hl+':     ['fg', 'Statement'],
-                \ 'info':    ['fg', 'PreProc'],
-                \ 'border':  ['fg', 'Ignore'],
-                \ 'prompt':  ['fg', 'Conditional'],
-                \ 'pointer': ['fg', 'Exception'],
-                \ 'marker':  ['fg', 'Keyword'],
-                \ 'spinner': ['fg', 'Label'],
-                \ 'header':  ['fg', 'Comment'],
-                \ }
-
-    function! s:fzf_file_preview_options(bang) abort
-        return fzf#vim#with_preview('right:60%:hidden', '?')
-    endfunction
-
-    function! s:build_fzf_options(user_command, bang) abort
-        return extend(s:fzf_file_preview_options(a:bang), { 'source': a:user_command })
-    endfunction
-
-    let s:fzf_files_command     = ''
-    let s:fzf_all_files_command = ''
-
-    if executable('rg')
-        let s:fzf_files_command     = 'rg --color=never --no-ignore-vcs --hidden --files'
-        let s:fzf_all_files_command = 'rg --color=never --no-ignore --hidden --files'
-    elseif executable('ag')
-        let s:fzf_files_command     = 'ag --nocolor --skip-vcs-ignores --hidden -l -g ""'
-        let s:fzf_all_files_command = 'ag --nocolor --unrestricted --hidden -l -g ""'
-    elseif executable('fd')
-        let s:fzf_files_command     = 'fd --color=never --no-ignore-vcs --hidden --type file'
-        let s:fzf_all_files_command = 'fd --color=never --no-ignore --hidden --type file'
-    endif
-
-    if s:fzf_files_command != ''
-        command! -bang -nargs=? -complete=dir Files
-                    \ call fzf#vim#files(<q-args>, s:build_fzf_options(s:fzf_files_command, <bang>0), <bang>0)
-    else
-        command! -bang -nargs=? -complete=dir Files
-                    \ call fzf#vim#files(<q-args>, s:fzf_file_preview_options(<bang>0), <bang>0)
-    endif
-
-    if s:fzf_all_files_command != ''
-        command! -bang -nargs=? -complete=dir AllFiles
-                    \ call fzf#vim#files(<q-args>, s:build_fzf_options(s:fzf_all_files_command, <bang>0), <bang>0)
-    else
-        command! -bang -nargs=? -complete=dir AllFiles
-                    \ call fzf#vim#files(<q-args>, s:fzf_file_preview_options(<bang>0), <bang>0)
-    endif
-
-    nnoremap          <Leader>G  :Ag!<Space>
     nnoremap <silent> <Leader>gg :Ag! <C-r><C-w><CR>
-    xnoremap <silent> <Leader>gg <Esc>:FastAg! <C-r>=GetSelectedText()<CR><CR>
+    xnoremap <silent> <Leader>gg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
 
     nnoremap <silent> <Leader>f :Files!<CR>
     nnoremap          <Leader>F :Files!<Space>
-    nnoremap <silent> <Leader>o :Files! .<CR>
+    nnoremap <silent> <Leader>p :PFiles!<CR>
+    nnoremap <silent> <Leader>o :Buffers!<CR>
     nnoremap <silent> <Leader>O :History!<CR>
     nnoremap <silent> <Leader>d :Files! <C-r>=expand("%:h")<CR><CR>
     nnoremap <silent> <Leader>D :Files! <C-r>=expand("%:h:h")<CR><CR>
@@ -1515,8 +1474,8 @@ endif
 
 if s:IsPlugged('ultisnips')
     " SirVer/ultisnips
-    let g:UltiSnipsExpandTrigger       = '<C-l>'
-    let g:UltiSnipsJumpForwardTrigger  = '<C-g>'
+    let g:UltiSnipsExpandTrigger       = '<C-g>'
+    let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
     let g:UltiSnipsJumpBackwardTrigger = '<C-z>'
 
     function! IsExpandableUltiSnips() abort
@@ -1549,24 +1508,16 @@ if s:IsPlugged('neosnippet.vim')
             return "\<C-e>"
         endif
 
-        return "\<C-l>"
+        return "\<C-g>"
     endfunction
 
-    imap <silent> <expr> <C-l> <SID>NeoSnippetExpand()
-    smap                 <C-l> <Plug>(neosnippet_expand_or_jump)
-    xmap                 <C-l> <Plug>(neosnippet_expand_target)
+    imap <silent> <expr> <C-g> <SID>NeoSnippetExpand()
+    smap                 <C-g> <Plug>(neosnippet_expand_or_jump)
+    xmap                 <C-g> <Plug>(neosnippet_expand_target)
 
-    imap <C-g> <Plug>(neosnippet_jump)
-    smap <C-g> <Plug>(neosnippet_jump)
+    imap <C-j> <Plug>(neosnippet_jump)
+    smap <C-j> <Plug>(neosnippet_jump)
     smap <Tab> <Plug>(neosnippet_jump)
-
-    imap <silent> <expr> <C-\><C-e> <SID>NeoSnippetExpand()
-    smap                 <C-\><C-e> <Plug>(neosnippet_expand_or_jump)
-    xmap                 <C-\><C-e> <Plug>(neosnippet_expand_target)
-
-    imap <C-\><C-f> <Plug>(neosnippet_jump)
-    smap <C-\><C-f> <Plug>(neosnippet_jump)
-    smap <Tab>      <Plug>(neosnippet_jump)
 endif
 
 if s:IsPlugged('vim-snipmate')
@@ -1585,13 +1536,13 @@ if s:IsPlugged('vim-snipmate')
             return "\<C-e>"
         endif
 
-        return "\<C-l>"
+        return "\<C-g>"
     endfunction
 
-    imap <silent> <expr> <C-l>      <SID>SnipMateExpand()
-    xmap                 <C-l>      <Plug>snipMateVisual
-    imap                 <C-g>      <Plug>snipMateNextOrTrigger
-    smap                 <C-g>      <Plug>snipMateNextOrTrigger
+    imap <silent> <expr> <C-g>      <SID>SnipMateExpand()
+    xmap                 <C-g>      <Plug>snipMateVisual
+    imap                 <C-j>      <Plug>snipMateNextOrTrigger
+    smap                 <C-j>      <Plug>snipMateNextOrTrigger
     imap                 <C-z>      <Plug>snipMateBack
     smap                 <C-z>      <Plug>snipMateBack
     imap                 <C-r><Tab> <Plug>snipMateShow
@@ -1819,21 +1770,47 @@ if s:IsPlugged('deoplete-go')
     " let g:deoplete#sources#go#cgo#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
 endif
 
-if s:IsPlugged('YouCompleteMe')
-    " Valloric/YouCompleteMe
-    if s:python3 && executable('python3')
-        let g:ycm_server_python_interprete = 'python3'
-    endif
-    let g:ycm_auto_trigger                        = g:zero_vim_autocomplete
-    let g:ycm_confirm_extra_conf                  = 0
-    let g:ycm_complete_in_comments_and_strings    = 1
-    let g:ycm_always_populate_location_list       = 1
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    let g:ycm_use_ultisnips_completer             = 1
-    let g:ycm_key_detailed_diagnostics            = ''
-    let g:ycm_extra_conf_vim_data                 = ['&filetype']
-    let g:ycm_global_ycm_extra_conf               = filereadable(expand('~/.ycm_extra_conf.py')) ? expand('~/.ycm_extra_conf') : ''
-    let g:ycm_filetype_blacklist                  = { 'unite': 1, 'ctrlp': 1, 'tagbar' : 1, 'qf': 1, 'nerdtree': 1 }
+if s:IsPlugged('ncm2')
+    " ncm2/ncm2
+    let g:ncm2#auto_popup = g:zero_vim_autocomplete
+
+    set completeopt=noinsert,menuone,noselect
+    set shortmess+=c
+
+    " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+    " inoremap <C-c> <ESC>
+
+    " Trigger complete manually
+    inoremap <silent> <expr> <C-_> "<C-r>=completor#do('complete')<CR>"
+
+    " <CR>: close popup and insert newline
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
+    " <Tab>: completion
+    function! s:CheckBackSpace() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    function! s:CleverTab() abort
+        if pumvisible()
+            return "\<C-n>"
+        endif
+
+        if s:CheckBackSpace()
+            return "\<Tab>"
+        endif
+
+        return "\<C-r>=ncm2#_on_complete(1)\<CR>" 
+    endfunction
+
+    inoremap <silent> <expr> <Tab> <SID>CleverTab()
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " Manual Complete
+    imap <C-_> <Plug>(ncm2_manual_trigger)
 endif
 
 if s:IsPlugged('asyncomplete.vim')
@@ -1922,6 +1899,57 @@ if s:IsPlugged('asyncomplete.vim')
                     \ },
                     \ }))
     endif
+endif
+
+if s:IsPlugged('completor.vim')
+    " maralla/completor.vim
+    let g:completor_auto_trigger = g:zero_vim_autocomplete
+
+    " Trigger complete manually
+    inoremap <silent> <expr> <C-_> "<C-r>=completor#do('complete')<CR>"
+
+    " <CR>: close popup and insert newline
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
+    " <Tab>: completion
+    function! s:CheckBackSpace() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    function! s:CleverTab() abort
+        if pumvisible()
+            return "\<C-n>"
+        endif
+
+        if s:CheckBackSpace()
+            return "\<Tab>"
+        endif
+
+        return "\<C-r>=completor#do('complete')\<CR>"
+    endfunction
+
+    inoremap <silent> <expr> <Tab> <SID>CleverTab()
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+endif
+
+if s:IsPlugged('YouCompleteMe')
+    " Valloric/YouCompleteMe
+    if s:python3 && executable('python3')
+        let g:ycm_server_python_interprete = 'python3'
+    endif
+    let g:ycm_auto_trigger                        = g:zero_vim_autocomplete
+    let g:ycm_confirm_extra_conf                  = 0
+    let g:ycm_complete_in_comments_and_strings    = 1
+    let g:ycm_always_populate_location_list       = 1
+    let g:ycm_collect_identifiers_from_tags_files = 1
+    let g:ycm_use_ultisnips_completer             = 1
+    let g:ycm_key_detailed_diagnostics            = ''
+    let g:ycm_extra_conf_vim_data                 = ['&filetype']
+    let g:ycm_global_ycm_extra_conf               = filereadable(expand('~/.ycm_extra_conf.py')) ? expand('~/.ycm_extra_conf') : ''
+    let g:ycm_filetype_blacklist                  = { 'unite': 1, 'ctrlp': 1, 'tagbar' : 1, 'qf': 1, 'nerdtree': 1 }
 endif
 
 if s:IsPlugged('supertab')
@@ -2021,7 +2049,7 @@ if s:IsPlugged('ale')
     let g:ale_set_quickfix             = 0
     let g:ale_list_window_size         = 5
     let g:ale_keep_list_window_open    = 0
-    let g:ale_open_list                = (g:zero_vim_autolint ? 'on_save' : 0)
+    let g:ale_open_list                = 0
     let g:ale_fix_on_save              = g:zero_vim_autofix
 
     let g:ale_sign_error   = '●' " •
