@@ -110,8 +110,8 @@ if !exists('g:zero_vim_groups')
                 \ 'tagbar',
                 \ 'undo',
                 \ 'indent',
-                \ 'ruby',
                 \ 'web',
+                \ 'ruby',
                 \ 'go',
                 \ 'git',
                 \ 'gitgutter',
@@ -252,8 +252,10 @@ call plug#begin()
     Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
     Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y (rub[y])
     Plug 'inside/vim-textobj-jsxattr'             " x
+    Plug 'rhysd/vim-textobj-word-column'          " v
     Plug 'kana/vim-textobj-function'
     Plug 'thinca/vim-textobj-function-javascript' " f
+    Plug 'haya14busa/vim-textobj-function-syntax'
 
     " A Vim plugin to move function arguments (and other delimited-by-something items) left and right.
     Plug 'AndrewRadev/sideways.vim'               " a
@@ -501,17 +503,6 @@ if s:Use('syntax')
     Plug 'sheerun/vim-polyglot'
 endif
 
-" Ruby {
-    if s:Use('ruby')
-        Plug 'keith/rspec.vim'
-        Plug 'phongnh/vim-rubocop'
-        Plug 'ecomba/vim-ruby-refactoring'
-        Plug 'tpope/vim-bundler'
-        Plug 'tpope/vim-rake'
-        Plug 'tpope/vim-rails'
-    endif
-" }
-
 " Web {
     if s:Use('web')
         Plug 'moll/vim-node'
@@ -527,6 +518,17 @@ endif
         Plug 'phongnh/vim-coloresque'
         Plug 'othree/html5.vim'
         Plug 'joukevandermaas/vim-ember-hbs'
+    endif
+" }
+
+" Ruby {
+    if s:Use('ruby')
+        Plug 'keith/rspec.vim'
+        Plug 'phongnh/vim-rubocop'
+        Plug 'ecomba/vim-ruby-refactoring'
+        Plug 'tpope/vim-bundler'
+        Plug 'tpope/vim-rake'
+        Plug 'tpope/vim-rails'
     endif
 " }
 
@@ -1339,6 +1341,7 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>\ :LeaderfTag<CR>
 
     " Buffer-related mappings
+    nnoremap <silent> <Leader>b  :LeaderfBuffer<CR>
     nmap              <Leader>bh <Leader>d
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :LeaderfLine<CR>
@@ -1395,6 +1398,7 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>\ :CtrlPTag<CR>
 
     " Buffer-related mappings
+    nnoremap <silent> <Leader>b  :CtrlPBuffer<CR>
     nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
     nmap              <Leader>bh <Leader>d
     nmap              <Leader>bp <Leader>p
@@ -1431,6 +1435,7 @@ if s:IsPlugged('fzf')
 
     nnoremap <silent> <Leader>\ :Tags!<CR>
 
+    nnoremap <silent> <Leader>b  :Buffers<CR>
     nnoremap <silent> <Leader>bb :Buffers<CR>
     nnoremap <silent> <Leader>bl :BLines<CR>
     nnoremap <silent> <Leader>bt :BTags<CR>
