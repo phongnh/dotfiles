@@ -314,7 +314,18 @@ call plug#begin()
 " }
 
 " Fuzzy finder {
-    if s:Use('leaderf') && s:python
+    if s:Use('denite') && s:python3
+        " A CtrlP matcher, specialized for paths.
+        Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
+        " Dark powered asynchronous unite all interfaces for Neovim/Vim8
+        " `pip3 install typing`
+        Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+        " MRU plugin includes unite.vim/denite.vim MRU sources
+        Plug 'Shougo/neomru.vim'
+        " extra useful sources for denite.nvim
+        Plug 'neoclide/denite-extra'
+        Plug 'Shougo/neoinclude.vim'
+    elseif s:Use('leaderf') && s:python
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh'  }
     else
@@ -1282,6 +1293,98 @@ if s:IsPlugged('vaffle.vim')
     " cocopon/vaffle.vim
     nnoremap <silent> <Leader>e  :Vaffle<CR>
     nnoremap <silent> <Leader>bf :Vaffle <C-r>=expand("%:p:h")<CR><CR>
+endif
+
+if s:IsPlugged('denite.nvim')
+    " Shougo/denite.nvim
+    call denite#custom#option('_', {
+                \ 'prompt':      '>',
+                \ 'empty':       v:false,
+                \ 'winheight':   16,
+                \ 'auto_accel':  v:true,
+                \ 'auto_resize': v:true,
+                \ })
+
+    if executable('rg')
+        call denite#custom#var('file/rec', 'command', [ 'rg', '--color=never', '--no-ignore-vcs', '--hidden', '--files' ])
+        call denite#custom#var('grep', 'command', [ 'rg', '--threads', '1' ])
+        call denite#custom#var('grep', 'default_opts', [ '--no-heading', '--hidden', '--vimgrep', '--smart-case' ])
+        call denite#custom#var('grep', 'recursive_opts', [])
+        call denite#custom#var('grep', 'pattern_opt', [ '--regexp' ])
+        call denite#custom#var('grep', 'separator', [ '--' ])
+        call denite#custom#var('grep', 'final_opts', [])
+    elseif executable('ag')
+        call denite#custom#var('file/rec', 'command', [ 'ag', '--nocolor', '--skip-vcs-ignores', '--hidden', '-l', '-g', '' ])
+        call denite#custom#var('grep', 'command', [ 'ag' ])
+        call denite#custom#var('grep', 'default_opts', [ '--hidden', '--vimgrep', '--smart-case' ])
+        call denite#custom#var('grep', 'recursive_opts', [])
+        call denite#custom#var('grep', 'pattern_opt', [])
+        call denite#custom#var('grep', 'separator', [ '--' ])
+        call denite#custom#var('grep', 'final_opts', [])
+    elseif executable('fd')
+        call denite#custom#var('file/rec', 'command', [ 'fd', '--color=never', '--no-ignore-vcs', '--hidden', '--type', 'file' ])
+    endif
+
+    call denite#custom#source('tag', 'matchers', [ 'matcher/substring' ])
+
+    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so')
+        call denite#custom#source('file/rec', 'matchers', [ 'matcher/cpsm' ])
+    endif
+	call denite#custom#source('file/rec', 'sorters', [ 'sorter/sublime' ])
+
+    call denite#custom#source('file_mru', 'matchers', [ 'matcher/fuzzy', 'matcher/project_files' ])
+    call denite#custom#source('file_mru', 'converters', [ 'converter/relative_word' ])
+
+    call denite#custom#map(
+                \ 'insert',
+                \ '<C-j>',
+                \ '<denite:move_to_next_line>',
+                \ 'noremap'
+                \)
+
+    call denite#custom#map(
+                \ 'insert',
+                \ '<C-k>',
+                \ '<denite:move_to_previous_line>',
+                \ 'noremap'
+                \)
+
+    command! -nargs=? -complete=dir DeniteFilesInFolder Denite -buffer-name=files-in-folder file_rec:<args> file:new:<args>
+
+    nmap <Leader><Leader> <Leader>f
+
+    nnoremap <silent> <Leader>f :Denite -resume -input= -buffer-name=files file/rec file:new<CR>
+    nnoremap          <Leader>F :DeniteFilesInFolder<Space>
+    nnoremap <silent> <C-p>     :DeniteProjectDir -resume -input= -buffer-name=project file/rec file:new<CR>
+    nnoremap <silent> <Leader>p :DeniteProjectDir -resume -input= -buffer-name=project file/rec file:new<CR>
+    nnoremap <silent> <Leader>o :Denite -buffer-name=buffers buffer<CR>
+    nnoremap <silent> <Leader>d :DeniteFilesInFolder <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :DeniteFilesInFolder <C-r>=expand("%:h:h")<CR><CR>
+
+    nnoremap <silent> <Leader>\ :Denite -resume -input= -buffer-name=tags tag<CR>
+
+    " Buffer-related mappings
+    nnoremap <silent> <Leader>b  :Denite -buffer-name=buffers buffer<CR>
+    nnoremap <silent> <Leader>bb :Denite -buffer-name=buffers buffer<CR>
+    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bp <Leader>p
+    nnoremap <silent> <Leader>bl :Denite -buffer-name=lines line<CR>
+
+    nnoremap <silent> <Leader><Tab> :Denite -buffer-name=buffers buffer<CR>
+
+    nnoremap <silent> <Leader>bo :Denite -buffer-name=outline outline<CR>
+
+    nnoremap <silent> <Leader>; :Denite -buffer-name=commands command<CR>
+    nnoremap <silent> <Leader>: :Denite -buffer-name=command-history command_history<CR>
+
+    nnoremap <silent> <Leader>y :Denite -buffer-name=registers register<CR>
+
+    " neoclide/denite-extra
+    nnoremap <silent> <Leader>O :Denite -buffer-name=mru file_mru<CR>
+    nnoremap <silent> <Leader>/ :Denite -buffer-name=search-history history<CR>
+
+    " Shougo/neoinclude.vim
+    nnoremap <silent> <Leader>bt :Denite -buffer-name=outline tag:include<CR>
 endif
 
 if s:IsPlugged('LeaderF')
