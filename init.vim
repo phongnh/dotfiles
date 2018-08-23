@@ -1420,6 +1420,10 @@ if s:IsPlugged('LeaderF')
     let g:Lf_ShortcutF = '<Leader>f'
     let g:Lf_ShortcutB = '<Leader>bb'
 
+    let g:Lf_CtagsFuncOpts = {
+                \ 'ruby': '--ruby-kinds=fFS',
+                \ }
+
     function! s:LeaderfRoot()
         let current = get(g:, 'Lf_WorkingDirectoryMode', 'c')
         try
