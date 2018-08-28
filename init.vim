@@ -1298,11 +1298,13 @@ endif
 if s:IsPlugged('denite.nvim')
     " Shougo/denite.nvim
     call denite#custom#option('_', {
-                \ 'prompt':      '>',
-                \ 'empty':       v:false,
-                \ 'winheight':   16,
-                \ 'auto_accel':  v:true,
-                \ 'auto_resize': v:true,
+                \ 'prompt':                  '>',
+                \ 'empty':                   v:false,
+                \ 'winheight':               16,
+                \ 'auto_accel':              v:true,
+                \ 'auto_resize':             v:true,
+                \ 'highlight_matched_char':  'None',
+                \ 'highlight_matched_range': 'None',
                 \ })
 
     if executable('rg')
