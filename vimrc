@@ -190,6 +190,13 @@ call plug#begin()
     Plug 'yssl/QFEnter'
 " }
 
+" NeoVim Plugin {
+    if s:Use('defx') || s:Use('deoplete') || s:Use('ncm2')
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+" }
+
 " Search {
     if s:Use('grep')
         " Helps you win at grep.
@@ -318,6 +325,9 @@ call plug#begin()
     if s:Use('nerdtree')
         " A tree explorer plugin for vim
         Plug 'scrooloose/nerdtree'
+    elseif s:Use('defx')
+        " The dark powered file explorer implementation
+        Plug 'Shougo/defx.nvim'
     elseif s:Use('vaffle')
         " Lightweight file manager for Vim
         Plug 'cocopon/vaffle.vim'
@@ -382,15 +392,11 @@ call plug#begin()
     if s:Use('neocomplete') && has('lua')
         Plug 'Shougo/neocomplete.vim'
     elseif s:Use('deoplete') && s:vim8 && s:python3
-        Plug 'roxma/nvim-yarp'
-        Plug 'roxma/vim-hug-neovim-rpc'
         Plug 'Shougo/deoplete.nvim'
         Plug 'zchee/deoplete-go', { 'do': 'make' }
         Plug 'zchee/deoplete-clang'
         Plug 'wokalski/autocomplete-flow'
     elseif s:Use('ncm2') && s:vim8 && s:python3
-        Plug 'roxma/nvim-yarp'
-        Plug 'roxma/vim-hug-neovim-rpc'
         Plug 'ncm2/ncm2'
         Plug 'ncm2/ncm2-bufword'
         Plug 'ncm2/ncm2-path'
@@ -556,7 +562,6 @@ endif
     if s:Use('ruby')
         Plug 'keith/rspec.vim'
         Plug 'phongnh/vim-rubocop'
-        Plug 'ecomba/vim-ruby-refactoring'
         Plug 'tpope/vim-bundler'
         Plug 'tpope/vim-rake'
         Plug 'tpope/vim-rails'
@@ -1316,6 +1321,55 @@ if s:IsPlugged('nerdtree')
     nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
     noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
     nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
+endif
+
+if s:IsPlugged('defx.nvim')
+    " Shougo/defx.nvim
+    function! s:my_defx_settings() abort
+        " Define mappings
+        nnoremap <silent><buffer><expr> <CR>
+                    \ defx#do_action('open')
+        nnoremap <silent><buffer><expr> l
+                    \ defx#do_action('open')
+        nnoremap <silent><buffer><expr> E
+                    \ defx#do_action('open', 'vsplit')
+        nnoremap <silent><buffer><expr> P
+                    \ defx#do_action('open', 'pedit')
+        nnoremap <silent><buffer><expr> K
+                    \ defx#do_action('new_directory')
+        nnoremap <silent><buffer><expr> N
+                    \ defx#do_action('new_file')
+        nnoremap <silent><buffer><expr> d
+                    \ defx#do_action('remove')
+        nnoremap <silent><buffer><expr> r
+                    \ defx#do_action('rename')
+        nnoremap <silent><buffer><expr> h
+                    \ defx#do_action('cd', ['..'])
+        nnoremap <silent><buffer><expr> ~
+                    \ defx#do_action('cd')
+        nnoremap <silent><buffer><expr> q
+                    \ defx#do_action('quit')
+        nnoremap <silent><buffer><expr> <Space>
+                    \ defx#do_action('toggle_select') . 'j'
+        nnoremap <silent><buffer><expr> *
+                    \ defx#do_action('toggle_select_all')
+        nnoremap <silent><buffer><expr> j
+                    \ line('.') == line('$') ? 'gg' : 'j'
+        nnoremap <silent><buffer><expr> k
+                    \ line('.') == 1 ? 'G' : 'k'
+        nnoremap <silent><buffer><expr> <C-l>
+                    \ defx#do_action('redraw')
+        nnoremap <silent><buffer><expr> <C-g>
+                    \ defx#do_action('print')
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd FileType defx call s:my_defx_settings()
+    augroup END
+
+    nnoremap <silent> <Leader>e  :Defx<CR>
+    nnoremap <silent> <Leader>E  :Defx .<CR>
+    nnoremap <silent> <Leader>bf :Defx `expand('%:p:h')` -search=`expand('%:p')`<CR>
 endif
 
 if s:IsPlugged('vaffle.vim')
@@ -2208,7 +2262,7 @@ if s:IsPlugged('syntastic')
 
     function! s:syntastic_add_checker(filetype, program, ...) abort
         if executable(a:program)
-            let programs = get(g:, printf('syntastic_%s_checkers', a:program), [])
+            let programs = get(g:, printf('syntastic_%s_checkers', a:filetype), [])
             call add(programs, a:program)
             let g:syntastic_{a:filetype}_checkers = programs
 
@@ -2222,6 +2276,7 @@ if s:IsPlugged('syntastic')
     call s:syntastic_add_checker('javascript', 'eslint', 'npm run eslint --')
     call s:syntastic_add_checker('jsx', 'eslint', 'npm run eslint --')
     call s:syntastic_add_checker('ruby', 'rubocop')
+    call s:syntastic_add_checker('yaml', 'yamllint')
 
     nnoremap <silent> <Leader>bc :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 endif
