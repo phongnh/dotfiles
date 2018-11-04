@@ -1093,16 +1093,16 @@ if s:IsPlugged('vim-grepper')
     nnoremap <silent> <Leader>G  :Grepper<CR>
     nnoremap <silent> <Leader>S  :Grepper<CR>
     nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>ss <Esc>:Grepper -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
-    nnoremap <silent> <Leader>s/ :Grepper -query <C-r>=GetSearchTextForGrepper()<CR><CR>
+    xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+    nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=GetSearchTextForGrepper()<CR><CR>
 
     nnoremap <silent> <Leader>L  :LGrepper<CR>
     nnoremap <silent> <Leader>sl :LGrepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>sl <Esc>:LGrepper -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+    xnoremap <silent> <Leader>sl <Esc>:LGrepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
 
     nnoremap          <Leader>B  :BGrepper<CR>
     nnoremap <silent> <Leader>sb :BGrepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>sb <Esc>:BGrepper -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+    xnoremap <silent> <Leader>sb <Esc>:BGrepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
     nmap              <Leader>bs <Leader>sb
     xmap              <Leader>bs <Leader>sb
 endif
