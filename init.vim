@@ -477,6 +477,13 @@ call plug#begin()
     endif
 " }
 
+" Gtags {
+    if s:Use('gtags') && executable('gtags')
+        " Async plugin for vim and neovim to ease the use of ctags/gtags
+        Plug 'jsfaint/gen_tags.vim'
+    endif
+" }
+
 " Tagbar {
     if s:Use('tagbar') && executable('ctags')
         " A class outline viewer for Vim
