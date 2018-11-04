@@ -2309,7 +2309,7 @@ if s:IsPlugged('vim-prettier')
     nmap <Leader>ap <Plug>(PrettierAsync)
 endif
 
-if s:Use('vim-gutentags')
+if s:IsPlugged('vim-gutentags')
     " ludovicchabant/vim-gutentags
     " Enable gtags module
     let g:gutentags_modules = ['ctags', 'gtags_cscope']
@@ -2322,6 +2322,17 @@ if s:Use('vim-gutentags')
 
     " skywind3000/gutentags_plus
     let g:gutentags_plus_nomap = 1
+
+    noremap <silent> <C-\>s :GscopeFind s <C-r><C-w><CR>
+    noremap <silent> <C-\>g :GscopeFind g <C-r><C-w><CR>
+    noremap <silent> <C-\>c :GscopeFind c <C-r><C-w><CR>
+    noremap <silent> <C-\>t :GscopeFind t <C-r><C-w><CR>
+    noremap <silent> <C-\>e :GscopeFind e <C-r><C-w><CR>
+    noremap <silent> <C-\>f :GscopeFind f <C-r>=expand("<cfile>")<CR><CR>
+    noremap <silent> <C-\>i :GscopeFind i <C-r>=expand("<cfile>")<CR><CR>
+    noremap <silent> <C-\>d :GscopeFind d <C-r><C-W><CR>
+    noremap <silent> <C-\>a :GscopeFind a <C-r><C-W><CR>
+    noremap <silent> <C-\>k :GscopeKill<CR>
 endif
 
 if s:IsPlugged('tagbar')
