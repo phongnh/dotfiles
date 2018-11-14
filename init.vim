@@ -556,7 +556,7 @@ endif
     if s:Use('go')
         Plug 'fatih/vim-go'
         Plug 'zchee/vim-go-stdlib'          " go standard library syntax highlighting
-        Plug 'garyburd/go-explorer'         " go get github.com/garyburd/go-explorer/src/getool
+        Plug 'phongnh/go-explorer'          " go get github.com/phongnh/go-explorer/src/getool
         Plug 'tweekmonster/hl-goimport.vim' " Highlights imported packages in Go
     endif
 " }
@@ -2330,7 +2330,7 @@ let g:markdown_fenced_languages = [
             \ ]
 
 if s:IsPlugged('vim-go')
-    " fatih/vim-go and garyburd/go-explorer
+    " fatih/vim-go and phongnh/go-explorer
     let g:go_highlight_functions         = 1
     let g:go_highlight_methods           = 1
     let g:go_highlight_fields            = 1
