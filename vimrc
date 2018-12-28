@@ -348,7 +348,7 @@ call plug#begin()
         Plug 'Shougo/neoinclude.vim'
     elseif s:Use('leaderf') && s:python
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
-        Plug 'Yggdroot/LeaderF', { 'do': './install.sh'  }
+        Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
     else
         if s:python
             Plug 'FelikZ/ctrlp-py-matcher'
@@ -399,7 +399,9 @@ call plug#begin()
     elseif s:Use('ncm2') && s:vim8 && s:python3
         Plug 'ncm2/ncm2'
         Plug 'ncm2/ncm2-bufword'
+        Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' }
         Plug 'ncm2/ncm2-path'
+        Plug 'ncm2/ncm2-gtags'
 
         if s:Use('ultisnips')
             Plug 'ncm2/ncm2-ultisnips'
@@ -487,7 +489,7 @@ call plug#begin()
         endif
 
         " A Vim plugin for Prettier
-        Plug 'prettier/vim-prettier', { 'do': 'npm install'  }
+        Plug 'prettier/vim-prettier', { 'do': 'npm install' }
     endif
 " }
 
@@ -1516,7 +1518,7 @@ if s:IsPlugged('LeaderF')
                 \ 'ruby': '--ruby-kinds=fFS',
                 \ }
 
-    function! s:LeaderfRoot()
+    function! s:LeaderfRoot() abort
         let current = get(g:, 'Lf_WorkingDirectoryMode', 'c')
         try
             let g:Lf_WorkingDirectoryMode = 'Ac'
@@ -1527,6 +1529,16 @@ if s:IsPlugged('LeaderF')
     endfunction
     command! -bar -nargs=0 LeaderfRoot call <SID>LeaderfRoot()
 
+    function! s:LeaderfFileInDir(dir) abort
+        let cwd = getcwd()
+        try
+            execute ":LeaderfFile " . expand(a:dir)
+        finally
+            execute "cd " . cwd
+        endtry
+    endfunction
+    command! -bar -nargs=1 -complete=dir LeaderfFileInDir call <SID>LeaderfFileInDir(<q-args>)
+
     nmap <Leader><Leader> <Leader>f
 
     nnoremap          <Leader>F :LeaderfFile<Space>
@@ -1534,8 +1546,8 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>p :LeaderfRoot<CR>
     nnoremap <silent> <Leader>o :LeaderfBuffer<CR>
     nnoremap <silent> <Leader>O :LeaderfMru<CR>
-    nnoremap <silent> <Leader>d :LeaderfFile <C-r>=expand("%:h")<CR><CR>
-    nnoremap <silent> <Leader>D :LeaderfFile <C-r>=expand("%:h:h")<CR><CR>
+    nnoremap <silent> <Leader>d :LeaderfFileInDir <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :LeaderfFileInDir <C-r>=expand("%:h:h")<CR><CR>
 
     nnoremap <silent> <Leader>\ :LeaderfTag<CR>
 
@@ -2677,18 +2689,23 @@ let g:ayucolor = 'mirage' " for mirage version of theme
 
 call s:Source('.vimrc.local')
 
-if exists('g:zero_vim_colorscheme')
-    if exists('g:zero_vim_background')
-        execute 'set background=' . g:zero_vim_background
+try
+    if exists('g:zero_vim_colorscheme')
+        if exists('g:zero_vim_background')
+            execute 'set background=' . g:zero_vim_background
+        endif
+        execute 'colorscheme ' . g:zero_vim_colorscheme
+    elseif has('gui_running')
+        set background=dark
+        colorscheme solarized
+    else
+        set background=dark
+        colorscheme gruvbox
     endif
-    execute 'colorscheme ' . g:zero_vim_colorscheme
-elseif has('gui_running')
-    set background=dark
-    colorscheme solarized
-else
+catch
     set background=dark
     colorscheme gruvbox
-endif
+endtry
 
 set secure
 
