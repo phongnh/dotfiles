@@ -1063,8 +1063,8 @@ nmap              <Leader>bs <Leader>sb
 xmap              <Leader>bs <Leader>sb
 
 " vim-scripts/DeleteTrailingWhitespace
-nnoremap <silent> <Leader>bW :update<CR>:DeleteTrailingWhitespace<CR>
-vnoremap <silent> <Leader>bW :DeleteTrailingWhitespace<CR>
+nnoremap <silent> <Leader>bu :update<CR>:DeleteTrailingWhitespace<CR>
+vnoremap <silent> <Leader>bu :DeleteTrailingWhitespace<CR>
 
 " tpope/vim-unimpaired
 " Back-compatibility
