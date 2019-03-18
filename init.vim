@@ -82,7 +82,8 @@ augroup MyAutoCmd
 augroup END
 
 " Default zero settings
-let g:zero_vim_solarized         = !empty($SOLARIZED)
+let g:zero_vim_true_color        = 0
+let g:zero_vim_solarized         = 0
 let g:zero_vim_autocomplete      = 1
 let g:zero_vim_autolint          = 0
 let g:zero_vim_autofix           = 0
@@ -242,20 +243,22 @@ call plug#begin()
 " }
 
 " Text Objects {
-    Plug 'kana/vim-textobj-user'
-    Plug 'kana/vim-textobj-entire'                " e
-    Plug 'kana/vim-textobj-line'                  " l
-    Plug 'kana/vim-textobj-indent'                " i
-    Plug 'glts/vim-textobj-comment'               " c
-    Plug 'mattn/vim-textobj-url'                  " u
-    Plug 'rhysd/vim-textobj-conflict'             " =
-    Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
-    Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y (rub[y])
-    Plug 'inside/vim-textobj-jsxattr'             " x
-    Plug 'rhysd/vim-textobj-word-column'          " v
-    Plug 'kana/vim-textobj-function'
-    Plug 'thinca/vim-textobj-function-javascript' " f
-    Plug 'haya14busa/vim-textobj-function-syntax'
+    if s:Use('text-objects')
+        Plug 'kana/vim-textobj-user'
+        Plug 'kana/vim-textobj-entire'                " e
+        Plug 'kana/vim-textobj-line'                  " l
+        Plug 'kana/vim-textobj-indent'                " i
+        Plug 'glts/vim-textobj-comment'               " c
+        Plug 'mattn/vim-textobj-url'                  " u
+        Plug 'rhysd/vim-textobj-conflict'             " =
+        Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
+        Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y (rub[y])
+        Plug 'inside/vim-textobj-jsxattr'             " x
+        Plug 'rhysd/vim-textobj-word-column'          " v
+        Plug 'kana/vim-textobj-function'
+        Plug 'thinca/vim-textobj-function-javascript' " f
+        Plug 'haya14busa/vim-textobj-function-syntax'
+    endif
 
     " A Vim plugin to move function arguments (and other delimited-by-something items) left and right.
     Plug 'AndrewRadev/sideways.vim'               " a
@@ -387,6 +390,8 @@ call plug#begin()
 
         if s:Use('ultisnips')
             Plug 'ncm2/ncm2-ultisnips'
+        elseif s:Use('neosnippet')
+            Plug 'ncm2/ncm2-neosnippet'
         elseif s:Use('snipmate')
             Plug 'ncm2/ncm2-snipmate'
         endif
@@ -590,17 +595,17 @@ endif
         Plug 'mhinz/vim-signify'
     endif
 
-    if s:Use('diff-enhanced')
+    if s:Use('diff-enhanced') && &diff
         " Better Diff options for Vim
         Plug 'chrisbra/vim-diff-enhanced'
     endif
 " }
 
+" A Vim plugin that provides a completion function for Unicode glyphs
+Plug 'chrisbra/unicode.vim'
+
 " Writing {
     if s:Use('writing')
-        " A Vim plugin that provides a completion function for Unicode glyphs
-        Plug 'chrisbra/unicode.vim'
-
         " Rethinking Vim as a tool for writing
         Plug 'reedes/vim-pencil'
         Plug 'reedes/vim-lexical'
@@ -797,6 +802,11 @@ if has('path_extra')
     setglobal tags-=./tags tags-=./tags; tags^=./tags;
 endif
 
+" True Color settings
+if g:zero_vim_true_color && has('termguicolors')
+    set termguicolors
+endif
+
 " Map leader
 let g:mapleader      = ' '
 let g:maplocalleader = '\'
@@ -975,6 +985,7 @@ if s:IsPlugged('vim-tmuxify')
         execute 'xnoremap <silent> ' . a:prefix . 's "my:TxSend'   . a:suffix . '(@m)<CR>'
         execute 'nmap     <silent> ' . a:prefix . 's mmvip'        . a:prefix . 's`m'
         execute 'nmap     <silent> ' . a:prefix . 'S mmggVG'       . a:prefix . 's`m'
+        execute 'nmap     <silent> ' . a:prefix . 'w mmviw'        . a:prefix . 's`m'
         execute 'nnoremap <silent> ' . a:prefix . 'l :TxSend'      . a:suffix . '(@m)<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'k :TxSendKey'   . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'u :TxSendKey'   . a:suffix . " 'C-u q C-u'<CR>"
@@ -1189,35 +1200,60 @@ let g:AutoPairsShortcutBackInsert = ''
 let g:AutoPairsMoveCharacter      = ''
 
 " terryma/vim-multiple-cursors
-" Called once right before you start selecting multiple cursors
-function! Multiple_cursors_before() abort
-    " let b:autopairs_enabled = 0
+if s:IsPlugged('deoplete')
+    " Called once right before you start selecting multiple cursors
+    function! Multiple_cursors_before() abort
+        if deoplete#is_enabled()
+            call deoplete#disable()
+            let g:deoplete_is_enable_before_multi_cursors = 1
+        else
+            let g:deoplete_is_enable_before_multi_cursors = 0
+        endif
+    endfunc
 
-    let g:deoplete#disable_auto_complete = 1
+    " Called once only when the multiple selection is cancelled (default <Esc>)
+    function! Multiple_cursors_after() abort
+        if g:deoplete_is_enable_before_multi_cursors
+            call deoplete#enable()
+        endif
+    endfunction
+elseif s:IsPlugged('ncm2')
+    function! Multiple_cursors_before() abort
+    endfunction
 
-    let b:cm_enabled = 0
+    function! Multiple_cursors_after() abort
+    endfunction
+elseif s:IsPlugged('asyncomplete')
+    function! Multiple_cursors_before() abort
+        let b:asyncomplete_enable = 0
+    endfunction
 
-    if exists(':MUcompleteAutoOff') == 2
-        silent! MUcompleteAutoOff
-    endif
+    function! Multiple_cursors_after() abort
+        let b:asyncomplete_enable = 1
+    endfunction
+elseif s:IsPlugged('completor')
+    function! Multiple_cursors_before() abort
+        silent! CompletorDisable
+    endfunction
 
-    let b:SuperTabDisabled = 1
-endfunction
+    function! Multiple_cursors_after() abort
+        silent! CompletorEnable
+    endfunction
+elseif s:IsPlugged('YouCompleteMe')
+    function! Multiple_cursors_before() abort
+    endfunction
 
-" Called once only when the multiple selection is cancelled (default <Esc>)
-function! Multiple_cursors_after() abort
-    " let b:autopairs_enabled = 1
+    function! Multiple_cursors_after() abort
+    endfunction
+elseif s:IsPlugged('supertab')
+    function! Multiple_cursors_before() abort
+        let b:SuperTabDisabled = 1
+    endfunction
 
-    let g:deoplete#disable_auto_complete = 0
-
-    let b:cm_enabled = 1
-
-    if exists(':MUcompleteAutoOn') == 2
-        silent! MUcompleteAutoOn
-    endif
-
-    let b:SuperTabDisabled = 0
-endfunction
+    function! Multiple_cursors_after() abort
+        let b:SuperTabDisabled = 0
+    endfunction
+endif
 
 " mattn/emmet-vim
 let g:user_emmet_leader_key = '<C-y>'
@@ -1227,17 +1263,21 @@ let g:user_emmet_settings = {
             \ },
             \ }
 
-" rhysd/vim-textobj-ruby
-let g:textobj_ruby_more_mappings = 0
+if s:IsPlugged('rhysd/vim-textobj-ruby')
+    " rhysd/vim-textobj-ruby
+    let g:textobj_ruby_more_mappings = 0
+endif
 
-" whatyouhide/vim-textobj-erb
-let g:textobj_erb_no_default_key_mappings = 1
+if s:IsPlugged('vim-textobj-erb')
+    " whatyouhide/vim-textobj-erb
+    let g:textobj_erb_no_default_key_mappings = 1
 
-" Remap from 'E' to 'y'
-omap ay <Plug>(textobj-erb-a)
-xmap ay <Plug>(textobj-erb-a)
-omap iy <Plug>(textobj-erb-i)
-xmap iy <Plug>(textobj-erb-i)
+    " Remap from 'E' to 'y'
+    omap ay <Plug>(textobj-erb-a)
+    xmap ay <Plug>(textobj-erb-a)
+    omap iy <Plug>(textobj-erb-i)
+    xmap iy <Plug>(textobj-erb-i)
+endif
 
 " AndrewRadev/sideways.vim
 omap <silent> aa <Plug>SidewaysArgumentTextobjA
@@ -1525,10 +1565,14 @@ if s:IsPlugged('LeaderF')
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :LeaderfLine<CR>
     nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
+    nnoremap <silent> <Leader>b] :LeaderfBufTagAll<CR>
+    nnoremap <silent> <Leader>]  :LeaderfBufTagAll<CR>
 
     nnoremap <silent> <Leader><Tab> :LeaderfTabBufferAll<CR>
 
     nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
+    nnoremap <silent> <Leader>b[ :LeaderfFunctionAll<CR>
+    nnoremap <silent> <Leader>[  :LeaderfFunctionAll<CR>
 
     nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
     nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
@@ -1583,12 +1627,16 @@ if s:IsPlugged('ctrlp.vim')
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
     nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
+    nnoremap <silent> <Leader>b] :CtrlPBufTagAll<CR>
+    nnoremap <silent> <Leader>]  :CtrlPBufTagAll<CR>
 
     " DavidEGx/ctrlp-smarttabs
     nnoremap <silent> <Leader><Tab> :CtrlPSmartTabs<CR>
 
     " tacahiroy/ctrlp-funky
     nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
+    nnoremap <silent> <Leader>b[ :CtrlPFunkyMulti<CR>
+    nnoremap <silent> <Leader>[  :CtrlPFunkyMulti<CR>
 
     " mattn/ctrlp-register
     nnoremap <silent> <Leader>Y :CtrlPRegister<CR>
@@ -2483,12 +2531,10 @@ if s:IsPlugged('vim-signify')
     nnoremap <silent> yog :SignifyToggle<CR>:echo (get(b:, 'sy', { 'active': 0 }).active ? 'Enabled' : 'Disabled') . ' Signify on buffer!'<CR>
 endif
 
-if s:IsPlugged('unicode.vim')
-    " chrisbra/unicode.vim
-    nmap <F3> <Plug>(UnicodeSwapCompleteName)
-    nmap <F4> <Plug>(MakeDigraph)
-    vmap <F4> <Plug>(MakeDigraph)
-endif
+" chrisbra/unicode.vim
+nmap <F3> <Plug>(UnicodeSwapCompleteName)
+nmap <F4> <Plug>(MakeDigraph)
+vmap <F4> <Plug>(MakeDigraph)
 
 if s:IsPlugged('vim-pencil')
     " reedes/vim-pencil
