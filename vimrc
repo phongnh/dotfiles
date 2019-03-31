@@ -1084,10 +1084,6 @@ xmap              <Leader>bs <Leader>sb
 nnoremap <silent> <Leader>bu :update<CR>:DeleteTrailingWhitespace<CR>
 vnoremap <silent> <Leader>bu :DeleteTrailingWhitespace<CR>
 
-" tpope/vim-unimpaired
-" Back-compatibility
-nmap co =o
-
 " regedarek/ZoomWin
 nmap <silent> <Leader>bm <Plug>ZoomWin
 vmap          <Leader>bm <Esc><Leader>bmgv
