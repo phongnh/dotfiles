@@ -976,8 +976,8 @@ nnoremap <silent> gl :buffer#<CR>
 " Edit file from buffer folder
 nnoremap <C-w><C-e> :edit <C-r>=fnameescape(expand('%:~:.:h')) . '/'<CR>
 
-" Yank whole buffer (use previous gy mapping)
-nmap <Leader>by ggVGgy``
+" Yank whole buffer to clipboard
+nnoremap <silent> <Leader>by :%y+<CR>
 
 " Reload buffer
 nnoremap <silent> <Leader>be :confirm edit<CR>
