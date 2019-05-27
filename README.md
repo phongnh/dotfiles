@@ -4,24 +4,25 @@ My dotfiles for vim + tmux setup
 
 ## Install necessary programs (Mac OS X only)
 
-    brew install tmux reattach-to-user-namespace htop-osx the_silver_searcher git tig urlview fpp cmake python2 python3
+    brew install tmux reattach-to-user-namespace htop ripgrep the_silver_searcher git tig urlview fpp cmake python python@2
 
     # Optional
     sudo -i
     gem install tmuxinator rubocop --no-rdoc --no-ri
 
     # Install vim
-    brew install vim --with-lua --HEAD
+    brew install vim
 
     # Or install macvim
-    brew install macvim --with-lua --HEAD
+    brew install macvim
 
     # Or install neovim
     brew tap neovim/neovim
     brew install neovim --HEAD
+    pip3 install --user --upgrade pip setuptools
+    pip3 install --user --upgrade neovim
     pip2 install --user --upgrade pip setuptools
     pip2 install --user --upgrade neovim
-    pip3 install --user --upgrade neovim
 
 ## Setup vim and nvim folder
 
