@@ -5,10 +5,10 @@ let s:python  = s:python3 || s:python2
 let s:vim8    = v:version >= 800
 
 function! s:Source(vimrc) abort
-    let vimrc = findfile(a:vimrc, ';')
-    if strlen(vimrc)
+    let vimrcs = findfile(a:vimrc, ';', -1)
+    for vimrc in reverse(vimrcs)
         execute 'source ' . fnamemodify(vimrc, ':p')
-    endif
+    endfor
 endfunction
 
 function! s:Use(group) abort
