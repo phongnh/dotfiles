@@ -1133,6 +1133,9 @@ if s:IsPlugged('vim-grepper')
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
     command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
 
+    nmap gs <plug>(GrepperOperator)
+    xmap gs <plug>(GrepperOperator)
+
     nnoremap <silent> <Leader>G  :Grepper<CR>
     nnoremap <silent> <Leader>S  :Grepper<CR>
     nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
@@ -1322,8 +1325,10 @@ nmap >, <Plug>SidewaysRight
 nnoremap <silent> [, :SidewaysJumpLeft<CR>
 nnoremap <silent> ], :SidewaysJumpRight<CR>
 
-" wellle/targets.vim
-let g:targets_nl = 'nN'
+if s:IsPlugged('targets.vim')
+    " wellle/targets.vim
+    let g:targets_nl = 'nN'
+endif
 
 " gcmt/wildfire.vim
 let s:wildfire_objects = ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}"]
@@ -2382,6 +2387,9 @@ if s:IsPlugged('vim-gutentags')
 
     " Generate datebases in my cache directory, prevent gtags files polluting my project
     let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+    " Ignored file types
+    let g:gutentags_exclude_filetypes = ['html', 'xml', 'ccs', 'sass', 'sccs', 'coffee', 'less', 'eruby', 'haml', 'hamlc', 'text',  'git', 'gitcommit', 'fugitiveblame']
 
     " Prevent gutentags adding gtags databases
     let g:gutentags_auto_add_gtags_cscope = 0
