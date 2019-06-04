@@ -1529,13 +1529,14 @@ if s:IsPlugged('LeaderF')
     " Yggdroot/LeaderF
     let g:Lf_WindowHeight  = 0.30
     let g:Lf_MruMaxFiles   = 200
-    let g:Lf_CursorBlink   = 0
+    " let g:Lf_CursorBlink   = 0 " When set this setting to 0, C-J & C-K do not work, temporarily disable it
     let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
     let g:Lf_StlSeparator  = { 'left': '', 'right': '' }
 
     let g:Lf_UseCache      = 0 " rg/ag is enough fast, we don't need cache
     let g:Lf_NeedCacheTime = 5 " 5 seconds
 
+    " let g:Lf_NoChdir              = 1
     let g:Lf_WorkingDirectoryMode = 'c'
 
     if executable('rg')
