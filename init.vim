@@ -145,11 +145,8 @@ call plug#begin()
     " sleuth.vim: Heuristically set buffer options
     Plug 'tpope/vim-sleuth'
 
-    " My vim functions for search and substitute
-    Plug 'phongnh/vim-search-helpers'
-
-    " Phong's vim command helpers
-    Plug 'phongnh/vim-command-helpers'
+    " My vim helpers
+    Plug 'phongnh/vim-helpers'
 
     " Helpers for UNIX
     Plug 'tpope/vim-eunuch'
