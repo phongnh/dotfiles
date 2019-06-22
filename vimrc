@@ -255,6 +255,9 @@ call plug#begin()
 
     " A simple Vim plugin to switch segments of text with predefined replacements
     Plug 'AndrewRadev/switch.vim'
+
+    " A Vim plugin to move function arguments (and other delimited-by-something items) left and right.
+    Plug 'AndrewRadev/sideways.vim'               " a
 " }
 
 " Text Objects {
@@ -274,9 +277,6 @@ call plug#begin()
         Plug 'thinca/vim-textobj-function-javascript' " f
         Plug 'haya14busa/vim-textobj-function-syntax'
     endif
-
-    " A Vim plugin to move function arguments (and other delimited-by-something items) left and right.
-    Plug 'AndrewRadev/sideways.vim'               " a
 
     " Vim plugin that provides additional text objects
     Plug 'wellle/targets.vim'
@@ -346,10 +346,14 @@ call plug#begin()
         " extra useful sources for denite.nvim
         Plug 'neoclide/denite-extra'
         Plug 'Shougo/neoinclude.vim'
-    elseif s:Use('leaderf') && s:python
+    endif
+
+    if s:Use('leaderf') && s:python
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-    else
+    endif
+
+    if s:Use('ctrlp')
         if s:python
             Plug 'FelikZ/ctrlp-py-matcher'
         endif
@@ -366,7 +370,7 @@ call plug#begin()
         Plug 'LeafCage/yankround.vim'
     endif
 
-    if s:Use('fzf') && !has('gui_running')
+    if s:Use('fzf')
         " A command-line fuzzy finder written in Go
         Plug 'junegunn/fzf', { 'do': './install --bin' }
         Plug 'junegunn/fzf.vim'
@@ -1294,6 +1298,18 @@ let g:user_emmet_settings = {
             \ },
             \ }
 
+" AndrewRadev/sideways.vim
+omap <silent> aa <Plug>SidewaysArgumentTextobjA
+xmap <silent> aa <Plug>SidewaysArgumentTextobjA
+omap <silent> ia <Plug>SidewaysArgumentTextobjI
+xmap <silent> ia <Plug>SidewaysArgumentTextobjI
+
+nmap <, <Plug>SidewaysLeft
+nmap >, <Plug>SidewaysRight
+
+nnoremap <silent> [, :SidewaysJumpLeft<CR>
+nnoremap <silent> ], :SidewaysJumpRight<CR>
+
 if s:IsPlugged('rhysd/vim-textobj-ruby')
     " rhysd/vim-textobj-ruby
     let g:textobj_ruby_more_mappings = 0
@@ -1309,18 +1325,6 @@ if s:IsPlugged('vim-textobj-erb')
     omap iy <Plug>(textobj-erb-i)
     xmap iy <Plug>(textobj-erb-i)
 endif
-
-" AndrewRadev/sideways.vim
-omap <silent> aa <Plug>SidewaysArgumentTextobjA
-xmap <silent> aa <Plug>SidewaysArgumentTextobjA
-omap <silent> ia <Plug>SidewaysArgumentTextobjI
-xmap <silent> ia <Plug>SidewaysArgumentTextobjI
-
-nmap <, <Plug>SidewaysLeft
-nmap >, <Plug>SidewaysRight
-
-nnoremap <silent> [, :SidewaysJumpLeft<CR>
-nnoremap <silent> ], :SidewaysJumpRight<CR>
 
 if s:IsPlugged('targets.vim')
     " wellle/targets.vim
@@ -1700,6 +1704,7 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>bb :Buffers!<CR>
     nnoremap <silent> <Leader>bl :BLines!<CR>
     nnoremap <silent> <Leader>bt :BTags!<CR>
+    nnoremap <silent> <Leader>bo :BOutline!<CR>
 
     nnoremap <silent> <Leader>; :Commands!<CR>
     nnoremap <silent> <Leader>: :History:!<CR>
