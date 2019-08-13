@@ -24,7 +24,11 @@ function! s:PlugDir(plugin) abort
 endfunction
 
 if &shell =~# 'fish$'
-    set shell=bash
+    if executable('zsh')
+        set shell=zsh
+    else
+        set shell=/bin/sh
+    endif
 endif
 
 if executable('python3')
@@ -136,9 +140,6 @@ call plug#begin()
     " Interactive command execution
     Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 
-    " EditorConfig plugin for Vim
-    Plug 'editorconfig/editorconfig-vim'
-
     " rsi.vim: Readline style insertion
     Plug 'tpope/vim-rsi'
 
@@ -162,7 +163,6 @@ call plug#begin()
 
     " Toggle useful settings
     Plug 'phongnh/vim-toggler'
-    Plug 'phongnh/vim-toggle-quickfix'
 
     " Maximize current buffer
     Plug 'regedarek/ZoomWin'
@@ -235,16 +235,14 @@ call plug#begin()
     " A vim plugin that simplifies the transition between multiline and single-line code
     Plug 'AndrewRadev/splitjoin.vim'
 
-    " A simple Vim plugin to switch segments of text with predefined replacements
-    Plug 'AndrewRadev/switch.vim'
-
     " A Vim plugin to move function arguments (and other delimited-by-something items) left and right.
     Plug 'AndrewRadev/sideways.vim'               " a
 " }
 
 " Text Objects {
+    Plug 'kana/vim-textobj-user'
+
     if s:Use('text-objects')
-        Plug 'kana/vim-textobj-user'
         Plug 'kana/vim-textobj-entire'                " e
         Plug 'kana/vim-textobj-line'                  " l
         Plug 'kana/vim-textobj-indent'                " i
@@ -258,13 +256,13 @@ call plug#begin()
         Plug 'kana/vim-textobj-function'
         Plug 'thinca/vim-textobj-function-javascript' " f
         Plug 'haya14busa/vim-textobj-function-syntax'
+
+        " Vim plugin that provides additional text objects
+        Plug 'wellle/targets.vim'
+
+        " Smart selection of the closest text object
+        Plug 'gcmt/wildfire.vim'
     endif
-
-    " Vim plugin that provides additional text objects
-    Plug 'wellle/targets.vim'
-
-    " Smart selection of the closest text object
-    Plug 'gcmt/wildfire.vim'
 " }
 
 " Appearance {
@@ -287,9 +285,6 @@ call plug#begin()
         Plug 'phongnh/vim-statusline'
     endif
 
-    " Setup VIM's cursor and True Color for iTerm2
-    Plug 'phongnh/vim-iterm-settings'
-
     " Show "Match 123 of 456 /search term/" in Vim searches
     Plug 'henrik/vim-indexed-search'
 
@@ -307,9 +302,6 @@ call plug#begin()
     if s:Use('nerdtree')
         " A tree explorer plugin for vim
         Plug 'scrooloose/nerdtree'
-    elseif s:Use('defx')
-        " The dark powered file explorer implementation
-        Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
     elseif s:Use('vaffle')
         " Lightweight file manager for Vim
         Plug 'cocopon/vaffle.vim'
@@ -317,25 +309,15 @@ call plug#begin()
 " }
 
 " Fuzzy finder {
-    if s:Use('denite') && s:python3
-        " A CtrlP matcher, specialized for paths.
-        Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
-        " Dark powered asynchronous unite all interfaces for Neovim/Vim8
-        " `pip3 install typing`
-        Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-        " MRU plugin includes unite.vim/denite.vim MRU sources
-        Plug 'Shougo/neomru.vim'
-        " extra useful sources for denite.nvim
-        Plug 'neoclide/denite-extra'
-        Plug 'Shougo/neoinclude.vim'
-    endif
-
-    if s:Use('leaderf') && s:python
+    if s:Use('fzf')
+        " A command-line fuzzy finder written in Go
+        Plug 'junegunn/fzf', { 'do': './install --bin' }
+        Plug 'junegunn/fzf.vim'
+        Plug 'phongnh/fzf-settings.vim'
+    elseif s:Use('leaderf') && s:python
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-    endif
-
-    if s:Use('ctrlp')
+    else
         if s:python
             Plug 'FelikZ/ctrlp-py-matcher'
         endif
@@ -351,13 +333,6 @@ call plug#begin()
         Plug 'mattn/ctrlp-register'
         Plug 'LeafCage/yankround.vim'
     endif
-
-    if s:Use('fzf')
-        " A command-line fuzzy finder written in Go
-        Plug 'junegunn/fzf', { 'do': './install --bin' }
-        Plug 'junegunn/fzf.vim'
-        Plug 'phongnh/fzf-settings.vim'
-    endif
 " }
 
 " Snippets and Autocomplete {
@@ -368,57 +343,22 @@ call plug#begin()
         Plug 'honza/vim-snippets'
         Plug 'Shougo/neosnippet-snippets'
         Plug 'Shougo/neosnippet.vim'
-    elseif s:Use('snipmate')
-        Plug 'honza/vim-snippets'
-        Plug 'MarcWeber/vim-addon-mw-utils'
-        Plug 'tomtom/tlib_vim'
-        Plug 'garbas/vim-snipmate'
     endif
 
     if s:Use('deoplete') && s:python3
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-        Plug 'zchee/deoplete-go', { 'do': 'make' }
-        Plug 'zchee/deoplete-clang'
+        Plug 'deoplete-plugins/deoplete-go', { 'do': 'make' }
+        Plug 'deoplete-plugins/deoplete-clang'
+        Plug 'deoplete-plugins/deoplete-jedi'
         Plug 'wokalski/autocomplete-flow'
-    elseif s:Use('ncm2') && s:python3
-        Plug 'roxma/nvim-yarp'
-        Plug 'roxma/vim-hug-neovim-rpc'
-        Plug 'ncm2/ncm2'
-        Plug 'ncm2/ncm2-bufword'
-        Plug 'fgrsnau/ncm2-otherbuf', { 'branch': 'ncm2' }
-        Plug 'ncm2/ncm2-path'
-        Plug 'ncm2/ncm2-gtags'
-
-        if s:Use('ultisnips')
-            Plug 'ncm2/ncm2-ultisnips'
-        elseif s:Use('neosnippet')
-            Plug 'ncm2/ncm2-neosnippet'
-        elseif s:Use('snipmate')
-            Plug 'ncm2/ncm2-snipmate'
-        endif
-    elseif s:Use('asyncomplete')
-        Plug 'prabirshrestha/async.vim'
-        Plug 'prabirshrestha/asyncomplete.vim'
-        Plug 'prabirshrestha/asyncomplete-buffer.vim'
-        Plug 'yami-beta/asyncomplete-omni.vim'
-        Plug 'prabirshrestha/asyncomplete-gocode.vim'
-        Plug 'prabirshrestha/asyncomplete-flow.vim'
-
-        if s:Use('ultisnips') && s:python
-            Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-        elseif s:Use('neosnippet')
-            Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
-        endif
-    elseif s:Use('completor') && s:python
+    elseif s:Use('YouCompleteMe') && s:python3 && executable('python3') && executable('cmake')
+        Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
+    elseif s:python
         Plug 'maralla/completor.vim'
 
         if s:Use('neosnippet')
             Plug 'maralla/completor-neosnippet'
         endif
-    elseif s:Use('YouCompleteMe') && s:python3 && executable('python3') && executable('cmake')
-        Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
-    elseif s:Use('supertab')
-        Plug 'ervandew/supertab'
     endif
 " }
 
@@ -455,7 +395,7 @@ call plug#begin()
         Plug 'vim-syntastic/syntastic'
     elseif s:Use('lint')
         " Asynchronous Lint Engine
-        Plug 'w0rp/ale'
+        Plug 'dense-analysis/ale'
     endif
 " }
 
@@ -466,13 +406,8 @@ call plug#begin()
             Plug 'Chiel92/vim-autoformat'
         endif
 
-        if executable('clang-format')
-            " Vim plugin for clang-format, a formatter for C, C++, Obj-C, Java, JavaScript, TypeScript and ProtoBuf.
-            Plug 'rhysd/vim-clang-format'
-        endif
-
         " A Vim plugin for Prettier
-        Plug 'prettier/vim-prettier', { 'do': 'npm install' }
+        Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
     endif
 " }
 
@@ -480,8 +415,11 @@ call plug#begin()
     if s:Use('ctags') && executable('ctags')
         " A Vim plugin that manages your tag files
         Plug 'ludovicchabant/vim-gutentags'
-        " The right way to use gtags with gutentags
-        Plug 'skywind3000/gutentags_plus'
+
+        if s:Use('ctags-cscope') && executable('gtags-cscope')
+            " The right way to use gtags with gutentags
+            Plug 'skywind3000/gutentags_plus'
+        endif
     endif
 " }
 
@@ -540,12 +478,17 @@ endif
         Plug 'othree/javascript-libraries-syntax.vim'
         Plug 'heavenshell/vim-jsdoc'
         Plug 'neoclide/vim-jsx-improve'
-        Plug 'kchmck/vim-coffee-script'
         Plug 'elzr/vim-json'
         Plug 'tpope/vim-jdaddy'
         Plug 'hail2u/vim-css3-syntax'
         Plug 'phongnh/vim-coloresque'
         Plug 'othree/html5.vim'
+    endif
+" }
+
+" CoffeeScript {
+    if s:Use('coffee-script')
+        Plug 'kchmck/vim-coffee-script'
         Plug 'joukevandermaas/vim-ember-hbs'
     endif
 " }
@@ -557,6 +500,14 @@ endif
         Plug 'tpope/vim-bundler'
         Plug 'tpope/vim-rake'
         Plug 'tpope/vim-rails'
+    endif
+" }
+
+" Python {
+    if s:Use('python')
+        Plug 'nvie/vim-flake8'
+        Plug 'fisadev/vim-isort'
+        Plug 'google/yapf', { 'rtp': 'plugins/vim' }
     endif
 " }
 
@@ -577,9 +528,6 @@ endif
     if s:Use('git')
         " An awesome Git wrapper so awesome
         Plug 'tpope/vim-fugitive'
-
-        " Fugitive extension to manage and merge Git branches
-        Plug 'idanarye/vim-merginal'
 
         " A git commit browser in Vim
         Plug 'junegunn/gv.vim'
@@ -986,8 +934,9 @@ if s:IsPlugged('vim-tmuxify')
         execute 'xnoremap <silent> ' . a:prefix . 's "my:TxSend'   . a:suffix . '(@m)<CR>'
         execute 'nmap     <silent> ' . a:prefix . 's mmvip'        . a:prefix . 's`m'
         execute 'nmap     <silent> ' . a:prefix . 'S mmggVG'       . a:prefix . 's`m'
+        execute 'nmap     <silent> ' . a:prefix . 'l mmV'          . a:prefix . 's`m'
         execute 'nmap     <silent> ' . a:prefix . 'w mmviw'        . a:prefix . 's`m'
-        execute 'nnoremap <silent> ' . a:prefix . 'l :TxSend'      . a:suffix . '(@m)<CR>'
+        execute 'nnoremap <silent> ' . a:prefix . 'a :TxSend'      . a:suffix . '(@m)<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'k :TxSendKey'   . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'u :TxSendKey'   . a:suffix . " 'C-u q C-u'<CR>"
         execute 'nnoremap <silent> ' . a:prefix . 'm :TxSendKey'   . a:suffix . " 'Enter'<CR>"
@@ -1014,7 +963,7 @@ endif
 let g:dispatch_quickfix_height = 10
 let g:dispatch_tmux_height     = 1
 
-" phongnh/vim-command-helpers
+" phongnh/vim-helpers
 nnoremap          <Leader>G  :Grep<Space>
 nnoremap          <Leader>S  :Grep<Space>
 nnoremap <silent> <Leader>ss :GrepCword<CR>
@@ -1097,11 +1046,12 @@ let g:qfenter_keymap.topen = ['<C-t>']
 if s:IsPlugged('vim-grepper')
     " mhinz/vim-grepper
     let g:grepper = {
-                \ 'open':      1,
-                \ 'switch':    1,
-                \ 'jump':      0,
-                \ 'next_tool': '<C-\>',
-                \ 'tools':     ['rg', 'ag', 'git', 'ack', 'grep', 'findstr'],
+                \ 'open':                1,
+                \ 'switch':              1,
+                \ 'jump':                0,
+                \ 'prompt_mapping_tool': '<C-\>',
+                \ 'tools':               ['rg', 'ag', 'git', 'ack', 'grep', 'findstr'],
+                \ 'stop':                2000,
                 \ }
 
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
@@ -1217,19 +1167,11 @@ if s:IsPlugged('deoplete')
             call deoplete#enable()
         endif
     endfunction
-elseif s:IsPlugged('ncm2')
+elseif s:IsPlugged('YouCompleteMe')
     function! Multiple_cursors_before() abort
     endfunction
 
     function! Multiple_cursors_after() abort
-    endfunction
-elseif s:IsPlugged('asyncomplete')
-    function! Multiple_cursors_before() abort
-        let b:asyncomplete_enable = 0
-    endfunction
-
-    function! Multiple_cursors_after() abort
-        let b:asyncomplete_enable = 1
     endfunction
 elseif s:IsPlugged('completor')
     function! Multiple_cursors_before() abort
@@ -1238,20 +1180,6 @@ elseif s:IsPlugged('completor')
 
     function! Multiple_cursors_after() abort
         silent! CompletorEnable
-    endfunction
-elseif s:IsPlugged('YouCompleteMe')
-    function! Multiple_cursors_before() abort
-    endfunction
-
-    function! Multiple_cursors_after() abort
-    endfunction
-elseif s:IsPlugged('supertab')
-    function! Multiple_cursors_before() abort
-        let b:SuperTabDisabled = 1
-    endfunction
-
-    function! Multiple_cursors_after() abort
-        let b:SuperTabDisabled = 0
     endfunction
 endif
 
@@ -1296,22 +1224,24 @@ if s:IsPlugged('targets.vim')
     let g:targets_nl = 'nN'
 endif
 
-" gcmt/wildfire.vim
-let s:wildfire_objects = ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}"]
+if s:IsPlugged('wildfire.vim')
+    " gcmt/wildfire.vim
+    let s:wildfire_objects = ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}"]
 
-let g:wildfire_objects = {
-            \ '*':        extend(copy(s:wildfire_objects), ['il', 'ip']),
-            \ 'html,xml': extend(copy(s:wildfire_objects), ['ix', 'it', 'at']),
-            \ 'ruby':     extend(copy(s:wildfire_objects), ['ir', 'ar']),
-            \ 'eruby':    extend(copy(s:wildfire_objects), ['iy', 'ay', 'ix', 'it', 'at']),
-            \ 'go':       extend(copy(s:wildfire_objects), ['if', 'af']),
-            \ }
+    let g:wildfire_objects = {
+                \ '*':        extend(copy(s:wildfire_objects), ['il', 'ip']),
+                \ 'html,xml': extend(copy(s:wildfire_objects), ['ix', 'it', 'at']),
+                \ 'ruby':     extend(copy(s:wildfire_objects), ['ir', 'ar']),
+                \ 'eruby':    extend(copy(s:wildfire_objects), ['iy', 'ay', 'ix', 'it', 'at']),
+                \ 'go':       extend(copy(s:wildfire_objects), ['if', 'af']),
+                \ }
 
-map  + <Plug>(wildfire-fuel)
-vmap _ <Plug>(wildfire-water)
+    map  + <Plug>(wildfire-fuel)
+    vmap _ <Plug>(wildfire-water)
 
-map  <M-l> <Plug>(wildfire-fuel)
-vmap <M-h> <Plug>(wildfire-water)
+    map  <M-l> <Plug>(wildfire-fuel)
+    vmap <M-h> <Plug>(wildfire-water)
+endif
 
 " luochen1990/rainbow
 let g:rainbow_active = 0
@@ -1342,153 +1272,43 @@ if s:IsPlugged('nerdtree')
     nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
 endif
 
-if s:IsPlugged('defx.nvim')
-    " Shougo/defx.nvim
-    function! s:my_defx_settings() abort
-        " Define mappings
-        nnoremap <silent><buffer><expr> <CR>
-                    \ defx#do_action('open')
-        nnoremap <silent><buffer><expr> l
-                    \ defx#do_action('open')
-        nnoremap <silent><buffer><expr> E
-                    \ defx#do_action('open', 'vsplit')
-        nnoremap <silent><buffer><expr> P
-                    \ defx#do_action('open', 'pedit')
-        nnoremap <silent><buffer><expr> K
-                    \ defx#do_action('new_directory')
-        nnoremap <silent><buffer><expr> N
-                    \ defx#do_action('new_file')
-        nnoremap <silent><buffer><expr> d
-                    \ defx#do_action('remove')
-        nnoremap <silent><buffer><expr> r
-                    \ defx#do_action('rename')
-        nnoremap <silent><buffer><expr> h
-                    \ defx#do_action('cd', ['..'])
-        nnoremap <silent><buffer><expr> ~
-                    \ defx#do_action('cd')
-        nnoremap <silent><buffer><expr> q
-                    \ defx#do_action('quit')
-        nnoremap <silent><buffer><expr> <Space>
-                    \ defx#do_action('toggle_select') . 'j'
-        nnoremap <silent><buffer><expr> *
-                    \ defx#do_action('toggle_select_all')
-        nnoremap <silent><buffer><expr> j
-                    \ line('.') == line('$') ? 'gg' : 'j'
-        nnoremap <silent><buffer><expr> k
-                    \ line('.') == 1 ? 'G' : 'k'
-        nnoremap <silent><buffer><expr> <C-l>
-                    \ defx#do_action('redraw')
-        nnoremap <silent><buffer><expr> <C-g>
-                    \ defx#do_action('print')
-    endfunction
-
-    augroup MyAutoCmd
-        autocmd FileType defx call s:my_defx_settings()
-    augroup END
-
-    nnoremap <silent> <Leader>e  :Defx<CR>
-    nnoremap <silent> <Leader>E  :Defx .<CR>
-    nnoremap <silent> <Leader>bf :Defx `expand('%:p:h')` -search=`expand('%:p')`<CR>
-endif
-
 if s:IsPlugged('vaffle.vim')
     " cocopon/vaffle.vim
     nnoremap <silent> <Leader>e  :Vaffle<CR>
     nnoremap <silent> <Leader>bf :Vaffle <C-r>=expand("%:p:h")<CR><CR>
 endif
 
-if s:IsPlugged('denite.nvim')
-    " Shougo/denite.nvim
-    call denite#custom#option('_', {
-                \ 'prompt':                  '>',
-                \ 'empty':                   v:false,
-                \ 'winheight':               16,
-                \ 'auto_accel':              v:true,
-                \ 'auto_resize':             v:true,
-                \ 'highlight_matched_char':  'None',
-                \ 'highlight_matched_range': 'None',
-                \ })
+if s:IsPlugged('fzf')
+    " junegunn/fzf and junegunn/fzf.vim
+    nnoremap <silent> <Leader>gg :Ag! <C-r><C-w><CR>
+    xnoremap <silent> <Leader>gg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
 
-    if executable('rg')
-        call denite#custom#var('file/rec', 'command', [ 'rg', '--color=never', '--no-ignore-vcs', '--hidden', '--files' ])
-        call denite#custom#var('grep', 'command', [ 'rg', '--threads', '1' ])
-        call denite#custom#var('grep', 'default_opts', [ '--no-heading', '--hidden', '--vimgrep', '--smart-case' ])
-        call denite#custom#var('grep', 'recursive_opts', [])
-        call denite#custom#var('grep', 'pattern_opt', [ '--regexp' ])
-        call denite#custom#var('grep', 'separator', [ '--' ])
-        call denite#custom#var('grep', 'final_opts', [])
-    elseif executable('ag')
-        call denite#custom#var('file/rec', 'command', [ 'ag', '--nocolor', '--skip-vcs-ignores', '--hidden', '-l', '-g', '' ])
-        call denite#custom#var('grep', 'command', [ 'ag' ])
-        call denite#custom#var('grep', 'default_opts', [ '--hidden', '--vimgrep', '--smart-case' ])
-        call denite#custom#var('grep', 'recursive_opts', [])
-        call denite#custom#var('grep', 'pattern_opt', [])
-        call denite#custom#var('grep', 'separator', [ '--' ])
-        call denite#custom#var('grep', 'final_opts', [])
-    elseif executable('fd')
-        call denite#custom#var('file/rec', 'command', [ 'fd', '--color=never', '--no-ignore-vcs', '--hidden', '--type', 'file' ])
-    endif
+    nnoremap <silent> <Leader>f :Files<CR>
+    nnoremap          <Leader>F :Files<Space>
+    nnoremap <silent> <C-p>     :PFiles<CR>
+    nnoremap <silent> <Leader>p :PFiles<CR>
+    nnoremap <silent> <Leader>o :Buffers<CR>
+    nnoremap <silent> <Leader>O :History<CR>
+    nnoremap <silent> <Leader>d :Files <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :Files <C-r>=expand("%:h:h")<CR><CR>
 
-    call denite#custom#source('tag', 'matchers', [ 'matcher/substring' ])
+    nnoremap <silent> <Leader>\ :Tags!<CR>
 
-    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so')
-        call denite#custom#source('file/rec', 'matchers', [ 'matcher/cpsm' ])
-    endif
-	call denite#custom#source('file/rec', 'sorters', [ 'sorter/sublime' ])
+    nnoremap <silent> <Leader>b  :Buffers<CR>
+    nnoremap <silent> <Leader>bb :Buffers<CR>
+    nnoremap <silent> <Leader>bl :BLines<CR>
+    nnoremap <silent> <Leader>bt :BTags<CR>
+    nnoremap <silent> <Leader>bo :BOutline<CR>
 
-    call denite#custom#source('file_mru', 'matchers', [ 'matcher/fuzzy', 'matcher/project_files' ])
-    call denite#custom#source('file_mru', 'converters', [ 'converter/relative_word' ])
+    nnoremap <silent> <Leader>; :Commands<CR>
+    nnoremap <silent> <Leader>: :History:<CR>
+    nnoremap <silent> <Leader>/ :History/<CR>
 
-    call denite#custom#map(
-                \ 'insert',
-                \ '<C-j>',
-                \ '<denite:move_to_next_line>',
-                \ 'noremap'
-                \)
+    nnoremap <silent> <Leader>q :cclose<CR>:Quickfix<CR>
+    nnoremap <silent> <Leader>l :lclose<CR>:LocationList<CR>
 
-    call denite#custom#map(
-                \ 'insert',
-                \ '<C-k>',
-                \ '<denite:move_to_previous_line>',
-                \ 'noremap'
-                \)
-
-    command! -nargs=? -complete=dir DeniteFilesInFolder Denite -buffer-name=files-in-folder file_rec:<args> file:new:<args>
-
-    nmap <Leader><Leader> <Leader>f
-
-    nnoremap <silent> <Leader>f :Denite -resume -input= -buffer-name=files file/rec file:new<CR>
-    nnoremap          <Leader>F :DeniteFilesInFolder<Space>
-    nnoremap <silent> <C-p>     :DeniteProjectDir -resume -input= -buffer-name=project file/rec file:new<CR>
-    nnoremap <silent> <Leader>p :DeniteProjectDir -resume -input= -buffer-name=project file/rec file:new<CR>
-    nnoremap <silent> <Leader>o :Denite -buffer-name=buffers buffer<CR>
-    nnoremap <silent> <Leader>d :DeniteFilesInFolder <C-r>=expand("%:h")<CR><CR>
-    nnoremap <silent> <Leader>D :DeniteFilesInFolder <C-r>=expand("%:h:h")<CR><CR>
-
-    nnoremap <silent> <Leader>\ :Denite -resume -input= -buffer-name=tags tag<CR>
-
-    " Buffer-related mappings
-    nnoremap <silent> <Leader>b  :Denite -buffer-name=buffers buffer<CR>
-    nnoremap <silent> <Leader>bb :Denite -buffer-name=buffers buffer<CR>
-    nmap              <Leader>bh <Leader>d
-    nmap              <Leader>bp <Leader>p
-    nnoremap <silent> <Leader>bl :Denite -buffer-name=lines line<CR>
-
-    nnoremap <silent> <Leader><Tab> :Denite -buffer-name=buffers buffer<CR>
-
-    nnoremap <silent> <Leader>bo :Denite -buffer-name=outline outline<CR>
-
-    nnoremap <silent> <Leader>; :Denite -buffer-name=commands command<CR>
-    nnoremap <silent> <Leader>: :Denite -buffer-name=command-history command_history<CR>
-
-    nnoremap <silent> <Leader>y :Denite -buffer-name=registers register<CR>
-
-    " neoclide/denite-extra
-    nnoremap <silent> <Leader>O :Denite -buffer-name=mru file_mru<CR>
-    nnoremap <silent> <Leader>/ :Denite -buffer-name=search-history history<CR>
-
-    " Shougo/neoinclude.vim
-    nnoremap <silent> <Leader>bt :Denite -buffer-name=outline tag:include<CR>
+    nnoremap <silent> <Leader>st :Tags! <C-r><C-w><CR>
+    vnoremap <silent> <Leader>st <Esc>:Tags! <C-r>=GetSelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('LeaderF')
@@ -1650,33 +1470,9 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
 endif
 
-if s:IsPlugged('fzf')
-    " junegunn/fzf and junegunn/fzf.vim
-    nnoremap <silent> <Leader>gg :Ag! <C-r><C-w><CR>
-    xnoremap <silent> <Leader>gg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
-
-    nnoremap <silent> <Leader>f :Files<CR>
-    nnoremap          <Leader>F :Files<Space>
-    nnoremap <silent> <Leader>p :PFiles<CR>
-    nnoremap <silent> <Leader>o :Buffers<CR>
-    nnoremap <silent> <Leader>O :History<CR>
-    nnoremap <silent> <Leader>d :Files <C-r>=expand("%:h")<CR><CR>
-    nnoremap <silent> <Leader>D :Files <C-r>=expand("%:h:h")<CR><CR>
-
-    nnoremap <silent> <Leader>\ :Tags!<CR>
-
-    nnoremap <silent> <Leader>b  :Buffers<CR>
-    nnoremap <silent> <Leader>bb :Buffers<CR>
-    nnoremap <silent> <Leader>bl :BLines<CR>
-    nnoremap <silent> <Leader>bt :BTags<CR>
-
-    nnoremap <silent> <Leader>; :Commands<CR>
-    nnoremap <silent> <Leader>: :History:<CR>
-    nnoremap <silent> <Leader>/ :History/<CR>
-
-    nnoremap <silent> <Leader>st :Tags! <C-r><C-w><CR>
-    vnoremap <silent> <Leader>st <Esc>:Tags! <C-r>=GetSelectedText()<CR><CR>
-endif
+function! ExpandSnippet() abort
+    return ''
+endfunction
 
 if s:IsPlugged('ultisnips')
     " SirVer/ultisnips
@@ -1686,6 +1482,14 @@ if s:IsPlugged('ultisnips')
 
     function! IsExpandableUltiSnips() abort
         return !empty(UltiSnips#SnippetsInCurrentScope())
+    endfunction
+
+    function! ExpandSnippet() abort
+        if IsExpandableUltiSnips()
+            return "\<Plug>(ultisnips_expand)"
+        endif
+
+        return ''
     endfunction
 
     inoremap <silent> <expr> <Plug>(ultisnips_expand) UltiSnips#ExpandSnippet()
@@ -1724,46 +1528,8 @@ if s:IsPlugged('neosnippet.vim')
     imap <C-j> <Plug>(neosnippet_jump)
     smap <C-j> <Plug>(neosnippet_jump)
     smap <Tab> <Plug>(neosnippet_jump)
-endif
 
-if s:IsPlugged('vim-snipmate')
-    " garbas/vim-snipmate
-    let g:snipMate = get(g:, 'snipMate', {})
-    let g:snips_no_mappings = 1
-    let g:snipMate.scope_aliases = {}
-    let g:snipMate.scope_aliases['ruby'] = 'ruby,rails'
-
-    function! s:SnipMateExpand() abort
-        if snipMate#CanBeTriggered()
-            return "\<Plug>snipMateTrigger"
-        endif
-
-        if pumvisible()
-            return "\<C-e>"
-        endif
-
-        return "\<C-g>"
-    endfunction
-
-    imap <silent> <expr> <C-g>      <SID>SnipMateExpand()
-    xmap                 <C-g>      <Plug>snipMateVisual
-    imap                 <C-j>      <Plug>snipMateNextOrTrigger
-    smap                 <C-j>      <Plug>snipMateNextOrTrigger
-    imap                 <C-z>      <Plug>snipMateBack
-    smap                 <C-z>      <Plug>snipMateBack
-    imap                 <C-r><Tab> <Plug>snipMateShow
-endif
-
-function! ExpandSnippet() abort
-    if s:IsPlugged('ultisnips') && IsExpandableUltiSnips()
-        return "\<Plug>(ultisnips_expand)"
-    endif
-
-    if s:IsPlugged('snipmate') && snipMate#CanBeTriggered()
-        return "\<Plug>snipMateTrigger"
-    endif
-
-    if s:IsPlugged('neosnippet')
+    function! ExpandSnippet() abort
         if neosnippet#jumpable()
             return "\<Plug>(neosnippet_jump)"
         endif
@@ -1771,10 +1537,10 @@ function! ExpandSnippet() abort
         if neosnippet#expandable()
             return "\<Plug>(neosnippet_expand)"
         endif
-    endif
 
-    return ''
-endfunction
+        return ''
+    endfunction
+endif
 
 if s:IsPlugged('deoplete.nvim')
     " Shougo/deoplete.nvim
@@ -1848,7 +1614,7 @@ if s:IsPlugged('deoplete.nvim')
 endif
 
 if s:IsPlugged('deoplete-clang')
-    " zchee/deoplete-clang
+    " deoplete-plugins/deoplete-clang
     let g:deoplete#ignore_sources.c            = ['buffer', 'dictionary', 'file', 'member', 'omni', 'tag', 'syntax']
     let g:deoplete#ignore_sources.cpp          = g:deoplete#ignore_sources.c
     let g:deoplete#ignore_sources.objc         = g:deoplete#ignore_sources.c
@@ -1858,7 +1624,7 @@ if s:IsPlugged('deoplete-clang')
 endif
 
 if s:IsPlugged('deoplete-go')
-    " zchee/deoplete-go
+    " deoplete-plugins/deoplete-go
     let g:deoplete#ignore_sources.go            = ['buffer', 'dictionary', 'file', 'member', 'omni', 'tag', 'syntax']
     let g:deoplete#sources#go#sort_class        = ['package', 'func', 'type', 'var', 'const']
     let g:deoplete#sources#go#use_cache         = 1
@@ -1867,135 +1633,21 @@ if s:IsPlugged('deoplete-go')
     " let g:deoplete#sources#go#cgo#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
 endif
 
-if s:IsPlugged('ncm2')
-    " ncm2/ncm2
-    let g:ncm2#auto_popup = g:zero_vim_autocomplete
-
-    set completeopt=noinsert,menuone,noselect
-    set shortmess+=c
-
-    " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
-    " inoremap <C-c> <ESC>
-
-    " Trigger complete manually
-    inoremap <silent> <expr> <C-_> "<C-r>=completor#do('complete')<CR>"
-
-    " <CR>: close popup and insert newline
-    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-
-    " <Tab>: completion
-    function! s:CheckBackSpace() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1] =~ '\s'
-    endfunction
-
-    function! s:CleverTab() abort
-        if pumvisible()
-            return "\<C-n>"
-        endif
-
-        if s:CheckBackSpace()
-            return "\<Tab>"
-        endif
-
-        return "\<C-r>=ncm2#_on_complete(1)\<CR>" 
-    endfunction
-
-    inoremap <silent> <expr> <Tab> <SID>CleverTab()
-
-    " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-    " Manual Complete
-    imap <C-_> <Plug>(ncm2_manual_trigger)
-endif
-
-if s:IsPlugged('asyncomplete.vim')
-    " prabirshrestha/asyncomplete.vim
-    let g:asyncomplete_auto_popup = g:zero_vim_autocomplete
-
-    " Show autocomplete popup manually
-    imap <C-_> <Plug>(asyncomplete_force_refresh)
-
-    " <CR>: close popup and insert newline
-    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-
-    " <Tab>: completion
-    function! s:CheckBackSpace() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1] =~ '\s'
-    endfunction
-
-    function! s:CleverTab() abort
-        if pumvisible()
-            return "\<C-n>"
-        endif
-
-        if s:CheckBackSpace()
-            return "\<Tab>"
-        endif
-
-        return asyncomplete#force_refresh()
-    endfunction
-
-    inoremap <silent> <expr> <Tab> <SID>CleverTab()
-
-    " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-    " prabirshrestha/asyncomplete-buffer.vim
-    call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-                \ 'name':      'buffer',
-                \ 'whitelist': ['*'],
-                \ 'blacklist': ['go'],
-                \ 'completor': function('asyncomplete#sources#buffer#completor'),
-                \ }))
-
-    " yami-beta/asyncomplete-omni.vim
-    call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-                \ 'name':      'omni',
-                \ 'whitelist': ['*'],
-                \ 'completor': function('asyncomplete#sources#omni#completor')
-                \ }))
-
-    if s:IsPlugged('asyncomplete-neosnippet.vim')
-        call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-                    \ 'name':      'neosnippet',
-                    \ 'whitelist': ['*'],
-                    \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-                    \ }))
+if s:IsPlugged('YouCompleteMe')
+    " ycm-core/YouCompleteMe
+    if s:python3 && executable('python3')
+        let g:ycm_server_python_interprete = 'python3'
     endif
-
-    if s:IsPlugged('asyncomplete-ultisnips.vim')
-        call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-                    \ 'name':      'ultisnips',
-                    \ 'whitelist': ['*'],
-                    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-                    \ }))
-    endif
-
-    if s:IsPlugged('asyncomplete-gocode.vim')
-        call asyncomplete#register_source(asyncomplete#sources#gocode#get_source_options({
-                    \ 'name':      'gocode',
-                    \ 'whitelist': ['go'],
-                    \ 'completor': function('asyncomplete#sources#gocode#completor'),
-                    \ 'config':    {
-                    \   'gocode_path': 'gocode'
-                    \ },
-                    \ }))
-    endif
-
-    if s:IsPlugged('asyncomplete-flow.vim')
-        autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#flow#get_source_options({
-                    \ 'name':      'flow',
-                    \ 'whitelist': ['javascript'],
-                    \ 'completor': function('asyncomplete#sources#flow#completor'),
-                    \ 'config':    {
-                    \   'prefer_local': 1,
-                    \   'flowbin_path': 'flow'
-                    \ },
-                    \ }))
-    endif
+    let g:ycm_auto_trigger                        = g:zero_vim_autocomplete
+    let g:ycm_confirm_extra_conf                  = 0
+    let g:ycm_complete_in_comments_and_strings    = 1
+    let g:ycm_always_populate_location_list       = 1
+    let g:ycm_collect_identifiers_from_tags_files = 1
+    let g:ycm_use_ultisnips_completer             = 1
+    let g:ycm_key_detailed_diagnostics            = ''
+    let g:ycm_extra_conf_vim_data                 = ['&filetype']
+    let g:ycm_global_ycm_extra_conf               = filereadable(expand('~/.ycm_extra_conf.py')) ? expand('~/.ycm_extra_conf') : ''
+    let g:ycm_filetype_blacklist                  = { 'unite': 1, 'ctrlp': 1, 'tagbar' : 1, 'qf': 1, 'nerdtree': 1 }
 endif
 
 if s:IsPlugged('completor.vim')
@@ -2030,28 +1682,6 @@ if s:IsPlugged('completor.vim')
 
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-endif
-
-if s:IsPlugged('YouCompleteMe')
-    " Valloric/YouCompleteMe
-    if s:python3 && executable('python3')
-        let g:ycm_server_python_interprete = 'python3'
-    endif
-    let g:ycm_auto_trigger                        = g:zero_vim_autocomplete
-    let g:ycm_confirm_extra_conf                  = 0
-    let g:ycm_complete_in_comments_and_strings    = 1
-    let g:ycm_always_populate_location_list       = 1
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    let g:ycm_use_ultisnips_completer             = 1
-    let g:ycm_key_detailed_diagnostics            = ''
-    let g:ycm_extra_conf_vim_data                 = ['&filetype']
-    let g:ycm_global_ycm_extra_conf               = filereadable(expand('~/.ycm_extra_conf.py')) ? expand('~/.ycm_extra_conf') : ''
-    let g:ycm_filetype_blacklist                  = { 'unite': 1, 'ctrlp': 1, 'tagbar' : 1, 'qf': 1, 'nerdtree': 1 }
-endif
-
-if s:IsPlugged('supertab')
-    " ervandew/supertab
-    let g:SuperTabDefaultCompletionType = 'context'
 endif
 
 if s:IsPlugged('vim-startify')
@@ -2116,8 +1746,10 @@ if s:IsPlugged('goyo.vim')
         endfor
     endfunction
 
-    autocmd! User GoyoEnter nested call <SID>OnGoyoEnter()
-    autocmd! User GoyoLeave nested call <SID>OnGoyoLeave()
+    augroup MyAutoCmd
+        autocmd! User GoyoEnter nested call <SID>OnGoyoEnter()
+        autocmd! User GoyoLeave nested call <SID>OnGoyoLeave()
+    augroup END
 endif
 
 if s:IsPlugged('limelight.vim')
@@ -2134,43 +1766,6 @@ if s:IsPlugged('limelight.vim')
 
     nmap gz <Plug>(Limelight)
     xmap gz <Plug>(Limelight)
-endif
-
-if s:IsPlugged('ale')
-    " w0rp/ale
-    let g:ale_lint_on_filetype_changed = g:zero_vim_autolint
-    let g:ale_lint_on_text_changed     = 'never'
-    let g:ale_lint_on_enter            = g:zero_vim_autolint
-    let g:ale_lint_on_save             = g:zero_vim_autolint
-    let g:ale_set_loclist              = 1
-    let g:ale_set_quickfix             = 0
-    let g:ale_list_window_size         = 5
-    let g:ale_keep_list_window_open    = 0
-    let g:ale_open_list                = 0
-    let g:ale_fix_on_save              = g:zero_vim_autofix
-
-    let g:ale_sign_error   = '●' " •
-    let g:ale_sign_warning = '.'
-
-    let g:ale_linters = {}
-    let g:ale_fixers  = {}
-
-    function! s:ale_add_program(dict, filetype, program) abort
-        if executable(a:program)
-            let programs = get(a:dict, a:filetype, [])
-            call add(programs, a:program)
-            let a:dict[a:filetype] = programs
-        endif
-    endfunction
-
-    call s:ale_add_program(g:ale_linters, 'javascript', 'eslint')
-    call s:ale_add_program(g:ale_fixers, 'javascript', 'eslint')
-    call s:ale_add_program(g:ale_linters, 'ruby', 'rubocop')
-
-    let g:ale_linter_aliases = { 'javascript.jsx': 'javascript', 'jsx': 'javascript' }
-
-    nnoremap <silent> <Leader>bc :ALELint<CR>
-    nnoremap <silent> <Leader>bC :ALEFix<CR>
 endif
 
 if s:IsPlugged('syntastic')
@@ -2210,6 +1805,44 @@ if s:IsPlugged('syntastic')
     nnoremap <silent> <Leader>bc :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 endif
 
+if s:IsPlugged('ale')
+    " dense-analysis/ale
+    let g:ale_lint_on_text_changed     = 0
+    let g:ale_lint_on_insert_leave     = 0
+    let g:ale_lint_on_enter            = g:zero_vim_autolint
+    let g:ale_lint_on_save             = g:zero_vim_autolint
+    let g:ale_lint_on_filetype_changed = g:zero_vim_autolint
+    let g:ale_set_loclist              = 1
+    let g:ale_set_quickfix             = 0
+    let g:ale_list_window_size         = 5
+    let g:ale_keep_list_window_open    = 0
+    let g:ale_open_list                = 0
+    let g:ale_fix_on_save              = g:zero_vim_autofix
+
+    let g:ale_sign_error   = '●' " •
+    let g:ale_sign_warning = '.'
+
+    let g:ale_linters = {}
+    let g:ale_fixers  = {}
+
+    function! s:ale_add_program(dict, filetype, program) abort
+        if executable(a:program)
+            let programs = get(a:dict, a:filetype, [])
+            call add(programs, a:program)
+            let a:dict[a:filetype] = programs
+        endif
+    endfunction
+
+    call s:ale_add_program(g:ale_linters, 'javascript', 'eslint')
+    call s:ale_add_program(g:ale_fixers, 'javascript', 'eslint')
+    call s:ale_add_program(g:ale_linters, 'ruby', 'rubocop')
+
+    let g:ale_linter_aliases = { 'javascript.jsx': 'javascript', 'jsx': 'javascript' }
+
+    nnoremap <silent> <Leader>bc :ALELint<CR>
+    nnoremap <silent> <Leader>bC :ALEFix<CR>
+endif
+
 if s:IsPlugged('vim-autoformat')
     " Chiel92/vim-autoformat
     let g:autoformat_autoindent             = 0
@@ -2221,16 +1854,6 @@ if s:IsPlugged('vim-autoformat')
     vnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
 endif
 
-if s:IsPlugged('vim-clang-format')
-    " rhysd/vim-clang-format
-    " Disable ClangFormat command and settings from justmao945/vim-clang
-    let g:clang_enable_format_command = 0
-    let g:clang_format_auto           = 0
-
-    nnoremap <silent> <Leader>cf :ClangFormat<CR>:update<CR>
-    vnoremap <silent> <Leader>cf :ClangFormat<CR>:update<CR>
-endif
-
 if s:IsPlugged('vim-prettier')
     " prettier/vim-prettier
     let g:prettier#autoformat = 0
@@ -2240,8 +1863,8 @@ endif
 
 if s:IsPlugged('vim-gutentags')
     " ludovicchabant/vim-gutentags
-    " Enable gtags module
-    let g:gutentags_modules = ['ctags', 'gtags_cscope']
+    " Enable only ctags module
+    let g:gutentags_modules = ['ctags']
 
     " Generate datebases in my cache directory, prevent gtags files polluting my project
     let g:gutentags_cache_dir = expand('~/.cache/tags')
@@ -2252,7 +1875,19 @@ if s:IsPlugged('vim-gutentags')
     " Prevent gutentags adding gtags databases
     let g:gutentags_auto_add_gtags_cscope = 0
 
+    " Define advanced commands
+    let g:gutentags_define_advanced_commands = 1
+endif
+
+if s:IsPlugged('gutentags_plus')
     " skywind3000/gutentags_plus
+    " Enable gtags module
+    let g:gutentags_modules = ['ctags', 'gtags_cscope']
+
+    " Auto add the generated code database
+    let g:gutentags_auto_add_gtags_cscope = 1
+
+    " No default mapping
     let g:gutentags_plus_nomap = 1
 
     noremap <silent> <C-\>s :GscopeFind s <C-r><C-w><CR>
@@ -2504,6 +2139,27 @@ if s:IsPlugged('gv.vim')
     nnoremap <silent> <Leader>gk :GV<CR>
     nnoremap <silent> <Leader>gK :GV!<CR>
     nnoremap <silent> <Leader>gv :GV?<CR>
+endif
+
+if s:IsPlugged('committia.vim')
+    " rhysd/committia.vim
+    let g:committia_hooks = {}
+
+    function! g:committia_hooks.edit_open(info)
+        " Additional settings
+        setlocal spell
+
+        " " If no commit message, start with insert mode
+        " if a:info.vcs ==# 'git' && getline(1) ==# ''
+        "     startinsert
+        " endif
+
+        " Scroll the diff window
+        nmap <buffer> <C-f> <Plug>(committia-scroll-diff-down-page)
+        nmap <buffer> <C-b> <Plug>(committia-scroll-diff-up-page)
+        nmap <buffer> <C-d> <Plug>(committia-scroll-diff-down-half)
+        nmap <buffer> <C-u> <Plug>(committia-scroll-diff-up-half)
+    endfunction
 endif
 
 if s:IsPlugged('vim-gitgutter')
