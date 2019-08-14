@@ -86,14 +86,15 @@ augroup MyAutoCmd
 augroup END
 
 " Default zero settings
-let g:zero_vim_true_color        = 0
-let g:zero_vim_solarized         = 0
-let g:zero_vim_autocomplete      = 1
-let g:zero_vim_autolint          = 0
-let g:zero_vim_autofix           = 0
-let g:zero_vim_git_gutter        = 1
-let g:zero_vim_indent_char       = '┊'
-let g:zero_vim_indent_first_char = '│'
+let g:zero_vim_true_color         = 0
+let g:zero_vim_solarized          = 0
+let g:zero_vim_autocomplete       = 1
+let g:zero_vim_autolint           = 0
+let g:zero_vim_autofix            = 0
+let g:zero_vim_git_gutter         = 1
+let g:zero_vim_grepper_ignore_vcs = 0
+let g:zero_vim_indent_char        = '┊'
+let g:zero_vim_indent_first_char  = '│'
 
 " Find .init.vim.before from current folder up to root.
 " If found, source it
@@ -1054,6 +1055,14 @@ if s:IsPlugged('vim-grepper')
                 \ 'stop':                2000,
                 \ }
 
+    if g:zero_vim_grepper_ignore_vcs
+        augroup MyAutoCmd
+            autocmd VimEnter *
+                        \ let g:grepper.rg.grepprg .= ' --no-ignore-vcs'    |
+                        \ let g:grepper.ag.grepprg .= ' --skip-vcs-ignores'
+        augroup END
+    endif
+
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
     command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
 
@@ -1476,7 +1485,7 @@ endfunction
 
 if s:IsPlugged('ultisnips')
     " SirVer/ultisnips
-    let g:UltiSnipsExpandTrigger       = '<C-g>'
+    let g:UltiSnipsExpandTrigger       = '<C-k>'
     let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
     let g:UltiSnipsJumpBackwardTrigger = '<C-z>'
 
@@ -1518,12 +1527,12 @@ if s:IsPlugged('neosnippet.vim')
             return "\<C-e>"
         endif
 
-        return "\<C-g>"
+        return "\<C-j>"
     endfunction
 
-    imap <silent> <expr> <C-g> <SID>NeoSnippetExpand()
-    smap                 <C-g> <Plug>(neosnippet_expand_or_jump)
-    xmap                 <C-g> <Plug>(neosnippet_expand_target)
+    imap <silent> <expr> <C-k> <SID>NeoSnippetExpand()
+    smap                 <C-k> <Plug>(neosnippet_expand_or_jump)
+    xmap                 <C-k> <Plug>(neosnippet_expand_target)
 
     imap <C-j> <Plug>(neosnippet_jump)
     smap <C-j> <Plug>(neosnippet_jump)
