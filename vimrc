@@ -1049,8 +1049,8 @@ let g:nrrw_rgn_resize_window = 'relative'
 let g:nrrw_rgn_rel_min       = 50
 let g:nrrw_rgn_rel_max       = 50
 
-nmap <unique> <Leader>bn <Plug>NrrwrgnDo
-xmap <unique> <Leader>bn <Plug>NrrwrgnDo
+nmap <Leader>bn <Plug>NrrwrgnDo
+xmap <Leader>bn <Plug>NrrwrgnDo
 
 nmap <Leader>n <Leader>bn
 xmap <Leader>n <Leader>bn
@@ -1071,21 +1071,23 @@ let g:qfenter_keymap.topen = ['<C-t>']
 
 if s:IsPlugged('vim-grepper')
     " mhinz/vim-grepper
-    let g:grepper = {
+    let g:default_grepper_options = {
                 \ 'open':                1,
                 \ 'switch':              1,
                 \ 'jump':                0,
                 \ 'prompt_mapping_tool': '<C-\>',
-                \ 'tools':               ['rg', 'ag', 'git', 'ack', 'grep', 'findstr'],
+                \ 'tools':               ['rg', 'ag', 'git', 'grep', 'findstr'],
                 \ 'stop':                2000,
                 \ }
 
     if g:zero_vim_grepper_ignore_vcs
-        augroup MyAutoCmd
-            autocmd VimEnter *
-                        \ let g:grepper.rg.grepprg .= ' --no-ignore-vcs'    |
-                        \ let g:grepper.ag.grepprg .= ' --skip-vcs-ignores'
-        augroup END
+        runtime plugin/grepper.vim
+
+        call extend(g:grepper, g:default_grepper_options)
+        let g:grepper.rg.grepprg .= ' --no-ignore-vcs' 
+        let g:grepper.ag.grepprg .= ' --skip-vcs-ignores'
+    else
+        let g:grepper = copy(g:default_grepper_options)
     endif
 
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
@@ -1324,6 +1326,8 @@ if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
     nnoremap <silent> <Leader>gg :Ag! <C-r><C-w><CR>
     xnoremap <silent> <Leader>gg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
+
+    nmap <Leader><Leader> <Leader>f
 
     nnoremap <silent> <Leader>f :Files!<CR>
     nnoremap          <Leader>F :Files!<Space>
