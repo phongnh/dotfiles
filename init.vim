@@ -86,15 +86,16 @@ augroup MyAutoCmd
 augroup END
 
 " Default zero settings
-let g:zero_vim_true_color         = 0
-let g:zero_vim_solarized          = 0
-let g:zero_vim_autocomplete       = 1
-let g:zero_vim_autolint           = 0
-let g:zero_vim_autofix            = 0
-let g:zero_vim_git_gutter         = 1
-let g:zero_vim_grepper_ignore_vcs = 0
-let g:zero_vim_indent_char        = '┊'
-let g:zero_vim_indent_first_char  = '│'
+let g:zero_vim_true_color        = 0
+let g:zero_vim_solarized         = 0
+let g:zero_vim_autocomplete      = 1
+let g:zero_vim_autolint          = 0
+let g:zero_vim_autofix           = 0
+let g:zero_vim_git_gutter        = 1
+let g:zero_vim_grep_ignore_vcs   = 0
+let g:zero_vim_find_tool         = 'rg'
+let g:zero_vim_indent_char       = '┊'
+let g:zero_vim_indent_first_char = '│'
 
 " Find .init.vim.before from current folder up to root.
 " If found, source it
@@ -965,6 +966,8 @@ let g:dispatch_quickfix_height = 10
 let g:dispatch_tmux_height     = 1
 
 " phongnh/vim-helpers
+let g:grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
+
 nnoremap          <Leader>G  :Grep<Space>
 nnoremap          <Leader>S  :Grep<Space>
 nnoremap <silent> <Leader>ss :GrepCword<CR>
@@ -1055,7 +1058,7 @@ if s:IsPlugged('vim-grepper')
                 \ 'stop':                2000,
                 \ }
 
-    if g:zero_vim_grepper_ignore_vcs
+    if g:zero_vim_grep_ignore_vcs
         runtime plugin/grepper.vim
 
         call extend(g:grepper, g:default_grepper_options)
@@ -1291,6 +1294,8 @@ endif
 
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
+    let g:fzf_find_tool = g:zero_vim_find_tool
+
     nnoremap <silent> <Leader>gg :Ag! <C-r><C-w><CR>
     xnoremap <silent> <Leader>gg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
 
@@ -1338,12 +1343,25 @@ if s:IsPlugged('LeaderF')
     " let g:Lf_NoChdir              = 1
     let g:Lf_WorkingDirectoryMode = 'c'
 
-    if executable('rg')
-        let g:Lf_ExternalCommand = 'rg %s --color=never --no-ignore-vcs --hidden --files'
-    elseif executable('ag')
-        let g:Lf_ExternalCommand = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
-    elseif executable('fd')
+    if g:zero_vim_find_tool == 'fd' && executable('fd')
         let g:Lf_ExternalCommand = 'fd --color=never --no-ignore-vcs --hidden --type file . %s'
+    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
+        let g:Lf_ExternalCommand = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
+    elseif executable('rg')
+        let g:Lf_ExternalCommand = 'rg %s --color=never --no-ignore-vcs --hidden --files'
+    endif
+
+    let g:Lf_StlColorscheme = 'powerline'
+
+    let g:Lf_RgConfig = [
+                \ '-H',
+                \ '--no-heading',
+                \ '--hidden',
+                \ '--vimgrep',
+                \ '--smart-case'
+                \ ]
+    if g:zero_vim_grep_ignore_vcs
+        call add(g:Lf_RgConfig, '--no-ignore-vcs')
     endif
 
     " These options are passed to external tools (rg, ag and pt, ...)
@@ -1412,6 +1430,9 @@ if s:IsPlugged('LeaderF')
 
     nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
     nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
+
+    nnoremap <silent> <Leader>si :LeaderfRgInteractive<CR>
+    nnoremap <silent> <Leader>sa :LeaderfRgRecall<CR>
 endif
 
 if s:IsPlugged('ctrlp.vim')
