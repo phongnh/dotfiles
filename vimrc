@@ -1189,17 +1189,7 @@ let g:AutoPairsShortcutBackInsert = ''
 let g:AutoPairsMoveCharacter      = ''
 
 " terryma/vim-multiple-cursors
-if s:IsPlugged('neocomplete')
-    " Called once right before you start selecting multiple cursors
-    function! Multiple_cursors_before() abort
-        silent! NeoCompleteLock
-    endfunction
-
-    " Called once only when the multiple selection is cancelled (default <Esc>)
-    function! Multiple_cursors_after() abort
-        silent! NeoCompleteUnlock
-    endfunction
-elseif s:IsPlugged('deoplete')
+if s:IsPlugged('deoplete')
     function! Multiple_cursors_before() abort
         if deoplete#is_enabled()
             call deoplete#disable()
