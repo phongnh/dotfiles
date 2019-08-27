@@ -1,0 +1,75 @@
+let g:zero_vim_groups = [
+            \ 'grep',
+            \ 'nerdtree',
+            \ 'fzf',
+            \ 'ultisnips',
+            \ 'coc',
+            \ 'airline',
+            \ 'distraction-free',
+            \ 'startify',
+            \ 'lint',
+            \ 'format',
+            \ 'ctags',
+            \ 'tagbar',
+            \ 'undo',
+            \ 'indent',
+            \ 'ruby',
+            \ 'web',
+            \ 'go',
+            \ 'git',
+            \ 'gitgutter',
+            \ 'diff-enhanced',
+            \ ]
+
+let g:airline_powerline        = 1
+let g:lightline_powerline      = 1
+let g:zero_vim_autocomplete    = 1
+let g:zero_vim_autolint        = 1
+let g:zero_vim_git_gutter      = 0
+let g:zero_vim_grep_ignore_vcs = 0
+let g:zero_vim_find_tool       = 'fd'
+
+if $ITERM_PROFILE ==? 'Solarized Dark'
+    let g:zero_vim_true_color  = 1
+    let g:zero_vim_solarized   = 1
+    let g:zero_vim_background  = 'dark'
+    let g:zero_vim_colorscheme = 'solarized8'
+    " let g:zero_vim_colorscheme = 'selenized'
+    let g:lightline_theme      = 'solarized'
+    let g:airline_theme        = 'solarized'
+elseif $ITERM_PROFILE ==? 'Solarized Light'
+    let g:zero_vim_true_color  = 1
+    let g:zero_vim_solarized   = 1
+    let g:zero_vim_background  = 'light'
+    let g:zero_vim_colorscheme = 'solarized8'
+    " let g:zero_vim_colorscheme = 'selenized'
+    let g:lightline_theme      = 'solarized'
+    let g:airline_theme        = 'solarized'
+endif
+
+" let g:airline#extensions#tabline#show_splits = 0
+" let g:airline#extensions#tabline#show_tab_count = 0
+" let g:airline#extensions#tabline#show_tab_nr = 0
+" let g:airline#extensions#tabline#tab_nr_type     = 1
+" let g:airline#extensions#tabline#tabnr_formatter = 'tabnr'
+" let g:airline#extensions#tabline#buffer_nr_show = 0
+
+" let g:zero_vim_background  = 'dark'
+" let g:zero_vim_colorscheme = 'deep-space'
+
+" if has('gui_running') || has('nvim') 
+"     hi Normal 		guifg=#839496 guibg=#002b36
+" else
+"     " Set the terminal default background and foreground colors, thereby
+"     " improving performance by not needing to set these colors on empty cells.
+"     hi Normal guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE
+"     let &t_ti = &t_ti . "\033]10;#839496\\007\033]11;#002b36\007"
+"     let &t_te = &t_te . "\033]110\007\033]111\007"
+" endif
+
+" " Transparent Background
+" if has("termguicolors")     " set true colors  
+"     set t_8f=\[[38;2;%lu;%lu;%lum
+"     set t_8b=\[[48;2;%lu;%lu;%lum
+"     set termguicolors
+" endif

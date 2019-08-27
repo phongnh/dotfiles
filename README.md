@@ -8,7 +8,7 @@ My dotfiles for vim + tmux setup
 
     # Optional
     sudo -i
-    gem install tmuxinator rubocop --no-rdoc --no-ri
+    gem install tmuxinator rubocop --no-rdoc --no-ri --no-document
 
     # Install vim
     brew install vim
@@ -20,9 +20,9 @@ My dotfiles for vim + tmux setup
     brew tap neovim/neovim
     brew install neovim --HEAD
     pip3 install --user --upgrade pip setuptools
-    pip3 install --user --upgrade neovim
+    pip3 install --user --upgrade pynvim
     pip2 install --user --upgrade pip setuptools
-    pip2 install --user --upgrade neovim
+    pip2 install --user --upgrade pynvim
 
 ## Setup vim and nvim folder
 

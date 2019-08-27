@@ -1,0 +1,57 @@
+let g:zero_vim_groups = [
+            \ 'grep',
+            \ 'nerdtree',
+            \ 'fzf',
+            \ 'ultisnips',
+            \ 'coc',
+            \ 'airline',
+            \ 'distraction-free',
+            \ 'startify',
+            \ 'lint',
+            \ 'format',
+            \ 'ctags',
+            \ 'tagbar',
+            \ 'undo',
+            \ 'indent',
+            \ 'ruby',
+            \ 'web',
+            \ 'go',
+            \ 'git',
+            \ 'gitgutter',
+            \ 'diff-enhanced',
+            \ ]
+
+let g:airline_powerline        = 1
+let g:lightline_powerline      = 1
+let g:zero_vim_autocomplete    = 0
+let g:zero_vim_autolint        = 1
+let g:zero_vim_git_gutter      = 0
+let g:zero_vim_grep_ignore_vcs = 0
+let g:zero_vim_find_tool       = 'fd'
+
+if $ITERM_PROFILE ==? 'Solarized Dark'
+    let g:zero_vim_solarized   = 1
+    let g:zero_vim_background  = 'dark'
+    let g:zero_vim_colorscheme = 'solarized8'
+    let g:lightline_theme      = 'solarized'
+    let g:airline_theme        = 'solarized'
+elseif $ITERM_PROFILE ==? 'Solarized Light'
+    let g:zero_vim_solarized   = 1
+    let g:zero_vim_background  = 'light'
+    let g:zero_vim_colorscheme = 'solarized8'
+    let g:lightline_theme      = 'solarized'
+    let g:airline_theme        = 'solarized'
+elseif $ITERM_PROFILE ==? 'Selenized Dark'
+    let g:zero_vim_background  = 'dark'
+    let g:zero_vim_colorscheme = 'selenized'
+    let g:lightline_theme      = 'selenized_dark'
+    let g:airline_theme        = 'solarized'
+elseif $ITERM_PROFILE ==? 'Selenized Light'
+    let g:zero_vim_background  = 'light'
+    let g:zero_vim_colorscheme = 'selenized'
+    let g:lightline_theme      = 'solarized'
+    let g:airline_theme        = 'solarized'
+else
+    let g:zero_vim_colorscheme = 'gruvbox'
+    let g:lightline_theme      = 'deus'
+endif
