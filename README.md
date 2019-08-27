@@ -4,7 +4,10 @@ My dotfiles for vim + tmux setup
 
 ## Install necessary programs (Mac OS X only)
 
-    brew install tmux reattach-to-user-namespace htop ripgrep the_silver_searcher git tig urlview fpp cmake python python@2
+    # Required packages
+    brew install tmux reattach-to-user-namespace htop fpp urlview tig
+    brew install python python@2 cmake
+    brew install ripgrep the_silver_searcher fd
 
     # Optional
     sudo -i
