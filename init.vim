@@ -1095,6 +1095,13 @@ if s:IsPlugged('ctrlsf.vim')
     " dyng/ctrlsf.vim
     let g:ctrlsf_populate_qflist = 1
 
+    if g:zero_vim_grep_ignore_vcs
+        let g:ctrlsf_extra_backend_args = {
+                    \ 'rg': '--no-ignore-vcs',
+                    \ 'ag': '--skip-vcs-ignores',
+                    \ }
+    endif
+
     nmap              <Leader>sp <Plug>CtrlSFPrompt
     nmap              <Leader>sf <Plug>CtrlSFCwordExec
     vmap              <Leader>sf <Plug>CtrlSFVwordExec
