@@ -8,6 +8,9 @@ My dotfiles for vim + tmux setup
     brew install tmux reattach-to-user-namespace htop fpp urlview tig
     brew install python python@2 cmake
     brew install ripgrep the_silver_searcher fd
+    brew install global ctags
+    brew unlink ctags
+    brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
     # Optional
     sudo -i
