@@ -1911,7 +1911,7 @@ if s:IsPlugged('vim-gutentags')
     let g:gutentags_cache_dir = expand('~/.cache/tags')
 
     " Ignored file types
-    let g:gutentags_exclude_filetypes = ['html', 'xml', 'ccs', 'sass', 'sccs', 'coffee', 'less', 'eruby', 'haml', 'hamlc', 'text',  'git', 'gitcommit', 'fugitiveblame']
+    let g:gutentags_exclude_filetypes = ['html', 'xml', 'css', 'sass', 'scss', 'coffee', 'less', 'eruby', 'haml', 'hamlc', 'text',  'git', 'gitcommit', 'fugitiveblame']
 
     " Prevent gutentags adding gtags databases
     let g:gutentags_auto_add_gtags_cscope = 0
