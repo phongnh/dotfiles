@@ -619,6 +619,7 @@ call plug#end()
 " Make ESC respond faster
 set ttimeout
 set ttimeoutlen=50
+set timeoutlen=500           " Mapping delay
 
 set visualbell               " Use visual bell instead of beeping
 set t_vb=                    " Disable screen flash
@@ -787,7 +788,7 @@ inoremap <silent> <C-t> <C-v><Tab>
 
 " CTRL-L: Redraw
 if has('diff') && &diff
-    nnoremap <silent> <C-l> :nohlsearch<CR>:diffupdate<CR><C-l>
+    nnoremap <silent> <C-l> :nohlsearch <Bar> diffupdate<CR><C-l>
 else
     nnoremap <silent> <C-l> :nohlsearch<CR><C-l>
 endif
@@ -985,8 +986,8 @@ nmap              <Leader>bs <Leader>sb
 xmap              <Leader>bs <Leader>sb
 
 " vim-scripts/DeleteTrailingWhitespace
-nnoremap <silent> <Leader>bu :update<CR>:DeleteTrailingWhitespace<CR>
-vnoremap <silent> <Leader>bu :DeleteTrailingWhitespace<CR>
+nnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
+vnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
 
 " regedarek/ZoomWin
 let g:zoomwin_localoptlist = [
@@ -1136,29 +1137,8 @@ let g:surround_no_insert_mappings = 1
 
 nmap <Leader>sw ysiw
 nmap <Leader>sW ysiW
-nmap <Leader>s` ysiw`
-nmap <Leader>s' ysiw'
-nmap <Leader>s" ysiw"
-nmap <Leader>s# ysiw#
-nmap <Leader>s> ysiw>
-nmap <Leader>s[ ysiw[
-nmap <Leader>s] ysiw]
-nmap <Leader>s( ysiw(
-nmap <Leader>s) ysiw)
-nmap <Leader>s{ ysiw{
-nmap <Leader>s} ysiw}
-nmap <Leader>c' cs"'
-nmap <Leader>c" cs'"
-nmap <Leader>c[ cs][
-nmap <Leader>c] cs[]
-nmap <Leader>c( cs)(
-nmap <Leader>c) cs()
-nmap <Leader>c{ cs}{
-nmap <Leader>c} cs{}
 
 " tpope/vim-abolish
-nnoremap <Leader>ab :%Abolish<Space>
-xnoremap <Leader>ab :Abolish<Space>
 nnoremap <Leader>sv :%Subvert//gc<Left><Left><Left>
 xnoremap <Leader>sv :Subvert//gc<Left><Left><Left>
 
@@ -1303,9 +1283,6 @@ if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
     let g:fzf_find_tool = g:zero_vim_find_tool
 
-    nnoremap <silent> <Leader>gg :Ag! <C-r><C-w><CR>
-    xnoremap <silent> <Leader>gg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
-
     nmap <Leader><Leader> <Leader>f
 
     nnoremap <silent> <Leader>f :Files<CR>
@@ -1319,7 +1296,6 @@ if s:IsPlugged('fzf')
 
     nnoremap <silent> <Leader>\ :Tags!<CR>
 
-    nnoremap <silent> <Leader>b  :Buffers<CR>
     nnoremap <silent> <Leader>bb :Buffers<CR>
     nnoremap <silent> <Leader>bl :BLines<CR>
     nnoremap <silent> <Leader>bt :BTags<CR>
@@ -1334,6 +1310,9 @@ if s:IsPlugged('fzf')
 
     nnoremap <silent> <Leader>st :Tags! <C-r><C-w><CR>
     vnoremap <silent> <Leader>st <Esc>:Tags! <C-r>=GetSelectedText()<CR><CR>
+
+    nnoremap <silent> <Leader>si :Ag! <C-r><C-w><CR>
+    xnoremap <silent> <Leader>si <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('LeaderF')
@@ -1421,7 +1400,6 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>\ :LeaderfTag<CR>
 
     " Buffer-related mappings
-    nnoremap <silent> <Leader>b  :LeaderfBuffer<CR>
     nmap              <Leader>bh <Leader>d
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :LeaderfLine<CR>
@@ -1429,7 +1407,7 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>b] :LeaderfBufTagAll<CR>
     nnoremap <silent> <Leader>]  :LeaderfBufTagAll<CR>
 
-    nnoremap <silent> <Leader><Tab> :LeaderfTabBufferAll<CR>
+    nnoremap <silent> <Leader>bj :LeaderfTabBufferAll<CR>
 
     nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
     nnoremap <silent> <Leader>b[ :LeaderfFunctionAll<CR>
@@ -1437,6 +1415,8 @@ if s:IsPlugged('LeaderF')
 
     nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
     nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
+
+    nnoremap <silent> <Leader>st :LeaderfTagCword<CR>
 
     nnoremap <silent> <Leader>si :LeaderfRgInteractive<CR>
     nnoremap <silent> <Leader>sa :LeaderfRgRecall<CR>
@@ -1485,7 +1465,6 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>\ :CtrlPTag<CR>
 
     " Buffer-related mappings
-    nnoremap <silent> <Leader>b  :CtrlPBuffer<CR>
     nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
     nmap              <Leader>bh <Leader>d
     nmap              <Leader>bp <Leader>p
@@ -1495,7 +1474,7 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>]  :CtrlPBufTagAll<CR>
 
     " DavidEGx/ctrlp-smarttabs
-    nnoremap <silent> <Leader><Tab> :CtrlPSmartTabs<CR>
+    nnoremap <silent> <Leader>bj :CtrlPSmartTabs<CR>
 
     " tacahiroy/ctrlp-funky
     nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
@@ -1891,8 +1870,10 @@ if s:IsPlugged('vim-autoformat')
     let g:autoformat_remove_trailing_spaces = 0
     let g:autoformat_verbosemode            = 0
 
-    nnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
-    vnoremap <silent> <Leader>af :Autoformat<CR>:update<CR>
+    nnoremap <silent> <Leader>= :Autoformat <Bar> update<CR>
+    xnoremap <silent> <Leader>= :Autoformat <Bar> update<CR>
+    nmap     <silent> <Leader>b= <Leader>=
+    xmap     <silent> <Leader>b= <Leader>=
 endif
 
 if s:IsPlugged('vim-prettier')
