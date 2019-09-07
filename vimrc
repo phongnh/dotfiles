@@ -1088,7 +1088,7 @@ if s:IsPlugged('vim-grepper')
         runtime plugin/grepper.vim
 
         call extend(g:grepper, g:default_grepper_options)
-        let g:grepper.rg.grepprg .= ' --no-ignore-vcs' 
+        let g:grepper.rg.grepprg .= ' --no-ignore-vcs'
         let g:grepper.ag.grepprg .= ' --skip-vcs-ignores'
     else
         let g:grepper = copy(g:default_grepper_options)
@@ -1294,6 +1294,7 @@ if s:IsPlugged('nerdtree')
     nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
     noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
     nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
+    nnoremap <silent> <Leader>bg :NERDTreeVCS<CR>
 endif
 
 if s:IsPlugged('vaffle.vim')
@@ -1758,8 +1759,8 @@ if s:IsPlugged('goyo.vim')
     let g:goyo_height = '85%'
     let g:goyo_linenr = 0
 
-    nnoremap <silent> <Leader><CR> :Goyo<CR>
-    vmap              <Leader><CR> <Leader><CR>gv
+    nnoremap <silent> <Leader><Enter> :Goyo<CR>
+    vmap              <Leader><Enter> <Esc><Leader><Enter>gv
 
     function! s:OnGoyoEnter() abort
         let s:goyo_settings = {
@@ -2197,7 +2198,7 @@ if s:IsPlugged('vim-gitgutter')
     nmap [c <Plug>GitGutterPrevHunk
     nmap ]c <Plug>GitGutterNextHunk
 
-    nnoremap <silent> yog :GitGutterToggle<CR>:echo (g:gitgutter_enabled ? 'Enabled' : 'Disabled') . ' GitGutter!'<CR>
+    nnoremap <silent> yog :GitGutterToggle<CR>:echo printf('%s GitGutter!', g:gitgutter_enabled ? 'Enabled' : 'Disabled')<CR>
 endif
 
 if s:IsPlugged('vim-signify')
@@ -2209,7 +2210,7 @@ if s:IsPlugged('vim-signify')
     let g:signify_update_on_bufenter    = 0
     let g:signify_update_on_focusgained = 0
 
-    nnoremap <silent> yog :SignifyToggle<CR>:echo (get(b:, 'sy', { 'active': 0 }).active ? 'Enabled' : 'Disabled') . ' Signify on buffer!'<CR>
+    nnoremap <silent> yog :SignifyToggle<CR>echo printf('%s Signify on buffer!', get(b:, 'sy', { 'active': 0 }).active ? 'Enabled' : 'Disabled')<CR>
 endif
 
 " chrisbra/unicode.vim
