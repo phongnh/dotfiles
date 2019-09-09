@@ -632,6 +632,11 @@ Plug 'chrisbra/unicode.vim'
     endif
 " }
 
+if s:Use('which-key')
+    " Vim plugin that shows keybindings in popup
+    Plug 'liuchengxu/vim-which-key'
+endif
+
 " My default filetype settings
 Plug 'phongnh/filetype-settings.vim'
 
@@ -1120,6 +1125,16 @@ endif
 if s:IsPlugged('ctrlsf.vim')
     " dyng/ctrlsf.vim
     let g:ctrlsf_populate_qflist = 1
+    let g:ctrlsf_auto_focus = {
+                \ 'at': 'start'
+                \ }
+
+    if g:zero_vim_grep_ignore_vcs
+        let g:ctrlsf_extra_backend_args = {
+                    \ 'rg': '--no-ignore-vcs',
+                    \ 'ag': '--skip-vcs-ignores',
+                    \ }
+    endif
 
     if g:zero_vim_grep_ignore_vcs
         let g:ctrlsf_extra_backend_args = {
@@ -2299,6 +2314,199 @@ let g:nord_italic_comments = 1
 let g:ayucolor = 'light'  " for light version of theme
 let g:ayucolor = 'dark'   " for dark version of theme
 let g:ayucolor = 'mirage' " for mirage version of theme
+
+if s:IsPlugged('vim-which-key')
+    " liuchengxu/vim-which-key
+    let g:which_key_map = {
+                \ '<CR>': 'toggle-distraction-free-writing',
+                \ '=':    'auto-format-buffer',
+                \ 'n':    'open-selected-region',
+                \ 'e':    'toggle-explorer',
+                \ 'E':    'open-explorer-in-cwd',
+                \ 'z':    'toggle-hyperfocus-writing',
+                \ 'H':    'toggle-start-screen',
+                \ 'T':    'toggle-tagbar',
+                \ 'U':    'toggle-undo-tree',
+                \ 'R':    'replace-prompt',
+                \ 'G':    'search-prompt',
+                \ 'S':    'search-prompt',
+                \ 'L':    'search-location-list-prompt',
+                \ 'B':    'search-in-buffer-prompt',
+                \ 'w':    'save-buffer',
+                \ 'x':    'save-and-close-buffer',
+                \ ' ':    'files',
+                \ 'f':    'files',
+                \ 'F':    'files-prompt',
+                \ 'p':    'buffer-project',
+                \ 'o':    'opening-buffers',
+                \ 'O':    'recent-files',
+                \ 'd':    'files-in-buffer-dir',
+                \ 'D':    'files-in-parent-dir-of-buffer-dir',
+                \ '\':    'tag',
+                \ '[':    'opening-buffer-outline',
+                \ ']':    'opening-buffer-tag',
+                \ ':':    'command-history',
+                \ '/':    'search-history',
+                \ }
+
+    let g:which_key_map.a = {
+                \ 'name': '+format',
+                \ 'p':    'prettier',
+                \ }
+
+    let g:which_key_map.b = {
+                \ 'name': '+buffer',
+                \ '=':    'auto-format-buffer',
+                \ 'i':    'toggle-indent-guide',
+                \ 'v':    'toggle-rainbow',
+                \ 'c':    'check-buffer-syntax',
+                \ 'C':    'fix-buffer-syntax',
+                \ 'f':    'find-buffer-in-explorer',
+                \ 'g':    'open-buffer-project-in-explorer',
+                \ 'b':    'opening-buffer',
+                \ 'j':    'buffers-in-tab',
+                \ 'h':    'files-in-buffer-dir',
+                \ 'p':    'buffer-project',
+                \ 'a':    'buffer-alternative',
+                \ 'r':    'buffer-related',
+                \ 't':    'buffer-tag',
+                \ ']':    'opening-buffer-tag',
+                \ 'o':    'buffer-outline',
+                \ '[':    'opening-buffer-outline',
+                \ 'l':    'buffer-line',
+                \ 'e':    'reload-buffer',
+                \ 'w':    'save-buffer',
+                \ 'u':    'save-buffer-and-delete-trailing-spaces',
+                \ 'x':    'save-and-close-buffer',
+                \ 'd':    'unload-buffer',
+                \ 'q':    'unload-buffer',
+                \ 'k':    'wipeout-buffer',
+                \ '-':    'wipeout-buffer',
+                \ 's':    'search-cword-in-buffer',
+                \ 'y':    'copy-buffer-to-clipboard',
+                \ 'n':    'open-selected-region',
+                \ 'm':    'maximize-buffer',
+                \ }
+
+    let g:which_key_map.c = {
+                \ 'name': '+comment',
+                \ ' ':    'toggle-comment',
+                \ 'i':    'toggle-comment-individually',
+                \ 'c':    'comment',
+                \ 'a':    'comment-with-alternate-delimiters',
+                \ 'l':    'comment-align-left',
+                \ 'b':    'comment-align-both',
+                \ 'n':    'comment-line-nesting',
+                \ 'm':    'comment-minimal',
+                \ 's':    'comment-sexily',
+                \ '$':    'comment-from-cursor-to-eol',
+                \ 'y':    'yank-and-comment',
+                \ 'u':    'uncomment-current-line',
+                \ 'A':    'add-comment-to-eol',
+                \ }
+
+    let g:which_key_map.g = {
+                \ 'name': '+git',
+                \ 'i':    'stage-current-file-interactive',
+                \ 'a':    'stage-all-interactive',
+                \ 's':    'status',
+                \ 'd':    'diff',
+                \ 'c':    'commit',
+                \ 'b':    'blame',
+                \ 'e':    'edit-prompt',
+                \ 'r':    'reset-file',
+                \ 'w':    'save-and-stage-current-file',
+                \ 'f':    'fetch',
+                \ 'p':    'push',
+                \ 'u':    'pull-and-rebase',
+                \ 'k':    'commit-browser',
+                \ 'K':    'current-file-commit-browser',
+                \ 'v':    'current-file-revisions',
+                \ }
+
+    let g:which_key_map.m = {
+                \ 'name': '+tmuxify',
+                \ 'b':    'send-<ctrl-c>',
+                \ 'c':    'send-<ctrl-l>',
+                \ 'n':    'create-and-associate-with-pane',
+                \ 'p':    'associate-with-existing-pane',
+                \ 'q':    'close-associated-pane',
+                \ 'r':    'send-text-prompt',
+                \ 't':    'create-pane',
+                \ 'i':    'send-prompt-input',
+                \ 's':    'send-paragraph',
+                \ 'S':    'send-buffer',
+                \ 'l':    'send-line',
+                \ 'w':    'send-word',
+                \ 'a':    'resend-last-text',
+                \ 'k':    'send-key-prompt',
+                \ 'u':    'send-<q>',
+                \ 'm':    'send-<enter>',
+                \ 'd':    'send-<ctrl-d>',
+                \ }
+
+    let g:which_key_map.v = {
+                \ 'name': '+tmuxify-buffer',
+                \ 'b':    'send-<ctrl-c>',
+                \ 'c':    'send-<ctrl-l>',
+                \ 'n':    'create-and-associate-with-pane',
+                \ 'p':    'associate-with-existing-pane',
+                \ 'q':    'close-associated-pane',
+                \ 'r':    'send-text-prompt',
+                \ 't':    'create-pane',
+                \ 'i':    'send-prompt-input',
+                \ 's':    'send-paragraph',
+                \ 'S':    'send-buffer',
+                \ 'l':    'send-line',
+                \ 'w':    'send-word',
+                \ 'a':    'resend-last-text',
+                \ 'k':    'send-key-prompt',
+                \ 'u':    'send-<q>',
+                \ 'm':    'send-<enter>',
+                \ 'd':    'send-<ctrl-d>',
+                \ 'v':    'update-plugins',
+                \ }
+
+    let g:which_key_map.s = {
+                \ 'name': '+search/replace/surround',
+                \ 's':    'search-cword',
+                \ 'r':    'search-and-replace-prompt',
+                \ 'v':    'subvert-prompt',
+                \ '/':    'search-pattern-from-/',
+                \ 'l':    'search-cword-location-list',
+                \ 'b':    'search-cword-in-buffer',
+                \ 'p':    'ctrlsf-search-prompt',
+                \ 'f':    'ctrlsf-search-cword',
+                \ 'u':    'ctrlsf-search-update',
+                \ 'o':    'toogle-ctrlsf-search-result',
+                \ 't':    'search-cword-in-tag',
+                \ 'i':    'grep-interactive',
+                \ 'w':    'surround-cword',
+                \ 'W':    'surround-CWORD',
+                \ }
+
+    let g:which_key_map.t = {
+                \ 'name': '+test',
+                \ 't':    'run-all-tests-in-current-file',
+                \ 'f':    'run-test-nearest-to-current-cursor',
+                \ 'n':    'run-test-nearest-to-current-cursor',
+                \ 'l':    'run-last-test',
+                \ 's':    'run-whole-test-suite',
+                \ 'v':    'visit-test-test',
+                \ }
+
+    let g:which_key_map.r = {
+                \ 'name': '+rubocop',
+                \ }
+
+    call which_key#register('<Space>', 'g:which_key_map')
+
+    nnoremap <silent> <Leader> :<C-u>WhichKey '<Space>'<CR>
+    vnoremap <silent> <Leader> :<C-u>WhichKeyVisual '<Space>'<CR>
+
+    nnoremap <silent> <LocalLeader> :<C-u>WhichKey '\'<CR>
+    vnoremap <silent> <LocalLeader> :<C-u>WhichKeyVisual '\'<CR>
+endif
 
 call s:Source('.vimrc.local')
 
