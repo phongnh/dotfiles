@@ -1022,18 +1022,19 @@ let g:dispatch_tmux_height     = 1
 " phongnh/vim-helpers
 let g:grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
 
-nnoremap          <Leader>G  :Grep<Space>
 nnoremap          <Leader>S  :Grep<Space>
-nnoremap <silent> <Leader>ss :GrepCword<CR>
+nnoremap <silent> <Leader>ss :GrepCCword<CR>
 xnoremap <silent> <Leader>ss <Esc>:Grep <C-r>=GetSelectedTextForAg()<CR><CR>
+nnoremap          <Leader>si :GrepCword<Space>
+xnoremap          <Leader>si <Esc>:Grep <C-r>=GetSelectedTextForAg()<CR><Space>
 nnoremap <silent> <Leader>s/ <Esc>:Grep <C-r>=GetSearchTextForAg()<CR><CR>
 
 nnoremap          <Leader>L  :LGrep<Space>
-nnoremap <silent> <Leader>sl :LGrepCword<CR>
+nnoremap <silent> <Leader>sl :LGrepCCword<CR>
 xnoremap <silent> <Leader>sl <Esc>:LGrep <C-r>=GetSelectedTextForAg()<CR><CR>
 
 nnoremap          <Leader>B  :BGrep<Space>
-nnoremap <silent> <Leader>sb :BGrepCword<CR>
+nnoremap <silent> <Leader>sb :BGrepCCword<CR>
 xnoremap <silent> <Leader>sb <Esc>:BGrep <C-r>=GetSelectedTextForAg()<CR><CR>
 nmap              <Leader>bs <Leader>sb
 xmap              <Leader>bs <Leader>sb
@@ -1105,10 +1106,11 @@ if s:IsPlugged('vim-grepper')
     nmap gs <plug>(GrepperOperator)
     xmap gs <plug>(GrepperOperator)
 
-    nnoremap <silent> <Leader>G  :Grepper<CR>
     nnoremap <silent> <Leader>S  :Grepper<CR>
     nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
     xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+    nnoremap <silent> <Leader>si :Grepper -prompt -cword<CR>
+    xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
     nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=GetSearchTextForGrepper()<CR><CR>
 
     nnoremap <silent> <Leader>L  :LGrepper<CR>
@@ -1136,18 +1138,13 @@ if s:IsPlugged('ctrlsf.vim')
                     \ }
     endif
 
-    if g:zero_vim_grep_ignore_vcs
-        let g:ctrlsf_extra_backend_args = {
-                    \ 'rg': '--no-ignore-vcs',
-                    \ 'ag': '--skip-vcs-ignores',
-                    \ }
-    endif
-
-    nmap              <Leader>sp <Plug>CtrlSFPrompt
-    nmap              <Leader>sf <Plug>CtrlSFCwordExec
+    nmap              <Leader>G  <Plug>CtrlSFPrompt
+    nmap              <Leader>sf <Plug>CtrlSFCCwordExec
     vmap              <Leader>sf <Plug>CtrlSFVwordExec
-    nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
+    nmap              <Leader>sp <Plug>CtrlSFCwordPath
+    vmap              <Leader>sp <Plug>CtrlSFVwordPath
     nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
+    nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
 endif
 
 " justinmk/vim-sneak
@@ -1350,8 +1347,8 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>st :Tags! <C-r><C-w><CR>
     vnoremap <silent> <Leader>st <Esc>:Tags! <C-r>=GetSelectedText()<CR><CR>
 
-    nnoremap <silent> <Leader>si :Ag! <C-r><C-w><CR>
-    xnoremap <silent> <Leader>si <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
+    nnoremap <silent> <Leader>sg :Ag! <C-r><C-w><CR>
+    xnoremap <silent> <Leader>sg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('LeaderF')
@@ -1457,7 +1454,7 @@ if s:IsPlugged('LeaderF')
 
     nnoremap <silent> <Leader>st :LeaderfTagCword<CR>
 
-    nnoremap <silent> <Leader>si :LeaderfRgInteractive<CR>
+    nnoremap <silent> <Leader>sg :LeaderfRgInteractive<CR>
     nnoremap <silent> <Leader>sa :LeaderfRgRecall<CR>
 endif
 
