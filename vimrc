@@ -1024,18 +1024,19 @@ let g:grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
 
 nnoremap          <Leader>S  :Grep<Space>
 nnoremap <silent> <Leader>ss :GrepCCword<CR>
-xnoremap <silent> <Leader>ss <Esc>:Grep <C-r>=GetSelectedTextForAg()<CR><CR>
-nnoremap          <Leader>si :GrepCword<Space>
-xnoremap          <Leader>si <Esc>:Grep <C-r>=GetSelectedTextForAg()<CR><Space>
-nnoremap <silent> <Leader>s/ <Esc>:Grep <C-r>=GetSearchTextForAg()<CR><CR>
+xnoremap <silent> <Leader>ss <Esc>:Grep <C-r>=GetSelectedTextForShell()<CR><CR>
+nnoremap          <Leader>si :GrepCCword<Space>
+xnoremap          <Leader>si <Esc>:Grep <C-r>=GetSelectedTextForShell()<CR><Space>
+nnoremap <silent> <Leader>s/ <Esc>:Grep <C-r>=GetSearchTextForShell()<CR><CR>
+nnoremap          <Leader>s? <Esc>:Grep <C-r>=GetSearchTextForShell()<CR><Space>
 
 nnoremap          <Leader>L  :LGrep<Space>
 nnoremap <silent> <Leader>sl :LGrepCCword<CR>
-xnoremap <silent> <Leader>sl <Esc>:LGrep <C-r>=GetSelectedTextForAg()<CR><CR>
+xnoremap <silent> <Leader>sl <Esc>:LGrep <C-r>=GetSelectedTextForShell()<CR><CR>
 
 nnoremap          <Leader>B  :BGrep<Space>
 nnoremap <silent> <Leader>sb :BGrepCCword<CR>
-xnoremap <silent> <Leader>sb <Esc>:BGrep <C-r>=GetSelectedTextForAg()<CR><CR>
+xnoremap <silent> <Leader>sb <Esc>:BGrep <C-r>=GetSelectedTextForShell()<CR><CR>
 nmap              <Leader>bs <Leader>sb
 xmap              <Leader>bs <Leader>sb
 
@@ -1108,18 +1109,19 @@ if s:IsPlugged('vim-grepper')
 
     nnoremap <silent> <Leader>S  :Grepper<CR>
     nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+    xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=GetSelectedTextForShell()<CR><CR>
     nnoremap <silent> <Leader>si :Grepper -prompt -cword<CR>
-    xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
-    nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=GetSearchTextForGrepper()<CR><CR>
+    xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=GetSelectedTextForShell()<CR><CR>
+    nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=GetSearchTextForShell()<CR><CR>
+    nnoremap <silent> <Leader>s? :Grepper -prompt -query <C-r>=GetSearchTextForShell()<CR><CR>
 
     nnoremap <silent> <Leader>L  :LGrepper<CR>
     nnoremap <silent> <Leader>sl :LGrepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>sl <Esc>:LGrepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+    xnoremap <silent> <Leader>sl <Esc>:LGrepper -noprompt -query <C-r>=GetSelectedTextForShell()<CR><CR>
 
     nnoremap          <Leader>B  :BGrepper<CR>
     nnoremap <silent> <Leader>sb :BGrepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>sb <Esc>:BGrepper -noprompt -query <C-r>=GetSelectedTextForGrepper()<CR><CR>
+    xnoremap <silent> <Leader>sb <Esc>:BGrepper -noprompt -query <C-r>=GetSelectedTextForShell()<CR><CR>
     nmap              <Leader>bs <Leader>sb
     xmap              <Leader>bs <Leader>sb
 endif
@@ -1138,11 +1140,11 @@ if s:IsPlugged('ctrlsf.vim')
                     \ }
     endif
 
-    nmap              <Leader>G  <Plug>CtrlSFPrompt
+    nmap              <Leader>sp <Plug>CtrlSFPrompt
     nmap              <Leader>sf <Plug>CtrlSFCCwordExec
     vmap              <Leader>sf <Plug>CtrlSFVwordExec
-    nmap              <Leader>sp <Plug>CtrlSFCwordPath
-    vmap              <Leader>sp <Plug>CtrlSFVwordPath
+    nmap              <Leader>sc <Plug>CtrlSFCCwordPath
+    vmap              <Leader>sc <Plug>CtrlSFVwordPath
     nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
     nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
 endif
@@ -1322,7 +1324,6 @@ if s:IsPlugged('fzf')
     nmap <Leader><Leader> <Leader>f
 
     nnoremap <silent> <Leader>f :Files!<CR>
-    nnoremap          <Leader>F :Files!<Space>
     nnoremap <silent> <C-p>     :PFiles!<CR>
     nnoremap <silent> <Leader>p :PFiles!<CR>
     nnoremap <silent> <Leader>o :Buffers!<CR>
@@ -1425,7 +1426,6 @@ if s:IsPlugged('LeaderF')
 
     nmap <Leader><Leader> <Leader>f
 
-    nnoremap          <Leader>F :LeaderfFile<Space>
     nnoremap <silent> <C-p>     :LeaderfRoot<CR>
     nnoremap <silent> <Leader>p :LeaderfRoot<CR>
     nnoremap <silent> <Leader>o :LeaderfBuffer<CR>
@@ -1454,8 +1454,9 @@ if s:IsPlugged('LeaderF')
 
     nnoremap <silent> <Leader>st :LeaderfTagCword<CR>
 
-    nnoremap <silent> <Leader>sg :LeaderfRgInteractive<CR>
-    nnoremap <silent> <Leader>sa :LeaderfRgRecall<CR>
+    nmap              <Leader>sg <Plug>LeaderfRgCwordLiteralBoundary<CR>
+    vmap              <Leader>sg <Plug>LeaderfRgVisualLiteralNoBoundary<CR>
+    nnoremap <silent> <Leader>sa :Leaderf rg --recall<CR>
 endif
 
 if s:IsPlugged('ctrlp.vim')
@@ -1491,7 +1492,6 @@ if s:IsPlugged('ctrlp.vim')
     nmap <Leader><Leader> <Leader>f
 
     nnoremap <silent> <Leader>f :CtrlP<CR>
-    nnoremap          <Leader>F :CtrlP<Space>
     nnoremap <silent> <Leader>p :CtrlPRoot<CR>
     nnoremap <silent> <Leader>o :CtrlPBuffer<CR>
     nnoremap <silent> <Leader>O :CtrlPMRUFiles<CR>
@@ -1817,11 +1817,10 @@ if s:IsPlugged('limelight.vim')
     let g:limelight_default_coefficient = 0.7
     let g:limelight_priority            = -1
 
-    nnoremap <silent> <Leader>z :Limelight!!<CR>
-    vmap              <Leader>z <Esc><Leader>zgv
-
-    nmap gz <Plug>(Limelight)
-    xmap gz <Plug>(Limelight)
+    nnoremap <silent> <Leader>F :Limelight!!<CR>
+    vmap              <Leader>F <Esc><Leader>Fgv
+    nmap              <Leader>z <Plug>(Limelight)
+    xmap              <Leader>z <Plug>(Limelight)
 endif
 
 if s:IsPlugged('syntastic')
@@ -2320,12 +2319,12 @@ if s:IsPlugged('vim-which-key')
                 \ 'n':    'open-selected-region',
                 \ 'e':    'toggle-explorer',
                 \ 'E':    'open-explorer-in-cwd',
-                \ 'z':    'toggle-hyperfocus-writing',
+                \ 'z':    'hyperfocus-on-range',
+                \ 'F':    'toggle-hyperfocus-writing',
                 \ 'H':    'toggle-start-screen',
                 \ 'T':    'toggle-tagbar',
                 \ 'U':    'toggle-undo-tree',
                 \ 'R':    'replace-prompt',
-                \ 'G':    'search-prompt',
                 \ 'S':    'search-prompt',
                 \ 'L':    'search-location-list-prompt',
                 \ 'B':    'search-in-buffer-prompt',
@@ -2333,7 +2332,6 @@ if s:IsPlugged('vim-which-key')
                 \ 'x':    'save-and-close-buffer',
                 \ ' ':    'files',
                 \ 'f':    'files',
-                \ 'F':    'files-prompt',
                 \ 'p':    'buffer-project',
                 \ 'o':    'opening-buffers',
                 \ 'O':    'recent-files',
@@ -2467,17 +2465,20 @@ if s:IsPlugged('vim-which-key')
     let g:which_key_map.s = {
                 \ 'name': '+search/replace/surround',
                 \ 's':    'search-cword',
+                \ 'i':    'search-cword-prompt',
                 \ 'r':    'search-and-replace-prompt',
                 \ 'v':    'subvert-prompt',
                 \ '/':    'search-pattern-from-/',
+                \ '?':    'search-pattern-from-/-prompt',
                 \ 'l':    'search-cword-location-list',
                 \ 'b':    'search-cword-in-buffer',
                 \ 'p':    'ctrlsf-search-prompt',
                 \ 'f':    'ctrlsf-search-cword',
+                \ 'c':    'ctrlsf-search-cword-prompt',
                 \ 'u':    'ctrlsf-search-update',
                 \ 'o':    'toogle-ctrlsf-search-result',
                 \ 't':    'search-cword-in-tag',
-                \ 'i':    'grep-interactive',
+                \ 'g':    'search-cword-fuzzy',
                 \ 'w':    'surround-cword',
                 \ 'W':    'surround-CWORD',
                 \ }
