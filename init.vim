@@ -1448,12 +1448,12 @@ if s:IsPlugged('ctrlp.vim')
     let g:ctrlp_max_files           = 0
     let g:ctrlp_clear_cache_on_exit = 0
 
-    if executable('rg')
-        let g:ctrlp_user_command = 'rg %s --color=never --no-ignore-vcs --hidden --files'
-    elseif executable('ag')
-        let g:ctrlp_user_command = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
-    elseif executable('fd')
+    if g:zero_vim_find_tool == 'fd' && executable('fd')
         let g:ctrlp_user_command = 'fd --color=never --no-ignore-vcs --hidden --type file . %s'
+    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
+        let g:ctrlp_user_command = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
+    elseif executable('rg')
+        let g:ctrlp_user_command = 'rg %s --color=never --no-ignore-vcs --hidden --files'
     endif
 
     if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so')
