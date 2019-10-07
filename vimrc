@@ -28,12 +28,8 @@ if &compatible
     set nocompatible
 endif
 
-if &shell =~# 'fish$'
-    if executable('zsh')
-        set shell=zsh
-    else
-        set shell=/bin/sh
-    endif
+if &shell =~# 'fish$' && (v:version < 704 || v:version == 704 && !has('patch276'))
+    set shell=/usr/bin/env\ bash
 endif
 
 set encoding=utf8
@@ -200,11 +196,6 @@ call plug#begin()
     endif
 " }
 
-" Motion {
-    " The missing motion for Vim
-    Plug 'justinmk/vim-sneak'
-" }
-
 " Editing {
     " Vim plugin for intensely orgasmic commenting
     Plug 'scrooloose/nerdcommenter'
@@ -315,13 +306,8 @@ call plug#begin()
     " BufExplorer Plugin for Vim
     Plug 'jlanzarotta/bufexplorer'
 
-    if s:Use('nerdtree')
-        " A tree explorer plugin for vim
-        Plug 'scrooloose/nerdtree'
-    elseif s:Use('vaffle')
-        " Lightweight file manager for Vim
-        Plug 'cocopon/vaffle.vim'
-    endif
+    " A tree explorer plugin for vim
+    Plug 'scrooloose/nerdtree'
 " }
 
 " Fuzzy finder {
@@ -371,6 +357,8 @@ call plug#begin()
         Plug 'wokalski/autocomplete-flow'
     elseif s:Use('YouCompleteMe') && v:version > 704 && s:python3 && executable('python3') && executable('cmake')
         Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
+    elseif s:Use('coc')
+        Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:vim8 && s:python
         Plug 'maralla/completor.vim'
 
@@ -579,18 +567,6 @@ endif
 " A Vim plugin that provides a completion function for Unicode glyphs
 Plug 'chrisbra/unicode.vim'
 
-" Writing {
-    if s:Use('writing')
-        " Rethinking Vim as a tool for writing
-        Plug 'reedes/vim-pencil'
-        Plug 'reedes/vim-lexical'
-        Plug 'reedes/vim-litecorrect'
-        Plug 'reedes/vim-wordy'
-        Plug 'reedes/vim-textobj-quote'
-        Plug 'reedes/vim-textobj-sentence'
-    endif
-" }
-
 " Tasks {
     if s:Use('tasks')
         " An implementation of Sublime's PlainTasks plugin for Vim
@@ -668,8 +644,8 @@ set fileformats=unix,dos,mac
 
 set nrformats-=octal
 
-" Don't try to highlight lines longer than 1000 characters
-set synmaxcol=1000
+" Don't try to highlight lines longer than 500 characters
+set synmaxcol=500
 
 " Enable virtualedit in visual block mode
 set virtualedit=block
@@ -806,7 +782,9 @@ if has('path_extra')
 endif
 
 " Remember where we are, support yankring
-set viminfo^=!
+if !empty(&viminfo)
+    set viminfo^=!
+endif
 
 " True Color settings
 if !has('guil_running') && g:zero_vim_true_color && has('termguicolors')
@@ -1152,9 +1130,6 @@ if s:IsPlugged('ctrlsf.vim')
     nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
 endif
 
-" justinmk/vim-sneak
-let g:sneak#streak = 1
-
 " scrooloose/nerdcommenter
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
@@ -1295,30 +1270,20 @@ let g:bufExplorerShowRelativePath         = 1
 
 nnoremap <silent> gb :ToggleBufExplorer<CR>
 
-if s:IsPlugged('nerdtree')
-    " scrooloose/nerdtree
-    let g:NERDTreeWinSize             = 35
-    let g:NERDTreeMouseMode           = 2
-    let g:NERDTreeMapChangeRoot       = '.' " Map . for changing root in NERDTree
-    let g:NERDTreeQuitOnOpen          = 0
-    let g:NERDTreeChDirMode           = 0
-    let g:NERDTreeShowBookmarks       = 1
-    let g:NERDTreeDirArrowExpandable  = '▸'
-    let g:NERDTreeDirArrowCollapsible = '▾'
-    " let g:NERDTreeDirArrowExpandable  = '+'
-    " let g:NERDTreeDirArrowCollapsible = '~'
+" scrooloose/nerdtree
+let g:NERDTreeWinSize             = 35
+let g:NERDTreeMouseMode           = 2
+let g:NERDTreeMapChangeRoot       = '.' " Map . for changing root in NERDTree
+let g:NERDTreeQuitOnOpen          = 0
+let g:NERDTreeChDirMode           = 0
+let g:NERDTreeShowBookmarks       = 1
+let g:NERDTreeDirArrowExpandable  = '▸' " +
+let g:NERDTreeDirArrowCollapsible = '▾' " ~
 
-    nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
-    noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
-    nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
-    nnoremap <silent> <Leader>bg :NERDTreeVCS<CR>
-endif
-
-if s:IsPlugged('vaffle.vim')
-    " cocopon/vaffle.vim
-    nnoremap <silent> <Leader>e  :Vaffle<CR>
-    nnoremap <silent> <Leader>bf :Vaffle <C-r>=expand("%:p:h")<CR><CR>
-endif
+nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
+noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
+nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
+nnoremap <silent> <Leader>bg :NERDTreeVCS<CR>
 
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
@@ -1709,6 +1674,63 @@ if s:IsPlugged('YouCompleteMe')
     let g:ycm_filetype_blacklist                  = { 'unite': 1, 'ctrlp': 1, 'tagbar' : 1, 'qf': 1, 'nerdtree': 1 }
 endif
 
+if s:IsPlugged('coc.nvim')
+    " neoclide/coc.nvim
+    " You will have bad experience for diagnostic messages when it's default 4000.
+    set updatetime=300
+
+    " don't give |ins-completion-menu| messages.
+    set shortmess+=c
+
+    " always show signcolumns
+    set signcolumn=yes
+
+    if executable('/usr/local/bin/node')
+        let g:coc_node_path = '/usr/local/bin/node'
+    endif
+
+    " <Tab>: completion
+    function! s:CheckBackSpace() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    function! s:CleverTab() abort
+        if pumvisible()
+            return "\<C-n>"
+        endif
+
+        if s:CheckBackSpace()
+            return "\<Tab>"
+        endif
+
+        return coc#refresh()
+    endfunction
+
+    inoremap <expr> <Tab> <SID>CleverTab()
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " Use <CR> to confirm completion, `<C-g>u` means break undo chain at current position.
+    " Coc only does snippet and additional edit on confirm.
+    " inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+    " To make <CR> select the first completion item and confirm the completion when no item has been selected
+    " inoremap <silent> <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+
+    " To make coc.nvim format your code on <CR>
+    " inoremap <silent> <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+    " Use <C-_> to trigger completion.
+    inoremap <silent> <expr> <C-_>      coc#refresh()
+    inoremap <silent> <expr> <C-x><C-r> coc#refresh()
+
+    " Use `[c` and `]c` to navigate diagnostics
+    nmap <silent> [c <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]c <Plug>(coc-diagnostic-next)
+endif
+
 if s:IsPlugged('completor.vim')
     " maralla/completor.vim
     let g:completor_auto_trigger = g:zero_vim_autocomplete
@@ -2053,15 +2075,26 @@ let g:rubycomplete_rails             = 0
 " Opererator syntax highlighting
 " let g:ruby_operators = 1
 
-if s:IsPlugged('vim-ruby-refactoring')
-    " ecomba/vim-ruby-refactoring
-    let g:ruby_refactoring_map_keys = 0
-endif
-
 if s:IsPlugged('vim-rails')
     " tpope/vim-rails
     nnoremap <silent> <Leader>ba :AE<CR>
     nnoremap <silent> <Leader>br :RE<CR>
+
+    let g:rails_projections = {
+                \ "app/controllers/*_controller.rb": {
+                \   "alternate": [
+                \       "spec/requests/{}_spec.rb",
+                \       "spec/requests/{}_controller_spec.rb",
+                \       "spec/controllers/{}_controller_spec.rb",
+                \   ],
+                \ },
+                \ "spec/requests/*_spec.rb": {
+                \   "alternate": [
+                \       "app/controllers/{}.rb",
+                \       "app/controllers/{}_controller.rb",
+                \   ]
+                \ },
+                \ }
 endif
 
 if s:IsPlugged('vim-go')
@@ -2231,47 +2264,6 @@ endif
 nmap <F3> <Plug>(UnicodeSwapCompleteName)
 nmap <F4> <Plug>(MakeDigraph)
 vmap <F4> <Plug>(MakeDigraph)
-
-if s:IsPlugged('vim-pencil')
-    " reedes/vim-pencil
-    let g:pencil#wrapModeDefault = 'soft' " default is 'hard'
-    let g:pencil#autoformat      = 1      " 0=manual, 1=auto (def)
-    let g:pencil#textwidth       = 74
-    let g:pencil#joinspaces      = 0      " 0=one_space (def), 1=two_spaces
-    let g:pencil#cursorwrap      = 1      " 0=disable, 1=enable (def)
-    let g:pencil#conceallevel    = 3      " 0=disable, 1=onechar, 2=hidechar, 3=hideall (def)
-    let g:pencil#concealcursor   = 'c'    " n=normal, v=visual, i=insert, c=command (def)
-    " let g:pencil#mode_indicators = {'hard': 'H', 'auto': 'A', 'soft': 'S', 'off': '',}
-
-    " reedes/vim-lexical
-    let g:lexical#spelllang      = ['en_us',]
-    let g:lexical#spell_key      = '<LocalLeader>ws'
-    let g:lexical#thesaurus_key  = '<LocalLeader>wt'
-    let g:lexical#dictionary_key = '<LocalLeader>wd'
-
-    function! s:SetupPencil() abort
-        call pencil#init()
-        call lexical#init({ 'spell': 0, })
-        call litecorrect#init()
-        call textobj#sentence#init()
-        call textobj#quote#init()
-
-        nnoremap <buffer> <silent> <LocalLeader>wf :PFormatToggle<CR>
-
-        map <buffer> <silent> <LocalLeader>wc <Plug>ReplaceWithCurly
-        map <buffer> <silent> <LocalLeader>wl <Plug>ReplaceWithStraight
-        map <buffer> <silent> <Localleader>w' <Plug>SurroundWithSingle
-        map <buffer> <silent> <Localleader>w" <Plug>SurroundWithDouble
-
-        nnoremap <buffer> <silent> <LocalLeader>wn :NextWordy<CR>
-        nnoremap <buffer> <silent> <LocalLeader>wp :NextWordy<CR>
-    endfunction
-
-    augroup VimPencil
-        autocmd!
-        autocmd FileType markdown,mkd,text,mail call s:SetupPencil()
-    augroup END
-endif
 
 if s:IsPlugged('vim-hardtime')
     " takac/vim-hardtime
