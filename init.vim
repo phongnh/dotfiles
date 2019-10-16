@@ -1350,7 +1350,7 @@ if s:IsPlugged('LeaderF')
         let current = get(g:, 'Lf_WorkingDirectoryMode', 'c')
         try
             let g:Lf_WorkingDirectoryMode = 'Ac'
-            call leaderf#File#startExpl(g:Lf_WindowPosition)
+            execute ':LeaderfFile'
         finally
             let g:Lf_WorkingDirectoryMode = current
         endtry
