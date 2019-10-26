@@ -1,9 +1,8 @@
 let g:zero_vim_groups = [
             \ 'grep',
             \ 'nerdtree',
-            \ 'fzf',
             \ 'ultisnips',
-            \ 'coc',
+            \ 'completor',
             \ 'airline',
             \ 'distraction-free',
             \ 'startify',

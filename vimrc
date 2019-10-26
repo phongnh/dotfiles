@@ -109,12 +109,13 @@ if !exists('g:zero_vim_groups')
                 \ 'grep',
                 \ 'nerdtree',
                 \ 'fzf',
-                \ 'neosnippet',
-                \ 'deoplete',
+                \ 'ultisnips',
+                \ 'completor',
                 \ 'airline',
                 \ 'distraction-free',
                 \ 'startify',
                 \ 'lint',
+                \ 'ctags',
                 \ 'format',
                 \ 'tagbar',
                 \ 'undo',
@@ -174,7 +175,7 @@ call plug#begin()
     Plug 'phongnh/vim-toggler'
 
     " Maximize current buffer
-    Plug 'regedarek/ZoomWin'
+    Plug 'phongnh/ZoomWin'
 
     " Delete buffers and close files in Vim without closing your windows or messing up your layout
     Plug 'moll/vim-bbye'
@@ -208,9 +209,6 @@ call plug#begin()
 
     " Vim script for text filtering and alignment
     Plug 'godlygeek/tabular'
-
-    " Plugin to move lines and selections up and down
-    Plug 'matze/vim-move'
 
     " quoting/parenthesizing made simple
     Plug 'tpope/vim-surround'
@@ -282,6 +280,11 @@ call plug#begin()
         Plug 'phongnh/lightline-settings.vim'
         " A light and configurable statusline/tabline plugin for Vim
         Plug 'itchyny/lightline.vim'
+    elseif s:Use('crystalline')
+        " My crystalline settings
+        Plug 'phongnh/crystalline-settings.vim'
+        " Functions for taking the monotony out of building your own fancy statusline in Vim
+        Plug 'rbong/vim-crystalline'
     else
         " Configure tabs within Terminal Vim
         Plug 'mkitt/tabline.vim'
@@ -479,14 +482,8 @@ call plug#begin()
 " Run your tests at the speed of thought
 Plug 'janko-m/vim-test'
 
-if s:Use('syntax')
-    " A solid language pack for Vim
-    Plug 'sheerun/vim-polyglot'
-endif
-
 " Web {
     if s:Use('web')
-        Plug 'moll/vim-node'
         Plug 'pangloss/vim-javascript'
         Plug 'othree/es.next.syntax.vim'
         Plug 'othree/javascript-libraries-syntax.vim'
@@ -511,7 +508,6 @@ endif
     if s:Use('ruby')
         Plug 'keith/rspec.vim'
         Plug 'phongnh/vim-rubocop'
-        Plug 'tpope/vim-bundler'
         Plug 'tpope/vim-rake'
         Plug 'tpope/vim-rails'
     endif
@@ -537,6 +533,11 @@ endif
 " Fish Shell {
     Plug 'dag/vim-fish'
 " }
+
+if s:Use('syntax')
+    " A solid language pack for Vim
+    Plug 'sheerun/vim-polyglot'
+endif
 
 " Git {
     if s:Use('git')
@@ -588,20 +589,26 @@ Plug 'chrisbra/unicode.vim'
     Plug 'altercation/vim-colors-solarized'
     Plug 'morhetz/gruvbox'
     Plug 'NLKNguyen/papercolor-theme'
-    Plug 'rakr/vim-one'
-    Plug 'whatyouhide/vim-gotham'
-    Plug 'yuttie/hydrangea-vim'
 
     " True Color schemes
     Plug 'lifepillar/vim-solarized8'
-    Plug 'tyrannicaltoucan/vim-deep-space'
-    Plug 'drewtempelmeyer/palenight.vim'
-    Plug 'mhartington/oceanic-next'
-    Plug 'arcticicestudio/nord-vim'
-    Plug 'ayu-theme/ayu-vim'
 
     " Distraction-free color schemes
     Plug 'pbrisbin/vim-colors-off'
+
+    " Extra colorschemes
+    if s:Use('extra-colorschemes')
+        Plug 'rakr/vim-one'
+        Plug 'whatyouhide/vim-gotham'
+        Plug 'yuttie/hydrangea-vim'
+
+        " True Color schemes
+        Plug 'tyrannicaltoucan/vim-deep-space'
+        Plug 'drewtempelmeyer/palenight.vim'
+        Plug 'mhartington/oceanic-next'
+        Plug 'arcticicestudio/nord-vim'
+        Plug 'ayu-theme/ayu-vim'
+    endif
 " }
 
 " DevIcons {
@@ -1025,7 +1032,7 @@ xmap              <Leader>bs <Leader>sb
 nnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
 vnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
 
-" regedarek/ZoomWin
+" phongnh/ZoomWin
 nmap <silent> <Leader>bm <Plug>ZoomWin
 vmap          <Leader>bm <Esc><Leader>bmgv
 
@@ -2056,14 +2063,6 @@ nnoremap <silent> <Leader>tl :TestLast<CR>
 nnoremap <silent> <Leader>ts :TestSuite<CR>
 nnoremap <silent> <Leader>tv :TestVisit<CR>
 
-if s:IsPlugged('vim-polyglot')
-    " sheerun/vim-polyglot
-    let g:polyglot_disabled = ['fish', 'coffee-script', 'go']
-
-    let g:vim_markdown_no_default_key_mappings = 1
-    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
-endif
-
 " Ruby speedup
 let g:rubycomplete_buffer_loading    = 0
 let g:rubycomplete_classes_in_global = 0
@@ -2096,6 +2095,16 @@ if s:IsPlugged('vim-rails')
                 \ },
                 \ }
 endif
+
+" pangloss/vim-javascript
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_flow  = 1
+
+" tpope/vim-markdown
+let g:markdown_fenced_languages = [
+            \ 'bash=sh', 'coffee', 'sass', 'scss', 'css', 'html', 'xml', 'erb=eruby', 'ruby',
+            \ 'javascript', 'js=javascript', 'json=javascript', 'python', 'sql', 'vim'
+            \ ]
 
 if s:IsPlugged('vim-go')
     " fatih/vim-go and phongnh/go-explorer
@@ -2178,6 +2187,15 @@ if s:IsPlugged('vim-go')
     augroup MyAutoCmd
         autocmd FileType go call s:SetupVimGo()
     augroup END
+endif
+
+if s:IsPlugged('vim-polyglot')
+    " sheerun/vim-polyglot
+    let g:polyglot_disabled = ['fish', 'coffee-script', 'go']
+
+    " plasticboy/vim-markdown
+    let g:vim_markdown_no_default_key_mappings = 1
+    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
 endif
 
 if s:IsPlugged('vim-fugitive')
