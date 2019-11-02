@@ -2519,6 +2519,22 @@ if s:IsPlugged('vim-which-key')
     vnoremap <silent> <LocalLeader> :<C-u>WhichKeyVisual '\'<CR>
 endif
 
+" Setup custom mapping to open specific folder
+function! OpenFolderWithMapping(folder, mapping) abort
+    if exists(':LeaderfFileInDir') == 2
+        let cmd = 'LeaderfFileInDir'
+        nnoremap <silent> <Leader>hh :LeaderfFileInDir ~/Dropbox/HubWorks/Code<CR>
+    elseif exists(':LeaderfFile') == 2
+        let cmd = 'LeaderfFile'
+        nnoremap <silent> <Leader>hh :LeaderfFile ~/Dropbox/HubWorks/Code<CR>
+    elseif exists(':Files') == 2
+        let cmd = 'Files!'
+    else
+        let cmd = 'CtrlP'
+    endif
+    execute printf('nnoremap <silent> %s :%s %s<CR>', a:mapping, cmd, a:folder)
+endfunction
+
 call s:Source('.vimrc.local')
 
 try
