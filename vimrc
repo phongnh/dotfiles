@@ -1335,8 +1335,9 @@ if s:IsPlugged('LeaderF')
     let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
     let g:Lf_StlSeparator  = { 'left': '', 'right': '' }
 
-    let g:Lf_UseCache      = 0 " rg/ag is enough fast, we don't need cache
-    let g:Lf_NeedCacheTime = 5 " 5 seconds
+    let g:Lf_UseCache       = 0  " rg/ag is enough fast, we don't need cache
+    let g:Lf_NeedCacheTime  = 10 " 10 seconds
+    let g:Lf_UseMemoryCache = 1
 
     " let g:Lf_NoChdir              = 1
     let g:Lf_WorkingDirectoryMode = 'c'
@@ -1382,7 +1383,7 @@ if s:IsPlugged('LeaderF')
         let current = get(g:, 'Lf_WorkingDirectoryMode', 'c')
         try
             let g:Lf_WorkingDirectoryMode = 'Ac'
-            execute ':LeaderfFile'
+            :LeaderfFile
         finally
             let g:Lf_WorkingDirectoryMode = current
         endtry
@@ -1390,11 +1391,12 @@ if s:IsPlugged('LeaderF')
     command! -bar -nargs=0 LeaderfRoot call <SID>LeaderfRoot()
 
     function! s:LeaderfFileInDir(dir) abort
-        let cwd = getcwd()
+        let current = get(g:, 'Lf_WorkingDirectory', '')
         try
-            execute ":LeaderfFile " . expand(a:dir)
+            let g:Lf_WorkingDirectory = a:dir
+            :LeaderfFile
         finally
-            execute "cd " . cwd
+            let g:Lf_WorkingDirectory = current
         endtry
     endfunction
     command! -bar -nargs=1 -complete=dir LeaderfFileInDir call <SID>LeaderfFileInDir(<q-args>)
@@ -2523,10 +2525,8 @@ endif
 function! OpenFolderWithMapping(folder, mapping) abort
     if exists(':LeaderfFileInDir') == 2
         let cmd = 'LeaderfFileInDir'
-        nnoremap <silent> <Leader>hh :LeaderfFileInDir ~/Dropbox/HubWorks/Code<CR>
     elseif exists(':LeaderfFile') == 2
         let cmd = 'LeaderfFile'
-        nnoremap <silent> <Leader>hh :LeaderfFile ~/Dropbox/HubWorks/Code<CR>
     elseif exists(':Files') == 2
         let cmd = 'Files!'
     else
