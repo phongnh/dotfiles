@@ -2525,8 +2525,6 @@ endif
 function! OpenFolderWithMapping(folder, mapping) abort
     if exists(':LeaderfFileInDir') == 2
         let cmd = 'LeaderfFileInDir'
-    elseif exists(':LeaderfFile') == 2
-        let cmd = 'LeaderfFile'
     elseif exists(':Files') == 2
         let cmd = 'Files!'
     else
