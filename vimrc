@@ -28,7 +28,7 @@ if &compatible
     set nocompatible
 endif
 
-if &shell =~# 'fish$' && (v:version < 704 || v:version == 704 && !has('patch276'))
+if &shell =~# 'fish$' " && (v:version < 704 || v:version == 704 && !has('patch276'))
     set shell=/usr/bin/env\ bash
 endif
 
@@ -69,6 +69,17 @@ let g:ftplugin_sql_omni_key    = ''
 " Disable syntax completion
 let g:loaded_syntax_completion = 1
 
+" Ruby speedup
+let g:rubycomplete_buffer_loading    = 0
+let g:rubycomplete_classes_in_global = 0
+let g:rubycomplete_rails             = 0
+
+" Disable custom rails syntax highlighting
+" let g:rails_syntax = 0
+
+" Opererator syntax highlighting
+" let g:ruby_operators = 1
+
 if has('gui_running')
     " Disable menu
     let g:did_install_default_menus = 1
@@ -102,34 +113,6 @@ let g:zero_vim_indent_first_char = '│'
 " Find .vimrc.before from current folder up to root.
 " If found, source it
 call s:Source('.vimrc.before')
-
-" Default vim plugins
-if !exists('g:zero_vim_groups')
-    let g:zero_vim_groups = [
-                \ 'grep',
-                \ 'nerdtree',
-                \ 'fzf',
-                \ 'ultisnips',
-                \ 'completor',
-                \ 'airline',
-                \ 'distraction-free',
-                \ 'startify',
-                \ 'lint',
-                \ 'ctags',
-                \ 'format',
-                \ 'tagbar',
-                \ 'undo',
-                \ 'indent',
-                \ 'web',
-                \ 'ruby',
-                \ 'go',
-                \ 'git',
-                \ 'gitgutter',
-                \ 'diff-enhanced',
-                \ 'writing',
-                \ 'tasks',
-                \ ]
-endif
 
 call plug#begin()
 
@@ -2064,17 +2047,6 @@ nmap              <Leader>tn <Leader>tf
 nnoremap <silent> <Leader>tl :TestLast<CR>
 nnoremap <silent> <Leader>ts :TestSuite<CR>
 nnoremap <silent> <Leader>tv :TestVisit<CR>
-
-" Ruby speedup
-let g:rubycomplete_buffer_loading    = 0
-let g:rubycomplete_classes_in_global = 0
-let g:rubycomplete_rails             = 0
-
-" Disable custom rails syntax highlighting
-" let g:rails_syntax = 0
-
-" Opererator syntax highlighting
-" let g:ruby_operators = 1
 
 if s:IsPlugged('vim-rails')
     " tpope/vim-rails
