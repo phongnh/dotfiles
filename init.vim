@@ -306,6 +306,7 @@ call plug#begin()
         Plug 'tacahiroy/ctrlp-funky'
         Plug 'mattn/ctrlp-register'
         Plug 'LeafCage/yankround.vim'
+        Plug 'phongnh/ctrlp-settings.vim'
     endif
 " }
 
@@ -1373,23 +1374,8 @@ endif
 
 if s:IsPlugged('ctrlp.vim')
     " ctrlpvim/ctrlp.vim
-    let g:ctrlp_match_window      = 'max:20'
-    let g:ctrlp_working_path_mode = 'w'
-    let g:ctrlp_reuse_window      = 'startify'
-    let g:ctrlp_cmd               = 'CtrlPRoot'
-    let g:ctrlp_prompt_mappings   = { 'MarkToOpen()': ['<C-z>', '<C-@>'], }
-
-    let g:ctrlp_use_caching         = 0 " rg/ag is enough fast, we don't need cache
-    let g:ctrlp_max_files           = 0
-    let g:ctrlp_clear_cache_on_exit = 0
-
-    if g:zero_vim_find_tool == 'fd' && executable('fd')
-        let g:ctrlp_user_command = 'fd --color=never --no-ignore-vcs --hidden --type file . %s'
-    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
-        let g:ctrlp_user_command = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
-    elseif executable('rg')
-        let g:ctrlp_user_command = 'rg %s --color=never --no-ignore-vcs --hidden --files'
-    endif
+    let g:ctrlp_find_tool = g:zero_vim_find_tool
+    let g:ctrlp_command   = 'CtrlPRoot'
 
     if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so')
         " nixprime/cpsm
