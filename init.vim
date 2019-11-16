@@ -641,8 +641,8 @@ set expandtab   " Expand tab to space
 set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
 set foldmethod=indent     " Fold by indent
 set foldlevel=1           " Starting fold at level 1
-set foldlevelstart=20     " Open all folds by default"
-set foldnestmax=20        " Deepest fold is 20 levels
+set foldlevelstart=10     " Open all folds by default
+set foldnestmax=10        " Deepest fold is 10 levels
 set nofoldenable          " Disable fold by default
 
 set fillchars=diff:⣿,vert:│
