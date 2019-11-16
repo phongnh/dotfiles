@@ -306,6 +306,9 @@ call plug#begin()
         Plug 'tacahiroy/ctrlp-funky'
         Plug 'mattn/ctrlp-register'
         Plug 'LeafCage/yankround.vim'
+        Plug 'fisadev/vim-ctrlp-cmdpalette'
+        Plug 'ompugao/ctrlp-history'
+        Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
         Plug 'phongnh/ctrlp-settings.vim'
     endif
 " }
@@ -1398,6 +1401,8 @@ if s:IsPlugged('ctrlp.vim')
 
     nnoremap <silent> <Leader>\ :CtrlPTag<CR>
 
+    nnoremap <silent> <Leader>q :CtrlPQuickfix<CR>
+
     " Buffer-related mappings
     nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
     nmap              <Leader>bh <Leader>d
@@ -1422,6 +1427,16 @@ if s:IsPlugged('ctrlp.vim')
     let g:yankround_max_history = 100
 
     nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
+
+    " fisadev/vim-ctrlp-cmdpalette
+    nnoremap <silent> <Leader>; :CtrlPCmdPalette<CR>
+
+    " ompugao/ctrlp-history
+    nnoremap <silent> <Leader>: :CtrlPCmdHistory<CR>
+    nnoremap <silent> <Leader>/ :CtrlPSearchHistory<CR>
+
+    " slimane/ctrlp-locationlist
+    nnoremap <silent> <Leader>l :CtrlPLocationlist<CR>
 endif
 
 function! ExpandSnippet() abort
