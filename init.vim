@@ -270,8 +270,8 @@ call plug#begin()
     " Rainbow Parentheses Improved, shorter code, no level limit, smooth and fast, powerful configuration.
     Plug 'luochen1990/rainbow'
 
-    " Fancy fold texts
-    Plug 'Konfekt/FoldText'
+    " Vim Fold Text
+    Plug 'phongnh/vim-fold-text'
 " }
 
 " Explorer {
