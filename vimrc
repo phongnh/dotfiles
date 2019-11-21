@@ -1057,7 +1057,7 @@ let g:qfenter_keymap.topen = ['<C-t>']
 
 if s:IsPlugged('vim-grepper')
     " mhinz/vim-grepper
-    let g:default_grepper_options = {
+    let g:grepper = {
                 \ 'open':                1,
                 \ 'switch':              1,
                 \ 'jump':                0,
@@ -1069,11 +1069,8 @@ if s:IsPlugged('vim-grepper')
     if g:zero_vim_grep_ignore_vcs
         runtime plugin/grepper.vim
 
-        call extend(g:grepper, g:default_grepper_options)
         let g:grepper.rg.grepprg .= ' --no-ignore-vcs'
         let g:grepper.ag.grepprg .= ' --skip-vcs-ignores'
-    else
-        let g:grepper = copy(g:default_grepper_options)
     endif
 
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
