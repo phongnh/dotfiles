@@ -1715,6 +1715,7 @@ if s:IsPlugged('vim-startify')
     let g:startify_skiplist = [
                 \ '.git/index',
                 \ '.git/config',
+                \ 'fugitiveblame',
                 \ 'COMMIT_EDITMSG',
                 \ 'git-rebase-todo',
                 \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
