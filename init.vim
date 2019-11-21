@@ -331,7 +331,7 @@ call plug#begin()
         Plug 'wokalski/autocomplete-flow'
     elseif s:Use('YouCompleteMe') && s:python3 && executable('python3') && executable('cmake')
         Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
-    elseif s:Use('coc')
+    elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:python
         Plug 'maralla/completor.vim'
