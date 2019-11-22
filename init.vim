@@ -389,8 +389,10 @@ call plug#begin()
             Plug 'Chiel92/vim-autoformat'
         endif
 
-        " A Vim plugin for Prettier
-        Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+        if executable('yarn')
+            " A Vim plugin for Prettier
+            Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+        endif
     endif
 " }
 
