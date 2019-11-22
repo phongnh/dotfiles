@@ -1319,6 +1319,8 @@ if s:IsPlugged('LeaderF')
     let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
     let g:Lf_StlSeparator  = { 'left': '', 'right': '' }
 
+    let g:Lf_StlColorscheme = 'gruvbox_material'
+
     let g:Lf_UseCache       = 0  " rg/ag is enough fast, we don't need cache
     let g:Lf_NeedCacheTime  = 10 " 10 seconds
     let g:Lf_UseMemoryCache = 1
@@ -1326,15 +1328,23 @@ if s:IsPlugged('LeaderF')
     " let g:Lf_NoChdir              = 1
     let g:Lf_WorkingDirectoryMode = 'c'
 
-    if g:zero_vim_find_tool == 'fd' && executable('fd')
-        let g:Lf_ExternalCommand = 'fd --color=never --no-ignore-vcs --hidden --type file . %s'
-    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
-        let g:Lf_ExternalCommand = 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""'
-    elseif executable('rg')
-        let g:Lf_ExternalCommand = 'rg %s --color=never --no-ignore-vcs --hidden --files'
-    endif
+    let s:Lf_FindTools = {
+            \ 'rg': 'rg %s --color=never --no-ignore-vcs --hidden --files',
+            \ 'ag': 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""',
+            \ 'fd': 'fd --color=never --no-ignore-vcs --ignore-file ~/.ignore --hidden --type file . %s',
+            \ }
 
-    let g:Lf_StlColorscheme = 'powerline'
+    if g:zero_vim_find_tool == 'fd' && executable('fd')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
+    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['ag']
+    elseif executable('rg')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['rg']
+    elseif executable('ag')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['ag']
+    elseif executable('fd')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
+    endif
 
     let g:Lf_RgConfig = [
                 \ '-H',
