@@ -325,14 +325,37 @@ call plug#begin()
 
     if s:Use('deoplete') && s:python3
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-        Plug 'deoplete-plugins/deoplete-go', { 'do': 'make' }
-        Plug 'deoplete-plugins/deoplete-clang'
-        Plug 'deoplete-plugins/deoplete-jedi'
-        Plug 'wokalski/autocomplete-flow'
+        if s:Use('lsp')
+            Plug 'prabirshrestha/async.vim'
+            Plug 'prabirshrestha/vim-lsp'
+            Plug 'lighttiger2505/deoplete-vim-lsp'
+        else
+            Plug 'deoplete-plugins/deoplete-go', { 'do': 'make' }
+            Plug 'deoplete-plugins/deoplete-clang'
+            Plug 'deoplete-plugins/deoplete-jedi'
+            Plug 'wokalski/autocomplete-flow'
+        endif
     elseif s:Use('YouCompleteMe') && s:python3 && executable('python3') && executable('cmake')
         Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
+    elseif s:Use('asyncomplete') && s:vim8
+        Plug 'prabirshrestha/async.vim'
+        Plug 'prabirshrestha/asyncomplete.vim'
+        Plug 'prabirshrestha/asyncomplete-buffer.vim'
+        Plug 'yami-beta/asyncomplete-omni.vim'
+        if s:IsPlugged('ultisnips')
+            Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+        elseif s:IsPlugged('neosnippet.vim')
+            Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
+        endif
+        if s:Use('lsp')
+            Plug 'prabirshrestha/vim-lsp'
+            Plug 'prabirshrestha/asyncomplete-lsp.vim'
+        else
+            Plug 'prabirshrestha/asyncomplete-gocode.vim'
+            Plug 'prabirshrestha/asyncomplete-flow.vim'
+        endif
     elseif s:python
         Plug 'maralla/completor.vim'
 
@@ -373,12 +396,12 @@ call plug#begin()
 " }
 
 " Syntax Checking/Linting {
-    if s:Use('syntastic')
-        " Syntax checking hacks for vim
-        Plug 'vim-syntastic/syntastic'
-    elseif s:Use('lint')
+    if s:Use('lint')
         " Asynchronous Lint Engine
         Plug 'dense-analysis/ale'
+    elseif s:Use('syntastic')
+        " Syntax checking hacks for vim
+        Plug 'vim-syntastic/syntastic'
     endif
 " }
 
@@ -1116,23 +1139,21 @@ if s:IsPlugged('deoplete')
     function! Multiple_cursors_before() abort
         if deoplete#is_enabled()
             call deoplete#disable()
-            let g:deoplete_is_enable_before_multi_cursors = 1
-        else
-            let g:deoplete_is_enable_before_multi_cursors = 0
         endif
-    endfunc
+    endfunction
 
-    " Called once only when the multiple selection is cancelled (default <Esc>)
     function! Multiple_cursors_after() abort
-        if g:deoplete_is_enable_before_multi_cursors
+        if g:zero_vim_autocomplete
             call deoplete#enable()
         endif
     endfunction
-elseif s:IsPlugged('YouCompleteMe')
+elseif s:IsPlugged('asyncomplete.vim')
     function! Multiple_cursors_before() abort
+        let g:asyncomplete_auto_popup = 0
     endfunction
 
     function! Multiple_cursors_after() abort
+        let g:asyncomplete_auto_popup = g:zero_vim_autocomplete
     endfunction
 elseif s:IsPlugged('completor')
     function! Multiple_cursors_before() abort
@@ -1140,7 +1161,9 @@ elseif s:IsPlugged('completor')
     endfunction
 
     function! Multiple_cursors_after() abort
-        silent! CompletorEnable
+        if g:zero_vim_autocomplete
+            silent! CompletorEnable
+        endif
     endfunction
 endif
 
@@ -1525,10 +1548,11 @@ if s:IsPlugged('deoplete.nvim')
     let g:deoplete#enable_at_startup = 1
 
     call deoplete#custom#option({
-                \ 'auto_complete':  g:zero_vim_autocomplete,
-                \ 'camel_case':     v:true,
-                \ 'max_list':       100,
-                \ 'refresh_always': v:true,
+                \ 'auto_complete':       g:zero_vim_autocomplete,
+                \ 'auto_complete_delay': 200,
+                \ 'camel_case':          v:true,
+                \ 'max_list':            200,
+                \ 'refresh_always':      v:true,
                 \ })
 
     call deoplete#custom#option('keyword_patterns', { '_': '[a-zA-Z_]\k*\(?' })
@@ -1630,6 +1654,12 @@ endif
 
 if s:IsPlugged('coc.nvim')
     " neoclide/coc.nvim
+    " Install Extensions
+    " :CocInstall coc-json coc-tsserver coc-html coc-xml coc-css coc-tailwindcss coc-yaml 
+    " :CocInstall coc-markdownlint
+    " :CocInstall coc-highlight coc-emmet coc-snippets coc-lists coc-git coc-yank
+    " :CocInstall coc-python coc-pyright coc-solargraph coc-flow
+
     " You will have bad experience for diagnostic messages when it's default 4000.
     set updatetime=300
 
@@ -1685,6 +1715,105 @@ if s:IsPlugged('coc.nvim')
     nmap <silent> ]c <Plug>(coc-diagnostic-next)
 endif
 
+if s:IsPlugged('asyncomplete.vim')
+    " prabirshrestha/asyncomplete.vim
+    let g:asyncomplete_auto_popup  = g:zero_vim_autocomplete
+    let g:asyncomplete_popup_delay = 50
+
+    " Show autocomplete popup manually
+    imap <C-_> <Plug>(asyncomplete_force_refresh)
+
+    " <CR>: close popup and insert newline
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
+    " <Tab>: completion
+    function! s:CheckBackSpace() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    function! s:CleverTab() abort
+        if pumvisible()
+            return "\<C-n>"
+        endif
+
+        if s:CheckBackSpace()
+            return "\<Tab>"
+        endif
+
+        return asyncomplete#force_refresh()
+    endfunction
+
+    inoremap <silent> <expr> <Tab> <SID>CleverTab()
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    function! s:SetupAsyncomplete() abort
+        " prabirshrestha/asyncomplete-buffer.vim
+        call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+                    \ 'name':      'buffer',
+                    \ 'whitelist': ['*'],
+                    \ 'blacklist': ['go'],
+                    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+                    \ }))
+
+        " yami-beta/asyncomplete-omni.vim
+        call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+                    \ 'name':      'omni',
+                    \ 'whitelist': ['*'],
+                    \ 'completor': function('asyncomplete#sources#omni#completor')
+                    \ }))
+
+        if s:IsPlugged('ultisnips')
+            " prabirshrestha/asyncomplete-ultisnips.vim
+            call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+                        \ 'name':      'ultisnips',
+                        \ 'whitelist': ['*'],
+                        \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('neosnippet')
+            " prabirshrestha/asyncomplete-neosnippet.vim
+            call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+                        \ 'name':      'neosnippet',
+                        \ 'whitelist': ['*'],
+                        \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+                        \ }))
+        endif
+
+        if exists('*asyncomplete#sources#gocode#get_source_options')
+            " prabirshrestha/asyncomplete-gocode.vim
+            call asyncomplete#register_source(asyncomplete#sources#gocode#get_source_options({
+                        \ 'name':      'gocode',
+                        \ 'whitelist': ['go'],
+                        \ 'completor': function('asyncomplete#sources#gocode#completor'),
+                        \ 'config':    {
+                        \   'gocode_path': 'gocode',
+                        \ },
+                        \ }))
+        endif
+
+        if exists('*asyncomplete#sources#flow#get_source_options')
+            " prabirshrestha/asyncomplete-flow.vim
+            call asyncomplete#register_source(asyncomplete#sources#flow#get_source_options({
+                        \ 'name':      'flow',
+                        \ 'whitelist': ['javascript'],
+                        \ 'completor': function('asyncomplete#sources#flow#completor'),
+                        \ 'config':    {
+                        \   'prefer_local': 1,
+                        \   'flowbin_path': 'flow',
+                        \ },
+                        \ }))
+        endif
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd User asyncomplete_setup call s:SetupAsyncomplete()
+    augroup END
+endif
+
 if s:IsPlugged('completor.vim')
     " maralla/completor.vim
     let g:completor_auto_trigger = g:zero_vim_autocomplete
@@ -1717,6 +1846,67 @@ if s:IsPlugged('completor.vim')
 
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+endif
+
+if s:IsPlugged('vim-lsp')
+    " prabirshrestha/vim-lsp
+    augroup MyAutoCmd
+        " go get -u golang.org/x/tools/cmd/gopls
+        if executable('gopls')
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'gopls',
+                        \ 'whitelist': ['go'],
+                        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+                        \ })
+            autocmd BufWritePre *.go LspDocumentFormatSync
+        elseif executable('go-langserver')
+            " go get -u github.com/sourcegraph/go-langserver
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'go-langserver',
+                        \ 'whitelist': ['go'],
+                        \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
+                        \ })
+            autocmd BufWritePre *.go LspDocumentFormatSync
+        endif
+
+        " gem install solargraph
+        if executable('solargraph')
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'solargraph',
+                        \ 'whitelist': ['ruby'],
+                        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
+                        \ 'initialization_options': {"diagnostics": "true"},
+                        \ })
+        endif
+
+        " pip install python-language-server
+        if executable('pyls')
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'pyls',
+                        \ 'whitelist': ['python'],
+                        \ 'cmd': {server_info->['pyls']},
+                        \ })
+        endif
+
+        " npm install -g flow-bin
+        if executable('flow')
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'flow',
+                        \ 'whitelist': ['javascript', 'javascript.jsx'],
+                        \ 'cmd': {server_info->['flow', 'lsp', '--from', 'vim-lsp'] },
+                        \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), '.flowconfig'))},
+                        \ })
+        endif
+
+        " npm install -g dockerfile-language-server-nodejs
+        if executable('docker-langserver')
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'docker-langserver',
+                        \ 'whitelist': ['dockerfile'],
+                        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'docker-langserver --stdio']},
+                        \ })
+        endif
+    augroup END
 endif
 
 if s:IsPlugged('vim-startify')
@@ -1803,43 +1993,6 @@ if s:IsPlugged('limelight.vim')
     xmap              <Leader>z <Plug>(Limelight)
 endif
 
-if s:IsPlugged('syntastic')
-    " vim-syntastic/syntastic
-    let g:syntastic_mode_map                 = { 'mode': 'passive', }
-    let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_auto_loc_list            = g:zero_vim_autolint
-    let g:syntastic_auto_jump                = 1
-    let g:syntastic_loc_list_height          = 5
-    let g:syntastic_check_on_open            = g:zero_vim_autolint
-    let g:syntastic_check_on_wq              = g:zero_vim_autolint
-    let g:syntastic_aggregate_errors         = 1
-    let g:syntastic_echo_current_error       = 1
-    let g:syntastic_error_symbol             = '●' " •
-    let g:syntastic_style_error_symbol       = '.'
-    let g:syntastic_warning_symbol           = '!'
-    let g:syntastic_style_warning_symbol     = '*'
-
-    function! s:syntastic_add_checker(filetype, program, ...) abort
-        if executable(a:program)
-            let programs = get(g:, printf('syntastic_%s_checkers', a:filetype), [])
-            call add(programs, a:program)
-            let g:syntastic_{a:filetype}_checkers = programs
-
-            let path = get(a:, 1, '')
-            if strlen(path)
-                let g:syntastic_{a:filetype}_{a:program}_exec = path
-            endif
-        endif
-    endfunction
-
-    call s:syntastic_add_checker('javascript', 'eslint', 'npm run eslint --')
-    call s:syntastic_add_checker('jsx', 'eslint', 'npm run eslint --')
-    call s:syntastic_add_checker('ruby', 'rubocop')
-    call s:syntastic_add_checker('yaml', 'yamllint')
-
-    nnoremap <silent> <Leader>bc :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
-endif
-
 if s:IsPlugged('ale')
     " dense-analysis/ale
     let g:ale_lint_on_text_changed     = 0
@@ -1876,6 +2029,43 @@ if s:IsPlugged('ale')
 
     nnoremap <silent> <Leader>bc :ALELint<CR>
     nnoremap <silent> <Leader>bC :ALEFix<CR>
+endif
+
+if s:IsPlugged('syntastic')
+    " vim-syntastic/syntastic
+    let g:syntastic_mode_map                 = { 'mode': 'passive', }
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list            = g:zero_vim_autolint
+    let g:syntastic_auto_jump                = 1
+    let g:syntastic_loc_list_height          = 5
+    let g:syntastic_check_on_open            = g:zero_vim_autolint
+    let g:syntastic_check_on_wq              = g:zero_vim_autolint
+    let g:syntastic_aggregate_errors         = 1
+    let g:syntastic_echo_current_error       = 1
+    let g:syntastic_error_symbol             = '●' " •
+    let g:syntastic_style_error_symbol       = '.'
+    let g:syntastic_warning_symbol           = '!'
+    let g:syntastic_style_warning_symbol     = '*'
+
+    function! s:syntastic_add_checker(filetype, program, ...) abort
+        if executable(a:program)
+            let programs = get(g:, printf('syntastic_%s_checkers', a:filetype), [])
+            call add(programs, a:program)
+            let g:syntastic_{a:filetype}_checkers = programs
+
+            let path = get(a:, 1, '')
+            if strlen(path)
+                let g:syntastic_{a:filetype}_{a:program}_exec = path
+            endif
+        endif
+    endfunction
+
+    call s:syntastic_add_checker('javascript', 'eslint', 'npm run eslint --')
+    call s:syntastic_add_checker('jsx', 'eslint', 'npm run eslint --')
+    call s:syntastic_add_checker('ruby', 'rubocop')
+    call s:syntastic_add_checker('yaml', 'yamllint')
+
+    nnoremap <silent> <Leader>bc :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 endif
 
 if s:IsPlugged('vim-autoformat')
