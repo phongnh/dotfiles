@@ -3,8 +3,8 @@ let g:zero_vim_groups = [
             \ 'text-objects',
             \ 'airline',
             \ 'fzf',
-            \ 'ultisnips',
-            \ 'completor',
+            \ 'neosnippet',
+            \ 'deoplete',
             \ 'startify',
             \ 'distraction-free',
             \ 'lint',
@@ -26,12 +26,12 @@ let g:lightline_powerline   = 1
 let g:lightline_bufferline  = 1
 let g:crystalline_powerline = 1
 
-let g:zero_vim_autocomplete    = 0
-let g:zero_vim_autolint        = 1
+let g:zero_vim_autocomplete    = 1
+let g:zero_vim_autolint        = 0
 let g:zero_vim_autofix         = 0
 let g:zero_vim_git_gutter      = 0
 let g:zero_vim_grep_ignore_vcs = 0
-let g:zero_vim_find_tool       = 'fd'
+let g:zero_vim_find_tool       = 'rg'
 
 if $ITERM_PROFILE =~? 'Solarized'
     let g:zero_vim_true_color  = 1
@@ -46,7 +46,6 @@ if $ITERM_PROFILE =~? 'Solarized'
         let g:zero_vim_background = 'dark'
     endif
 else
-    let g:zero_vim_background  = 'dark'
     let g:zero_vim_colorscheme = 'gruvbox'
     let g:lightline_theme      = 'deus'
 endif

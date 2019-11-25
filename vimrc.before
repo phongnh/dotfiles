@@ -1,7 +1,7 @@
 let g:zero_vim_groups = [
             \ 'grep',
             \ 'text-objects',
-            \ 'crystalline',
+            \ 'airline',
             \ 'leaderf',
             \ 'ultisnips',
             \ 'completor',
@@ -13,8 +13,8 @@ let g:zero_vim_groups = [
             \ 'tagbar',
             \ 'undo',
             \ 'indent',
-            \ 'ruby',
             \ 'web',
+            \ 'ruby',
             \ 'go',
             \ 'git',
             \ 'gitgutter',
@@ -27,11 +27,11 @@ let g:lightline_bufferline  = 1
 let g:crystalline_powerline = 1
 
 let g:zero_vim_autocomplete    = 1
-let g:zero_vim_autolint        = 1
+let g:zero_vim_autolint        = 0
 let g:zero_vim_autofix         = 0
 let g:zero_vim_git_gutter      = 0
 let g:zero_vim_grep_ignore_vcs = 0
-let g:zero_vim_find_tool       = 'fd'
+let g:zero_vim_find_tool       = 'rg'
 
 if $ITERM_PROFILE =~? 'Solarized'
     let g:zero_vim_true_color  = 1
