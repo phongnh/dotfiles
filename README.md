@@ -56,8 +56,10 @@ My dotfiles for vim + tmux setup
     ln -sf ~/dotfiles/gvimrc ~/.gvimrc
     # Using vim
     ln -sf ~/dotfiles/vimrc ~/.vimrc
+    ln -sf ~/dotfiles/vimrc.before ~/.vimrc.before
     # Using neovim
     ln -sf ~/dotfiles/init.vim ~/.config/nvim/init.vim
+    ln -sf ~/dotfiles/init.vim.before ~/.init.vim.before
 
     # tmux
     ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf
