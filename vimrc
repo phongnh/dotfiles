@@ -4,6 +4,21 @@ let s:python3 = has('python3')
 let s:python  = s:python3 || s:python2
 let s:vim8    = v:version >= 800
 
+" Find and source vimrc from root to current folder
+" ~/projects/hello $
+" .
+" └── /home/phong
+"     ├── vimrc
+"     └── projects
+"         ├── vimrc
+"         └── hello
+"             ├── vimrc
+"             └── ...
+"
+" Files are sourced in order for the call s:Source('vimrc'):
+"   /home/phong/vimrc
+"   /home/phong/projects/vimrc
+"   /home/phong/projects/hello/vimrc
 function! s:Source(vimrc) abort
     let vimrcs = findfile(a:vimrc, ';', -1)
     for vimrc in reverse(vimrcs)
@@ -11,14 +26,17 @@ function! s:Source(vimrc) abort
     endfor
 endfunction
 
+" Check if plugin group is used or not
 function! s:Use(group) abort
     return index(get(g:, 'zero_vim_groups', []), a:group) > - 1
 endfunction
 
+" Check if a plugin is plugged in plug section or not
 function! s:IsPlugged(plugin) abort
     return has_key(g:plugs, a:plugin)
 endfunction
 
+" Plugin Dir
 function! s:PlugDir(plugin) abort
     return g:plugs[a:plugin]['dir']
 endfunction
@@ -110,10 +128,10 @@ let g:zero_vim_find_tool         = 'rg'
 let g:zero_vim_indent_char       = '┊'
 let g:zero_vim_indent_first_char = '│'
 
-" Find .vimrc.before from current folder up to root.
-" If found, source it
+" Find and source .vimrc.before from root to current folder.
 call s:Source('.vimrc.before')
 
+" Plugins
 call plug#begin()
 
 " Core {
@@ -2703,6 +2721,7 @@ function! OpenFolderWithMapping(folder, mapping) abort
     execute printf('nnoremap <silent> %s :%s %s<CR>', a:mapping, cmd, a:folder)
 endfunction
 
+" Find and source .vimrc.local from root to current folder
 call s:Source('.vimrc.local')
 
 try
