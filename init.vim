@@ -545,6 +545,7 @@ Plug 'janko-m/vim-test'
 
 if s:Use('syntax')
     " A solid language pack for Vim
+    let g:polyglot_disabled = ['fish', 'coffee-script', 'go']
     Plug 'sheerun/vim-polyglot'
 endif
 
@@ -2349,8 +2350,6 @@ endif
 
 if s:IsPlugged('vim-polyglot')
     " sheerun/vim-polyglot
-    let g:polyglot_disabled = ['fish', 'coffee-script', 'go']
-
     " plasticboy/vim-markdown
     let g:vim_markdown_no_default_key_mappings = 1
     let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
