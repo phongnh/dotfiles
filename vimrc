@@ -1545,19 +1545,17 @@ if s:IsPlugged('ultisnips')
     let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
     let g:UltiSnipsJumpBackwardTrigger = '<C-z>'
 
-    function! IsExpandableUltiSnips() abort
-        return !empty(UltiSnips#SnippetsInCurrentScope())
-    endfunction
+    inoremap <silent> <expr> <Plug>(ultisnips_expand) UltiSnips#ExpandSnippet()
 
+    " deoplete integration
     function! ExpandSnippet() abort
-        if IsExpandableUltiSnips()
+        " Expandable
+        if !empty(UltiSnips#SnippetsInCurrentScope())
             return "\<Plug>(ultisnips_expand)"
         endif
 
         return ''
     endfunction
-
-    inoremap <silent> <expr> <Plug>(ultisnips_expand) UltiSnips#ExpandSnippet()
 endif
 
 if s:IsPlugged('neosnippet.vim')
@@ -1583,7 +1581,7 @@ if s:IsPlugged('neosnippet.vim')
             return "\<C-e>"
         endif
 
-        return "\<C-j>"
+        return "\<C-k>"
     endfunction
 
     imap <silent> <expr> <C-k> <SID>NeoSnippetExpand()
@@ -1594,6 +1592,7 @@ if s:IsPlugged('neosnippet.vim')
     smap <C-j> <Plug>(neosnippet_jump)
     smap <Tab> <Plug>(neosnippet_jump)
 
+    " deoplete integration
     function! ExpandSnippet() abort
         if neosnippet#jumpable()
             return "\<Plug>(neosnippet_jump)"
