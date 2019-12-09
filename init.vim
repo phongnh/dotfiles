@@ -491,6 +491,12 @@ call plug#begin()
 " Run your tests at the speed of thought
 Plug 'janko-m/vim-test'
 
+if s:Use('syntax')
+    " A solid language pack for Vim
+    let g:polyglot_disabled = ['fish', 'coffee-script', 'go']
+    Plug 'sheerun/vim-polyglot'
+endif
+
 " Web {
     if s:Use('web')
         Plug 'pangloss/vim-javascript'
@@ -542,12 +548,6 @@ Plug 'janko-m/vim-test'
 " Fish Shell {
     Plug 'dag/vim-fish'
 " }
-
-if s:Use('syntax')
-    " A solid language pack for Vim
-    let g:polyglot_disabled = ['fish', 'coffee-script', 'go']
-    Plug 'sheerun/vim-polyglot'
-endif
 
 " Git {
     if s:Use('git')
@@ -2232,6 +2232,13 @@ nnoremap <silent> <Leader>tl :TestLast<CR>
 nnoremap <silent> <Leader>ts :TestSuite<CR>
 nnoremap <silent> <Leader>tv :TestVisit<CR>
 
+if s:IsPlugged('vim-polyglot')
+    " sheerun/vim-polyglot
+    " plasticboy/vim-markdown
+    let g:vim_markdown_no_default_key_mappings = 1
+    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
+endif
+
 " pangloss/vim-javascript
 let g:javascript_plugin_jsdoc = 1
 let g:javascript_plugin_flow  = 1
@@ -2345,13 +2352,6 @@ if s:IsPlugged('vim-go')
     augroup MyAutoCmd
         autocmd FileType go call s:SetupVimGo()
     augroup END
-endif
-
-if s:IsPlugged('vim-polyglot')
-    " sheerun/vim-polyglot
-    " plasticboy/vim-markdown
-    let g:vim_markdown_no_default_key_mappings = 1
-    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
 endif
 
 if s:IsPlugged('vim-fugitive')
