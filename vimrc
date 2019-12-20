@@ -933,10 +933,14 @@ nnoremap <silent> [w :wincmd W<CR>
 
 " Search and Replace
 nnoremap <Leader>R  :%s//gc<Left><Left><Left>
+nmap     <Leader>rr <Leader>R
 nnoremap <Leader>sr :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+nmap     <Leader>rw <Leader>sr
 
 xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
+xmap     <Leader>rr <Leader>R
 xnoremap <Leader>sr <Esc>:%s/<C-r>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xmap     <Leader>rw <Leader>sr
 
 " Buffer-related mappings
 " gl: Go to Last buffer
@@ -1037,6 +1041,7 @@ let g:dispatch_tmux_height     = 1
 let g:grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
 
 nnoremap          <Leader>S  :Grep<Space>
+nmap              <Leader>se <Leader>S
 nnoremap <silent> <Leader>ss :GrepCCword<CR>
 xnoremap <silent> <Leader>ss <Esc>:Grep <C-r>=GetSelectedTextForShell()<CR><CR>
 nnoremap          <Leader>si :GrepCCword<Space>
@@ -1333,6 +1338,9 @@ if s:IsPlugged('fzf')
 
     nnoremap <silent> <Leader>\ :Tags!<CR>
 
+    " Buffer-related mappings
+    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bb :Buffers!<CR>
     nnoremap <silent> <Leader>bl :BLines!<CR>
     nnoremap <silent> <Leader>bt :BTags!<CR>
@@ -2050,10 +2058,10 @@ if s:IsPlugged('limelight.vim')
     let g:limelight_default_coefficient = 0.7
     let g:limelight_priority            = -1
 
-    nnoremap <silent> <Leader>F :Limelight!!<CR>
-    vmap              <Leader>F <Esc><Leader>Fgv
-    nmap              <Leader>z <Plug>(Limelight)
-    xmap              <Leader>z <Plug>(Limelight)
+    nnoremap <silent> <Leader>I :Limelight!!<CR>
+    vmap              <Leader>I <Esc><Leader>Fgv
+    nmap              <Leader>i <Plug>(Limelight)
+    xmap              <Leader>i <Plug>(Limelight)
 endif
 
 if s:IsPlugged('ale')
@@ -2148,7 +2156,8 @@ if s:IsPlugged('vim-prettier')
     " prettier/vim-prettier
     let g:prettier#autoformat = 0
 
-    nmap <Leader>ap <Plug>(PrettierAsync)
+    nmap <Leader>P  <Plug>(PrettierAsync)
+    nmap <Leader>rf <Plug>(PrettierAsync)
 endif
 
 if s:IsPlugged('vim-gutentags')
@@ -2520,8 +2529,8 @@ if s:IsPlugged('vim-which-key')
                 \ 'n':    'open-selected-region',
                 \ 'e':    'toggle-explorer',
                 \ 'E':    'open-explorer-in-cwd',
-                \ 'z':    'hyperfocus-on-range',
-                \ 'F':    'toggle-hyperfocus-writing',
+                \ 'i':    'hyperfocus-on-range',
+                \ 'I':    'toggle-hyperfocus-writing',
                 \ 'H':    'toggle-start-screen',
                 \ 'T':    'toggle-tagbar',
                 \ 'U':    'toggle-undo-tree',
@@ -2538,16 +2547,12 @@ if s:IsPlugged('vim-which-key')
                 \ 'O':    'recent-files',
                 \ 'd':    'files-in-buffer-dir',
                 \ 'D':    'files-in-parent-dir-of-buffer-dir',
+                \ 'P':    'prettier-async',
                 \ '\':    'tag',
                 \ '[':    'opening-buffer-outline',
                 \ ']':    'opening-buffer-tag',
                 \ ':':    'command-history',
                 \ '/':    'search-history',
-                \ }
-
-    let g:which_key_map.a = {
-                \ 'name': '+format',
-                \ 'p':    'prettier',
                 \ }
 
     let g:which_key_map.b = {
@@ -2665,6 +2670,7 @@ if s:IsPlugged('vim-which-key')
 
     let g:which_key_map.s = {
                 \ 'name': '+search/replace/surround',
+                \ 'e':    'search-prompt',
                 \ 's':    'search-cword',
                 \ 'i':    'search-cword-prompt',
                 \ 'r':    'search-and-replace-prompt',
@@ -2695,7 +2701,10 @@ if s:IsPlugged('vim-which-key')
                 \ }
 
     let g:which_key_map.r = {
-                \ 'name': '+rubocop',
+                \ 'name': '+replace/rubocop/prettier',
+                \ 'r': 'replace-prompt',
+                \ 'w': 'search-and-replace-prompt',
+                \ 'f': 'prettier-async',
                 \ }
 
     call which_key#register('<Space>', 'g:which_key_map')
