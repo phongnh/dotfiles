@@ -509,7 +509,7 @@ Plug 'janko-m/vim-test'
 
 if s:Use('syntax')
     " A solid language pack for Vim
-    let g:polyglot_disabled = ['fish', 'coffee-script', 'go']
+    let g:polyglot_disabled = ['markdown', 'fish', 'coffee-script']
     Plug 'sheerun/vim-polyglot'
 endif
 
@@ -2275,9 +2275,13 @@ nnoremap <silent> <Leader>tv :TestVisit<CR>
 
 if s:IsPlugged('vim-polyglot')
     " sheerun/vim-polyglot
-    " plasticboy/vim-markdown
-    let g:vim_markdown_no_default_key_mappings = 1
-    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
+    " gabrielelana/vim-markdown
+    let g:markdown_include_jekyll_support             = 0
+    let g:markdown_enable_folding                     = 0
+    let g:markdown_enable_mappings                    = 0
+    let g:markdown_enable_insert_mode_mappings        = 0
+    let g:markdown_enable_insert_mode_leader_mappings = 0
+    let g:markdown_mapping_switch_status              = '<Leader>M'
 endif
 
 if s:IsPlugged('vim-rails')
