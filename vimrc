@@ -293,8 +293,8 @@ call plug#begin()
         Plug 'phongnh/vim-statusline'
     endif
 
-    " Setup VIM's cursor and True Color for iTerm2
-    Plug 'phongnh/vim-iterm-settings'
+    " Set cursor settings for iTerm.app, Kitty and Alacritty terminals
+    Plug 'phongnh/vim-cursor-settings'
 
     " Show "Match 123 of 456 /search term/" in Vim searches
     Plug 'henrik/vim-indexed-search'
