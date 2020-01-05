@@ -509,7 +509,7 @@ Plug 'janko-m/vim-test'
 
 if s:Use('syntax')
     " A solid language pack for Vim
-    let g:polyglot_disabled = ['markdown', 'fish', 'coffee-script']
+    let g:polyglot_disabled = ['fish', 'coffee-script']
     Plug 'sheerun/vim-polyglot'
 endif
 
@@ -1469,6 +1469,7 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>b[ :LeaderfFunctionAll<CR>
     nnoremap <silent> <Leader>[  :LeaderfFunctionAll<CR>
 
+    nnoremap <silent> <Leader>; :LeaderfCommand<CR>
     nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
     nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
 
@@ -1619,11 +1620,14 @@ if s:IsPlugged('deoplete.nvim')
     let g:deoplete#enable_at_startup = 1
 
     call deoplete#custom#option({
-                \ 'auto_complete':       g:zero_vim_autocomplete,
-                \ 'auto_complete_delay': 200,
-                \ 'camel_case':          v:true,
-                \ 'max_list':            200,
-                \ 'refresh_always':      v:true,
+                \ 'auto_complete':        g:zero_vim_autocomplete,
+                \ 'auto_complete_delay':  200,
+                \ 'refresh_always':       v:true,
+                \ 'camel_case':           v:true,
+                \ 'skip_multibyte':       v:true,
+                \ 'prev_completion_mode': 'length',
+                \ 'auto_preview':         v:true,
+                \ 'max_list':             200,
                 \ })
 
     call deoplete#custom#option('keyword_patterns', { '_': '[a-zA-Z_]\k*\(?' })
@@ -1633,11 +1637,17 @@ if s:IsPlugged('deoplete.nvim')
     call deoplete#custom#option('ignore_sources', g:deoplete#ignore_sources)
 
     call deoplete#custom#source('_', 'converters', [
-                \ 'converter_remove_paren',
                 \ 'converter_remove_overlap',
+                \ 'converter_case',
+                \ 'matcher_length',
                 \ 'converter_truncate_abbr',
+                \ 'converter_truncate_info',
                 \ 'converter_truncate_menu',
-                \ 'converter_auto_delimiter',
+                \ ])
+
+    call deoplete#custom#source('_', 'matchers', [
+                \ 'matcher_fuzzy',
+                \ 'matcher_length'
                 \ ])
 
     " CTRL-H, <BS>: close popup and delete backword char
@@ -1681,9 +1691,8 @@ if s:IsPlugged('deoplete.nvim')
 
     inoremap          <expr> <C-x><C-g> deoplete#undo_completion()
     inoremap          <expr> <C-x><C-l> deoplete#complete_common_string()
-    inoremap          <expr> <C-x><C-r> deoplete#refresh()
+    inoremap          <expr> <C-x><C-r> deoplete#manual_complete()
     inoremap <silent> <expr> <C-x><C-f> deoplete#manual_complete('file')
-    inoremap <silent> <expr> <C-_>      deoplete#manual_complete()
 endif
 
 if s:IsPlugged('deoplete-clang')
@@ -1777,8 +1786,7 @@ if s:IsPlugged('coc.nvim')
     " To make coc.nvim format your code on <CR>
     " inoremap <silent> <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-    " Use <C-_> to trigger completion.
-    inoremap <silent> <expr> <C-_>      coc#refresh()
+    " Use <C-x><C-r> to trigger completion.
     inoremap <silent> <expr> <C-x><C-r> coc#refresh()
 
     " Use `[c` and `]c` to navigate diagnostics
@@ -1792,7 +1800,7 @@ if s:IsPlugged('asyncomplete.vim')
     let g:asyncomplete_popup_delay = 50
 
     " Show autocomplete popup manually
-    imap <C-_> <Plug>(asyncomplete_force_refresh)
+    imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
@@ -1890,7 +1898,7 @@ if s:IsPlugged('completor.vim')
     let g:completor_auto_trigger = g:zero_vim_autocomplete
 
     " Trigger complete manually
-    inoremap <silent> <expr> <C-_> "<C-r>=completor#do('complete')<CR>"
+    inoremap <silent> <expr> <C-x><C-r> "<C-r>=completor#do('complete')<CR>"
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
@@ -2084,7 +2092,7 @@ if s:IsPlugged('ale')
     let g:ale_linters = {}
     let g:ale_fixers  = {}
 
-    function! s:ale_add_program(dict, filetype, program) abort
+    function! s:AleAddProgram(dict, filetype, program) abort
         if executable(a:program)
             let programs = get(a:dict, a:filetype, [])
             call add(programs, a:program)
@@ -2092,9 +2100,9 @@ if s:IsPlugged('ale')
         endif
     endfunction
 
-    call s:ale_add_program(g:ale_linters, 'javascript', 'eslint')
-    call s:ale_add_program(g:ale_fixers, 'javascript', 'eslint')
-    call s:ale_add_program(g:ale_linters, 'ruby', 'rubocop')
+    call s:AleAddProgram(g:ale_linters, 'javascript', 'eslint')
+    call s:AleAddProgram(g:ale_fixers, 'javascript', 'eslint')
+    call s:AleAddProgram(g:ale_linters, 'ruby', 'rubocop')
 
     let g:ale_linter_aliases = { 'javascript.jsx': 'javascript', 'jsx': 'javascript' }
 
@@ -2118,7 +2126,7 @@ if s:IsPlugged('syntastic')
     let g:syntastic_warning_symbol           = '!'
     let g:syntastic_style_warning_symbol     = '*'
 
-    function! s:syntastic_add_checker(filetype, program, ...) abort
+    function! s:SyntasticAddChecker(filetype, program, ...) abort
         if executable(a:program)
             let programs = get(g:, printf('syntastic_%s_checkers', a:filetype), [])
             call add(programs, a:program)
@@ -2131,10 +2139,10 @@ if s:IsPlugged('syntastic')
         endif
     endfunction
 
-    call s:syntastic_add_checker('javascript', 'eslint', 'npm run eslint --')
-    call s:syntastic_add_checker('jsx', 'eslint', 'npm run eslint --')
-    call s:syntastic_add_checker('ruby', 'rubocop')
-    call s:syntastic_add_checker('yaml', 'yamllint')
+    call s:SyntasticAddChecker('javascript', 'eslint', 'npm run eslint --')
+    call s:SyntasticAddChecker('jsx', 'eslint', 'npm run eslint --')
+    call s:SyntasticAddChecker('ruby', 'rubocop')
+    call s:SyntasticAddChecker('yaml', 'yamllint')
 
     nnoremap <silent> <Leader>bc :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 endif
@@ -2275,13 +2283,9 @@ nnoremap <silent> <Leader>tv :TestVisit<CR>
 
 if s:IsPlugged('vim-polyglot')
     " sheerun/vim-polyglot
-    " gabrielelana/vim-markdown
-    let g:markdown_include_jekyll_support             = 0
-    let g:markdown_enable_folding                     = 0
-    let g:markdown_enable_mappings                    = 0
-    let g:markdown_enable_insert_mode_mappings        = 0
-    let g:markdown_enable_insert_mode_leader_mappings = 0
-    let g:markdown_mapping_switch_status              = '<Leader>M'
+    " plasticboy/vim-markdown
+    let g:vim_markdown_no_default_key_mappings = 1
+    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
 endif
 
 if s:IsPlugged('vim-rails')
