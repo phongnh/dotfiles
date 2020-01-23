@@ -287,8 +287,6 @@ call plug#begin()
         " Functions for taking the monotony out of building your own fancy statusline in Vim
         Plug 'rbong/vim-crystalline'
     else
-        " Configure tabs within Terminal Vim
-        Plug 'mkitt/tabline.vim'
         " My vim statusline
         Plug 'phongnh/vim-statusline'
     endif
