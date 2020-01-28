@@ -554,6 +554,9 @@ endif
         " An awesome Git wrapper so awesome
         Plug 'tpope/vim-fugitive'
 
+        " Vim and Neovim plugin to reveal the commit messages under the cursor
+        Plug 'rhysd/git-messenger.vim'
+    
         " A git commit browser in Vim
         Plug 'junegunn/gv.vim'
 
@@ -2599,6 +2602,7 @@ if s:IsPlugged('vim-which-key')
                 \ 'k':    'commit-browser',
                 \ 'K':    'current-file-commit-browser',
                 \ 'v':    'current-file-revisions',
+                \ 'm':    'git-messenger',
                 \ }
 
     let g:which_key_map.m = {
