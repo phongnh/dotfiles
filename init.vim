@@ -45,12 +45,14 @@ if &shell =~# 'fish$' " && (v:version < 704 || v:version == 704 && !has('patch27
     set shell=/usr/bin/env\ bash
 endif
 
+let g:python3_host_skip_check = 1
 if executable('python3')
-    let g:python3_host_prog = substitute(system('which python3'), '\n\+$', '', '')
+    let g:python3_host_prog = exepath('python3')
 endif
 
+let g:python_host_skip_check = 1
 if executable('python2')
-    let g:python_host_prog = substitute(system('which python2'), '\n\+$', '', '')
+    let g:python_host_prog = exepath('python2')
 endif
 
 " Disable system plugins
