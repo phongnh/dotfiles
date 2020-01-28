@@ -1513,7 +1513,7 @@ if s:IsPlugged('ctrlp.vim')
 
     nnoremap <silent> <Leader>\ :CtrlPTag<CR>
 
-    nnoremap <silent> <Leader>q :CtrlPQuickfix<CR>
+    nnoremap <silent> <Leader>q :cclose<CR>:CtrlPQuickfix<CR>
 
     " Buffer-related mappings
     nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
@@ -1548,7 +1548,7 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>/ :CtrlPSearchHistory<CR>
 
     " slimane/ctrlp-locationlist
-    nnoremap <silent> <Leader>l :CtrlPLocationlist<CR>
+    nnoremap <silent> <Leader>l :lclose<CR>:CtrlPLocationlist<CR>
 endif
 
 function! ExpandSnippet() abort
