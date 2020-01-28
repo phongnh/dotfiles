@@ -178,8 +178,8 @@ call plug#begin()
     " Maximize current buffer
     Plug 'phongnh/ZoomWin'
 
-    " Delete buffers and close files in Vim without closing your windows or messing up your layout
-    Plug 'moll/vim-bbye'
+    " Sane buffer/window deletion.
+    Plug 'mhinz/vim-sayonara'
 
     " A Narrow Region Plugin for vim (like Emacs Narrow Region)
     Plug 'chrisbra/NrrwRgn'
@@ -1068,9 +1068,15 @@ vnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
 nmap <silent> <Leader>bm <Plug>ZoomWin
 vmap          <Leader>bm <Esc><Leader>bmgv
 
-" moll/vim-bbye
-nnoremap <silent> <Leader>bd :Bdelete<CR>
-nnoremap <silent> <Leader>bk :Bwipeout<CR>
+" mhinz/vim-sayonara
+let g:sayonara_filetypes = {
+            \ 'nerdtree':    'NERDTreeClose',
+            \ 'bufexplorer': 'ToggleBufExplorer',
+            \ 'undotree':    'UndotreeHide',
+            \ 'gundo':       'GundoHide',
+            \ }
+
+nnoremap <silent> <Leader>bd :Sayonara!<CR>
 
 " chrisbra/NrrwRgn
 let g:nrrw_topbot_leftright  = 'belowright'
