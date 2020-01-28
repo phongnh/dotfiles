@@ -1701,8 +1701,23 @@ if s:IsPlugged('coc.nvim')
     " Install Extensions
     " :CocInstall coc-json coc-tsserver coc-html coc-xml coc-css coc-tailwindcss coc-yaml 
     " :CocInstall coc-markdownlint
-    " :CocInstall coc-highlight coc-emmet coc-snippets coc-lists coc-git coc-yank
-    " :CocInstall coc-python coc-pyright coc-solargraph coc-flow
+    " :CocInstall coc-highlight coc-emmet coc-ultisnips coc-snippets coc-lists coc-git coc-yank
+    " :CocInstall coc-python coc-pyright coc-solargraph coc-flow coc-rls coc-vimlsp
+
+    let g:coc_global_extensions = [
+                \ 'coc-json',
+                \ 'coc-tsserver',
+                \ 'coc-html',
+                \ 'coc-xml',
+                \ 'coc-css',
+                \ 'coc-tailwindcss',
+                \ 'coc-yaml',
+                \ 'coc-python',
+                \ ]
+
+    if s:IsPlugged('ultisnips')
+        call add(g:coc_global_extensions, 'coc-ultisnips')
+    endif
 
     " You will have bad experience for diagnostic messages when it's default 4000.
     set updatetime=300
