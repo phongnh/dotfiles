@@ -1117,9 +1117,11 @@ if s:IsPlugged('vim-grepper')
                 \ 'stop':                2000,
                 \ }
 
-    if g:zero_vim_grep_ignore_vcs
-        runtime plugin/grepper.vim
+    runtime plugin/grepper.vim
+    let g:grepper.rg.grepprg .= ' --hidden'
+    let g:grepper.ag.grepprg .= ' --hidden'
 
+    if g:zero_vim_grep_ignore_vcs
         let g:grepper.rg.grepprg .= ' --no-ignore-vcs'
         let g:grepper.ag.grepprg .= ' --skip-vcs-ignores'
     endif
