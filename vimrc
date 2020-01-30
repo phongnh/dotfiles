@@ -251,7 +251,7 @@ call plug#begin()
         Plug 'kana/vim-textobj-indent'                " i
         Plug 'glts/vim-textobj-comment'               " c
         Plug 'mattn/vim-textobj-url'                  " u
-        Plug 'rhysd/vim-textobj-conflict'             " =
+        Plug 'rhysd/vim-textobj-conflict'             " =, remapped to k
         Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
         Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y (rub[y])
         Plug 'inside/vim-textobj-jsxattr'             " x
@@ -1263,7 +1263,16 @@ nmap >, <Plug>SidewaysRight
 nnoremap <silent> [, :SidewaysJumpLeft<CR>
 nnoremap <silent> ], :SidewaysJumpRight<CR>
 
-if s:IsPlugged('rhysd/vim-textobj-ruby')
+if s:IsPlugged('vim-textobj-conflict')
+    " rhysd/vim-textobj-conflict
+    let g:textobj_conflict_no_default_key_mappings = 1
+
+    " Remap from '=' to 'k'
+    omap ik <Plug>(textobj-conflict-i)
+    omap ak <Plug>(textobj-conflict-a)
+endif
+
+if s:IsPlugged('vim-textobj-ruby')
     " rhysd/vim-textobj-ruby
     let g:textobj_ruby_more_mappings = 0
 endif
@@ -1282,6 +1291,26 @@ endif
 if s:IsPlugged('targets.vim')
     " wellle/targets.vim
     let g:targets_nl = 'nN'
+    " Only consider targets fully visible on screen
+    let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab rr rb bb ll al aa'
+
+    augroup MyAutoCmd
+        autocmd User targets#mappings#user call targets#mappings#extend({
+                    \ 'd': {
+                    \   'separator': [{'d':','}, {'d':'.'}, {'d':';'}, {'d':':'}, {'d':'+'}, {'d':'-'},
+                    \                 {'d':'='}, {'d':'~'}, {'d':'_'}, {'d':'*'}, {'d':'#'}, {'d':'/'},
+                    \                 {'d':'\'}, {'d':'|'}, {'d':'&'}, {'d':'$'}],
+                    \ },
+                    \ '0': {
+                    \   'separator': [{'d':','}, {'d':'.'}, {'d':';'}, {'d':':'}, {'d':'+'}, {'d':'-'},
+                    \                 {'d':'='}, {'d':'~'}, {'d':'_'}, {'d':'*'}, {'d':'#'}, {'d':'/'},
+                    \                 {'d':'\'}, {'d':'|'}, {'d':'&'}, {'d':'$'}],
+                    \   'pair':      [{'o':'(', 'c':')'}, {'o':'[', 'c':']'}, {'o':'{', 'c':'}'}, {'o':'<', 'c':'>'}],
+                    \   'quote':     [{'d':"'"}, {'d':'"'}, {'d':'`'}],
+                    \   'tag':       [{}],
+                    \ },
+                    \ })
+    augroup END
 endif
 
 if s:IsPlugged('wildfire.vim')
@@ -1298,9 +1327,6 @@ if s:IsPlugged('wildfire.vim')
 
     map  + <Plug>(wildfire-fuel)
     vmap _ <Plug>(wildfire-water)
-
-    map  <M-l> <Plug>(wildfire-fuel)
-    vmap <M-h> <Plug>(wildfire-water)
 endif
 
 " luochen1990/rainbow
