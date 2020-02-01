@@ -309,6 +309,12 @@ call plug#begin()
     elseif s:Use('leaderf') && s:python
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+    elseif s:Use('clap') && has('nvim-0.4.2')
+        " Viewer & Finder for LSP symbols and tags
+        Plug 'liuchengxu/vista.vim'
+
+        " Modern performant generic finder and dispatcher for Vim and NeoVim
+        Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
     else
         if s:python
             Plug 'FelikZ/ctrlp-py-matcher'
@@ -1350,6 +1356,123 @@ if s:IsPlugged('fzf')
 
     nnoremap <silent> <Leader>sg :Ag! <C-r><C-w><CR>
     xnoremap <silent> <Leader>sg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
+endif
+
+if s:IsPlugged('vim-clap')
+    " liuchengxu/vim-clap
+    let g:clap_search_box_border_style = 'nil'
+    let g:clap_disable_run_rooter      = v:true
+    let g:clap_popup_cursor_shape      = '_'
+    let g:clap_current_selection_sign  = { 'text': '» ', 'texthl': 'WarningMsg', 'linehl': 'ClapCurrentSelection' }
+    let g:clap_selected_sign           = { 'text': ' »', 'texthl': 'WarningMsg', 'linehl': 'ClapSelected' }
+    let g:clap_prompt_format           = ' %spinner%%forerunner_status%%provider_id%:'
+
+    function! ClapPromptFormat() abort
+        if g:clap.provider.id ==# 'files' && exists('g:__clap_provider_cwd')
+            let cwd = fnamemodify(g:__clap_provider_cwd, ':~:.')
+            if cwd[0] ==# '~' || cwd[0] ==# '/'
+                let cwd = pathshorten(cwd)
+            endif
+            return g:clap_prompt_format . cwd . ' '
+        endif
+        return g:clap_prompt_format . ' '
+    endfunction
+
+    let g:ClapPrompt = function('ClapPromptFormat')
+
+    if executable('rg')
+        let g:clap_provider_grep_executable = 'rg'
+        let g:clap_provider_grep_opts = '-H --no-heading --hidden --vimgrep --smart-case'
+        if g:zero_vim_grep_ignore_vcs
+            let g:clap_provider_grep_opts .= ' --no-ignore-vcs'
+        endif
+    elseif executable('ag')
+        let g:clap_provider_grep_executable = 'ag'
+        let s:clap_provider_grep_opts = '--noheading --hidden --vimgrep --smart-case'
+        if g:zero_vim_grep_ignore_vcs
+            let g:clap_provider_grep_opts .= ' --skip-vcs-ignores'
+        endif
+    endif
+
+    let s:clap_find_tools = {
+                \ 'rg': 'rg --color=never --no-ignore-vcs --hidden --files',
+                \ 'ag': "ag --nocolor --skip-vcs-ignores --hidden -l -g ''",
+                \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file',
+                \ }
+
+    if g:zero_vim_find_tool == 'fd' && executable('fd')
+        let s:clap_find_tool = s:clap_find_tools['fd']
+    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
+        let s:clap_find_tool = s:clap_find_tools['ag']
+    elseif executable('rg')
+        let s:clap_find_tool = s:clap_find_tools['rg']
+    elseif executable('ag')
+        let s:clap_find_tool = s:clap_find_tools['ag']
+    elseif executable('fd')
+        let s:clap_find_tool = s:clap_find_tools['fd']
+    endif
+
+    command! -bang -nargs=? -complete=dir ClapFiles execute printf('%s files ++finder=%s', <bang>0 ? 'Clap!' : 'Clap', s:clap_find_tool) <q-args>
+
+    function! s:clap_find_project_dir(starting_path) abort
+        if empty(a:starting_path)
+            return ''
+        endif
+
+        for root_marker in ['.git', '.hg', '.svn']
+            let root_dir = finddir(root_marker, a:starting_path . ';')
+            if empty(root_dir)
+                continue
+            endif
+
+            let root_dir = substitute(root_dir, root_marker, '', '')
+            if !empty(root_dir)
+                let root_dir = fnamemodify(root_dir, ':p:~:.')
+            endif
+
+            return root_dir
+        endfor
+
+        return ''
+    endfunction
+
+    command! -bang -nargs=0 ClapRoot execute (<bang>0 ? 'ClapFiles!' : 'ClapFiles') s:clap_find_project_dir(expand('%:p:h'))
+
+    nmap <Leader><Leader> <Leader>f
+
+    nnoremap <silent> <Leader>f :ClapFiles<CR>
+    nnoremap <silent> <C-p>     :ClapRoot<CR>
+    nnoremap <silent> <Leader>p :ClapRoot<CR>
+    nnoremap <silent> <Leader>o :Clap buffers<CR>
+    nnoremap <silent> <Leader>O :Clap history<CR>
+    nnoremap <silent> <Leader>d :ClapFiles <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :ClapFiles <C-r>=expand("%:h:h")<CR><CR>
+
+    nnoremap <silent> <Leader>\ :Clap tags<CR>
+
+    " Buffer-related mappings
+    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bp <Leader>p
+    nnoremap <silent> <Leader>bl :Clap blines<CR>
+    nnoremap <silent> <Leader>bt :Clap tags<CR>
+
+    nnoremap <silent> <Leader>bj :Clap windows<CR>
+
+    nnoremap <silent> <Leader>bo :Clap tags<CR>
+
+    nnoremap <silent> <Leader>; :Clap command<CR>
+    nnoremap <silent> <Leader>: :Clap command_history<CR>
+
+    nnoremap <silent> <Leader>' :Clap marks<CR>
+
+    nnoremap <silent> <Leader>y :Clap yanks<CR>
+    nnoremap <silent> <Leader>Y :Clap registers<CR>
+
+    nnoremap <silent> <Leader>q :cclose<CR>:Clap quickfix<CR>
+    nnoremap <silent> <Leader>l :lclose<CR>:Clap loclist<CR>
+
+    nnoremap <silent> <Leader>sg :Clap grep ++query=<cword><CR>
+    xnoremap <silent> <Leader>sg <Esc>:Clap grep ++query=<C-r>=GetSelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('LeaderF')
