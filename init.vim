@@ -349,36 +349,52 @@ call plug#begin()
 
     if s:Use('deoplete') && s:python3
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-        if s:Use('lsp')
+        if s:Use('lsp') && has('nvim-0.5-nightly')
+            Plug 'neovim/nvim-lsp'
+            Plug 'Shougo/deoplete-lsp'
+        elseif s:Use('lsp')
             Plug 'prabirshrestha/async.vim'
             Plug 'prabirshrestha/vim-lsp'
+            Plug 'mattn/vim-lsp-settings'
             Plug 'lighttiger2505/deoplete-vim-lsp'
         else
+            Plug 'Shougo/neco-vim'
             Plug 'deoplete-plugins/deoplete-go', { 'do': 'make' }
             Plug 'deoplete-plugins/deoplete-clang'
-            Plug 'deoplete-plugins/deoplete-jedi'
+            Plug 'deoplete-plugins/deoplete-jedi', { 'do': 'git submodule update --init' }
             Plug 'wokalski/autocomplete-flow'
         endif
     elseif s:Use('YouCompleteMe') && s:python3 && executable('python3') && executable('cmake')
         Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
-    elseif s:Use('asyncomplete') && s:vim8
+    elseif s:Use('asyncomplete')
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
         Plug 'prabirshrestha/asyncomplete-buffer.vim'
         Plug 'yami-beta/asyncomplete-omni.vim'
-        if s:IsPlugged('ultisnips')
-            Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-        elseif s:IsPlugged('neosnippet.vim')
-            Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
-        endif
         if s:Use('lsp')
             Plug 'prabirshrestha/vim-lsp'
+            Plug 'mattn/vim-lsp-settings'
             Plug 'prabirshrestha/asyncomplete-lsp.vim'
+            if s:IsPlugged('ultisnips')
+                Plug 'thomasfaingnaert/vim-lsp-snippets'
+                Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+            elseif s:IsPlugged('neosnippet.vim')
+                Plug 'thomasfaingnaert/vim-lsp-snippets'
+                Plug 'thomasfaingnaert/vim-lsp-neosnippet'
+            endif
         else
+            Plug 'Shougo/neco-vim'
+            Plug 'prabirshrestha/asyncomplete-necovim.vim'
             Plug 'prabirshrestha/asyncomplete-gocode.vim'
+            Plug 'wsdjeg/asyncomplete-clang.vim'
             Plug 'prabirshrestha/asyncomplete-flow.vim'
+            if s:IsPlugged('ultisnips')
+                Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+            elseif s:IsPlugged('neosnippet.vim')
+                Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
+            endif
         endif
     elseif s:python
         Plug 'maralla/completor.vim'
@@ -1919,9 +1935,20 @@ if s:IsPlugged('coc.nvim')
     " Use <C-x><C-r> to trigger completion.
     inoremap <silent> <expr> <C-x><C-r> coc#refresh()
 
-    " Use `[c` and `]c` to navigate diagnostics
-    nmap <silent> [c <Plug>(coc-diagnostic-prev)
-    nmap <silent> ]c <Plug>(coc-diagnostic-next)
+    " Use `[g` and `]g` to navigate diagnostics
+    nmap <silent> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+    " Use K to show documentation in preview window
+    nnoremap <silent> K :call <SID>ShowDocument()<CR>
+
+    function! s:ShowDocument() abort
+        if index(['vim','help'], &filetype) >= 0
+            execute 'help ' . expand('<cword>')
+        else
+            call CocAction('doHover')
+        endif
+    endfunction
 endif
 
 if s:IsPlugged('asyncomplete.vim')
@@ -1959,22 +1986,26 @@ if s:IsPlugged('asyncomplete.vim')
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 
     function! s:SetupAsyncomplete() abort
-        " prabirshrestha/asyncomplete-buffer.vim
-        call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-                    \ 'name':      'buffer',
-                    \ 'whitelist': ['*'],
-                    \ 'blacklist': ['go'],
-                    \ 'completor': function('asyncomplete#sources#buffer#completor'),
-                    \ }))
+        if exists('*asyncomplete#sources#buffer#get_source_options')
+            " prabirshrestha/asyncomplete-buffer.vim
+            call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+                        \ 'name':      'buffer',
+                        \ 'whitelist': ['*'],
+                        \ 'blacklist': ['go'],
+                        \ 'completor': function('asyncomplete#sources#buffer#completor'),
+                        \ }))
+        endif
 
-        " yami-beta/asyncomplete-omni.vim
-        call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-                    \ 'name':      'omni',
-                    \ 'whitelist': ['*'],
-                    \ 'completor': function('asyncomplete#sources#omni#completor')
-                    \ }))
+        if exists('*asyncomplete#sources#omni#get_source_options')
+            " yami-beta/asyncomplete-omni.vim
+            call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+                        \ 'name':      'omni',
+                        \ 'whitelist': ['*'],
+                        \ 'completor': function('asyncomplete#sources#omni#completor')
+                        \ }))
+        endif
 
-        if s:IsPlugged('ultisnips')
+        if exists('*asyncomplete#sources#ultisnips#get_source_options')
             " prabirshrestha/asyncomplete-ultisnips.vim
             call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
                         \ 'name':      'ultisnips',
@@ -1983,7 +2014,7 @@ if s:IsPlugged('asyncomplete.vim')
                         \ }))
         endif
 
-        if s:IsPlugged('neosnippet')
+        if exists('*asyncomplete#sources#neosnippet#get_source_options')
             " prabirshrestha/asyncomplete-neosnippet.vim
             call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
                         \ 'name':      'neosnippet',
@@ -2004,6 +2035,11 @@ if s:IsPlugged('asyncomplete.vim')
                         \ }))
         endif
 
+        if exists('*asyncomplete#sources#clang#get_source_options')
+            " wsdjeg/asyncomplete-clang.vim
+            call asyncomplete#register_source(asyncomplete#sources#clang#get_source_options())
+        endif
+
         if exists('*asyncomplete#sources#flow#get_source_options')
             " prabirshrestha/asyncomplete-flow.vim
             call asyncomplete#register_source(asyncomplete#sources#flow#get_source_options({
@@ -2014,6 +2050,15 @@ if s:IsPlugged('asyncomplete.vim')
                         \   'prefer_local': 1,
                         \   'flowbin_path': 'flow',
                         \ },
+                        \ }))
+        endif
+
+        if exists('*asyncomplete#sources#necovim#get_source_options')
+            " prabirshrestha/asyncomplete-necovim.vim
+            call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
+                        \ 'name': 'necovim',
+                        \ 'whitelist': ['vim'],
+                        \ 'completor': function('asyncomplete#sources#necovim#completor'),
                         \ }))
         endif
     endfunction
@@ -2059,63 +2104,25 @@ endif
 
 if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
-    augroup MyAutoCmd
-        " go get -u golang.org/x/tools/cmd/gopls
-        if executable('gopls')
-            autocmd User lsp_setup call lsp#register_server({
-                        \ 'name': 'gopls',
-                        \ 'whitelist': ['go'],
-                        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
-                        \ })
-            autocmd BufWritePre *.go LspDocumentFormatSync
-        elseif executable('go-langserver')
-            " go get -u github.com/sourcegraph/go-langserver
-            autocmd User lsp_setup call lsp#register_server({
-                        \ 'name': 'go-langserver',
-                        \ 'whitelist': ['go'],
-                        \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
-                        \ })
-            autocmd BufWritePre *.go LspDocumentFormatSync
-        endif
+    let g:lsp_signs_error   = { 'text': '●' }
+    let g:lsp_signs_warning = { 'text': '.' }
 
-        " gem install solargraph
-        if executable('solargraph')
-            autocmd User lsp_setup call lsp#register_server({
-                        \ 'name': 'solargraph',
-                        \ 'whitelist': ['ruby'],
-                        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
-                        \ 'initialization_options': {"diagnostics": "true"},
-                        \ })
-        endif
+    let g:lsp_highlight_references_enabled = 1
 
-        " pip install python-language-server
-        if executable('pyls')
-            autocmd User lsp_setup call lsp#register_server({
-                        \ 'name': 'pyls',
-                        \ 'whitelist': ['python'],
-                        \ 'cmd': {server_info->['pyls']},
-                        \ })
-        endif
+    " Use `[g` and `]g` to navigate diagnostics
+    nmap <silent> [g <Plug>(lsp-previous-diagnostic)
+    nmap <silent> ]g <Plug>(lsp-next-diagnostic)
 
-        " npm install -g flow-bin
-        if executable('flow')
-            autocmd User lsp_setup call lsp#register_server({
-                        \ 'name': 'flow',
-                        \ 'whitelist': ['javascript', 'javascript.jsx'],
-                        \ 'cmd': {server_info->['flow', 'lsp', '--from', 'vim-lsp'] },
-                        \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), '.flowconfig'))},
-                        \ })
-        endif
+    " Use K to show documentation
+    nnoremap <silent> K :call <SID>ShowDocument()<CR>
 
-        " npm install -g dockerfile-language-server-nodejs
-        if executable('docker-langserver')
-            autocmd User lsp_setup call lsp#register_server({
-                        \ 'name': 'docker-langserver',
-                        \ 'whitelist': ['dockerfile'],
-                        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'docker-langserver --stdio']},
-                        \ })
+    function! s:ShowDocument() abort
+        if index(['vim', 'help'], &filetype) >= 0
+            execute 'help ' . expand('<cword>')
+        else
+            execute 'LspHover'
         endif
-    augroup END
+    endfunction
 endif
 
 if s:IsPlugged('vim-startify')
