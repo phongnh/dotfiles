@@ -2262,22 +2262,83 @@ if s:IsPlugged('ale')
     let g:ale_sign_error   = '●' " •
     let g:ale_sign_warning = '.'
 
-    let g:ale_linters = {}
-    let g:ale_fixers  = {}
+    let g:ale_linter_aliases = { 'javascript.jsx': 'javascript', 'jsx': 'javascript' }
 
-    function! s:AleAddProgram(dict, filetype, program) abort
+    let g:ale_linters = {}
+    let g:ale_fixers  = {
+                \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+                \ }
+
+    function! s:AddAleProgram(dict, program, filetype) abort
         if executable(a:program)
-            let programs = get(a:dict, a:filetype, [])
-            call add(programs, a:program)
-            let a:dict[a:filetype] = programs
+            let filetypes = []
+            if type(a:filetype) == type('')
+                call add(filetypes, a:filetype)
+            elseif type(a:filetype) == type([])
+                call extend(filetypes, a:filetype)
+            endif
+            for ft in filetypes
+                let a:dict[ft] = get(a:dict, ft, [])
+                call add(a:dict[ft], a:program)
+            endfor
         endif
     endfunction
 
-    call s:AleAddProgram(g:ale_linters, 'javascript', 'eslint')
-    call s:AleAddProgram(g:ale_fixers, 'javascript', 'eslint')
-    call s:AleAddProgram(g:ale_linters, 'ruby', 'rubocop')
+    function! s:AddAleFixer(fixer, filetype) abort
+        call s:AddAleProgram(g:ale_fixers, a:fixer, a:filetype)
+    endfunction
 
-    let g:ale_linter_aliases = { 'javascript.jsx': 'javascript', 'jsx': 'javascript' }
+    function! s:AddAleLinter(linter, filetype) abort
+        call s:AddAleProgram(g:ale_linters, a:linter, a:filetype)
+    endfunction
+
+    call s:AddAleLinter('eslint', ['javascript', 'typescript'])
+    call s:AddAleLinter('standardrb', 'ruby')
+    call s:AddAleLinter('rubocop', 'ruby')
+    call s:AddAleLinter('yamllint', 'yaml')
+    call s:AddAleLinter('flake8', 'python')
+    call s:AddAleLinter('pylint', 'python')
+
+    call s:AddAleFixer('prettier', [
+                \ 'html',
+                \ 'css',
+                \ 'scss',
+                \ 'markdown',
+                \ 'json',
+                \ 'javascript',
+                \ 'typescript',
+                \ 'graphql',
+                \ 'yaml'
+                \ ])
+    call s:AddAleFixer('shfmt', [
+                \ 'sh',
+                \ 'bash'
+                \ ])
+    call s:AddAleFixer('standardrb', 'ruby')
+    call s:AddAleFixer('black', 'python')
+    call s:AddAleFixer('gofmt', 'go')
+    call s:AddAleFixer('rustfmt', 'rust')
+    call s:AddAleFixer('refmt', 'reason')
+
+    " Don't auto-format files inside `node_modules`, minified files and jquery
+    let g:ale_pattern_options_enabled = 1
+    let g:ale_pattern_options = {
+                \ '\.min\.(js\|css)$': {
+                \   'ale_linters': [],
+                \   'ale_fixers': []
+                \ },
+                \ 'jquery.*': {
+                \   'ale_linters': [],
+                \   'ale_fixers': []
+                \ },
+                \ 'node_modules/.*': {
+                \   'ale_linters': [],
+                \   'ale_fixers': []
+                \ },
+                \ 'package.json': {
+                \   'ale_fixers': g:ale_fixers['*']
+                \ },
+                \}
 
     nnoremap <silent> <Leader>bc :ALELint<CR>
     nnoremap <silent> <Leader>bC :ALEFix<CR>
@@ -2299,23 +2360,32 @@ if s:IsPlugged('syntastic')
     let g:syntastic_warning_symbol           = '!'
     let g:syntastic_style_warning_symbol     = '*'
 
-    function! s:SyntasticAddChecker(filetype, program, ...) abort
-        if executable(a:program)
-            let programs = get(g:, printf('syntastic_%s_checkers', a:filetype), [])
-            call add(programs, a:program)
-            let g:syntastic_{a:filetype}_checkers = programs
+    let s:syntastic_checker_exec_paths = {
+                \ 'eslint': 'npm run eslint --',
+                \ }
 
-            let path = get(a:, 1, '')
-            if strlen(path)
-                let g:syntastic_{a:filetype}_{a:program}_exec = path
+    function! s:AddSyntasticChecker(checker, filetype) abort
+        if executable(a:checker)
+            let filetypes = []
+            if type(a:filetype) == type('')
+                call add(filetypes, a:filetype)
+            elseif type(a:filetype) == type([])
+                call extend(filetypes, a:filetype)
             endif
+            for ft in filetypes
+                let g:syntastic_{ft}_checkers = get(g:, printf('syntastic_%s_checkers', ft), [])
+                call add(g:syntastic_{ft}_checkers, a:checker)
+                if has_key(s:syntastic_checker_exec_paths, a:checker)
+                    let g:syntastic_{ft}_{a:checker}_exec = s:syntastic_checker_exec_paths[a:checker]
+                endif
+            endfor
         endif
     endfunction
 
-    call s:SyntasticAddChecker('javascript', 'eslint', 'npm run eslint --')
-    call s:SyntasticAddChecker('jsx', 'eslint', 'npm run eslint --')
-    call s:SyntasticAddChecker('ruby', 'rubocop')
-    call s:SyntasticAddChecker('yaml', 'yamllint')
+    call s:AddSyntasticChecker('eslint', ['typescript', 'javascript', 'jsx'])
+    call s:AddSyntasticChecker('standardrb', 'ruby')
+    call s:AddSyntasticChecker('rubocop', 'ruby')
+    call s:AddSyntasticChecker('yamllint', 'yaml')
 
     nnoremap <silent> <Leader>bc :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 endif
@@ -2513,7 +2583,7 @@ if s:IsPlugged('vim-go')
 
     let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
     let g:ale_linters = get(g:, 'ale_linters', {})
-    let g:ale_linters.go = g:syntastic_go_checkers
+    let g:ale_linters.go = ['golint', 'govet', 'errheck']
 
     function! s:SetupVimGo() abort
         if has("nvim")
