@@ -349,10 +349,10 @@ call plug#begin()
 
     if s:Use('deoplete') && s:python3
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-        if s:Use('lsp') && has('nvim-0.5-nightly')
+        if s:Use('nvim-lsp') && has('nvim-0.5-nightly')
             Plug 'neovim/nvim-lsp'
             Plug 'Shougo/deoplete-lsp'
-        elseif s:Use('lsp')
+        elseif s:Use('lsp') || s:Use('nvim-lsp')
             Plug 'prabirshrestha/async.vim'
             Plug 'prabirshrestha/vim-lsp'
             Plug 'mattn/vim-lsp-settings'
