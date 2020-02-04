@@ -1465,30 +1465,30 @@ if s:IsPlugged('fzf')
 
     nmap <Leader><Leader> <Leader>f
 
-    nnoremap <silent> <Leader>f :Files!<CR>
-    nnoremap <silent> <C-p>     :PFiles!<CR>
-    nnoremap <silent> <Leader>p :PFiles!<CR>
-    nnoremap <silent> <Leader>o :Buffers!<CR>
-    nnoremap <silent> <Leader>O :History!<CR>
-    nnoremap <silent> <Leader>d :Files! <C-r>=expand("%:h")<CR><CR>
-    nnoremap <silent> <Leader>D :Files! <C-r>=expand("%:h:h")<CR><CR>
+    nnoremap <silent> <Leader>f :Files<CR>
+    nnoremap <silent> <C-p>     :PFiles<CR>
+    nnoremap <silent> <Leader>p :PFiles<CR>
+    nnoremap <silent> <Leader>o :Buffers<CR>
+    nnoremap <silent> <Leader>O :History<CR>
+    nnoremap <silent> <Leader>d :Files <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :Files <C-r>=expand("%:h:h")<CR><CR>
 
     nnoremap <silent> <Leader>\ :Tags!<CR>
 
     " Buffer-related mappings
     nmap              <Leader>bh <Leader>d
     nmap              <Leader>bp <Leader>p
-    nnoremap <silent> <Leader>bb :Buffers!<CR>
-    nnoremap <silent> <Leader>bl :BLines!<CR>
-    nnoremap <silent> <Leader>bt :BTags!<CR>
-    nnoremap <silent> <Leader>bo :BOutline!<CR>
+    nnoremap <silent> <Leader>bb :Buffers<CR>
+    nnoremap <silent> <Leader>bl :BLines<CR>
+    nnoremap <silent> <Leader>bt :BTags<CR>
+    nnoremap <silent> <Leader>bo :BOutline<CR>
 
-    nnoremap <silent> <Leader>; :Commands!<CR>
-    nnoremap <silent> <Leader>: :History:!<CR>
-    nnoremap <silent> <Leader>/ :History/!<CR>
+    nnoremap <silent> <Leader>; :Commands<CR>
+    nnoremap <silent> <Leader>: :History:<CR>
+    nnoremap <silent> <Leader>/ :History/<CR>
 
-    nnoremap <silent> <Leader>q :cclose<CR>:Quickfix!<CR>
-    nnoremap <silent> <Leader>l :lclose<CR>:LocationList!<CR>
+    nnoremap <silent> <Leader>q :cclose<CR>:Quickfix<CR>
+    nnoremap <silent> <Leader>l :lclose<CR>:LocationList<CR>
 
     nnoremap <silent> <Leader>st :Tags! <C-r><C-w><CR>
     vnoremap <silent> <Leader>st <Esc>:Tags! <C-r>=vim_helpers#SelectedText()<CR><CR>
@@ -3056,7 +3056,7 @@ function! OpenFolderWithMapping(folder, mapping) abort
     if exists(':LeaderfFileInDir') == 2
         let cmd = 'LeaderfFileInDir'
     elseif exists(':Files') == 2
-        let cmd = 'Files!'
+        let cmd = 'Files'
     elseif exists(':ClapFiles') == 2
         let cmd = 'ClapFiles'
     else
