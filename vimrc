@@ -2978,6 +2978,8 @@ function! OpenFolderWithMapping(folder, mapping) abort
         let cmd = 'LeaderfFileInDir'
     elseif exists(':Files') == 2
         let cmd = 'Files!'
+    elseif exists(':ClapFiles') == 2
+        let cmd = 'ClapFiles'
     else
         let cmd = 'CtrlP'
     endif
