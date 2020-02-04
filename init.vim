@@ -1621,13 +1621,11 @@ if s:IsPlugged('LeaderF')
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :LeaderfLine<CR>
     nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
-    nnoremap <silent> <Leader>b] :LeaderfBufTagAll<CR>
     nnoremap <silent> <Leader>]  :LeaderfBufTagAll<CR>
 
     nnoremap <silent> <Leader>bj :LeaderfTabBufferAll<CR>
 
     nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
-    nnoremap <silent> <Leader>b[ :LeaderfFunctionAll<CR>
     nnoremap <silent> <Leader>[  :LeaderfFunctionAll<CR>
 
     nnoremap <silent> <Leader>; :LeaderfCommand<CR>
@@ -1675,7 +1673,6 @@ if s:IsPlugged('ctrlp.vim')
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
     nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
-    nnoremap <silent> <Leader>b] :CtrlPBufTagAll<CR>
     nnoremap <silent> <Leader>]  :CtrlPBufTagAll<CR>
 
     " DavidEGx/ctrlp-smarttabs
@@ -1683,7 +1680,6 @@ if s:IsPlugged('ctrlp.vim')
 
     " tacahiroy/ctrlp-funky
     nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
-    nnoremap <silent> <Leader>b[ :CtrlPFunkyMulti<CR>
     nnoremap <silent> <Leader>[  :CtrlPFunkyMulti<CR>
 
     " mattn/ctrlp-register
