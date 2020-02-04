@@ -954,12 +954,12 @@ nnoremap <silent> [w :wincmd W<CR>
 " Search and Replace
 nnoremap <Leader>R  :%s//gc<Left><Left><Left>
 nmap     <Leader>rr <Leader>R
-nnoremap <Leader>sr :%s/<C-r>=GetWordForSubstitute()<CR>/gc<Left><Left><Left>
+nnoremap <Leader>sr :%s/<C-r>=vim_helpers#CwordForSubstitute()<CR>/gc<Left><Left><Left>
 nmap     <Leader>rw <Leader>sr
 
 xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
 xmap     <Leader>rr <Leader>R
-xnoremap <Leader>sr <Esc>:%s/<C-r>=GetSelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xnoremap <Leader>sr <Esc>:%s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
 xmap     <Leader>rw <Leader>sr
 
 " Buffer-related mappings
@@ -1063,21 +1063,23 @@ let g:grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
 nnoremap          <Leader>S  :Grep<Space>
 nmap              <Leader>se <Leader>S
 nnoremap <silent> <Leader>ss :GrepCCword<CR>
-xnoremap <silent> <Leader>ss <Esc>:Grep <C-r>=GetSelectedTextForShell()<CR><CR>
+xnoremap <silent> <Leader>ss <Esc>:Grep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 nnoremap          <Leader>si :GrepCCword<Space>
-xnoremap          <Leader>si <Esc>:Grep <C-r>=GetSelectedTextForShell()<CR><Space>
-nnoremap <silent> <Leader>s/ <Esc>:Grep <C-r>=GetSearchTextForShell()<CR><CR>
-nnoremap          <Leader>s? <Esc>:Grep <C-r>=GetSearchTextForShell()<CR><Space>
+xnoremap          <Leader>si <Esc>:Grep <C-r>=vim_helpers#SelectedTextForShell()<CR><Space>
+nnoremap <silent> <Leader>s/ <Esc>:Grep <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
+nnoremap          <Leader>s? <Esc>:Grep <C-r>=vim_helpers#SearchTextForShell()<CR><Space>
 
 nnoremap          <Leader>L  :LGrep<Space>
 nnoremap <silent> <Leader>sl :LGrepCCword<CR>
-xnoremap <silent> <Leader>sl <Esc>:LGrep <C-r>=GetSelectedTextForShell()<CR><CR>
+xnoremap <silent> <Leader>sl <Esc>:LGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 nnoremap          <Leader>B  :BGrep<Space>
-nnoremap <silent> <Leader>sb :BGrepCCword<CR>
-xnoremap <silent> <Leader>sb <Esc>:BGrep <C-r>=GetSelectedTextForShell()<CR><CR>
-nmap              <Leader>bs <Leader>sb
-xmap              <Leader>bs <Leader>sb
+nnoremap <silent> <Leader>bs :BGrepCCword<CR>
+xnoremap <silent> <Leader>bs <Esc>:BGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+" Grep with current buffer file type
+nnoremap <silent> <Leader>sb :FTGrepCCword<CR>
+xnoremap <silent> <Leader>sb <Esc>:FTGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 " vim-scripts/DeleteTrailingWhitespace
 nnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
@@ -1148,26 +1150,54 @@ if s:IsPlugged('vim-grepper')
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
     command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
 
+    function! s:FTGrepper(qargs) abort
+        if exists(':GrepperRg') == 2
+            let cmd = 'GrepperRg ' . vim_helpers#ParseGrepFileTypeOption('rg')
+        elseif exists(':GrepperAg') == 2
+            let cmd = 'GrepperAg ' . vim_helpers#ParseGrepFileTypeOption('ag')
+        elseif exists(':GrepperGrep') == 2
+            let cmd = 'GrepperGrep ' . vim_helpers#ParseGrepFileTypeOption('grep')
+        else
+            let cmd = 'Grepper'
+        endif
+        execute vim_helpers#strip(cmd . ' ' . a:qargs)
+    endfunction
+
+    function! s:FTGrepperCword(word_boundary, qargs) abort
+        if a:word_boundary
+            let cword = vim_helpers#CCwordForGrep()
+        else
+            let cword = vim_helpers#CwordForGrep()
+        endif
+        call s:FTGrepper(cword . ' ' . a:qargs)
+    endfunction
+
+    command! -nargs=+ -complete=dir FTGrepper       call <SID>FTGrepper(<q-args>)
+    command! -nargs=? -complete=dir FTGrepperCCword call <SID>FTGrepperCword(1, <q-args>)
+    command! -nargs=? -complete=dir FTGrepperCword  call <SID>FTGrepperCword(0, <q-args>)
+
     nmap gs <plug>(GrepperOperator)
     xmap gs <plug>(GrepperOperator)
 
     nnoremap <silent> <Leader>S  :Grepper<CR>
     nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=GetSelectedTextForShell()<CR><CR>
+    xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
     nnoremap <silent> <Leader>si :Grepper -prompt -cword<CR>
-    xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=GetSelectedTextForShell()<CR><CR>
-    nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=GetSearchTextForShell()<CR><CR>
-    nnoremap <silent> <Leader>s? :Grepper -prompt -query <C-r>=GetSearchTextForShell()<CR><CR>
+    xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+    nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
+    nnoremap <silent> <Leader>s? :Grepper -prompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
 
     nnoremap <silent> <Leader>L  :LGrepper<CR>
     nnoremap <silent> <Leader>sl :LGrepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>sl <Esc>:LGrepper -noprompt -query <C-r>=GetSelectedTextForShell()<CR><CR>
+    xnoremap <silent> <Leader>sl <Esc>:LGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
     nnoremap          <Leader>B  :BGrepper<CR>
-    nnoremap <silent> <Leader>sb :BGrepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>sb <Esc>:BGrepper -noprompt -query <C-r>=GetSelectedTextForShell()<CR><CR>
-    nmap              <Leader>bs <Leader>sb
-    xmap              <Leader>bs <Leader>sb
+    nnoremap <silent> <Leader>bs :BGrepper -noprompt -cword<CR>
+    xnoremap <silent> <Leader>bs <Esc>:BGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+    " Grep with current buffer file type
+    nnoremap <silent> <Leader>sb :FTGrepperCCword<CR>
+    xnoremap <silent> <Leader>sb <Esc>:FTGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 endif
 
 if s:IsPlugged('ctrlsf.vim')
@@ -1408,10 +1438,10 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>l :lclose<CR>:LocationList!<CR>
 
     nnoremap <silent> <Leader>st :Tags! <C-r><C-w><CR>
-    vnoremap <silent> <Leader>st <Esc>:Tags! <C-r>=GetSelectedText()<CR><CR>
+    vnoremap <silent> <Leader>st <Esc>:Tags! <C-r>=vim_helpers#SelectedText()<CR><CR>
 
     nnoremap <silent> <Leader>sg :Ag! <C-r><C-w><CR>
-    xnoremap <silent> <Leader>sg <Esc>:Ag! -F <C-r>=GetSelectedText()<CR><CR>
+    xnoremap <silent> <Leader>sg <Esc>:Ag! -F <C-r>=vim_helpers#SelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('vim-clap')
@@ -1528,7 +1558,7 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <Leader>l :lclose<CR>:Clap loclist<CR>
 
     nnoremap <silent> <Leader>sg :Clap grep ++query=<cword><CR>
-    xnoremap <silent> <Leader>sg <Esc>:Clap grep ++query=<C-r>=GetSelectedText()<CR><CR>
+    xnoremap <silent> <Leader>sg <Esc>:Clap grep ++query=<C-r>=vim_helpers#SelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('LeaderF')
