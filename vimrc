@@ -1195,7 +1195,7 @@ if s:IsPlugged('vim-grepper')
     nnoremap <silent> <Leader>bs :BGrepper -noprompt -cword<CR>
     xnoremap <silent> <Leader>bs <Esc>:BGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
-    " Grep with current buffer file type
+    " Grepper with current buffer file type
     nnoremap <silent> <Leader>sb :FTGrepperCCword<CR>
     xnoremap <silent> <Leader>sb <Esc>:FTGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 endif
@@ -1214,6 +1214,55 @@ if s:IsPlugged('ctrlsf.vim')
                     \ }
     endif
 
+    function! s:CtrlSFParseFileTypeOption(cmd) abort
+        let ext = expand('%:e')
+
+        if a:cmd ==# 'rg'
+            let ft = vim_helpers#RgFileType(&filetype)
+
+            if strlen(ft) && vim_helpers#IsRgKnownFileType(ft)
+                return printf("-filetype %s", ft)
+            elseif strlen(ext)
+                return printf("-filematch '*.%s'", ext)
+            endif
+        elseif a:cmd ==# 'ag'
+            let ft = vim_helpers#AgFileType(&filetype)
+
+            if strlen(ft) && vim_helpers#IsAgKnownFileType(ft)
+                return printf("-filetype %s", ft)
+            elseif strlen(ext)
+                return printf("-filematch '.%s$'", ext)
+            endif
+        endif
+
+        return ''
+    endfunction
+
+    " CtrlSF prefers ag over rg
+    if executable('ag')
+        let g:ctrlsf_ackprg = 'ag'
+    elseif executable('rg')
+        let g:ctrlsf_ackprg = 'rg'
+    endif
+
+    function! s:FTCtrlSF(qargs) abort
+        let cmd = 'CtrlSF ' . s:CtrlSFParseFileTypeOption(get(g:, 'ctrlsf_ackprg', ''))
+        execute vim_helpers#strip(cmd . ' ' . a:qargs)
+    endfunction
+
+    function! s:FTCtrlSFCword(word_boundary, qargs) abort
+        if a:word_boundary && get(g:, 'ctrlsf_ackprg', '') =~# 'ag\|rg'
+            let cword = '-word ' . vim_helpers#CwordForGrep()
+        else
+            let cword = vim_helpers#CwordForGrep()
+        endif
+        call s:FTCtrlSF(cword . ' ' . a:qargs)
+    endfunction
+
+    command! -nargs=+ -complete=dir FTCtrlSF       call <SID>FTCtrlSF(<q-args>)
+    command! -nargs=? -complete=dir FTCtrlSFCCword call <SID>FTCtrlSFCword(1, <q-args>)
+    command! -nargs=? -complete=dir FTCtrlSFCword  call <SID>FTCtrlSFCword(0, <q-args>)
+
     nmap              <Leader>sp <Plug>CtrlSFPrompt
     nmap              <Leader>sf <Plug>CtrlSFCCwordExec
     vmap              <Leader>sf <Plug>CtrlSFVwordExec
@@ -1221,6 +1270,10 @@ if s:IsPlugged('ctrlsf.vim')
     vmap              <Leader>sc <Plug>CtrlSFVwordPath
     nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
     nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
+
+    " CtrlSF with current buffer file type
+    nnoremap <silent> <Leader>sn :FTCtrlSFCCword<CR>
+    xnoremap <silent> <Leader>sn <Esc>:FTCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 endif
 
 " scrooloose/nerdcommenter
