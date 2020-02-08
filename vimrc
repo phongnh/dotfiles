@@ -1735,7 +1735,7 @@ endif
 if s:IsPlugged('ctrlp.vim')
     " ctrlpvim/ctrlp.vim
     let g:ctrlp_find_tool = g:zero_vim_find_tool
-    let g:ctrlp_command   = 'CtrlPRoot'
+    let g:ctrlp_cmd       = 'CtrlPRoot'
 
     if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so')
         " nixprime/cpsm
