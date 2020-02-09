@@ -1212,9 +1212,9 @@ if s:IsPlugged('ctrlsf.vim')
 
     function! s:FTCtrlSFCword(word_boundary, qargs) abort
         if a:word_boundary && get(g:, 'ctrlsf_ackprg', '') =~# 'ag\|rg'
-            let cword = '-word ' . vim_helpers#CwordForGrep()
+            let cword = '-R ' . expand('<cword>')
         else
-            let cword = vim_helpers#CwordForGrep()
+            let cword = expand('<cword>')
         endif
         call s:FTCtrlSF(cword . ' ' . a:qargs)
     endfunction
