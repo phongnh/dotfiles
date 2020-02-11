@@ -1565,6 +1565,7 @@ if s:IsPlugged('vim-clap')
 
     nnoremap <silent> <Leader>; :Clap command<CR>
     nnoremap <silent> <Leader>: :Clap command_history<CR>
+    nnoremap <silent> <Leader>/ :Clap search_history<CR>
 
     nnoremap <silent> <Leader>' :Clap marks<CR>
 
