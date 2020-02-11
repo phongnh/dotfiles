@@ -1004,6 +1004,9 @@ nnoremap <silent> <Leader>bq :confirm bdelete<CR>
 nnoremap <silent> <Leader>bk :confirm bwipeout<CR>
 nnoremap <silent> <Leader>b- :confirm bwipeout<CR>
 
+" Set buffer filetype
+nnoremap <Leader>b; :set filetype=
+
 " Exit Vim. Bring up a prompt when some buffers have been changed
 nnoremap <silent> ZE :confirm qall<CR>
 
@@ -1487,6 +1490,8 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>bt :BTags<CR>
     nnoremap <silent> <Leader>bo :BOutline<CR>
 
+    nnoremap <silent> <Leader>b; :Filetypes<CR>
+
     nnoremap <silent> <Leader>; :Commands<CR>
     nnoremap <silent> <Leader>: :History:<CR>
     nnoremap <silent> <Leader>/ :History/<CR>
@@ -1603,6 +1608,8 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <Leader>bj :Clap windows<CR>
 
     nnoremap <silent> <Leader>bo :Clap tags<CR>
+
+    nnoremap <silent> <Leader>b; :Clap filetypes<CR>
 
     nnoremap <silent> <Leader>; :Clap command<CR>
     nnoremap <silent> <Leader>: :Clap command_history<CR>
@@ -1732,6 +1739,8 @@ if s:IsPlugged('LeaderF')
 
     nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
     nnoremap <silent> <Leader>[  :LeaderfFunctionAll<CR>
+
+    nnoremap <silent> <Leader>b; :Leaderf filetype<CR>
 
     nnoremap <silent> <Leader>; :LeaderfCommand<CR>
     nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
