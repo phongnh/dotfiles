@@ -1469,6 +1469,7 @@ if s:IsPlugged('vim-clap')
     let g:clap_current_selection_sign  = { 'text': '» ', 'texthl': 'WarningMsg', 'linehl': 'ClapCurrentSelection' }
     let g:clap_selected_sign           = { 'text': ' »', 'texthl': 'WarningMsg', 'linehl': 'ClapSelected' }
     let g:clap_prompt_format           = ' %spinner%%forerunner_status%%provider_id%:'
+    let g:clap_layout                  = { 'width': '70%', 'height': '50%',  'row': '20%', 'col': '15%' }
 
     function! ClapPromptFormat() abort
         if g:clap.provider.id ==# 'files' && exists('g:__clap_provider_cwd')
