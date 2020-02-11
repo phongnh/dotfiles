@@ -113,6 +113,7 @@ augroup MyAutoCmd
 augroup END
 
 " Default zero settings
+let g:zero_vim_powerline         = 0
 let g:zero_vim_true_color        = 0
 let g:zero_vim_solarized         = 0
 let g:zero_vim_autocomplete      = 1
@@ -262,6 +263,7 @@ call plug#begin()
 " Appearance {
     if s:Use('airline')
         " My airline settings
+        let g:airline_powerline = g:zero_vim_powerline
         Plug 'phongnh/airline-settings.vim'
         " lean & mean status/tabline for vim that's light as air
         Plug 'vim-airline/vim-airline'
@@ -269,11 +271,13 @@ call plug#begin()
         Plug 'vim-airline/vim-airline-themes'
     elseif s:Use('lightline')
         " My lightline settings
+        let g:lightline_powerline = g:zero_vim_powerline
         Plug 'phongnh/lightline-settings.vim'
         " A light and configurable statusline/tabline plugin for Vim
         Plug 'itchyny/lightline.vim'
     elseif s:Use('crystalline')
         " My crystalline settings
+        let g:crystalline_powerline = g:zero_vim_powerline
         Plug 'phongnh/crystalline-settings.vim'
         " Functions for taking the monotony out of building your own fancy statusline in Vim
         Plug 'rbong/vim-crystalline'
@@ -1580,7 +1584,13 @@ if s:IsPlugged('LeaderF')
     let g:Lf_MruMaxFiles   = 200
     " let g:Lf_CursorBlink   = 0 " When set this setting to 0, C-J & C-K do not work, temporarily disable it
     let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
-    let g:Lf_StlSeparator  = { 'left': '', 'right': '' }
+
+    " Powerline Separator
+    if g:zero_vim_powerline
+        let g:Lf_StlSeparator = { 'left': '', 'right': '' }
+    else
+        let g:Lf_StlSeparator = { 'left': '', 'right': '' }
+    endif
 
     let g:Lf_StlColorscheme = 'gruvbox_material'
 

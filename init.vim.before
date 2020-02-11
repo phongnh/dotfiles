@@ -21,17 +21,16 @@ let g:zero_vim_groups = [
             \ 'diff-enhanced',
             \ ]
 
-let g:airline_powerline     = 1
-let g:lightline_powerline   = 1
-let g:lightline_bufferline  = 1
-let g:crystalline_powerline = 1
-
+let g:zero_vim_powerline       = 1
 let g:zero_vim_autocomplete    = 1
 let g:zero_vim_autolint        = 0
 let g:zero_vim_autofix         = 0
 let g:zero_vim_git_gutter      = 0
 let g:zero_vim_grep_ignore_vcs = 0
 let g:zero_vim_find_tool       = 'rg'
+
+" Enable Lightline Bufferline
+let g:lightline_bufferline = 1
 
 if $ITERM_PROFILE =~? 'Solarized'
     let g:zero_vim_true_color  = 1
@@ -47,5 +46,6 @@ if $ITERM_PROFILE =~? 'Solarized'
     endif
 else
     let g:zero_vim_colorscheme = 'gruvbox'
+    let g:zero_vim_background  = 'dark'
     let g:lightline_theme      = 'deus'
 endif
