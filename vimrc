@@ -951,10 +951,6 @@ nnoremap <silent> zM zM:<C-u>setlocal foldlevel?<CR>
 nnoremap <silent> z] :let &foldcolumn = &foldcolumn + 1<CR>:<C-u>setlocal foldcolumn?<CR>
 nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:<C-u>setlocal foldcolumn?<CR>
 
-" Next/previous window
-nnoremap <silent> ]w :wincmd w<CR>
-nnoremap <silent> [w :wincmd W<CR>
-
 " Search and Replace
 nnoremap <Leader>R  :%s//gc<Left><Left><Left>
 nmap     <Leader>rr <Leader>R
