@@ -2243,11 +2243,16 @@ if s:IsPlugged('vim-lsp')
     let g:lsp_signs_error   = { 'text': '●' }
     let g:lsp_signs_warning = { 'text': '.' }
 
+    let g:lsp_diagnostics_echo_cursor      = 1 " enable echo under cursor when in normal mode
     let g:lsp_highlight_references_enabled = 1
 
     " Use `[g` and `]g` to navigate diagnostics
     nmap <silent> [g <Plug>(lsp-previous-diagnostic)
     nmap <silent> ]g <Plug>(lsp-next-diagnostic)
+
+    " Use `[r` and `]r` to navigate references
+    nmap <silent> [r <Plug>(lsp-previous-reference)
+    nmap <silent> ]r <Plug>(lsp-next-reference)
 
     " Use K to show documentation
     nnoremap <silent> K :call <SID>ShowDocument()<CR>
