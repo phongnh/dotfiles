@@ -1812,22 +1812,58 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>l :lclose<CR>:CtrlPLocationlist<CR>
 endif
 
+" Autocomplete Integration - Dummy function
 function! ExpandSnippet() abort
     return ''
 endfunction
 
 if s:IsPlugged('ultisnips')
     " SirVer/ultisnips
-    let g:UltiSnipsExpandTrigger       = '<C-k>'
+    let g:UltiSnipsExpandTrigger       = '<Plug>(ultisnips_expand)'
     let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
     let g:UltiSnipsJumpBackwardTrigger = '<C-z>'
+    let g:UltiSnipsListSnippets        = ''
 
-    inoremap <silent> <expr> <Plug>(ultisnips_expand) UltiSnips#ExpandSnippet()
+    " Jump Forward result
+    let g:ulti_jump_forwards_res = 0 " (0: fail, 1: success)
 
-    " deoplete integration
+    function s:IsExpandableUltiSnips() abort
+        return !(
+                    \ col('.') <= 1
+                    \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
+                    \ || empty(UltiSnips#SnippetsInCurrentScope())
+                    \ )
+    endfunction
+
+    function! s:UltiSnipsExpand() abort
+        if s:IsExpandableUltiSnips()
+            return "\<Plug>(ultisnips_expand_or_jump)"
+        endif
+
+        if pumvisible()
+            return "\<C-e>"
+        endif
+
+        return "\<C-k>"
+    endfunction
+
+    inoremap <silent>  <Plug>(ultisnips_expand_or_jump) <C-r>=UltiSnips#ExpandSnippetOrJump()<CR>
+    snoremap <silent>  <Plug>(ultisnips_expand_or_jump) <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
+
+    imap <silent> <expr> <C-k> <SID>UltiSnipsExpand()
+    smap                 <C-k> <Plug>(ultisnips_expand_or_jump)
+    xmap                 <C-k> <Plug>(ultisnips_expand)
+
+    " Autocomplete Integration
     function! ExpandSnippet() abort
-        " Expandable
-        if !empty(UltiSnips#SnippetsInCurrentScope())
+        call UltiSnips#JumpForwards()
+
+        " Jumped successfully, do nothing!
+        if g:ulti_jump_forwards_res
+            return ''
+        endif
+
+        if s:IsExpandableUltiSnips()
             return "\<Plug>(ultisnips_expand)"
         endif
 
@@ -1846,8 +1882,6 @@ if s:IsPlugged('neosnippet.vim')
                 \ 'objc':   'objc,c',
                 \ 'objcpp': 'objc,c',
                 \ }
-
-    let g:neosnippet#snippets_directory = expand('~/.vim/plugged/vim-snippets/snippets')
 
     function! s:NeoSnippetExpand() abort
         if neosnippet#expandable_or_jumpable()
@@ -1869,7 +1903,7 @@ if s:IsPlugged('neosnippet.vim')
     smap <C-j> <Plug>(neosnippet_jump)
     smap <Tab> <Plug>(neosnippet_jump)
 
-    " deoplete integration
+    " Autocomplete Integration
     function! ExpandSnippet() abort
         if neosnippet#jumpable()
             return "\<Plug>(neosnippet_jump)"
@@ -1937,9 +1971,9 @@ if s:IsPlugged('deoplete.nvim')
             return "\<Tab>"
         endif
 
-        let expand = ExpandSnippet()
-        if strlen(expand)
-            return expand
+        let snippet = ExpandSnippet()
+        if strlen(snippet)
+            return snippet
         endif
 
         return deoplete#manual_complete()
@@ -2114,10 +2148,15 @@ if s:IsPlugged('asyncomplete.vim')
             return "\<Tab>"
         endif
 
+        let snippet = ExpandSnippet()
+        if strlen(snippet)
+            return snippet
+        endif
+
         return asyncomplete#force_refresh()
     endfunction
 
-    inoremap <silent> <expr> <Tab> <SID>CleverTab()
+    imap <silent> <expr> <Tab> <SID>CleverTab()
 
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
