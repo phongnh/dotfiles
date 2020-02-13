@@ -368,10 +368,6 @@ call plug#begin()
             Plug 'deoplete-plugins/deoplete-jedi', { 'do': 'git submodule update --init' }
             Plug 'wokalski/autocomplete-flow'
         endif
-    elseif s:Use('YouCompleteMe') && s:python3 && executable('python3') && executable('cmake')
-        Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer --js-completer' }
-    elseif s:Use('coc') && executable('yarn')
-        Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:Use('asyncomplete')
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
@@ -401,10 +397,11 @@ call plug#begin()
                 Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
             endif
         endif
+    elseif s:Use('coc') && executable('yarn')
+        Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:python
         Plug 'maralla/completor.vim'
-
-        if s:Use('neosnippet')
+        if s:IsPlugged('neosnippet')
             Plug 'maralla/completor-neosnippet'
         endif
     endif
@@ -1975,23 +1972,6 @@ if s:IsPlugged('deoplete-go')
     " let g:deoplete#sources#go#gocode_binary     = $GOPATH . '/bin/gocode'
     " let g:deoplete#sources#go#cgo               = 1
     " let g:deoplete#sources#go#cgo#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
-endif
-
-if s:IsPlugged('YouCompleteMe')
-    " ycm-core/YouCompleteMe
-    if s:python3 && executable('python3')
-        let g:ycm_server_python_interprete = 'python3'
-    endif
-    let g:ycm_auto_trigger                        = g:zero_vim_autocomplete
-    let g:ycm_confirm_extra_conf                  = 0
-    let g:ycm_complete_in_comments_and_strings    = 1
-    let g:ycm_always_populate_location_list       = 1
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    let g:ycm_use_ultisnips_completer             = 1
-    let g:ycm_key_detailed_diagnostics            = ''
-    let g:ycm_extra_conf_vim_data                 = ['&filetype']
-    let g:ycm_global_ycm_extra_conf               = filereadable(expand('~/.ycm_extra_conf.py')) ? expand('~/.ycm_extra_conf') : ''
-    let g:ycm_filetype_blacklist                  = { 'unite': 1, 'ctrlp': 1, 'tagbar' : 1, 'qf': 1, 'nerdtree': 1 }
 endif
 
 if s:IsPlugged('coc.nvim')
