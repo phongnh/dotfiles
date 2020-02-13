@@ -635,11 +635,12 @@ Plug 'chrisbra/unicode.vim'
 
 " Color schemes {
     Plug 'altercation/vim-colors-solarized'
-    Plug 'morhetz/gruvbox'
+    Plug 'gruvbox-community/gruvbox'
     Plug 'NLKNguyen/papercolor-theme'
 
     " True Color schemes
     Plug 'lifepillar/vim-solarized8'
+    Plug 'lifepillar/vim-gruvbox8'
 
     " Distraction-free color schemes
     Plug 'pbrisbin/vim-colors-off'
