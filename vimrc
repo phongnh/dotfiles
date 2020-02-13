@@ -387,6 +387,7 @@ call plug#begin()
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
         Plug 'prabirshrestha/asyncomplete-buffer.vim'
+        Plug 'prabirshrestha/asyncomplete-file.vim'
         Plug 'yami-beta/asyncomplete-omni.vim'
         if s:Use('lsp')
             Plug 'prabirshrestha/vim-lsp'
@@ -2132,12 +2133,23 @@ if s:IsPlugged('asyncomplete.vim')
                         \ }))
         endif
 
+        if exists('*asyncomplete#sources#file#get_source_options')
+            " prabirshrestha/asyncomplete-file.vim
+            call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+                        \ 'name':      'file',
+                        \ 'whitelist': ['*'],
+                        \ 'priority':  10,
+                        \ 'completor': function('asyncomplete#sources#file#completor'),
+                        \ }))
+        endif
+
         if exists('*asyncomplete#sources#omni#get_source_options')
             " yami-beta/asyncomplete-omni.vim
             call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
                         \ 'name':      'omni',
                         \ 'whitelist': ['*'],
-                        \ 'completor': function('asyncomplete#sources#omni#completor')
+                        \ 'blacklist': ['c', 'cpp', 'html', 'ruby'],
+                        \ 'completor': function('asyncomplete#sources#omni#completor'),
                         \ }))
         endif
 
