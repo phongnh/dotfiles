@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-mkdir -p ~/.vim/{plugged,snippets,cache,autoload}
-mkdir -p ~/.vim/snippets/{UltiSnips,snippets,neosnippets}
+mkdir -p ~/.vim/{plugged,cache,autoload}
+mkdir -p ~/.vim/{UltiSnips,snippets,neosnippets}
 mkdir -p ~/.cache/{swap,backup,undo}
 touch ~/.cache/NERDTreeBookmarks
 
