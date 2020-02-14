@@ -623,30 +623,12 @@ Plug 'chrisbra/unicode.vim'
 " }
 
 " Color schemes {
-    Plug 'altercation/vim-colors-solarized'
-    Plug 'gruvbox-community/gruvbox'
-    Plug 'NLKNguyen/papercolor-theme'
+    " one colorscheme pack to rule them all!
+    Plug 'flazz/vim-colorschemes'
 
     " True Color schemes
     Plug 'lifepillar/vim-solarized8'
     Plug 'lifepillar/vim-gruvbox8'
-
-    " Distraction-free color schemes
-    Plug 'pbrisbin/vim-colors-off'
-
-    " Extra colorschemes
-    if s:Use('extra-colorschemes')
-        Plug 'rakr/vim-one'
-        Plug 'whatyouhide/vim-gotham'
-        Plug 'yuttie/hydrangea-vim'
-
-        " True Color schemes
-        Plug 'tyrannicaltoucan/vim-deep-space'
-        Plug 'drewtempelmeyer/palenight.vim'
-        Plug 'mhartington/oceanic-next'
-        Plug 'arcticicestudio/nord-vim'
-        Plug 'ayu-theme/ayu-vim'
-    endif
 " }
 
 " DevIcons {
@@ -2857,30 +2839,12 @@ if !has('gui_running')
     let g:solarized_termcolors = g:zero_vim_solarized ? 16 : 256
 endif
 
-" morhetz/gruvbox
-" let g:gruvbox_contrast_dark  = 'hard'
-" let g:gruvbox_contrast_light = 'hard'
-let g:gruvbox_italic         = 1
-
 " lifepillar/vim-solarized8
 let g:solarized_use16        = 1
 let g:solarized_term_italics = 1
 
-" drewtempelmeyer/palenight.vim
-let g:palenight_terminal_italics = 1
-
-" mhartington/oceanic-next
-let g:oceanic_next_terminal_bold   = 1
-let g:oceanic_next_terminal_italic = 1
-
-" arcticicestudio/nord-vim
-let g:nord_italic          = 1
-let g:nord_italic_comments = 1
-
-" ayu-theme/ayu-vim
-let g:ayucolor = 'light'  " for light version of theme
-let g:ayucolor = 'dark'   " for dark version of theme
-let g:ayucolor = 'mirage' " for mirage version of theme
+" lifepillar/vim-gruvbox8
+let g:gruvbox_italic = 1
 
 if s:IsPlugged('vim-which-key')
     " liuchengxu/vim-which-key
@@ -3103,11 +3067,11 @@ try
         execute 'colorscheme ' . g:zero_vim_colorscheme
     else
         set background=dark
-        colorscheme gruvbox
+        colorscheme gruvbox8
     endif
 catch
     set background=dark
-    colorscheme gruvbox
+    colorscheme gruvbox8
 endtry
 
 set secure
