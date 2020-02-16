@@ -42,7 +42,11 @@ function! s:PlugDir(plugin) abort
 endfunction
 
 if &shell =~# 'fish$' " && (v:version < 704 || v:version == 704 && !has('patch276'))
-    set shell=/usr/bin/env\ bash
+    if executable('bash')
+        let &shell = exepath('bash')
+    elseif executable('zsh')
+        let &shell = exepath('zsh')
+    endif
 endif
 
 let g:python3_host_skip_check = 1
