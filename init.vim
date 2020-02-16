@@ -3,6 +3,7 @@ let s:python2 = has('python')
 let s:python3 = has('python3')
 let s:python  = s:python3 || s:python2
 let s:vim8    = v:version >= 800
+let s:vim81   = v:version >= 801
 
 " Find and source vimrc from root to current folder
 " ~/projects/hello $
@@ -304,7 +305,7 @@ call plug#begin()
     " BufExplorer Plugin for Vim
     Plug 'jlanzarotta/bufexplorer'
 
-    if s:Use('fern')
+    if s:Use('fern') && has('nvim-0.4.2')
         " General purpose asynchrnonous tree viewer written in Pure Vim script
         Plug 'lambdalisue/fern.vim'
         Plug 'lambdalisue/fern-renderer-devicons.vim'
