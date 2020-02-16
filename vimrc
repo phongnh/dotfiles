@@ -1951,6 +1951,7 @@ let g:language_servers = {
             \ 'bash-language-server':             ['bash-language-server', 'start'],
             \ 'ccls':                             ['ccls'],
             \ 'clangd':                           ['clangd', '--background-index'],
+            \ 'clangd-9':                         ['clangd', '--background-index'],
             \ 'cquery':                           ['cquery'],
             \ 'css-languageserver':               ['css-languageserver', '--stdio'],
             \ 'docker-langserver':                ['docker-langserver', '--stdio'],
@@ -1980,6 +1981,7 @@ let g:language_servers = {
 " Enabled Language Servers
 let s:enabled_language_servers = {
             \ 'clangd':                           { 'cmd': g:language_servers['clangd'], 'filetypes': ['c', 'cpp'] },
+            \ 'clangd-9':                         { 'cmd': g:language_servers['clangd-9'], 'filetypes': ['c', 'cpp'] },
             \ 'ccls':                             { 'cmd': g:language_servers['ccls'], 'filetypes': ['c', 'cpp'] },
             \ 'gopls':                            { 'cmd': g:language_servers['gopls'], 'filetypes': ['go'] },
             \ 'go-langserver':                    { 'cmd': g:language_servers['go-langserver'], 'filetypes': ['go'] },
