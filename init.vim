@@ -1029,6 +1029,9 @@ xnoremap <silent> <Leader>bs <Esc>:BGrep <C-r>=vim_helpers#SelectedTextForShell(
 nnoremap <silent> <Leader>sb :FTGrepCCword<CR>
 xnoremap <silent> <Leader>sb <Esc>:FTGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
+" Tig Status
+nnoremap <silent> <Leader>gt :TigStatus<CR>
+
 " vim-scripts/DeleteTrailingWhitespace
 nnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
 vnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
