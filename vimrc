@@ -1662,7 +1662,7 @@ if s:IsPlugged('LeaderF')
 
     " Powerline Separator
     if g:zero_vim_powerline
-        let g:Lf_StlSeparator = { 'left': '', 'right': '' }
+        let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2" }
     else
         let g:Lf_StlSeparator = { 'left': '', 'right': '' }
     endif
