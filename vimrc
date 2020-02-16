@@ -367,21 +367,25 @@ call plug#begin()
         Plug 'Shougo/neosnippet.vim'
     endif
 
+    if s:Use('coc')
+        " coc.nvim plugin has both autocomplete and lsp functions
+    elseif s:Use('lsp')
+        Plug 'prabirshrestha/async.vim'
+        Plug 'prabirshrestha/vim-lsp'
+        Plug 'mattn/vim-lsp-settings'
+    elseif s:Use('lsc')
+        Plug 'natebosch/vim-lsc'
+    endif
+
     if s:Use('deoplete') && s:vim8 && s:python3
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
         Plug 'Shougo/deoplete.nvim'
-        if s:Use('lsp')
-            Plug 'prabirshrestha/async.vim'
-            Plug 'prabirshrestha/vim-lsp'
-            Plug 'mattn/vim-lsp-settings'
+        Plug 'hrsh7th/deoplete-fname'
+        if s:IsPlugged('vim-lsp')
             Plug 'lighttiger2505/deoplete-vim-lsp'
-        else
-            Plug 'Shougo/neco-vim'
-            Plug 'deoplete-plugins/deoplete-go', { 'do': 'make' }
-            Plug 'deoplete-plugins/deoplete-clang'
-            Plug 'deoplete-plugins/deoplete-jedi', { 'do': 'git submodule update --init' }
-            Plug 'wokalski/autocomplete-flow'
+        elseif s:IsPlugged('vim-lsc')
+            Plug 'hrsh7th/deoplete-vim-lsc'
         endif
     elseif s:Use('asyncomplete') && s:vim8
         Plug 'prabirshrestha/async.vim'
@@ -389,36 +393,23 @@ call plug#begin()
         Plug 'prabirshrestha/asyncomplete-buffer.vim'
         Plug 'prabirshrestha/asyncomplete-file.vim'
         Plug 'yami-beta/asyncomplete-omni.vim'
-        if s:Use('lsp')
-            Plug 'prabirshrestha/vim-lsp'
-            Plug 'mattn/vim-lsp-settings'
+        if s:IsPlugged('ultisnips')
+            Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+        elseif s:IsPlugged('neosnippet.vim')
+            Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
+        endif
+        if s:IsPlugged('vim-lsp')
             Plug 'prabirshrestha/asyncomplete-lsp.vim'
-            if s:IsPlugged('ultisnips')
-                Plug 'thomasfaingnaert/vim-lsp-snippets'
-                Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-            elseif s:IsPlugged('neosnippet.vim')
-                Plug 'thomasfaingnaert/vim-lsp-snippets'
-                Plug 'thomasfaingnaert/vim-lsp-neosnippet'
-            endif
-        else
-            Plug 'Shougo/neco-vim'
-            Plug 'prabirshrestha/asyncomplete-necovim.vim'
-            Plug 'prabirshrestha/asyncomplete-gocode.vim'
-            Plug 'wsdjeg/asyncomplete-clang.vim'
-            Plug 'prabirshrestha/asyncomplete-flow.vim'
-            if s:IsPlugged('ultisnips')
-                Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-            elseif s:IsPlugged('neosnippet.vim')
-                Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
-            endif
         endif
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
-    elseif s:vim8 && s:python
+    elseif s:Use('completor') && s:vim8 && s:python
         Plug 'maralla/completor.vim'
         if s:IsPlugged('neosnippet')
             Plug 'maralla/completor-neosnippet'
         endif
+    else
+        Plug 'ajh17/VimCompletesMe'
     endif
 " }
 
@@ -1911,6 +1902,177 @@ if s:IsPlugged('neosnippet.vim')
     endfunction
 endif
 
+" LSP Servers
+let g:language_servers = {
+            \ 'bash-language-server':             ['bash-language-server', 'start'],
+            \ 'ccls':                             ['ccls'],
+            \ 'clangd':                           ['clangd', '--background-index'],
+            \ 'cquery':                           ['cquery'],
+            \ 'css-languageserver':               ['css-languageserver', '--stdio'],
+            \ 'docker-langserver':                ['docker-langserver', '--stdio'],
+            \ 'flow':                             ['flow', 'lsp', '--from', 'vim'],
+            \ 'go-langserver':                    ['go-langserver', '-gocompletion'],
+            \ 'gopls':                            ['gopls', '-mode', 'stdio'],
+            \ 'html-languageserver':              ['html-languageserver', '--stdio'],
+            \ 'javascript-typescript-langserver': ['javascript-typescript-langserver'],
+            \ 'json-languageserver':              ['json-languageserver', '--stdio'],
+            \ 'metals':                           ['metals'],
+            \ 'pyls':                             ['pyls'],
+            \ 'pyls_ms':                          ['pyls_ms'],
+            \ 'ra_lsp_server':                    ['ra_lsp_server'],
+            \ 'rls':                              ['rls'],
+            \ 'rustup-nightly-rls':               ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+            \ 'rustup-rls':                       ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+            \ 'solargraph':                       ['solargraph', 'stdio'],
+            \ 'srb':                              ['srb', 'tc', '--typed', 'true', '--enable-all-experimental-lsp-features', '--lsp', '--disable-watchman', '--dir', '.'],
+            \ 'sql-language-server':              ['sql-language-server', 'up', '--method', 'stdio'],
+            \ 'terraform-lsp':                    ['terraform-lsp'],
+            \ 'typescript-language-server':       ['typescript-language-server', '--stdio'],
+            \ 'vim-language-server':              ['vim-language-server', '--stdio'],
+            \ 'vls':                              ['vls'],
+            \ 'yaml-language-server':             ['yaml-language-server', '--stdio'],
+            \ }
+
+" Enabled Language Servers
+let s:enabled_language_servers = {
+            \ 'clangd':                           { 'cmd': g:language_servers['clangd'], 'filetypes': ['c', 'cpp'] },
+            \ 'ccls':                             { 'cmd': g:language_servers['ccls'], 'filetypes': ['c', 'cpp'] },
+            \ 'gopls':                            { 'cmd': g:language_servers['gopls'], 'filetypes': ['go'] },
+            \ 'go-langserver':                    { 'cmd': g:language_servers['go-langserver'], 'filetypes': ['go'] },
+            \ 'rls':                              { 'cmd': g:language_servers['rls'], 'filetypes': ['rust'] },
+            \ 'ra_lsp_server':                    { 'cmd': g:language_servers['ra_lsp_server'], 'filetypes': ['rust'] },
+            \ 'metals':                           { 'cmd': g:language_servers['metals'], 'filetypes': ['sacalar', 'sbt'] },
+            \ 'pyls':                             { 'cmd': g:language_servers['pyls'], 'filetypes': ['python'] },
+            \ 'solargraph':                       { 'cmd': g:language_servers['solargraph'], 'filetypes': ['ruby'] },
+            \ 'yaml-language-server':             { 'cmd': g:language_servers['yaml-language-server'], 'filetypes': ['yaml'] },
+            \ 'html-languageserver':              { 'cmd': g:language_servers['html-languageserver'], 'filetypes': ['html'] },
+            \ 'css-languageserver':               { 'cmd': g:language_servers['css-languageserver'], 'filetypes': ['ccs', 'scss', 'less'] },
+            \ 'json-languageserver':              { 'cmd': g:language_servers['json-languageserver'], 'filetypes': ['json'] },
+            \ 'typescript-language-server':       { 'cmd': g:language_servers['typescript-language-server'], 'filetypes': ['javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'] },
+            \ 'javascript-typescript-langserver': { 'cmd': g:language_servers['javascript-typescript-langserver'], 'filetypes': ['javascript', 'javascriptreact', 'javascript.jsx'] },
+            \ 'flow':                             { 'cmd': g:language_servers['flow'], 'filetypes': ['javascript', 'javascripteact', 'javascript.jsx'] },
+            \ 'docker-langserver':                { 'cmd': g:language_servers['docker-langserver'], 'filetypes': ['dockerfile'] },
+            \ 'terraform-lsp':                    { 'cmd': g:language_servers['terraform-lsp'], 'filetypes': ['terraform'] },
+            \ 'bash-language-server':             { 'cmd': g:language_servers['bash-language-server'], 'filetypes': ['sh'] },
+            \ 'vim-language-server':              { 'cmd': g:language_servers['vim-language-server'], 'filetypes': ['vim'] },
+            \ }
+
+if s:IsPlugged('vim-lsp')
+    " prabirshrestha/vim-lsp
+    let g:lsp_signs_error   = { 'text': '●' }
+    let g:lsp_signs_warning = { 'text': '.' }
+
+    let g:lsp_diagnostics_enabled          = 1
+    let g:lsp_diagnostics_echo_cursor      = 1 " enable echo under cursor when in normal mode
+    let g:lsp_highlight_references_enabled = 1
+
+    " Use `[g` and `]g` to navigate diagnostics
+    nmap <silent> [g <Plug>(lsp-previous-diagnostic)
+    nmap <silent> ]g <Plug>(lsp-next-diagnostic)
+
+    " Use `[r` and `]r` to navigate references
+    nmap <silent> [r <Plug>(lsp-previous-reference)
+    nmap <silent> ]r <Plug>(lsp-next-reference)
+
+    " Use K to show documentation
+    nnoremap <silent> K :call <SID>ShowDocument()<CR>
+
+    function! s:ShowDocument() abort
+        if index(['vim', 'help'], &filetype) >= 0
+            execute 'help ' . expand('<cword>')
+        else
+            execute 'LspHover'
+        endif
+    endfunction
+
+    nmap     <silent> <Leader>K  <Plug>(lsp-hover)
+    nmap              <Leader>kh <Leader>K
+    nmap     <silent> <Leader>ka <Plug>(lsp-code-action)
+    nmap     <silent> <Leader>ke <Plug>(lsp-rename)
+    nmap     <silent> <Leader>kf <Plug>(lsp-document-format)
+    xmap              <Leader>kf <Plug>(lsp-document-range-format)
+    nmap     <silent> <Leader>kd <Plug>(lsp-definition)
+    nmap     <silent> <Leader>kD <Plug>(lsp-declaration)
+    nmap     <silent> <Leader>ki <Plug>(lsp-implementation)
+    nmap     <silent> <Leader>kt <Plug>(lsp-type-definition)
+    nmap     <silent> <Leader>kT <Plug>(lsp-type-hierarchy)
+    nmap     <silent> <Leader>kl <Plug>(lsp-document-diagnostics)
+    nmap     <silent> <Leader>ks <Plug>(lsp-document-symbol)
+    nmap     <silent> <Leader>kw <Plug>(lsp-workspace-symbol)
+    nmap     <silent> <Leader>kr <Plug>(lsp-references)
+    nmap     <silent> <Leader>kn <Plug>(lsp-next-error)
+    nmap     <silent> <Leader>kp <Plug>(lsp-previous-error)
+    nnoremap <silent> <Leader>k; :LspStatus<CR>
+endif
+
+if s:IsPlugged('vim-lsc')
+    " natebosch/vim-lsc
+    let g:lsc_auto_completeopt     = v:true
+    let g:lsc_enable_diagnostics   = v:true
+    let g:lsc_reference_highlights = v:true
+    let g:lsc_trace_level          = 'off'
+
+    let g:lsc_server_commands = {}
+
+    " Default server options
+    " let s:lsc_server_default_opts = {
+    "             \ 'log_level':       -1,
+    "             \ 'suppress_stderr': v:true,
+    "             \ }
+
+    function! s:AddServer(name, server) abort
+        let cmd = a:server['cmd']
+        let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
+        if !executable(cmd[0])
+            return
+        endif
+        let l:default = get(s:, 'lsc_server_default_opts', {})
+        let l:opts = extend(copy(l:default), get(a:server, 'opts', {}))
+        call extend(l:opts, { 'name': a:name, 'command': join(cmd, ' ') })
+        for ft in a:server['filetypes']
+            if !has_key(g:lsc_server_commands, ft)
+                let g:lsc_server_commands[ft] = l:opts
+            endif
+        endfor
+    endfunction
+
+    for [name, server] in items(s:enabled_language_servers)
+        call s:AddServer(name, server)
+    endfor
+
+    let g:lsc_auto_map = {
+                \ 'GoToDefinition':      '<Leader>kd',
+                \ 'GoToDefinitionSplit': '<Leader>k\',
+                \ 'FindReferences':      '<Leader>kr',
+                \ 'NextReference':       '[r',
+                \ 'PreviousReference':   ']r',
+                \ 'FindImplementations': '<Leader>ki',
+                \ 'FindCodeActions':     '<Leader>ka',
+                \ 'Rename':              '<Leader>ke',
+                \ 'ShowHover':           ['<Leader>K', '<Leader>kh'],
+                \ 'DocumentSymbol':      '<Leader>ks',
+                \ 'WorkspaceSymbol':     '<Leader>kw',
+                \ 'SignatureHelp':       '<Leader>km',
+                \ 'Completion':          'completefunc',
+                \ }
+
+    if s:IsPlugged('deoplete') || s:IsPlugged('asyncomplete')
+        let g:lsc_auto_map['Completion'] = 'omnifunc'
+    endif
+
+    nnoremap <silent> <Leader>kl :LSClientAllDiagnostics<CR>
+    nnoremap <silent> <Leader>kc :LSClientLineDiagnostics<CR>
+    nnoremap <silent> <Leader>k; :call PrintLSCServerStatus()<CR>
+
+    function! PrintLSCServerStatus(...) abort
+        let ft = get(a:, 1, &filetype)
+        let servers = lsc#server#forFileType(ft)
+        if empty(servers) | echo 'No Server!' | endif
+        let server = servers[0]
+        echo printf('%s: %s!', get(server, 'config', { 'name': 'Server' })['name'], server['status'])
+    endfunction
+endif
+
 if s:IsPlugged('deoplete.nvim')
     " Shougo/deoplete.nvim
     let g:deoplete#enable_at_startup = 1
@@ -1991,33 +2153,112 @@ if s:IsPlugged('deoplete.nvim')
     inoremap <silent> <expr> <C-x><C-f> deoplete#manual_complete('file')
 endif
 
-if s:IsPlugged('deoplete-clang')
-    " deoplete-plugins/deoplete-clang
-    let g:deoplete#ignore_sources.c            = ['buffer', 'dictionary', 'file', 'member', 'omni', 'tag', 'syntax']
-    let g:deoplete#ignore_sources.cpp          = g:deoplete#ignore_sources.c
-    let g:deoplete#ignore_sources.objc         = g:deoplete#ignore_sources.c
-    let g:deoplete#ignore_sources.objcpp       = g:deoplete#ignore_sources.c
-    " let g:deoplete#sources#clang#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
-    " let g:deoplete#sources#clang#clang_header  = '/usr/local/opt/llvm/include/clang'
-endif
+if s:IsPlugged('asyncomplete.vim')
+    " prabirshrestha/asyncomplete.vim
+    let g:asyncomplete_auto_popup  = g:zero_vim_autocomplete
+    let g:asyncomplete_popup_delay = 50
 
-if s:IsPlugged('deoplete-go')
-    " deoplete-plugins/deoplete-go
-    let g:deoplete#ignore_sources.go            = ['buffer', 'dictionary', 'file', 'member', 'omni', 'tag', 'syntax']
-    let g:deoplete#sources#go#sort_class        = ['package', 'func', 'type', 'var', 'const']
-    let g:deoplete#sources#go#use_cache         = 1
-    " let g:deoplete#sources#go#gocode_binary     = $GOPATH . '/bin/gocode'
-    " let g:deoplete#sources#go#cgo               = 1
-    " let g:deoplete#sources#go#cgo#libclang_path = '/usr/local/opt/llvm/lib/libclang.dylib'
+    " Show autocomplete popup manually
+    imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
+
+    " <CR>: close popup and insert newline
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
+    " <Tab>: completion
+    function! s:CheckBackSpace() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    function! s:CleverTab() abort
+        if pumvisible()
+            return "\<C-n>"
+        endif
+
+        if s:CheckBackSpace()
+            return "\<Tab>"
+        endif
+
+        let snippet = ExpandSnippet()
+        if strlen(snippet)
+            return snippet
+        endif
+
+        return asyncomplete#force_refresh()
+    endfunction
+
+    imap <silent> <expr> <Tab> <SID>CleverTab()
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " <C-y>: close popup
+    inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
+
+    " <C-e>: cancel popup
+    inoremap <expr> <C-e> pumvisible() ? asyncomplete#cancel_popup() : "\<C-e>"
+
+    function! s:SetupAsyncomplete() abort
+        if s:IsPlugged('asyncomplete-buffer.vim')
+            " prabirshrestha/asyncomplete-buffer.vim
+            call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+                        \ 'name':      'buffer',
+                        \ 'whitelist': ['*'],
+                        \ 'blacklist': ['go'],
+                        \ 'completor': function('asyncomplete#sources#buffer#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('asyncomplete-file.vim')
+            " prabirshrestha/asyncomplete-file.vim
+            call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+                        \ 'name':      'file',
+                        \ 'whitelist': ['*'],
+                        \ 'priority':  10,
+                        \ 'completor': function('asyncomplete#sources#file#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('asyncomplete-omni.vim')
+            " yami-beta/asyncomplete-omni.vim
+            call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+                        \ 'name':      'omni',
+                        \ 'whitelist': ['*'],
+                        \ 'blacklist': ['c', 'cpp', 'html', 'ruby'],
+                        \ 'completor': function('asyncomplete#sources#omni#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('asyncomplete-ultisnips.vim')
+            " prabirshrestha/asyncomplete-ultisnips.vim
+            call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+                        \ 'name':      'ultisnips',
+                        \ 'whitelist': ['*'],
+                        \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('asyncomplete-neosnippet.vim')
+            " prabirshrestha/asyncomplete-neosnippet.vim
+            call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+                        \ 'name':      'neosnippet',
+                        \ 'whitelist': ['*'],
+                        \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+                        \ }))
+        endif
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd User asyncomplete_setup call s:SetupAsyncomplete()
+    augroup END
 endif
 
 if s:IsPlugged('coc.nvim')
     " neoclide/coc.nvim
-    " Install Extensions
-    " :CocInstall coc-json coc-tsserver coc-html coc-xml coc-css coc-tailwindcss coc-yaml 
-    " :CocInstall coc-markdownlint
-    " :CocInstall coc-highlight coc-emmet coc-ultisnips coc-snippets coc-lists coc-git coc-yank
-    " :CocInstall coc-python coc-pyright coc-solargraph coc-flow coc-rls coc-vimlsp
+    " Extensions
+    " coc-json coc-tsserver coc-flow coc-html coc-xml coc-css coc-tailwindcss
+    " coc-python coc-pyright coc-solargraph coc-yaml coc-flow coc-rls coc-rust-analyzer coc-metals coc-vimlsp
+    " coc-markdownlint coc-highlight coc-emmet coc-ultisnips coc-snippets coc-lists coc-git coc-yank
 
     let g:coc_global_extensions = [
                 \ 'coc-json',
@@ -2025,9 +2266,12 @@ if s:IsPlugged('coc.nvim')
                 \ 'coc-html',
                 \ 'coc-xml',
                 \ 'coc-css',
-                \ 'coc-tailwindcss',
-                \ 'coc-yaml',
+                \ 'coc-markdownlint',
                 \ 'coc-python',
+                \ 'coc-pyright',
+                \ 'coc-solargraph',
+                \ 'coc-yaml',
+                \ 'coc-vimlsp',
                 \ ]
 
     if s:IsPlugged('ultisnips')
@@ -2070,15 +2314,13 @@ if s:IsPlugged('coc.nvim')
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-    " Use <CR> to confirm completion, `<C-g>u` means break undo chain at current position.
+    " Use <CR> for confirm completion,
+    " `<C-g>u` means break undo chain at current position.
     " Coc only does snippet and additional edit on confirm.
-    " inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-    " To make <CR> select the first completion item and confirm the completion when no item has been selected
-    " inoremap <silent> <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
-
-    " To make coc.nvim format your code on <CR>
-    " inoremap <silent> <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+    " Overwrite <C-x><C-r>
+    imap <silent> <C-x><C-u> <Plug>(coc-complete-custom)
 
     " Use <C-x><C-r> to trigger completion.
     inoremap <silent> <expr> <C-x><C-r> coc#refresh()
@@ -2097,144 +2339,46 @@ if s:IsPlugged('coc.nvim')
             call CocAction('doHover')
         endif
     endfunction
-endif
 
-if s:IsPlugged('asyncomplete.vim')
-    " prabirshrestha/asyncomplete.vim
-    let g:asyncomplete_auto_popup  = g:zero_vim_autocomplete
-    let g:asyncomplete_popup_delay = 50
+    nnoremap <silent> <Leader>K  :call CocAction('doHover')<CR>
+    nmap              <Leader>kh <Leader>K
+    nmap     <silent> <Leader>ka <Plug>(coc-codeaction)
+    xmap              <Leader>ka <Plug>(coc-codeaction-selected)
+    nmap     <silent> <Leader>ke <Plug>(coc-rename)
+    nmap     <silent> <Leader>kf <Plug>(coc-format)
+    xmap              <Leader>kf <Plug>(coc-format-selected)
+    nmap     <silent> <Leader>kl <Plug>(coc-diagnostic-info)
+    nmap     <silent> <Leader>kd <Plug>(coc-definition)
+    nmap     <silent> <Leader>kD <Plug>(coc-declaration)
+    nmap     <silent> <Leader>ki <Plug>(coc-implementation)
+    nmap     <silent> <Leader>kt <Plug>(coc-type-definition)
+    nmap     <silent> <Leader>kr <Plug>(coc-references)
+    nmap     <silent> <Leader>ko <Plug>(coc-openlink)
+    nmap     <silent> <Leader>kx <Plug>(coc-fix-current)
+    nmap     <silent> <Leader>ku <Plug>(coc-refactor)
+    nmap     <silent> <Leader>kn <Plug>(coc-diagnostic-next-error)
+    nmap     <silent> <Leader>kp <Plug>(coc-diagnostic-prev-error)
+    nnoremap <silent> <Leader>k; :CocInfo<CR>
 
-    " Show autocomplete popup manually
-    imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
-
-    " <CR>: close popup and insert newline
-    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-
-    " <Tab>: completion
-    function! s:CheckBackSpace() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1] =~ '\s'
-    endfunction
-
-    function! s:CleverTab() abort
-        if pumvisible()
-            return "\<C-n>"
-        endif
-
-        if s:CheckBackSpace()
-            return "\<Tab>"
-        endif
-
-        let snippet = ExpandSnippet()
-        if strlen(snippet)
-            return snippet
-        endif
-
-        return asyncomplete#force_refresh()
-    endfunction
-
-    imap <silent> <expr> <Tab> <SID>CleverTab()
-
-    " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-    function! s:SetupAsyncomplete() abort
-        if exists('*asyncomplete#sources#buffer#get_source_options')
-            " prabirshrestha/asyncomplete-buffer.vim
-            call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-                        \ 'name':      'buffer',
-                        \ 'whitelist': ['*'],
-                        \ 'blacklist': ['go'],
-                        \ 'completor': function('asyncomplete#sources#buffer#completor'),
-                        \ }))
-        endif
-
-        if exists('*asyncomplete#sources#file#get_source_options')
-            " prabirshrestha/asyncomplete-file.vim
-            call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-                        \ 'name':      'file',
-                        \ 'whitelist': ['*'],
-                        \ 'priority':  10,
-                        \ 'completor': function('asyncomplete#sources#file#completor'),
-                        \ }))
-        endif
-
-        if exists('*asyncomplete#sources#omni#get_source_options')
-            " yami-beta/asyncomplete-omni.vim
-            call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-                        \ 'name':      'omni',
-                        \ 'whitelist': ['*'],
-                        \ 'blacklist': ['c', 'cpp', 'html', 'ruby'],
-                        \ 'completor': function('asyncomplete#sources#omni#completor'),
-                        \ }))
-        endif
-
-        if exists('*asyncomplete#sources#ultisnips#get_source_options')
-            " prabirshrestha/asyncomplete-ultisnips.vim
-            call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-                        \ 'name':      'ultisnips',
-                        \ 'whitelist': ['*'],
-                        \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-                        \ }))
-        endif
-
-        if exists('*asyncomplete#sources#neosnippet#get_source_options')
-            " prabirshrestha/asyncomplete-neosnippet.vim
-            call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-                        \ 'name':      'neosnippet',
-                        \ 'whitelist': ['*'],
-                        \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-                        \ }))
-        endif
-
-        if exists('*asyncomplete#sources#gocode#get_source_options')
-            " prabirshrestha/asyncomplete-gocode.vim
-            call asyncomplete#register_source(asyncomplete#sources#gocode#get_source_options({
-                        \ 'name':      'gocode',
-                        \ 'whitelist': ['go'],
-                        \ 'completor': function('asyncomplete#sources#gocode#completor'),
-                        \ 'config':    {
-                        \   'gocode_path': 'gocode',
-                        \ },
-                        \ }))
-        endif
-
-        if exists('*asyncomplete#sources#clang#get_source_options')
-            " wsdjeg/asyncomplete-clang.vim
-            call asyncomplete#register_source(asyncomplete#sources#clang#get_source_options())
-        endif
-
-        if exists('*asyncomplete#sources#flow#get_source_options')
-            " prabirshrestha/asyncomplete-flow.vim
-            call asyncomplete#register_source(asyncomplete#sources#flow#get_source_options({
-                        \ 'name':      'flow',
-                        \ 'whitelist': ['javascript'],
-                        \ 'completor': function('asyncomplete#sources#flow#completor'),
-                        \ 'config':    {
-                        \   'prefer_local': 1,
-                        \   'flowbin_path': 'flow',
-                        \ },
-                        \ }))
-        endif
-
-        if exists('*asyncomplete#sources#necovim#get_source_options')
-            " prabirshrestha/asyncomplete-necovim.vim
-            call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
-                        \ 'name': 'necovim',
-                        \ 'whitelist': ['vim'],
-                        \ 'completor': function('asyncomplete#sources#necovim#completor'),
-                        \ }))
-        endif
-    endfunction
+    xmap ik <Plug>(coc-funcobj-i)
+    xmap ak <Plug>(coc-funcobj-a)
+    omap ik <Plug>(coc-funcobj-i)
+    omap ak <Plug>(coc-funcobj-a)
 
     augroup MyAutoCmd
-        autocmd User asyncomplete_setup call s:SetupAsyncomplete()
+        " Update signature help on jump placeholder
+        autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+        autocmd CursorHold * silent call CocActionAsync('highlight')
     augroup END
 endif
 
 if s:IsPlugged('completor.vim')
     " maralla/completor.vim
     let g:completor_auto_trigger = g:zero_vim_autocomplete
+
+    if s:IsPlugged('completor-neosnippet')
+        let g:completor_disable_ultisnips = 1
+    endif
 
     " Trigger complete manually
     inoremap <silent> <expr> <C-x><C-r> "<C-r>=completor#do('complete')<CR>"
@@ -2264,34 +2408,41 @@ if s:IsPlugged('completor.vim')
 
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    if s:IsPlugged('vim-lsp')
+    elseif s:IsPlugged('vim-lsc')
+    elseif get(g:, 'zero_vim_completor_lsp', 1)
+        " Enable LSP
+        let g:completor_filetype_map = {}
+
+        function! s:AddServer(name, server) abort
+            let cmd = a:server['cmd']
+            let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
+            if !executable(cmd[0])
+                return
+            endif
+            let l:opts = { 'ft': 'lsp', 'cmd': join(cmd, ' ') }
+            for ft in a:server['filetypes']
+                if !has_key(g:completor_filetype_map, ft)
+                    let g:completor_filetype_map[ft] = l:opts
+                endif
+            endfor
+        endfunction
+
+        for [name, server] in items(s:enabled_language_servers)
+            call s:AddServer(name, server)
+        endfor
+
+        nnoremap <silent> <Leader>K  :call completor#do('hover')<CR>
+        nmap              <Leader>kh <Leader>K
+        nnoremap <silent> <Leader>kd :call completor#do('definition')<CR>
+        nnoremap <silent> <Leader>kD :call completor#do('doc')<CR>
+        nnoremap <silent> <Leader>kf :call completor#do('format')<CR>
+    endif
 endif
 
-if s:IsPlugged('vim-lsp')
-    " prabirshrestha/vim-lsp
-    let g:lsp_signs_error   = { 'text': '●' }
-    let g:lsp_signs_warning = { 'text': '.' }
-
-    let g:lsp_diagnostics_echo_cursor      = 1 " enable echo under cursor when in normal mode
-    let g:lsp_highlight_references_enabled = 1
-
-    " Use `[g` and `]g` to navigate diagnostics
-    nmap <silent> [g <Plug>(lsp-previous-diagnostic)
-    nmap <silent> ]g <Plug>(lsp-next-diagnostic)
-
-    " Use `[r` and `]r` to navigate references
-    nmap <silent> [r <Plug>(lsp-previous-reference)
-    nmap <silent> ]r <Plug>(lsp-next-reference)
-
-    " Use K to show documentation
-    nnoremap <silent> K :call <SID>ShowDocument()<CR>
-
-    function! s:ShowDocument() abort
-        if index(['vim', 'help'], &filetype) >= 0
-            execute 'help ' . expand('<cword>')
-        else
-            execute 'LspHover'
-        endif
-    endfunction
+if s:IsPlugged('VimCompletesMe')
+    " ajh17/VimCompletesMe
 endif
 
 if s:IsPlugged('vim-startify')
@@ -2664,6 +2815,16 @@ if s:IsPlugged('vim-polyglot')
     let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
 endif
 
+" pangloss/vim-javascript
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_flow  = 1
+
+" tpope/vim-markdown
+let g:markdown_fenced_languages = [
+            \ 'bash=sh', 'coffee', 'sass', 'scss', 'css', 'html', 'xml', 'erb=eruby', 'ruby',
+            \ 'javascript', 'js=javascript', 'json=javascript', 'python', 'sql', 'vim'
+            \ ]
+
 if s:IsPlugged('vim-rails')
     " tpope/vim-rails
     nnoremap <silent> <Leader>ba :AE<CR>
@@ -2686,16 +2847,6 @@ if s:IsPlugged('vim-rails')
                 \ }
 endif
 
-" pangloss/vim-javascript
-let g:javascript_plugin_jsdoc = 1
-let g:javascript_plugin_flow  = 1
-
-" tpope/vim-markdown
-let g:markdown_fenced_languages = [
-            \ 'bash=sh', 'coffee', 'sass', 'scss', 'css', 'html', 'xml', 'erb=eruby', 'ruby',
-            \ 'javascript', 'js=javascript', 'json=javascript', 'python', 'sql', 'vim'
-            \ ]
-
 if s:IsPlugged('vim-go')
     " fatih/vim-go and phongnh/go-explorer
     let g:go_highlight_functions         = 1
@@ -2710,9 +2861,10 @@ if s:IsPlugged('vim-go')
     let g:go_fmt_command       = 'goimports'
     let g:go_fmt_fail_silently = 1
 
-    if s:IsPlugged('neosnippet.vim')
-        let g:go_snippet_engine = 'neosnippet'
-    endif
+    " Use lsc#complete#complete for omnifunc instead of go#complete#Complete if enabled LSP for go
+    " if s:IsPlugged('vim-lsc') && has_key(g:lsc_server_commands, 'go')
+    "     let g:go_code_completion_enabled = 0
+    " endif
 
     let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
     let g:ale_linters = get(g:, 'ale_linters', {})
