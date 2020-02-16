@@ -247,7 +247,7 @@ call plug#begin()
         Plug 'kana/vim-textobj-indent'                " i
         Plug 'glts/vim-textobj-comment'               " c
         Plug 'mattn/vim-textobj-url'                  " u
-        Plug 'rhysd/vim-textobj-conflict'             " =, remapped to k
+        Plug 'rhysd/vim-textobj-conflict'             " =
         Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
         Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y (rub[y])
         Plug 'inside/vim-textobj-jsxattr'             " x
@@ -1317,15 +1317,6 @@ nmap >, <Plug>SidewaysRight
 
 nnoremap <silent> [, :SidewaysJumpLeft<CR>
 nnoremap <silent> ], :SidewaysJumpRight<CR>
-
-if s:IsPlugged('vim-textobj-conflict')
-    " rhysd/vim-textobj-conflict
-    let g:textobj_conflict_no_default_key_mappings = 1
-
-    " Remap from '=' to 'k'
-    omap ik <Plug>(textobj-conflict-i)
-    omap ak <Plug>(textobj-conflict-a)
-endif
 
 if s:IsPlugged('vim-textobj-ruby')
     " rhysd/vim-textobj-ruby
