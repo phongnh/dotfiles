@@ -316,8 +316,14 @@ call plug#begin()
     " BufExplorer Plugin for Vim
     Plug 'jlanzarotta/bufexplorer'
 
-    " A tree explorer plugin for vim
-    Plug 'scrooloose/nerdtree'
+    if s:Use('fern')
+        " General purpose asynchrnonous tree viewer written in Pure Vim script
+        Plug 'lambdalisue/fern.vim'
+        Plug 'lambdalisue/fern-renderer-devicons.vim'
+    else
+        " A tree explorer plugin for vim
+        Plug 'scrooloose/nerdtree'
+    endif
 " }
 
 " Fuzzy finder {
@@ -586,7 +592,7 @@ endif
 
         " Vim and Neovim plugin to reveal the commit messages under the cursor
         Plug 'rhysd/git-messenger.vim'
-    
+
         " A git commit browser in Vim
         Plug 'junegunn/gv.vim'
 
@@ -1433,20 +1439,58 @@ let g:bufExplorerShowRelativePath         = 1
 
 nnoremap <silent> gb :ToggleBufExplorer<CR>
 
-" scrooloose/nerdtree
-let g:NERDTreeWinSize             = 35
-let g:NERDTreeMouseMode           = 2
-let g:NERDTreeMapChangeRoot       = '.' " Map . for changing root in NERDTree
-let g:NERDTreeQuitOnOpen          = 0
-let g:NERDTreeChDirMode           = 0
-let g:NERDTreeShowBookmarks       = 1
-let g:NERDTreeDirArrowExpandable  = '▸' " +
-let g:NERDTreeDirArrowCollapsible = '▾' " ~
+if s:IsPlugged('fern.vim')
+    " lambdalisue/fern.vim
+    let g:fern#drawer_width = 35
 
-nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
-noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
-nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
-nnoremap <silent> <Leader>bg :NERDTreeVCS<CR>
+    if s:IsPlugged('vim-devicons')
+        " lambdalisue/fern-renderer-devicons.vim
+        let g:fern#renderer = 'devicons'
+    endif
+
+    command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernDrawerToggle Fern <args> -drawer -toggle
+    command! -nargs=0 FernDrawerReveal Fern %:h -drawer -reveal=%
+    command! -nargs=0 FernDrawerCWD call s:OpenFernDrawerCWD()
+
+    function! s:OpenFernDrawerCWD() abort
+        let cwd = getcwd()
+        execute printf('Fern %s -drawer', cwd)
+    endfunction
+
+    function! s:InitFern() abort
+        nmap     <buffer> <nowait> o  <Plug>(fern-open-or-expand)
+        nmap     <buffer> <nowait> p  <Plug>(fern-action-leave)
+        nmap     <buffer> <nowait> r  <Plug>(fern-action-reload)
+        nmap     <buffer> <nowait> I  <Plug>(fern-action-hidden-toggle)
+        nmap     <buffer> <nowait> cd <Plug>(fern-action-cd)
+        nnoremap <buffer> <nowait> q  :quit<CR>
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd FileType fern call <SID>InitFern()
+    augroup END
+
+    nnoremap <silent> <Leader>e  :FernDrawerToggle .<CR>
+    nnoremap <silent> <Leader>E  :FernDrawerCWD<CR>
+    nnoremap <silent> <Leader>bf :FernDrawerReveal<CR>
+endif
+
+if s:IsPlugged('nerdtree')
+    " scrooloose/nerdtree
+    let g:NERDTreeWinSize             = 35
+    let g:NERDTreeMouseMode           = 2
+    let g:NERDTreeMapChangeRoot       = '.' " Map . for changing root in NERDTree
+    let g:NERDTreeQuitOnOpen          = 0
+    let g:NERDTreeChDirMode           = 0
+    let g:NERDTreeShowBookmarks       = 1
+    let g:NERDTreeDirArrowExpandable  = '▸' " +
+    let g:NERDTreeDirArrowCollapsible = '▾' " ~
+
+    nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
+    noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
+    nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
+    nnoremap <silent> <Leader>bg :NERDTreeVCS<CR>
+endif
 
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
