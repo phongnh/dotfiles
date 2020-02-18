@@ -1636,7 +1636,7 @@ if s:IsPlugged('LeaderF')
     " Enable Popup
     if g:zero_vim_popup
         let g:Lf_WindowPosition       = 'popup'
-        let g:Lf_PopupShowStatusline  = 1
+        let g:Lf_PopupShowStatusline  = 0
         let g:Lf_PreviewInPopup       = 1
         let g:Lf_PopupPreviewPosition = 'bottom'
         let g:Lf_PopupColorscheme     = 'gruvbox_material'
