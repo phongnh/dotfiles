@@ -2072,12 +2072,8 @@ if s:IsPlugged('vim-lsc')
                 \ 'DocumentSymbol':      '<Leader>ks',
                 \ 'WorkspaceSymbol':     '<Leader>kw',
                 \ 'SignatureHelp':       '<Leader>km',
-                \ 'Completion':          'completefunc',
+                \ 'Completion':          'omnifunc',
                 \ }
-
-    if s:IsPlugged('deoplete') || s:IsPlugged('asyncomplete')
-        let g:lsc_auto_map['Completion'] = 'omnifunc'
-    endif
 
     nnoremap <silent> <Leader>kl :LSClientAllDiagnostics<CR>
     nnoremap <silent> <Leader>kc :LSClientLineDiagnostics<CR>
@@ -2428,8 +2424,8 @@ if s:IsPlugged('completor.vim')
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-    if s:IsPlugged('vim-lsp')
-    elseif s:IsPlugged('vim-lsc')
+    if s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc')
+        " Nothing to do
     elseif get(g:, 'zero_vim_completor_lsp', 1)
         " Enable LSP
         let g:completor_filetype_map = {}
