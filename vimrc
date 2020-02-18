@@ -1853,11 +1853,6 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>l :lclose<CR>:CtrlPLocationlist<CR>
 endif
 
-" Autocomplete Integration - Dummy function
-function! ExpandSnippet() abort
-    return ''
-endfunction
-
 if s:IsPlugged('ultisnips')
     " SirVer/ultisnips
     let g:UltiSnipsExpandTrigger       = '<Plug>(ultisnips_expand)'
@@ -1888,28 +1883,12 @@ if s:IsPlugged('ultisnips')
         return "\<C-k>"
     endfunction
 
-    inoremap <silent>  <Plug>(ultisnips_expand_or_jump) <C-r>=UltiSnips#ExpandSnippetOrJump()<CR>
-    snoremap <silent>  <Plug>(ultisnips_expand_or_jump) <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
+    inoremap <silent> <Plug>(ultisnips_expand_or_jump) <C-r>=UltiSnips#ExpandSnippetOrJump()<CR>
+    snoremap <silent> <Plug>(ultisnips_expand_or_jump) <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
 
     imap <silent> <expr> <C-k> <SID>UltiSnipsExpand()
     smap                 <C-k> <Plug>(ultisnips_expand_or_jump)
     xmap                 <C-k> <Plug>(ultisnips_expand)
-
-    " Autocomplete Integration
-    function! ExpandSnippet() abort
-        call UltiSnips#JumpForwards()
-
-        " Jumped successfully, do nothing!
-        if g:ulti_jump_forwards_res
-            return ''
-        endif
-
-        if s:IsExpandableUltiSnips()
-            return "\<Plug>(ultisnips_expand)"
-        endif
-
-        return ''
-    endfunction
 endif
 
 if s:IsPlugged('neosnippet.vim')
@@ -1943,19 +1922,6 @@ if s:IsPlugged('neosnippet.vim')
     imap <C-j> <Plug>(neosnippet_jump)
     smap <C-j> <Plug>(neosnippet_jump)
     smap <Tab> <Plug>(neosnippet_jump)
-
-    " Autocomplete Integration
-    function! ExpandSnippet() abort
-        if neosnippet#jumpable()
-            return "\<Plug>(neosnippet_jump)"
-        endif
-
-        if neosnippet#expandable()
-            return "\<Plug>(neosnippet_expand)"
-        endif
-
-        return ''
-    endfunction
 endif
 
 " LSP Servers
@@ -2181,11 +2147,6 @@ if s:IsPlugged('deoplete.nvim')
             return "\<Tab>"
         endif
 
-        let snippet = ExpandSnippet()
-        if strlen(snippet)
-            return snippet
-        endif
-
         return deoplete#manual_complete()
     endfunction
 
@@ -2231,11 +2192,6 @@ if s:IsPlugged('asyncomplete.vim')
 
         if s:CheckBackSpace()
             return "\<Tab>"
-        endif
-
-        let snippet = ExpandSnippet()
-        if strlen(snippet)
-            return snippet
         endif
 
         return asyncomplete#force_refresh()
