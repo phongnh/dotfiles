@@ -1128,12 +1128,13 @@ if s:IsPlugged('vim-grepper')
                 \ }
 
     runtime plugin/grepper.vim
-    let g:grepper.rg.grepprg .= ' --hidden'
-    let g:grepper.ag.grepprg .= ' --hidden'
 
-    if g:zero_vim_grep_ignore_vcs
-        let g:grepper.rg.grepprg .= ' --no-ignore-vcs'
-        let g:grepper.ag.grepprg .= ' --skip-vcs-ignores'
+    if has_key(g:grepper, 'rg')
+        let g:grepper.rg.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
+    endif
+
+    if has_key(g:grepper, 'ag')
+        let g:grepper.ag.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --skip-vcs-ignores' : '')
     endif
 
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
