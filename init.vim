@@ -3,7 +3,6 @@ let s:python2 = has('python')
 let s:python3 = has('python3')
 let s:python  = s:python3 || s:python2
 let s:vim8    = v:version >= 800
-let s:vim81   = v:version >= 801
 
 " Find and source vimrc from root to current folder
 " ~/projects/hello $
@@ -119,6 +118,7 @@ augroup END
 
 " Default zero settings
 let g:zero_vim_powerline         = 0
+let g:zero_vim_popup             = 0
 let g:zero_vim_true_color        = 0
 let g:zero_vim_solarized         = 0
 let g:zero_vim_autocomplete      = 1
@@ -1458,6 +1458,7 @@ endif
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
     let g:fzf_find_tool = g:zero_vim_find_tool
+    let g:fzf_settings_popup = g:zero_vim_popup
 
     nmap <Leader><Leader> <Leader>f
 
@@ -1631,6 +1632,15 @@ if s:IsPlugged('LeaderF')
     endif
 
     let g:Lf_StlColorscheme = 'gruvbox_material'
+
+    " Enable Popup
+    if g:zero_vim_popup
+        let g:Lf_WindowPosition       = 'popup'
+        let g:Lf_PopupShowStatusline  = 1
+        let g:Lf_PreviewInPopup       = 1
+        let g:Lf_PopupPreviewPosition = 'bottom'
+        let g:Lf_PopupColorscheme     = 'gruvbox_material'
+    endif
 
     let g:Lf_UseCache       = 0  " rg/ag is enough fast, we don't need cache
     let g:Lf_NeedCacheTime  = 10 " 10 seconds
