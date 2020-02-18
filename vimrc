@@ -1325,7 +1325,7 @@ elseif s:IsPlugged('asyncomplete.vim')
     function! Multiple_cursors_after() abort
         let g:asyncomplete_auto_popup = g:zero_vim_autocomplete
     endfunction
-elseif s:IsPlugged('completor')
+elseif s:IsPlugged('completor.vim')
     function! Multiple_cursors_before() abort
         silent! CompletorDisable
     endfunction
