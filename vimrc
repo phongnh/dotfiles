@@ -785,7 +785,7 @@ set undolevels=1000             " Maximum number of changes that can be undone
 set history=1000                " Store lots of command lines in history
 
 " Completion settings
-set completeopt=menuone,noselect
+set completeopt=menuone,noinsert,noselect
 set complete=.,w,b,u,t,k
 set complete-=t
 set pumheight=20                " Set popup menu max height
@@ -2031,7 +2031,7 @@ endif
 
 if s:IsPlugged('vim-lsc')
     " natebosch/vim-lsc
-    let g:lsc_auto_completeopt     = v:true
+    let g:lsc_auto_completeopt     = v:false
     let g:lsc_enable_diagnostics   = v:true
     let g:lsc_reference_highlights = v:true
     let g:lsc_trace_level          = 'off'
@@ -2039,10 +2039,10 @@ if s:IsPlugged('vim-lsc')
     let g:lsc_server_commands = {}
 
     " Default server options
-    " let s:lsc_server_default_opts = {
-    "             \ 'log_level':       -1,
-    "             \ 'suppress_stderr': v:true,
-    "             \ }
+    let s:lsc_server_default_opts = {
+                \ 'log_level':       -1,
+                \ 'suppress_stderr': v:true,
+                \ }
 
     function! s:AddServer(name, server) abort
         let cmd = a:server['cmd']
@@ -2091,6 +2091,18 @@ if s:IsPlugged('vim-lsc')
         let server = servers[0]
         echo printf('%s: %s!', get(server, 'config', { 'name': 'Server' })['name'], server['status'])
     endfunction
+
+    function! s:SetupLSC() abort
+        if empty(&omnifunc)
+            set omnifunc=lsc#complete#complete
+        elseif empty(&completefunc)
+            set completefunc=lsc#complete#complete
+        endif
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd FileType go call <SID>SetupLSC()
+    augroup END
 endif
 
 if s:IsPlugged('deoplete.nvim')
@@ -2171,7 +2183,7 @@ endif
 if s:IsPlugged('asyncomplete.vim')
     " prabirshrestha/asyncomplete.vim
     let g:asyncomplete_auto_popup  = g:zero_vim_autocomplete
-    let g:asyncomplete_popup_delay = 50
+    let g:asyncomplete_popup_delay = 80
 
     " Show autocomplete popup manually
     imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
@@ -2343,7 +2355,7 @@ if s:IsPlugged('coc.nvim')
     nnoremap <silent> K :call <SID>ShowDocument()<CR>
 
     function! s:ShowDocument() abort
-        if index(['vim','help'], &filetype) >= 0
+        if index(['vim', 'help'], &filetype) >= 0
             execute 'help ' . expand('<cword>')
         else
             call CocAction('doHover')
@@ -2384,7 +2396,9 @@ endif
 
 if s:IsPlugged('completor.vim')
     " maralla/completor.vim
-    let g:completor_auto_trigger = g:zero_vim_autocomplete
+    let g:completor_auto_trigger     = g:zero_vim_autocomplete
+    let g:completor_complete_options = 'menuone,noinsert,noselect'
+    let g:completor_auto_close_doc   = 1
 
     if s:IsPlugged('completor-neosnippet')
         let g:completor_disable_ultisnips = 1
@@ -2442,13 +2456,13 @@ if s:IsPlugged('completor.vim')
         for [name, server] in items(s:enabled_language_servers)
             call s:AddServer(name, server)
         endfor
-
-        nnoremap <silent> <Leader>K  :call completor#do('hover')<CR>
-        nmap              <Leader>kh <Leader>K
-        nnoremap <silent> <Leader>kd :call completor#do('definition')<CR>
-        nnoremap <silent> <Leader>kD :call completor#do('doc')<CR>
-        nnoremap <silent> <Leader>kf :call completor#do('format')<CR>
     endif
+
+    nnoremap <silent> <Leader>K  :call completor#do('hover')<CR>
+    nmap              <Leader>kh <Leader>K
+    nnoremap <silent> <Leader>kd :call completor#do('definition')<CR>
+    nnoremap <silent> <Leader>kD :call completor#do('doc')<CR>
+    nnoremap <silent> <Leader>kf :call completor#do('format')<CR>
 endif
 
 if s:IsPlugged('VimCompletesMe')
