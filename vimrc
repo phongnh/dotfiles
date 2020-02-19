@@ -1307,33 +1307,47 @@ let g:AutoPairsMoveCharacter      = ''
 if s:IsPlugged('deoplete')
     " Called once right before you start selecting multiple cursors
     function! Multiple_cursors_before() abort
+        let b:autopairs_enabled = 0
         if deoplete#is_enabled()
             call deoplete#disable()
         endif
     endfunction
 
     function! Multiple_cursors_after() abort
+        let b:autopairs_enabled = 1
         if g:zero_vim_autocomplete
             call deoplete#enable()
         endif
     endfunction
 elseif s:IsPlugged('asyncomplete.vim')
     function! Multiple_cursors_before() abort
+        let b:autopairs_enabled = 0
         let g:asyncomplete_auto_popup = 0
     endfunction
 
     function! Multiple_cursors_after() abort
+        let b:autopairs_enabled = 1
         let g:asyncomplete_auto_popup = g:zero_vim_autocomplete
     endfunction
 elseif s:IsPlugged('completor.vim')
     function! Multiple_cursors_before() abort
+        let b:autopairs_enabled = 0
         silent! CompletorDisable
     endfunction
 
     function! Multiple_cursors_after() abort
+        let b:autopairs_enabled = 1
         if g:zero_vim_autocomplete
             silent! CompletorEnable
         endif
+    endfunction
+else
+    function! Multiple_cursors_before() abort
+        let b:autopairs_enabled = 0
+    endfunction
+
+    function! Multiple_cursors_after() abort
+        let b:autopairs_enabled = 1
     endfunction
 endif
 
