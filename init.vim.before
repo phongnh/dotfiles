@@ -37,13 +37,9 @@ if $ITERM_PROFILE =~? 'Solarized'
     let g:zero_vim_solarized   = 1
     " let g:solarized_termtrans  = 1
     let g:zero_vim_colorscheme = 'solarized8'
+    let g:zero_vim_background = $ITERM_PROFILE =~? 'Light' ? 'light' : 'dark'
     let g:lightline_theme      = 'solarized'
     let g:airline_theme        = 'solarized'
-    if $ITERM_PROFILE =~? 'Light'
-        let g:zero_vim_background = 'light'
-    else
-        let g:zero_vim_background = 'dark'
-    endif
 else
     let g:zero_vim_colorscheme = 'gruvbox'
     let g:zero_vim_background  = 'dark'
