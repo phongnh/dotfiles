@@ -117,6 +117,7 @@ augroup MyAutoCmd
 augroup END
 
 " Default zero settings
+let g:zero_vim_devicons          = 0
 let g:zero_vim_powerline         = 0
 let g:zero_vim_popup             = 0
 let g:zero_vim_true_color        = 0
@@ -308,7 +309,10 @@ call plug#begin()
     if s:Use('fern') && has('nvim-0.4.2')
         " General purpose asynchrnonous tree viewer written in Pure Vim script
         Plug 'lambdalisue/fern.vim'
-        Plug 'lambdalisue/fern-renderer-devicons.vim'
+        if g:zero_vim_devicons
+            let g:fern#renderer = 'devicons'
+            Plug 'lambdalisue/fern-renderer-devicons.vim'
+        endif
     else
         " A tree explorer plugin for vim
         Plug 'scrooloose/nerdtree'
@@ -635,7 +639,7 @@ Plug 'chrisbra/unicode.vim'
 " }
 
 " DevIcons {
-    if s:Use('devicons')
+    if g:zero_vim_devicons
         " Adds file type glyphs/icons to popular Vim plugins: NERDTree, vim-airline, Powerline, Unite, vim-startify and more
         Plug 'ryanoasis/vim-devicons'
     endif
@@ -1419,11 +1423,6 @@ nnoremap <silent> gb :ToggleBufExplorer<CR>
 if s:IsPlugged('fern.vim')
     " lambdalisue/fern.vim
     let g:fern#drawer_width = 35
-
-    if s:IsPlugged('vim-devicons')
-        " lambdalisue/fern-renderer-devicons.vim
-        let g:fern#renderer = 'devicons'
-    endif
 
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernDrawerToggle Fern <args> -drawer -toggle
     command! -nargs=0 FernDrawerReveal Fern %:h -drawer -reveal=%
