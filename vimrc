@@ -2553,11 +2553,9 @@ endif
 
 if s:IsPlugged('limelight.vim')
     " junegunn/limelight.vim
-    let g:limelight_conceal_ctermfg     = 'gray'
     let g:limelight_conceal_ctermfg     = 240
-    let g:limelight_conceal_guifg       = 'DarkGray'
     let g:limelight_conceal_guifg       = '#777777'
-    let g:limelight_default_coefficient = 0.7
+    let g:limelight_default_coefficient = 0.75
     let g:limelight_priority            = -1
 
     nnoremap <silent> <Leader>I :Limelight!!<CR>
