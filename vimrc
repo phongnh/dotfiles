@@ -1683,15 +1683,12 @@ if s:IsPlugged('LeaderF')
         let g:Lf_StlSeparator = { 'left': '', 'right': '' }
     endif
 
-    let g:Lf_StlColorscheme = 'gruvbox_material'
-
-    " Enable Popup
-    if g:zero_vim_popup
+    " Popup Settings
+    if get(g:, 'Lf_Popup', 0)
         let g:Lf_WindowPosition       = 'popup'
         let g:Lf_PopupShowStatusline  = 0
         let g:Lf_PreviewInPopup       = 1
         let g:Lf_PopupPreviewPosition = 'bottom'
-        let g:Lf_PopupColorscheme     = 'gruvbox_material'
     endif
 
     let g:Lf_UseCache       = 0  " rg/ag is enough fast, we don't need cache
