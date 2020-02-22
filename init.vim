@@ -118,9 +118,9 @@ augroup END
 
 " Default zero settings
 let g:zero_vim_devicons          = 0
+let g:zero_vim_true_color        = 0
 let g:zero_vim_powerline         = 0
 let g:zero_vim_popup             = 0
-let g:zero_vim_true_color        = 0
 let g:zero_vim_solarized         = 0
 let g:zero_vim_autocomplete      = 1
 let g:zero_vim_autolint          = 0

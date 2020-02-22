@@ -122,9 +122,9 @@ augroup END
 
 " Default zero settings
 let g:zero_vim_devicons          = 0
+let g:zero_vim_true_color        = 0
 let g:zero_vim_powerline         = 0
 let g:zero_vim_popup             = 0
-let g:zero_vim_true_color        = 0
 let g:zero_vim_solarized         = 0
 let g:zero_vim_autocomplete      = 1
 let g:zero_vim_autolint          = 0
@@ -832,8 +832,10 @@ endif
 
 " True Color settings
 if !has('guil_running') && g:zero_vim_true_color && has('termguicolors')
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    if $TERM_PROGRAM ==? 'Alacritty' || index(['alacritty', 'xterm-kitty', 'tmux-256color', 'screen-256color'], $TERM) > -1
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    endif
     set termguicolors
 endif
 
