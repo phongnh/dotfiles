@@ -1,46 +1,3 @@
-" Helpers
-let s:python2 = has('python')
-let s:python3 = has('python3')
-let s:python  = s:python3 || s:python2
-let s:vim8    = v:version >= 800
-
-" Find and source vimrc from root to current folder
-" ~/projects/hello $
-" .
-" └── /home/phong
-"     ├── vimrc
-"     └── projects
-"         ├── vimrc
-"         └── hello
-"             ├── vimrc
-"             └── ...
-"
-" Files are sourced in order for the call s:Source('vimrc'):
-"   /home/phong/vimrc
-"   /home/phong/projects/vimrc
-"   /home/phong/projects/hello/vimrc
-function! s:Source(vimrc) abort
-    let vimrcs = findfile(a:vimrc, ';', -1)
-    for vimrc in reverse(vimrcs)
-        execute 'source ' . fnamemodify(vimrc, ':p')
-    endfor
-endfunction
-
-" Check if plugin group is used or not
-function! s:Use(group) abort
-    return index(get(g:, 'zero_vim_groups', []), a:group) > - 1
-endfunction
-
-" Check if a plugin is plugged in plug section or not
-function! s:IsPlugged(plugin) abort
-    return has_key(g:plugs, a:plugin)
-endfunction
-
-" Plugin Dir
-function! s:PlugDir(plugin) abort
-    return g:plugs[a:plugin]['dir']
-endfunction
-
 " No Vi Compatibility
 if &compatible
     set nocompatible
@@ -135,8 +92,55 @@ let g:zero_vim_find_tool         = 'rg'
 let g:zero_vim_indent_char       = '┊'
 let g:zero_vim_indent_first_char = '│'
 
+" Helpers
+" Find and source vimrc from root to current folder
+" ~/projects/hello $
+" .
+" └── /home/phong
+"     ├── vimrc
+"     └── projects
+"         ├── vimrc
+"         └── hello
+"             ├── vimrc
+"             └── ...
+"
+" Files are sourced in order for the call s:Source('vimrc'):
+"   /home/phong/vimrc
+"   /home/phong/projects/vimrc
+"   /home/phong/projects/hello/vimrc
+function! s:Source(vimrc) abort
+    let vimrcs = findfile(a:vimrc, ';', -1)
+    for vimrc in reverse(vimrcs)
+        execute 'source ' . fnamemodify(vimrc, ':p')
+    endfor
+endfunction
+
+" Check if plugin group is used or not
+function! s:Use(group) abort
+    return index(get(g:, 'zero_vim_groups', []), a:group) > - 1
+endfunction
+
+" Check if a plugin is plugged in plug section or not
+function! s:IsPlugged(plugin) abort
+    return has_key(g:plugs, a:plugin)
+endfunction
+
+" Plugin Dir
+function! s:PlugDir(plugin) abort
+    return g:plugs[a:plugin]['dir']
+endfunction
+
 " Find and source .vimrc.before from root to current folder.
 call s:Source('.vimrc.before')
+
+" True Color settings
+if !has('guil_running') && g:zero_vim_true_color && has('termguicolors')
+    if $TERM_PROGRAM ==? 'Alacritty' || index(['alacritty', 'xterm-kitty', 'tmux-256color', 'screen-256color'], $TERM) > -1
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    endif
+    set termguicolors
+endif
 
 " Plugins
 call plug#begin()
@@ -337,7 +341,7 @@ call plug#begin()
         Plug 'junegunn/fzf', { 'do': './install --bin' }
         Plug 'junegunn/fzf.vim'
         Plug 'phongnh/fzf-settings.vim'
-    elseif s:Use('leaderf') && s:python
+    elseif s:Use('leaderf') && (has('python3') || has('python'))
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
     elseif s:Use('clap') && has('patch-8.1.2114')
@@ -347,12 +351,12 @@ call plug#begin()
         " Modern performant generic finder and dispatcher for Vim and NeoVim
         Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
     else
-        if s:python
+        if (has('python3') || has('python'))
             Plug 'FelikZ/ctrlp-py-matcher'
         endif
 
-        if s:python && executable('cmake')
-            execute printf("Plug 'nixprime/cpsm', { 'do': 'env %s ./install.sh' }", s:python3 ? 'PY3=ON' : 'PY3=OFF')
+        if (has('python3') || has('python')) && executable('cmake')
+            execute printf("Plug 'nixprime/cpsm', { 'do': 'env %s ./install.sh' }", has('python3') ? 'PY3=ON' : 'PY3=OFF')
         endif
 
         " Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
@@ -369,7 +373,7 @@ call plug#begin()
 " }
 
 " Snippets and Autocomplete {
-    if s:Use('ultisnips') && s:python
+    if s:Use('ultisnips') && (has('python3') || has('python'))
         Plug 'honza/vim-snippets'
         Plug 'SirVer/ultisnips'
     elseif s:Use('neosnippet')
@@ -388,7 +392,7 @@ call plug#begin()
         Plug 'natebosch/vim-lsc'
     endif
 
-    if s:Use('deoplete') && s:vim8 && s:python3
+    if s:Use('deoplete') && v:version >= 800 && has('python3')
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
         Plug 'Shougo/deoplete.nvim'
@@ -398,7 +402,7 @@ call plug#begin()
         elseif s:IsPlugged('vim-lsc')
             Plug 'hrsh7th/deoplete-vim-lsc'
         endif
-    elseif s:Use('asyncomplete') && s:vim8
+    elseif s:Use('asyncomplete') && v:version >= 800
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
         Plug 'prabirshrestha/asyncomplete-buffer.vim'
@@ -414,7 +418,7 @@ call plug#begin()
         endif
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
-    elseif s:Use('completor') && s:vim8 && s:python
+    elseif s:Use('completor') && v:version >= 800 && (has('python3') || has('python'))
         Plug 'maralla/completor.vim'
         if s:IsPlugged('neosnippet')
             Plug 'maralla/completor-neosnippet'
@@ -466,7 +470,7 @@ call plug#begin()
 
 " Format {
     if s:Use('format')
-        if s:python
+        if (has('python3') || has('python'))
             " Provide easy code formatting in Vim by integrating existing code formatters.
             Plug 'Chiel92/vim-autoformat'
         endif
@@ -507,7 +511,7 @@ call plug#begin()
 
 " Undo history {
     if s:Use('undo')
-        if s:python
+        if (has('python3') || has('python'))
             " Visualize your Vim undo tree
             Plug 'sjl/gundo.vim'
         else
@@ -828,15 +832,6 @@ endif
 " Remember where we are, support yankring
 if !empty(&viminfo)
     set viminfo^=!
-endif
-
-" True Color settings
-if !has('guil_running') && g:zero_vim_true_color && has('termguicolors')
-    if $TERM_PROGRAM ==? 'Alacritty' || index(['alacritty', 'xterm-kitty', 'tmux-256color', 'screen-256color'], $TERM) > -1
-        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-    endif
-    set termguicolors
 endif
 
 " Map leader
@@ -2782,7 +2777,7 @@ endif
 
 if s:IsPlugged('gundo.vim')
     " sjl/gundo.vim
-    let g:gundo_prefer_python3 = s:python3
+    let g:gundo_prefer_python3 = has('python3')
     let g:gundo_right          = 1
     let g:gundo_width          = 30
     let g:gundo_preview_bottom = 1
