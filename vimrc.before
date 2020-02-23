@@ -35,14 +35,16 @@ let g:zero_vim_find_tool       = 'rg'
 let g:lightline_bufferline = 1
 
 if $ITERM_PROFILE =~? 'Solarized'
-    " let g:solarized_termtrans  = 1
     let g:zero_vim_solarized   = 1
     let g:zero_vim_colorscheme = g:zero_vim_true_color ? 'solarized8' : 'solarized'
     let g:zero_vim_background  = $ITERM_PROFILE =~? 'Light' ? 'light' : 'dark'
-    let g:lightline_theme      = 'solarized'
     let g:airline_theme        = 'solarized'
+    let g:lightline_theme      = 'solarized'
+    let g:crystalline_theme    = 'solarized'
 else
     let g:zero_vim_colorscheme = g:zero_vim_true_color ? 'gruvbox8' : 'gruvbox'
     let g:zero_vim_background  = 'dark'
+    let g:airline_theme        = 'deus'
     let g:lightline_theme      = 'deus'
+    let g:crystalline_theme    = 'gruvbox'
 endif
