@@ -6,15 +6,13 @@ if &shell =~# 'fish$' " && (v:version < 704 || v:version == 704 && !has('patch27
     endif
 endif
 
-let g:python3_host_skip_check = 1
+" Python 3
 if executable('python3')
     let g:python3_host_prog = exepath('python3')
 endif
 
-let g:python_host_skip_check = 1
-if executable('python2')
-    let g:python_host_prog = exepath('python2')
-endif
+" Disable Python 2 support
+let g:loaded_python_provider = 0
 
 " Disable system plugins
 let g:loaded_getscript         = 1
@@ -320,7 +318,7 @@ call plug#begin()
         Plug 'junegunn/fzf', { 'do': './install --bin' }
         Plug 'junegunn/fzf.vim'
         Plug 'phongnh/fzf-settings.vim'
-    elseif s:Use('leaderf') && (has('python3') || has('python'))
+    elseif s:Use('leaderf') && has('python3')
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
     elseif s:Use('clap') && has('nvim-0.4.2')
@@ -330,12 +328,12 @@ call plug#begin()
         " Modern performant generic finder and dispatcher for Vim and NeoVim
         Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
     else
-        if (has('python3') || has('python'))
+        if has('python3')
             Plug 'FelikZ/ctrlp-py-matcher'
         endif
 
-        if (has('python3') || has('python')) && executable('cmake')
-            execute printf("Plug 'nixprime/cpsm', { 'do': 'env %s ./install.sh' }", has('python3') ? 'PY3=ON' : 'PY3=OFF')
+        if has('python3') && executable('cmake')
+            Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
         endif
 
         " Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
@@ -352,7 +350,7 @@ call plug#begin()
 " }
 
 " Snippets and Autocomplete {
-    if s:Use('ultisnips') && (has('python3') || has('python'))
+    if s:Use('ultisnips') && has('python3')
         Plug 'honza/vim-snippets'
         Plug 'SirVer/ultisnips'
     elseif s:Use('neosnippet')
@@ -375,7 +373,7 @@ call plug#begin()
         Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
     endif
 
-    if s:Use('deoplete') && (has('python3') || has('python'))
+    if s:Use('deoplete') && has('python3')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'hrsh7th/deoplete-fname'
         if s:IsPlugged('vim-lsp')
@@ -415,7 +413,7 @@ call plug#begin()
         if s:IsPlugged('vim-lsp')
             Plug 'ncm2/ncm2-vim-lsp'
         endif
-    elseif s:Use('completor') && (has('python3') || has('python'))
+    elseif s:Use('completor') && has('python3')
         Plug 'maralla/completor.vim'
         if s:IsPlugged('neosnippet')
             Plug 'maralla/completor-neosnippet'
@@ -467,7 +465,7 @@ call plug#begin()
 
 " Format {
     if s:Use('format')
-        if (has('python3') || has('python'))
+        if has('python3')
             " Provide easy code formatting in Vim by integrating existing code formatters.
             Plug 'Chiel92/vim-autoformat'
         endif
@@ -508,7 +506,7 @@ call plug#begin()
 
 " Undo history {
     if s:Use('undo')
-        if (has('python3') || has('python'))
+        if has('python3')
             " Visualize your Vim undo tree
             Plug 'sjl/gundo.vim'
         else
@@ -2851,7 +2849,7 @@ endif
 
 if s:IsPlugged('gundo.vim')
     " sjl/gundo.vim
-    let g:gundo_prefer_python3 = has('python3')
+    let g:gundo_prefer_python3 = 1
     let g:gundo_right          = 1
     let g:gundo_width          = 30
     let g:gundo_preview_bottom = 1

@@ -341,7 +341,7 @@ call plug#begin()
         Plug 'junegunn/fzf', { 'do': './install --bin' }
         Plug 'junegunn/fzf.vim'
         Plug 'phongnh/fzf-settings.vim'
-    elseif s:Use('leaderf') && (has('python3') || has('python'))
+    elseif s:Use('leaderf') && has('python3')
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
     elseif s:Use('clap') && has('patch-8.1.2114')
@@ -351,12 +351,12 @@ call plug#begin()
         " Modern performant generic finder and dispatcher for Vim and NeoVim
         Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
     else
-        if (has('python3') || has('python'))
+        if has('python3')
             Plug 'FelikZ/ctrlp-py-matcher'
         endif
 
-        if (has('python3') || has('python')) && executable('cmake')
-            execute printf("Plug 'nixprime/cpsm', { 'do': 'env %s ./install.sh' }", has('python3') ? 'PY3=ON' : 'PY3=OFF')
+        if has('python3') && executable('cmake')
+            Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
         endif
 
         " Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
@@ -373,7 +373,7 @@ call plug#begin()
 " }
 
 " Snippets and Autocomplete {
-    if s:Use('ultisnips') && (has('python3') || has('python'))
+    if s:Use('ultisnips') && has('python3')
         Plug 'honza/vim-snippets'
         Plug 'SirVer/ultisnips'
     elseif s:Use('neosnippet')
@@ -435,7 +435,7 @@ call plug#begin()
         if s:IsPlugged('vim-lsp')
             Plug 'ncm2/ncm2-vim-lsp'
         endif
-    elseif s:Use('completor') && v:version >= 800 && (has('python3') || has('python'))
+    elseif s:Use('completor') && v:version >= 800 && has('python3')
         Plug 'maralla/completor.vim'
         if s:IsPlugged('neosnippet')
             Plug 'maralla/completor-neosnippet'
@@ -487,7 +487,7 @@ call plug#begin()
 
 " Format {
     if s:Use('format')
-        if (has('python3') || has('python'))
+        if has('python3')
             " Provide easy code formatting in Vim by integrating existing code formatters.
             Plug 'Chiel92/vim-autoformat'
         endif
@@ -528,7 +528,7 @@ call plug#begin()
 
 " Undo history {
     if s:Use('undo')
-        if (has('python3') || has('python'))
+        if has('python3')
             " Visualize your Vim undo tree
             Plug 'sjl/gundo.vim'
         else
@@ -2893,7 +2893,7 @@ endif
 
 if s:IsPlugged('gundo.vim')
     " sjl/gundo.vim
-    let g:gundo_prefer_python3 = has('python3')
+    let g:gundo_prefer_python3 = 1
     let g:gundo_right          = 1
     let g:gundo_width          = 30
     let g:gundo_preview_bottom = 1
