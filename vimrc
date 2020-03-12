@@ -1958,6 +1958,18 @@ if s:IsPlugged('neosnippet.vim')
     smap <Tab> <Plug>(neosnippet_jump)
 endif
 
+" Check if LSP is enabled
+function! s:IsEnabledLSP() abort
+    return s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim') || s:IsPlugged('coc.nvim')
+endfunction
+
+if s:IsEnabledLSP()
+    " Always draw the signcolumn
+    set signcolumn=yes
+    " Don't give |ins-completion-menu| messages.
+    set shortmess+=c
+endif
+
 " LSP Servers
 let g:language_servers = {
             \ 'bash-language-server':             ['bash-language-server', 'start'],
@@ -2046,7 +2058,6 @@ if s:IsPlugged('vim-lsp')
     function! s:OnLspBufferEnabled() abort
         setlocal omnifunc=lsp#complete
         setlocal completefunc=lsp#complete
-        setlocal signcolumn=yes
 
         nmap     <buffer> <silent> <Leader>K  <Plug>(lsp-hover)
         nmap     <buffer>          <Leader>kh <Leader>K
@@ -2141,11 +2152,10 @@ if s:IsPlugged('vim-lsc')
     function! s:SetupLSC() abort
         setlocal omnifunc=lsc#complete#complete
         setlocal completefunc=lsc#complete#complete
-        setlocal signcolumn=yes
     endfunction
 
     augroup MyAutoCmd
-        autocmd FileType c,cpp,go,rust,python,vim call <SID>SetupLSC()
+        autocmd FileType c,cpp,go,rust,python,vim,sh call <SID>SetupLSC()
     augroup END
 endif
 
@@ -2192,9 +2202,7 @@ if s:IsPlugged('LanguageClient-neovim')
     endfunction
 
     augroup MyAutoCmd
-        autocmd User LanguageClientStarted setlocal signcolumn=yes
-        autocmd User LanguageClientStopped setlocal signcolumn=auto
-        autocmd FileType c,cpp,go,rust,python,vim call <SID>SetupLanguageClient()
+        autocmd User LanguageClientStarted call <SID>SetupLanguageClient()
     augroup END
 endif
 
@@ -2374,10 +2382,24 @@ endif
 
 if s:IsPlugged('coc.nvim')
     " neoclide/coc.nvim
-    " Extensions
-    " coc-json coc-tsserver coc-flow coc-html coc-xml coc-css coc-tailwindcss
-    " coc-python coc-pyright coc-solargraph coc-yaml coc-flow coc-rls coc-rust-analyzer coc-metals coc-vimlsp
-    " coc-markdownlint coc-highlight coc-emmet coc-ultisnips coc-snippets coc-lists coc-git coc-yank
+    " https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions
+    " https://github.com/neoclide/coc.nvim/wiki/Language-servers
+    let g:coc_disabled_extensions = [
+                \ 'coc-flow',
+                \ 'coc-eslint',
+                \ 'coc-prettier',
+                \ 'coc-tailwindcss',
+                \ 'coc-clangd',
+                \ 'coc-rls',
+                \ 'coc-rust-analyzer',
+                \ 'coc-metals',
+                \ 'coc-highlight',
+                \ 'coc-yank',
+                \ 'coc-emmet',
+                \ 'coc-snippets',
+                \ 'coc-git',
+                \ 'coc-lists',
+                \ ]
 
     let g:coc_global_extensions = [
                 \ 'coc-json',
@@ -2396,15 +2418,6 @@ if s:IsPlugged('coc.nvim')
     if s:IsPlugged('ultisnips')
         call add(g:coc_global_extensions, 'coc-ultisnips')
     endif
-
-    " You will have bad experience for diagnostic messages when it's default 4000.
-    set updatetime=300
-
-    " don't give |ins-completion-menu| messages.
-    set shortmess+=c
-
-    " always show signcolumns
-    set signcolumn=yes
 
     if executable('/usr/local/bin/node')
         let g:coc_node_path = '/usr/local/bin/node'
@@ -2462,13 +2475,13 @@ if s:IsPlugged('coc.nvim')
     nnoremap <silent> <Leader>K  :call CocAction('doHover')<CR>
     nmap              <Leader>kh <Leader>K
     nmap     <silent> <Leader>ka <Plug>(coc-codeaction)
-    xmap              <Leader>ka <Plug>(coc-codeaction-selected)
+    vmap     <silent> <Leader>ka <Plug>(coc-codeaction-selected)
     nmap     <silent> <Leader>ke <Plug>(coc-rename)
     nmap     <silent> <Leader>kf <Plug>(coc-format)
-    xmap              <Leader>kf <Plug>(coc-format-selected)
+    vmap     <silent> <Leader>kf <Plug>(coc-format-selected)
     nmap     <silent> <Leader>kl <Plug>(coc-diagnostic-info)
-    nmap     <silent> <Leader>kd <Plug>(coc-definition)
-    nmap     <silent> <Leader>kD <Plug>(coc-declaration)
+    nmap     <silent> <Leader>kd <Plug>(coc-declaration)
+    nmap     <silent> <Leader>k] <Plug>(coc-definition)
     nmap     <silent> <Leader>ki <Plug>(coc-implementation)
     nmap     <silent> <Leader>kt <Plug>(coc-type-definition)
     nmap     <silent> <Leader>kr <Plug>(coc-references)
@@ -2985,8 +2998,10 @@ if s:IsPlugged('vim-go')
     let g:go_fmt_command       = 'goimports'
     let g:go_fmt_fail_silently = 1
 
-    " Use completion from LSP plugin instead of go#complete#Complete
-    if s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim')
+    " Use completion from LSP plugin instead of go#complete#Complete except for coc.nvim
+    if s:IsPlugged('coc.nvim')
+        let g:go_code_completion_enabled = 1
+    elseif s:IsEnabledLSP()
         let g:go_code_completion_enabled = 0
     endif
 
