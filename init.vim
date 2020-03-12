@@ -371,6 +371,8 @@ call plug#begin()
         Plug 'mattn/vim-lsp-settings'
     elseif s:Use('lsc')
         Plug 'natebosch/vim-lsc'
+    elseif s:Use('LanguageClient')
+        Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
     endif
 
     if s:Use('deoplete') && (has('python3') || has('python'))
@@ -1975,24 +1977,36 @@ if s:IsPlugged('vim-lsp')
         endif
     endfunction
 
-    nmap     <silent> <Leader>K  <Plug>(lsp-hover)
-    nmap              <Leader>kh <Leader>K
-    nmap     <silent> <Leader>ka <Plug>(lsp-code-action)
-    nmap     <silent> <Leader>ke <Plug>(lsp-rename)
-    nmap     <silent> <Leader>kf <Plug>(lsp-document-format)
-    xmap              <Leader>kf <Plug>(lsp-document-range-format)
-    nmap     <silent> <Leader>kd <Plug>(lsp-definition)
-    nmap     <silent> <Leader>kD <Plug>(lsp-declaration)
-    nmap     <silent> <Leader>ki <Plug>(lsp-implementation)
-    nmap     <silent> <Leader>kt <Plug>(lsp-type-definition)
-    nmap     <silent> <Leader>kT <Plug>(lsp-type-hierarchy)
-    nmap     <silent> <Leader>kl <Plug>(lsp-document-diagnostics)
-    nmap     <silent> <Leader>ks <Plug>(lsp-document-symbol)
-    nmap     <silent> <Leader>kw <Plug>(lsp-workspace-symbol)
-    nmap     <silent> <Leader>kr <Plug>(lsp-references)
-    nmap     <silent> <Leader>kn <Plug>(lsp-next-error)
-    nmap     <silent> <Leader>kp <Plug>(lsp-previous-error)
-    nnoremap <silent> <Leader>k; :LspStatus<CR>
+    function! s:OnLspBufferEnabled() abort
+        setlocal omnifunc=lsp#complete
+        setlocal completefunc=lsp#complete
+        setlocal signcolumn=yes
+
+        nmap     <buffer> <silent> <Leader>K  <Plug>(lsp-hover)
+        nmap     <buffer>          <Leader>kh <Leader>K
+        nmap     <buffer> <silent> <Leader>ka <Plug>(lsp-code-action)
+        nmap     <buffer> <silent> <Leader>ke <Plug>(lsp-rename)
+        nmap     <buffer> <silent> <Leader>kf <Plug>(lsp-document-format)
+        vmap     <buffer> <silent> <Leader>kf <Plug>(lsp-document-format)
+        nmap     <buffer> <silent> <Leader>kF <Plug>(lsp-document-range-format)
+        xmap     <buffer> <silent> <Leader>kF <Plug>(lsp-document-range-format)
+        nmap     <buffer> <silent> <Leader>kd <Plug>(lsp-declaration)
+        nmap     <buffer> <silent> <Leader>k] <Plug>(lsp-definition)
+        nmap     <buffer> <silent> <Leader>ki <Plug>(lsp-implementation)
+        nmap     <buffer> <silent> <Leader>kt <Plug>(lsp-type-definition)
+        nmap     <buffer> <silent> <Leader>kT <Plug>(lsp-type-hierarchy)
+        nmap     <buffer> <silent> <Leader>kl <Plug>(lsp-document-diagnostics)
+        nmap     <buffer> <silent> <Leader>ks <Plug>(lsp-document-symbol)
+        nmap     <buffer> <silent> <Leader>kw <Plug>(lsp-workspace-symbol)
+        nmap     <buffer> <silent> <Leader>kr <Plug>(lsp-references)
+        nmap     <buffer> <silent> <Leader>kn <Plug>(lsp-next-error)
+        nmap     <buffer> <silent> <Leader>kp <Plug>(lsp-previous-error)
+        nnoremap <buffer> <silent> <Leader>k; :LspStatus<CR>
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd User lsp_buffer_enabled call <SID>OnLspBufferEnabled()
+    augroup END
 endif
 
 if s:IsPlugged('vim-lsc')
@@ -2031,7 +2045,7 @@ if s:IsPlugged('vim-lsc')
     endfor
 
     let g:lsc_auto_map = {
-                \ 'GoToDefinition':      '<Leader>kd',
+                \ 'GoToDefinition':      '<Leader>k]',
                 \ 'GoToDefinitionSplit': '<Leader>k\',
                 \ 'FindReferences':      '<Leader>kr',
                 \ 'NextReference':       '[r',
@@ -2047,7 +2061,7 @@ if s:IsPlugged('vim-lsc')
                 \ }
 
     nnoremap <silent> <Leader>kl :LSClientAllDiagnostics<CR>
-    nnoremap <silent> <Leader>kc :LSClientLineDiagnostics<CR>
+    nnoremap <silent> <Leader>kL :LSClientLineDiagnostics<CR>
     nnoremap <silent> <Leader>k; :call PrintLSCServerStatus()<CR>
 
     function! PrintLSCServerStatus(...) abort
@@ -2059,15 +2073,62 @@ if s:IsPlugged('vim-lsc')
     endfunction
 
     function! s:SetupLSC() abort
-        if empty(&omnifunc)
-            set omnifunc=lsc#complete#complete
-        elseif empty(&completefunc)
-            set completefunc=lsc#complete#complete
-        endif
+        setlocal omnifunc=lsc#complete#complete
+        setlocal completefunc=lsc#complete#complete
+        setlocal signcolumn=yes
     endfunction
 
     augroup MyAutoCmd
-        autocmd FileType go call <SID>SetupLSC()
+        autocmd FileType c,cpp,go,rust,python,vim call <SID>SetupLSC()
+    augroup END
+endif
+
+if s:IsPlugged('LanguageClient-neovim')
+    " autozimu/LanguageClient-neovim
+    let g:LanguageClient_serverCommands = {}
+    let g:LanguageClient_diagnosticsList = 'Location'
+
+    function! s:AddServer(name, server) abort
+        let cmd = a:server['cmd']
+        let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
+        if !executable(cmd[0])
+            return
+        endif
+        for ft in a:server['filetypes']
+            if !has_key(g:LanguageClient_serverCommands, ft)
+                let g:LanguageClient_serverCommands[ft] = cmd
+            endif
+        endfor
+    endfunction
+
+    for [name, server] in items(s:enabled_language_servers)
+        call s:AddServer(name, server)
+    endfor
+
+    function! s:SetupLanguageClient() abort
+        setlocal omnifunc=LanguageClient#complete
+        setlocal completefunc=LanguageClient#complete
+
+        nnoremap <buffer> <silent> <Leader>K  :call LanguageClient#textDocument_hover()<CR>
+        nmap     <buffer>          <Leader>kh <Leader>K
+        nnoremap <buffer> <silent> <Leader>ka :call LanguageClient#textDocument_codeAction()<CR>
+        nnoremap <buffer> <silent> <Leader>ke :call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <silent> <Leader>kf :call LanguageClient#textDocument_formatting()<CR>
+        vnoremap <buffer> <silent> <Leader>kf :call LanguageClient#textDocument_rangeFormatting()<CR>
+        nnoremap <buffer> <silent> <Leader>k] :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <buffer> <silent> <Leader>ki :call LanguageClient#textDocument_implementation()<CR>
+        nnoremap <buffer> <silent> <Leader>kr :call LanguageClient#textDocument_references()<CR>
+        nnoremap <buffer> <silent> <Leader>ks :call LanguageClient#textDocument_documentSymbol()<CR>
+        nnoremap <buffer> <silent> <Leader>kw :call LanguageClient#workspace_symbol()<CR>
+        nnoremap <buffer> <silent> <Leader>kc :call LanguageClient#textDocument_documentHighlight()<CR>
+        nnoremap <buffer> <silent> <Leader>kC :call LanguageClient#clearDocumentHighlight()<CR>
+        nnoremap <buffer> <silent> <Leader>k; :echo LanguageClient#serverStatusMessage()<CR>
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd User LanguageClientStarted setlocal signcolumn=yes
+        autocmd User LanguageClientStopped setlocal signcolumn=auto
+        autocmd FileType c,cpp,go,rust,python,vim call <SID>SetupLanguageClient()
     augroup END
 endif
 
@@ -2087,6 +2148,10 @@ if s:IsPlugged('deoplete.nvim')
                 \ })
 
     call deoplete#custom#option('keyword_patterns', { '_': '[a-zA-Z_]\k*\(?' })
+
+    call deoplete#custom#option('omni_patterns', {
+                \ 'go': '[^. *\t]\.\w*',
+                \ })
 
     " Ignore sources
     let g:deoplete#ignore_sources = { '_': ['dictionary', 'tag', 'syntax'] }
@@ -2862,17 +2927,17 @@ if s:IsPlugged('vim-go')
     let g:go_fmt_command       = 'goimports'
     let g:go_fmt_fail_silently = 1
 
-    " Use lsc#complete#complete for omnifunc instead of go#complete#Complete if enabled LSP for go
-    " if s:IsPlugged('vim-lsc') && has_key(g:lsc_server_commands, 'go')
-    "     let g:go_code_completion_enabled = 0
-    " endif
+    " Use completion from LSP plugin instead of go#complete#Complete
+    if s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim')
+        let g:go_code_completion_enabled = 0
+    endif
 
     let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
     let g:ale_linters = get(g:, 'ale_linters', {})
     let g:ale_linters.go = ['golint', 'govet', 'errheck']
 
     function! s:SetupVimGo() abort
-        if has("nvim")
+        if has('nvim')
             nmap <buffer> <LocalLeader>R <Plug>(go-run-split)
         else
             nnoremap <buffer> <silent> <LocalLeader>R :GoRun!<CR>:redraw!<CR>
@@ -2916,7 +2981,7 @@ if s:IsPlugged('vim-go')
         nnoremap <buffer> g} :GoImport<Space>
         nnoremap <buffer> g{ :GoDrop<Space>
 
-        if s:IsPlugged('ctrlp.vim')
+        if s:IsPlugged('ctrlp.vim') || s:IsPlugged('fzf.vim')
             nnoremap <buffer> <silent> <LocalLeader>o :GoDecls<CR>
             nnoremap <buffer> <silent> <LocalLeader>O :GoDeclsDir<CR>
             nnoremap <buffer>          <LocalLeader>p :GoDeclsDir<Space>
