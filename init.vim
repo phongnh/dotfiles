@@ -762,7 +762,7 @@ set cmdheight=2                 " Height of command-line (easy-readable)
 set undolevels=1000             " Maximum number of changes that can be undone
 
 " Completion settings
-set completeopt=menuone,noselect
+set completeopt=menuone,noinsert,noselect
 set complete=.,w,b,u,t,k
 set complete-=t
 set pumheight=20                " Set popup menu max height
