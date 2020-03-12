@@ -2981,6 +2981,14 @@ if s:IsPlugged('vim-fugitive')
     augroup END
 endif
 
+if s:IsPlugged('git-messenger.vim')
+    " rhysd/git-messenger.vim
+    augroup MyAutoCmd
+        " Hack for the case Git Messenger popup closed immediately after it opened on Vim 8.2
+        autocmd FileType gitmessengerpopup setlocal updatetime=300000
+    augroup END
+endif
+
 if s:IsPlugged('gv.vim')
     " junegunn/gv.vim
     nnoremap <silent> <Leader>gk :GV<CR>
