@@ -2442,58 +2442,20 @@ if s:IsPlugged('completor.vim')
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
 
     " <Tab>: completion
-    function! s:CheckBackSpace() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1] =~ '\s'
-    endfunction
-
     function! s:CleverTab() abort
         if pumvisible()
             return "\<C-n>"
-        endif
-
-        if s:CheckBackSpace()
+        elseif col('.') > 1 && strpart(getline('.'), col('.') - 2, 3) =~ '^[[:keyword:][:ident:]]'
+            return "\<C-r>=completor#do('complete')\<CR>"
+        else
             return "\<Tab>"
         endif
-
-        return "\<C-r>=completor#do('complete')\<CR>"
     endfunction
 
     inoremap <silent> <expr> <Tab> <SID>CleverTab()
 
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-    if s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc')
-        " Nothing to do
-    elseif get(g:, 'zero_vim_completor_lsp', 1)
-        " Enable LSP
-        let g:completor_filetype_map = {}
-
-        function! s:AddServer(name, server) abort
-            let cmd = a:server['cmd']
-            let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
-            if !executable(cmd[0])
-                return
-            endif
-            let l:opts = { 'ft': 'lsp', 'cmd': join(cmd, ' ') }
-            for ft in a:server['filetypes']
-                if !has_key(g:completor_filetype_map, ft)
-                    let g:completor_filetype_map[ft] = l:opts
-                endif
-            endfor
-        endfunction
-
-        for [name, server] in items(s:enabled_language_servers)
-            call s:AddServer(name, server)
-        endfor
-    endif
-
-    nnoremap <silent> <Leader>K  :call completor#do('hover')<CR>
-    nmap              <Leader>kh <Leader>K
-    nnoremap <silent> <Leader>kd :call completor#do('definition')<CR>
-    nnoremap <silent> <Leader>kD :call completor#do('doc')<CR>
-    nnoremap <silent> <Leader>kf :call completor#do('format')<CR>
 endif
 
 if s:IsPlugged('VimCompletesMe')
