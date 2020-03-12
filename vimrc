@@ -420,6 +420,21 @@ call plug#begin()
         endif
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
+    elseif s:Use('ncm2')
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc'
+        Plug 'ncm2/ncm2'
+        Plug 'ncm2/ncm2-bufword'
+        Plug 'fgrsnau/ncm2-otherbuf'
+        Plug 'ncm2/ncm2-path'
+        if s:IsPlugged('ultisnips')
+            Plug 'ncm2/ncm2-ultisnips'
+        elseif s:IsPlugged('neosnippet.vim')
+            Plug 'ncm2/ncm2-neosnippet'
+        endif
+        if s:IsPlugged('vim-lsp')
+            Plug 'ncm2/ncm2-vim-lsp' 
+        endif
     elseif s:Use('completor') && v:version >= 800 && (has('python3') || has('python'))
         Plug 'maralla/completor.vim'
         if s:IsPlugged('neosnippet')
@@ -1331,6 +1346,16 @@ elseif s:IsPlugged('asyncomplete.vim')
     function! Multiple_cursors_after() abort
         let b:autopairs_enabled = 1
         let g:asyncomplete_auto_popup = g:zero_vim_autocomplete
+    endfunction
+elseif s:IsPlugged('ncm2')
+    function! Multiple_cursors_before() abort
+        let b:autopairs_enabled = 0
+        let b:ncm2_enable = 0
+    endfunction
+
+    function! Multiple_cursors_after() abort
+        let b:autopairs_enabled = 1
+        let b:ncm2_enable = 1
     endfunction
 elseif s:IsPlugged('completor.vim')
     function! Multiple_cursors_before() abort
@@ -2464,6 +2489,49 @@ if s:IsPlugged('coc.nvim')
         autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
         autocmd CursorHold * silent call CocActionAsync('highlight')
     augroup END
+endif
+
+if s:IsPlugged('ncm2')
+    " ncm2/ncm2
+    let g:ncm2#auto_popup  = g:zero_vim_autocomplete
+    let g:ncm2#popup_delay = 100
+
+    " Enable Autocomplete for all buffers
+    augroup MyAutoCmd
+        autocmd BufEnter * call ncm2#enable_for_buffer()
+    augroup END
+
+    " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+    " inoremap <C-c> <ESC>
+
+    " Trigger complete manually
+    imap <C-x><C-r> <Plug>(ncm2_manual_trigger)
+
+    " <CR>: close popup and insert newline
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
+    " <Tab>: completion
+    function! s:CheckBackSpace() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    function! s:CleverTab() abort
+        if pumvisible()
+            return "\<C-n>"
+        endif
+
+        if s:CheckBackSpace()
+            return "\<Tab>"
+        endif
+
+        return "\<C-r>=ncm2#manual_trigger()\<CR>"
+    endfunction
+
+    inoremap <silent> <expr> <Tab> <SID>CleverTab()
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 endif
 
 if s:IsPlugged('completor.vim')
