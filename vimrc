@@ -3002,6 +3002,7 @@ if s:IsPlugged('vim-go')
     if s:IsPlugged('coc.nvim')
         let g:go_code_completion_enabled = 1
     elseif s:IsEnabledLSP()
+        let g:go_gopls_enabled           = 0
         let g:go_code_completion_enabled = 0
     endif
 
