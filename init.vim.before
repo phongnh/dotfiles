@@ -13,14 +13,15 @@ let g:zero_vim_groups = [
             \ 'tagbar',
             \ 'undo',
             \ 'indent',
-            \ 'web',
-            \ 'ruby',
-            \ 'go',
             \ 'git',
             \ 'gitgutter',
             \ 'diff-enhanced',
+            \ 'web',
+            \ 'ruby',
+            \ 'go',
             \ ]
 
+let g:zero_vim_devicons        = index(['Kitty', 'Alacritty'], $TERM_PROGRAM) > -1
 let g:zero_vim_true_color      = 1
 let g:zero_vim_powerline       = 1
 let g:zero_vim_popup           = 1

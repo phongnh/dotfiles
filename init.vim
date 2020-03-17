@@ -413,7 +413,7 @@ call plug#begin()
             Plug 'ncm2/ncm2-neosnippet'
         endif
         if s:IsPlugged('vim-lsp')
-            Plug 'ncm2/ncm2-vim-lsp' 
+            Plug 'ncm2/ncm2-vim-lsp'
         endif
     elseif s:Use('completor') && (has('python3') || has('python'))
         Plug 'maralla/completor.vim'
@@ -530,67 +530,6 @@ call plug#begin()
     endif
 " }
 
-" Run your tests at the speed of thought
-Plug 'janko-m/vim-test'
-
-if s:Use('syntax')
-    " A solid language pack for Vim
-    let g:polyglot_disabled = ['fish', 'coffee-script']
-    Plug 'sheerun/vim-polyglot'
-endif
-
-" Web {
-    if s:Use('web')
-        Plug 'pangloss/vim-javascript'
-        Plug 'othree/es.next.syntax.vim'
-        Plug 'othree/javascript-libraries-syntax.vim'
-        Plug 'heavenshell/vim-jsdoc'
-        Plug 'neoclide/vim-jsx-improve'
-        Plug 'elzr/vim-json'
-        Plug 'tpope/vim-jdaddy'
-        Plug 'hail2u/vim-css3-syntax'
-        Plug 'phongnh/vim-coloresque'
-        Plug 'othree/html5.vim'
-    endif
-" }
-
-" CoffeeScript {
-    if s:Use('coffee-script')
-        Plug 'kchmck/vim-coffee-script'
-        Plug 'joukevandermaas/vim-ember-hbs'
-    endif
-" }
-
-" Ruby {
-    if s:Use('ruby')
-        Plug 'keith/rspec.vim'
-        Plug 'phongnh/vim-rubocop'
-        Plug 'tpope/vim-rake'
-        Plug 'tpope/vim-rails'
-    endif
-" }
-
-" Python {
-    if s:Use('python')
-        Plug 'nvie/vim-flake8'
-        Plug 'fisadev/vim-isort'
-        Plug 'google/yapf', { 'rtp': 'plugins/vim' }
-    endif
-" }
-
-" Go {
-    if s:Use('go')
-        Plug 'fatih/vim-go'
-        Plug 'zchee/vim-go-stdlib'          " go standard library syntax highlighting
-        Plug 'phongnh/go-explorer'          " go get github.com/phongnh/go-explorer/src/getool
-        Plug 'tweekmonster/hl-goimport.vim' " Highlights imported packages in Go
-    endif
-" }
-
-" Fish Shell {
-    Plug 'dag/vim-fish'
-" }
-
 " Git {
     if s:Use('git')
         " An awesome Git wrapper so awesome
@@ -598,7 +537,7 @@ endif
 
         " Vim and Neovim plugin to reveal the commit messages under the cursor
         Plug 'rhysd/git-messenger.vim'
-    
+
         " A git commit browser in Vim
         Plug 'junegunn/gv.vim'
 
@@ -639,6 +578,75 @@ Plug 'chrisbra/unicode.vim'
         Plug 'takac/vim-hardtime'
     endif
 " }
+
+" Web {
+    if s:Use('web')
+        Plug 'othree/html5.vim'
+        Plug 'pangloss/vim-javascript'
+        Plug 'MaxMEllon/vim-jsx-pretty'
+        Plug 'elzr/vim-json'
+        Plug 'othree/javascript-libraries-syntax.vim'
+        Plug 'heavenshell/vim-jsdoc'
+        Plug 'tpope/vim-jdaddy'
+        Plug 'hail2u/vim-css3-syntax'
+        Plug 'phongnh/vim-coloresque'
+    endif
+" }
+
+" CoffeeScript {
+    if s:Use('coffee-script')
+        Plug 'kchmck/vim-coffee-script'
+        Plug 'joukevandermaas/vim-ember-hbs'
+    endif
+" }
+
+" Ruby {
+    if s:Use('ruby')
+        Plug 'vim-ruby/vim-ruby'
+        Plug 'stephpy/vim-yaml'
+        Plug 'noprompt/vim-yardoc'
+        Plug 'keith/rspec.vim'
+        Plug 'tpope/vim-rake'
+        Plug 'tpope/vim-rails'
+        Plug 'phongnh/vim-rubocop'
+    endif
+" }
+
+" Python {
+    if s:Use('python')
+        Plug 'vim-python/python-syntax'
+        Plug 'nvie/vim-flake8'
+        Plug 'fisadev/vim-isort'
+        Plug 'google/yapf', { 'rtp': 'plugins/vim' }
+    endif
+" }
+
+" Go {
+    if s:Use('go')
+        Plug 'fatih/vim-go'
+        Plug 'zchee/vim-go-stdlib'          " go standard library syntax highlighting
+        Plug 'phongnh/go-explorer'          " go get github.com/phongnh/go-explorer/src/getool
+        Plug 'tweekmonster/hl-goimport.vim' " Highlights imported packages in Go
+    endif
+" }
+
+" Fish Shell {
+    Plug 'dag/vim-fish'
+" }
+
+if s:Use('syntax')
+    " A solid language pack for Vim
+    let g:polyglot_disabled = ['fish']
+    if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'javascript', 'jsx', 'json']) | endif
+    if s:Use('coffee-script') | call add(g:polyglot_disabled, 'coffee-script') | endif
+    if s:Use('ruby') | call extend(g:polyglot_disabled, ['ruby', 'yaml', 'yard', 'rspec']) | endif
+    if s:Use('python') | call add(g:polyglot_disabled, 'python') | endif
+    if s:Use('go') | call add(g:polyglot_disabled, 'go') | endif
+    Plug 'sheerun/vim-polyglot'
+endif
+
+" Run your tests at the speed of thought
+Plug 'janko-m/vim-test'
 
 " Color schemes {
     " one colorscheme pack to rule them all!
@@ -2886,41 +2894,105 @@ if s:IsPlugged('vim-indent-guides')
     vmap              <Leader>bi <Esc><Leader>bigv
 endif
 
-" janko-m/vim-test
-function! Neovim2Strategy(cmd) abort
-    if g:test#neovim_mode ==? 's'
-        let win = 'botright new'
-    elseif g:test#neovim_mode ==? 'v'
-        let win = 'vertical new'
-    elseif g:test#neovim_mode ==? 't'
-        let win = 'tabnew'
-    else
-        let win = 'botright 15new'
-    endif
-    execute win | call termopen(a:cmd) | startinsert
-endfunction
+if s:IsPlugged('vim-fugitive')
+    " tpope/vim-fugitive
+    nnoremap          <Leader>gi :Git add -p %<CR><CR>
+    nnoremap          <Leader>ga :Git add -p<CR><CR>
+    nnoremap <silent> <Leader>gs :Gstatus<CR>
+    nnoremap <silent> <Leader>gd :Gdiff<CR>
+    nnoremap <silent> <Leader>gc :Gcommit<CR>
+    nnoremap <silent> <Leader>gb :Gblame<CR>
+    nnoremap          <Leader>ge :Gedit<Space>
+    nnoremap <silent> <Leader>gr :Gread<CR>
+    nnoremap <silent> <Leader>gw :Gwrite<CR>
+    nnoremap <silent> <Leader>gf :Gfetch<CR>
+    nnoremap <silent> <Leader>gp :Gpush<CR>
+    nnoremap <silent> <Leader>gu :Gpull --rebase<CR>
 
-let g:test#custom_strategies = { 'neovim2': function('Neovim2Strategy') }
-let g:test#strategy          = 'neovim2'
-let g:test#neovim_mode       = 'd'
-
-if s:IsPlugged('vim-tmuxify')
-    let g:test#custom_strategies['tmuxify'] = function('TmuxifyRunner')
-    let g:test#strategy = 'tmuxify'
+    augroup MyAutoCmd
+        autocmd FileType gitcommit nmap <buffer> <silent> U :Git checkout -- <C-r><C-g><CR>
+        autocmd BufReadPost fugitive://* set bufhidden=delete
+    augroup END
 endif
 
-nnoremap <silent> <Leader>tt :TestFile<CR>
-nnoremap <silent> <Leader>tf :TestNearest<CR>
-nmap              <Leader>tn <Leader>tf
-nnoremap <silent> <Leader>tl :TestLast<CR>
-nnoremap <silent> <Leader>ts :TestSuite<CR>
-nnoremap <silent> <Leader>tv :TestVisit<CR>
+if s:IsPlugged('git-messenger.vim')
+    " rhysd/git-messenger.vim
+    augroup MyAutoCmd
+        " Hack for the case Git Messenger popup closed immediately after it opened on Vim 8.2
+        autocmd FileType gitmessengerpopup setlocal updatetime=300000
+    augroup END
+endif
 
-if s:IsPlugged('vim-polyglot')
-    " sheerun/vim-polyglot
-    " plasticboy/vim-markdown
-    let g:vim_markdown_no_default_key_mappings = 1
-    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
+if s:IsPlugged('gv.vim')
+    " junegunn/gv.vim
+    nnoremap <silent> <Leader>gk :GV<CR>
+    nnoremap <silent> <Leader>gK :GV!<CR>
+    nnoremap <silent> <Leader>gv :GV?<CR>
+endif
+
+if s:IsPlugged('committia.vim')
+    " rhysd/committia.vim
+    let g:committia_hooks = {}
+
+    function! g:committia_hooks.edit_open(info)
+        " Additional settings
+        setlocal spell
+
+        " " If no commit message, start with insert mode
+        " if a:info.vcs ==# 'git' && getline(1) ==# ''
+        "     startinsert
+        " endif
+
+        " Scroll the diff window
+        nmap <buffer> <C-f> <Plug>(committia-scroll-diff-down-page)
+        nmap <buffer> <C-b> <Plug>(committia-scroll-diff-up-page)
+        nmap <buffer> <C-d> <Plug>(committia-scroll-diff-down-half)
+        nmap <buffer> <C-u> <Plug>(committia-scroll-diff-up-half)
+    endfunction
+endif
+
+if s:IsPlugged('vim-gitgutter')
+    " airblade/vim-gitgutter
+    let g:gitgutter_enabled  = g:zero_vim_git_gutter
+    let g:gitgutter_map_keys = 0
+
+    if executable('rg')
+        let g:gitgutter_grep = 'rg --color=never'
+        let $GREP_OPTIONS    = ''
+    elseif executable('ag')
+        let g:gitgutter_grep = 'ag --nocolor'
+        let $GREP_OPTIONS    = ''
+    endif
+
+    nmap [c <Plug>GitGutterPrevHunk
+    nmap ]c <Plug>GitGutterNextHunk
+
+    nnoremap <silent> yog :GitGutterToggle<CR>:echo printf('%s GitGutter!', g:gitgutter_enabled ? 'Enabled' : 'Disabled')<CR>
+endif
+
+if s:IsPlugged('vim-signify')
+    " mhinz/vim-signify
+    let g:signify_disable_by_default    = !g:zero_vim_git_gutter
+    let g:signify_vcs_list              = ['git', 'hg']
+    let g:signify_cursorhold_insert     = 0
+    let g:signify_cursorhold_normal     = 0
+    let g:signify_update_on_bufenter    = 0
+    let g:signify_update_on_focusgained = 0
+
+    nnoremap <silent> yog :SignifyToggle<CR>echo printf('%s Signify on buffer!', get(b:, 'sy', { 'active': 0 }).active ? 'Enabled' : 'Disabled')<CR>
+endif
+
+" chrisbra/unicode.vim
+nmap <F3> <Plug>(UnicodeSwapCompleteName)
+nmap <F4> <Plug>(MakeDigraph)
+vmap <F4> <Plug>(MakeDigraph)
+
+if s:IsPlugged('vim-hardtime')
+    " takac/vim-hardtime
+    let g:hardtime_default_on = 1
+    let g:hardtime_showmsg    = 1
+    let g:list_of_visual_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<LEFT>', '<RIGHT>']
+    let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<LEFT>', '<RIGHT>']
 endif
 
 " pangloss/vim-javascript
@@ -3042,106 +3114,42 @@ if s:IsPlugged('vim-go')
     augroup END
 endif
 
-if s:IsPlugged('vim-fugitive')
-    " tpope/vim-fugitive
-    nnoremap          <Leader>gi :Git add -p %<CR><CR>
-    nnoremap          <Leader>ga :Git add -p<CR><CR>
-    nnoremap <silent> <Leader>gs :Gstatus<CR>
-    nnoremap <silent> <Leader>gd :Gdiff<CR>
-    nnoremap <silent> <Leader>gc :Gcommit<CR>
-    nnoremap <silent> <Leader>gb :Gblame<CR>
-    nnoremap          <Leader>ge :Gedit<Space>
-    nnoremap <silent> <Leader>gr :Gread<CR>
-    nnoremap <silent> <Leader>gw :Gwrite<CR>
-    nnoremap <silent> <Leader>gf :Gfetch<CR>
-    nnoremap <silent> <Leader>gp :Gpush<CR>
-    nnoremap <silent> <Leader>gu :Gpull --rebase<CR>
-
-    augroup MyAutoCmd
-        autocmd FileType gitcommit nmap <buffer> <silent> U :Git checkout -- <C-r><C-g><CR>
-        autocmd BufReadPost fugitive://* set bufhidden=delete
-    augroup END
+if s:IsPlugged('vim-polyglot')
+    " sheerun/vim-polyglot
+    " plasticboy/vim-markdown
+    let g:vim_markdown_no_default_key_mappings = 1
+    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
 endif
 
-if s:IsPlugged('git-messenger.vim')
-    " rhysd/git-messenger.vim
-    augroup MyAutoCmd
-        " Hack for the case Git Messenger popup closed immediately after it opened on Vim 8.2
-        autocmd FileType gitmessengerpopup setlocal updatetime=300000
-    augroup END
-endif
-
-if s:IsPlugged('gv.vim')
-    " junegunn/gv.vim
-    nnoremap <silent> <Leader>gk :GV<CR>
-    nnoremap <silent> <Leader>gK :GV!<CR>
-    nnoremap <silent> <Leader>gv :GV?<CR>
-endif
-
-if s:IsPlugged('committia.vim')
-    " rhysd/committia.vim
-    let g:committia_hooks = {}
-
-    function! g:committia_hooks.edit_open(info)
-        " Additional settings
-        setlocal spell
-
-        " " If no commit message, start with insert mode
-        " if a:info.vcs ==# 'git' && getline(1) ==# ''
-        "     startinsert
-        " endif
-
-        " Scroll the diff window
-        nmap <buffer> <C-f> <Plug>(committia-scroll-diff-down-page)
-        nmap <buffer> <C-b> <Plug>(committia-scroll-diff-up-page)
-        nmap <buffer> <C-d> <Plug>(committia-scroll-diff-down-half)
-        nmap <buffer> <C-u> <Plug>(committia-scroll-diff-up-half)
-    endfunction
-endif
-
-if s:IsPlugged('vim-gitgutter')
-    " airblade/vim-gitgutter
-    let g:gitgutter_enabled  = g:zero_vim_git_gutter
-    let g:gitgutter_map_keys = 0
-
-    if executable('rg')
-        let g:gitgutter_grep = 'rg --color=never'
-        let $GREP_OPTIONS    = ''
-    elseif executable('ag')
-        let g:gitgutter_grep = 'ag --nocolor'
-        let $GREP_OPTIONS    = ''
+" janko-m/vim-test
+function! Neovim2Strategy(cmd) abort
+    if g:test#neovim_mode ==? 's'
+        let win = 'botright new'
+    elseif g:test#neovim_mode ==? 'v'
+        let win = 'vertical new'
+    elseif g:test#neovim_mode ==? 't'
+        let win = 'tabnew'
+    else
+        let win = 'botright 15new'
     endif
+    execute win | call termopen(a:cmd) | startinsert
+endfunction
 
-    nmap [c <Plug>GitGutterPrevHunk
-    nmap ]c <Plug>GitGutterNextHunk
+let g:test#custom_strategies = { 'neovim2': function('Neovim2Strategy') }
+let g:test#strategy          = 'neovim2'
+let g:test#neovim_mode       = 'd'
 
-    nnoremap <silent> yog :GitGutterToggle<CR>:echo printf('%s GitGutter!', g:gitgutter_enabled ? 'Enabled' : 'Disabled')<CR>
+if s:IsPlugged('vim-tmuxify')
+    let g:test#custom_strategies['tmuxify'] = function('TmuxifyRunner')
+    let g:test#strategy = 'tmuxify'
 endif
 
-if s:IsPlugged('vim-signify')
-    " mhinz/vim-signify
-    let g:signify_disable_by_default    = !g:zero_vim_git_gutter
-    let g:signify_vcs_list              = ['git', 'hg']
-    let g:signify_cursorhold_insert     = 0
-    let g:signify_cursorhold_normal     = 0
-    let g:signify_update_on_bufenter    = 0
-    let g:signify_update_on_focusgained = 0
-
-    nnoremap <silent> yog :SignifyToggle<CR>echo printf('%s Signify on buffer!', get(b:, 'sy', { 'active': 0 }).active ? 'Enabled' : 'Disabled')<CR>
-endif
-
-" chrisbra/unicode.vim
-nmap <F3> <Plug>(UnicodeSwapCompleteName)
-nmap <F4> <Plug>(MakeDigraph)
-vmap <F4> <Plug>(MakeDigraph)
-
-if s:IsPlugged('vim-hardtime')
-    " takac/vim-hardtime
-    let g:hardtime_default_on = 1
-    let g:hardtime_showmsg    = 1
-    let g:list_of_visual_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<LEFT>', '<RIGHT>']
-    let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<LEFT>', '<RIGHT>']
-endif
+nnoremap <silent> <Leader>tt :TestFile<CR>
+nnoremap <silent> <Leader>tf :TestNearest<CR>
+nmap              <Leader>tn <Leader>tf
+nnoremap <silent> <Leader>tl :TestLast<CR>
+nnoremap <silent> <Leader>ts :TestSuite<CR>
+nnoremap <silent> <Leader>tv :TestVisit<CR>
 
 " altercation/vim-colors-solarized
 let g:loaded_togglebg = 1
