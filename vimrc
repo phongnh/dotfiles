@@ -651,7 +651,7 @@ Plug 'chrisbra/unicode.vim'
 " }
 
 " Fish Shell {
-    Plug 'dag/vim-fish'
+    Plug 'georgewitteman/vim-fish'
 " }
 
 if s:Use('syntax')
