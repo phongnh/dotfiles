@@ -2993,15 +2993,15 @@ if s:IsPlugged('vim-hardtime')
     let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<LEFT>', '<RIGHT>']
 endif
 
-" pangloss/vim-javascript
-let g:javascript_plugin_jsdoc = 1
-let g:javascript_plugin_flow  = 1
-
 " tpope/vim-markdown
 let g:markdown_fenced_languages = [
             \ 'bash=sh', 'coffee', 'sass', 'scss', 'css', 'html', 'xml', 'erb=eruby', 'ruby',
             \ 'javascript', 'js=javascript', 'json=javascript', 'python', 'sql', 'vim'
             \ ]
+
+" pangloss/vim-javascript
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_flow  = 1
 
 if s:IsPlugged('vim-rails')
     " tpope/vim-rails
