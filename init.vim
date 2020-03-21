@@ -77,7 +77,6 @@ let g:zero_vim_true_color        = 0
 let g:zero_vim_powerline         = 0
 let g:zero_vim_popup             = 0
 let g:zero_vim_solarized         = 0
-let g:zero_vim_autocomplete      = 1
 let g:zero_vim_autolint          = 0
 let g:zero_vim_autofix           = 0
 let g:zero_vim_git_gutter        = 1
@@ -1286,62 +1285,64 @@ let g:AutoPairsShortcutBackInsert = ''
 let g:AutoPairsMoveCharacter      = ''
 
 " terryma/vim-multiple-cursors
-if s:IsPlugged('deoplete')
+if s:IsPlugged('deoplete.nvim')
     " Called once right before you start selecting multiple cursors
-    function! Multiple_cursors_before() abort
-        let b:autopairs_enabled = 0
-        if deoplete#is_enabled()
-            call deoplete#disable()
-        endif
+    function! Multiple_cursors_before_hook() abort
+        call deoplete#custom#buffer_option('auto_complete', v:false)
     endfunction
 
-    function! Multiple_cursors_after() abort
-        let b:autopairs_enabled = 1
-        if g:zero_vim_autocomplete
-            call deoplete#enable()
-        endif
+    function! Multiple_cursors_after_hook() abort
+        call deoplete#custom#buffer_option('auto_complete', v:true)
     endfunction
 elseif s:IsPlugged('asyncomplete.vim')
-    function! Multiple_cursors_before() abort
-        let b:autopairs_enabled = 0
+    function! Multiple_cursors_before_hook() abort
         let g:asyncomplete_auto_popup = 0
     endfunction
 
-    function! Multiple_cursors_after() abort
-        let b:autopairs_enabled = 1
-        let g:asyncomplete_auto_popup = g:zero_vim_autocomplete
+    function! Multiple_cursors_after_hook() abort
+        let g:asyncomplete_auto_popup = 1
     endfunction
-elseif s:IsPlugged('ncm2')
-    function! Multiple_cursors_before() abort
-        let b:autopairs_enabled = 0
-        let b:ncm2_enable = 0
+elseif s:IsPlugged('coc.nvim')
+    function! Multiple_cursors_before_hook() abort
+        let b:coc_suggest_disable = 1
     endfunction
 
-    function! Multiple_cursors_after() abort
-        let b:autopairs_enabled = 1
-        let b:ncm2_enable = 1
+    function! Multiple_cursors_after_hook() abort
+        let b:coc_suggest_disable = 0
+    endfunction
+elseif s:IsPlugged('ncm2')
+    function! Multiple_cursors_before_hook() abort
+        call ncm2#lock('vim-multiple-cursors')
+    endfunction
+
+    function! Multiple_cursors_after_hook() abort
+        call ncm2#unlock('vim-multiple-cursors')
     endfunction
 elseif s:IsPlugged('completor.vim')
-    function! Multiple_cursors_before() abort
-        let b:autopairs_enabled = 0
+    function! Multiple_cursors_before_hook() abort
         silent! CompletorDisable
     endfunction
 
-    function! Multiple_cursors_after() abort
-        let b:autopairs_enabled = 1
-        if g:zero_vim_autocomplete
-            silent! CompletorEnable
-        endif
+    function! Multiple_cursors_after_hook() abort
+        silent! CompletorEnable
     endfunction
 else
-    function! Multiple_cursors_before() abort
-        let b:autopairs_enabled = 0
+    function!  Multiple_cursors_before_hook() abort
     endfunction
 
-    function! Multiple_cursors_after() abort
-        let b:autopairs_enabled = 1
+    function!  Multiple_cursors_after_hook() abort
     endfunction
 endif
+
+function! Multiple_cursors_before() abort
+    let b:autopairs_enabled = 0
+    call Multiple_cursors_before_hook()
+endfunction
+
+function! Multiple_cursors_after() abort
+    let b:autopairs_enabled = 1
+    call Multiple_cursors_after_hook()
+endfunction
 
 " mattn/emmet-vim
 let g:user_emmet_leader_key = '<C-y>'
@@ -2175,8 +2176,8 @@ if s:IsPlugged('deoplete.nvim')
     let g:deoplete#enable_at_startup = 1
 
     call deoplete#custom#option({
-                \ 'auto_complete':        g:zero_vim_autocomplete,
-                \ 'auto_complete_delay':  200,
+                \ 'auto_complete':        v:true,
+                \ 'auto_complete_delay':  100,
                 \ 'refresh_always':       v:true,
                 \ 'camel_case':           v:true,
                 \ 'skip_multibyte':       v:true,
@@ -2251,8 +2252,8 @@ endif
 
 if s:IsPlugged('asyncomplete.vim')
     " prabirshrestha/asyncomplete.vim
-    let g:asyncomplete_auto_popup  = g:zero_vim_autocomplete
-    let g:asyncomplete_popup_delay = 80
+    let g:asyncomplete_auto_popup  = 1
+    let g:asyncomplete_popup_delay = 100
 
     " Show autocomplete popup manually
     imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
@@ -2470,7 +2471,7 @@ endif
 
 if s:IsPlugged('ncm2')
     " ncm2/ncm2
-    let g:ncm2#auto_popup  = g:zero_vim_autocomplete
+    let g:ncm2#auto_popup  = 1
     let g:ncm2#popup_delay = 100
 
     " Enable Autocomplete for all buffers
@@ -2513,7 +2514,8 @@ endif
 
 if s:IsPlugged('completor.vim')
     " maralla/completor.vim
-    let g:completor_auto_trigger     = g:zero_vim_autocomplete
+    let g:completor_auto_trigger     = 1
+    let g:completor_completion_delay = 100
     let g:completor_complete_options = 'menuone,noinsert,noselect'
     let g:completor_auto_close_doc   = 1
 
