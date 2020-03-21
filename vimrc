@@ -1496,7 +1496,7 @@ if s:IsPlugged('fern.vim')
     let g:fern#drawer_width = 35
 
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernDrawerToggle Fern <args> -drawer -toggle
-    command! -nargs=0 FernDrawerReveal Fern %:h -drawer -reveal=%
+    command! -nargs=0 FernDrawerReveal Fern %:h -drawer -reveal=%:t
     command! -nargs=0 FernDrawerCWD call s:OpenFernDrawerCWD()
 
     function! s:OpenFernDrawerCWD() abort
