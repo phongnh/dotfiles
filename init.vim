@@ -399,7 +399,7 @@ call plug#begin()
         endif
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
-    elseif s:Use('ncm2')
+    elseif s:Use('ncm2') && has('python3')
         Plug 'roxma/nvim-yarp'
         Plug 'ncm2/ncm2'
         Plug 'ncm2/ncm2-bufword'
