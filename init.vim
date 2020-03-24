@@ -126,6 +126,11 @@ endfunction
 " Find and source .init.vim.before from root to current folder
 call s:Source('.init.vim.before')
 
+" True Color settings
+if g:zero_vim_true_color && has('termguicolors')
+    set termguicolors
+endif
+
 " Plugins
 call plug#begin()
 
@@ -807,11 +812,6 @@ set splitright                  " Splitting a window will put the new window rig
 
 if has('path_extra')
     setglobal tags-=./tags tags-=./tags; tags^=./tags;
-endif
-
-" True Color settings
-if g:zero_vim_true_color && has('termguicolors')
-    set termguicolors
 endif
 
 " Map leader
