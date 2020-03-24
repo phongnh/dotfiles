@@ -1014,9 +1014,8 @@ if s:IsPlugged('vim-tmuxify')
         if empty(a:command)
             return
         endif
-        TxSendKey! 'C-u q C-u'
-        TxSendKey! 'C-u C-l C-u'
-        execute 'TxRun! ' . shellescape(a:command)
+        call tmuxify#pane_send_raw("'C-u q C-u' 'C-u C-l C-u'", '!')
+        call tmuxify#pane_run('!', a:command)
     endfunction
 endif
 
