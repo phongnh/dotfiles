@@ -1003,15 +1003,6 @@ if s:IsPlugged('vim-tmuxify')
     call s:SetupTmuxifyMappings('<Leader>m', '!')
     " Local mappings
     call s:SetupTmuxifyMappings('<Leader>v', '')
-
-    " Runner for janko-m/vim-test
-    function! TmuxifyRunner(command) abort
-        if empty(a:command)
-            return
-        endif
-        call tmuxify#pane_send_raw("'C-u q C-u' 'C-u C-l C-u'", '!')
-        call tmuxify#pane_run('!', a:command)
-    endfunction
 endif
 
 " tpope/vim-dispatch
@@ -3149,8 +3140,8 @@ let g:test#strategy          = 'neovim2'
 let g:test#neovim_mode       = 'd'
 
 if s:IsPlugged('vim-tmuxify')
-    let g:test#custom_strategies['tmuxify'] = function('TmuxifyRunner')
-    let g:test#strategy = 'tmuxify'
+    let g:test#preserve_screen = 0
+    let g:test#strategy        = 'tmuxify'
 endif
 
 nnoremap <silent> <Leader>tt :TestFile<CR>
