@@ -2191,7 +2191,7 @@ if s:IsPlugged('deoplete.nvim')
 
     call deoplete#custom#option({
                 \ 'auto_complete':        v:true,
-                \ 'auto_complete_delay':  100,
+                \ 'auto_complete_delay':  50,
                 \ 'refresh_always':       v:true,
                 \ 'camel_case':           v:true,
                 \ 'skip_multibyte':       v:true,
@@ -2267,7 +2267,7 @@ endif
 if s:IsPlugged('asyncomplete.vim')
     " prabirshrestha/asyncomplete.vim
     let g:asyncomplete_auto_popup  = 1
-    let g:asyncomplete_popup_delay = 100
+    let g:asyncomplete_popup_delay = 50
 
     " Show autocomplete popup manually
     imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
@@ -2486,7 +2486,7 @@ endif
 if s:IsPlugged('ncm2')
     " ncm2/ncm2
     let g:ncm2#auto_popup  = 1
-    let g:ncm2#popup_delay = 100
+    let g:ncm2#popup_delay = 50
 
     " Enable Autocomplete for all buffers
     augroup MyAutoCmd
@@ -2529,7 +2529,7 @@ endif
 if s:IsPlugged('completor.vim')
     " maralla/completor.vim
     let g:completor_auto_trigger     = 1
-    let g:completor_completion_delay = 100
+    let g:completor_completion_delay = 50
     let g:completor_complete_options = 'menuone,noinsert,noselect'
     let g:completor_auto_close_doc   = 1
 
