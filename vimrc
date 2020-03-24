@@ -465,13 +465,8 @@ call plug#begin()
     " Find out which project a file belongs to, easy to use in scripts/mappings
     Plug 'dbakker/vim-projectroot'
 
-    if s:Use('projectionist')
-        " projectionist.vim: project configuration
-        Plug 'tpope/vim-projectionist'
-    elseif s:Use('portkey')
-        " Navigate files at the speed of Vim.
-        Plug 'dsawardekar/portkey'
-    endif
+    " projectionist.vim: Granular project configuration
+    Plug 'tpope/vim-projectionist'
 " }
 
 " Syntax Checking/Linting {
