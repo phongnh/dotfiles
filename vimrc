@@ -173,8 +173,8 @@ call plug#begin()
     " Helpers for UNIX
     Plug 'tpope/vim-eunuch'
 
-    " Delete unwanted whitespace at the end of lines
-    Plug 'vim-scripts/DeleteTrailingWhitespace'
+    " Better whitespace highlighting for vim
+    Plug 'ntpeters/vim-better-whitespace'
 
     " Enable repeating supported plugin maps with "."
     Plug 'tpope/vim-repeat'
@@ -1095,9 +1095,24 @@ xnoremap <silent> <Leader>sb <Esc>:FTGrep <C-r>=vim_helpers#SelectedTextForShell
 " Tig Status
 nnoremap <silent> <Leader>gt :TigStatus<CR>
 
-" vim-scripts/DeleteTrailingWhitespace
-nnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
-vnoremap <silent> <Leader>bu :DeleteTrailingWhitespace <Bar> update<CR>
+" ntpeters/vim-better-whitespace
+let g:better_whitespace_enabled = 1
+let g:strip_whitespace_on_save  = 0
+
+let g:better_whitespace_filetypes_blacklist = [
+            \ 'diff',
+            \ 'git',
+            \ 'gitcommit',
+            \ 'ctrlsf',
+            \ 'unite',
+            \ 'qf',
+            \ 'help',
+            \ 'markdown',
+            \ ]
+
+nnoremap <silent> <Leader>bu :StripWhitespace<CR>:update<CR>
+vnoremap <silent> <Leader>bu :StripWhitespace<CR>:update<CR>
+nnoremap <silent> yo<Space>  :ToggleWhitespace<CR>
 
 " phongnh/ZoomWin
 nmap <silent> <Leader>bm <Plug>ZoomWin
@@ -3252,7 +3267,7 @@ if s:IsPlugged('vim-which-key')
                 \ 'l':    'buffer-line',
                 \ 'e':    'reload-buffer',
                 \ 'w':    'save-buffer',
-                \ 'u':    'save-buffer-and-delete-trailing-spaces',
+                \ 'u':    'save-buffer-and-strip-trailing-spaces',
                 \ 'x':    'save-and-close-buffer',
                 \ 'd':    'unload-buffer',
                 \ 'q':    'unload-buffer',
