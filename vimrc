@@ -3022,8 +3022,8 @@ if s:IsPlugged('vim-gitgutter')
         let $GREP_OPTIONS    = ''
     endif
 
-    nmap [c <Plug>GitGutterPrevHunk
-    nmap ]c <Plug>GitGutterNextHunk
+    nmap [c <Plug>(GitGutterPrevHunk)
+    nmap ]c <Plug>(GitGutterNextHunk)
 
     nnoremap <silent> yog :GitGutterToggle<CR>:echo printf('%s GitGutter!', g:gitgutter_enabled ? 'Enabled' : 'Disabled')<CR>
 endif
