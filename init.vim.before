@@ -1,7 +1,7 @@
 let g:zero_vim_groups = [
             \ 'grep',
             \ 'text-objects',
-            \ 'airline',
+            \ 'lightline',
             \ 'fzf',
             \ 'neosnippet',
             \ 'deoplete',
@@ -22,7 +22,7 @@ let g:zero_vim_groups = [
             \ ]
 
 let g:zero_vim_devicons        = index(['Kitty', 'Alacritty'], $TERM_PROGRAM) > -1
-let g:zero_vim_true_color      = 1
+let g:zero_vim_true_color      = ($COLORTERM ==# 'truecolor' || $COLORTERM ==# '24bit')
 let g:zero_vim_powerline       = 1
 let g:zero_vim_popup           = 1
 let g:zero_vim_autolint        = 0
@@ -36,13 +36,13 @@ let g:lightline_bufferline = 1
 
 if $ITERM_PROFILE =~? 'Solarized'
     let g:zero_vim_solarized   = 1
-    let g:zero_vim_colorscheme = 'solarized8'
+    let g:zero_vim_colorscheme = g:zero_vim_true_color ? 'solarized8' : 'solarized'
     let g:zero_vim_background  = $ITERM_PROFILE =~? 'Light' ? 'light' : 'dark'
     let g:airline_theme        = 'solarized'
     let g:lightline_theme      = 'solarized'
     let g:crystalline_theme    = 'solarized'
 else
-    let g:zero_vim_colorscheme = 'gruvbox8'
+    let g:zero_vim_colorscheme = g:zero_vim_true_color ? 'gruvbox8' : 'gruvbox'
     let g:zero_vim_background  = 'dark'
     let g:airline_theme        = 'deus'
     let g:lightline_theme      = 'deus'
