@@ -2153,7 +2153,7 @@ if s:IsPlugged('vim-lsc')
     function! PrintLSCServerStatus(...) abort
         let ft = get(a:, 1, &filetype)
         let servers = lsc#server#forFileType(ft)
-        if empty(servers) | echo 'No Server!' | endif
+        if empty(servers) | echo 'No Server!' | return | endif
         let server = servers[0]
         echo printf('%s: %s!', get(server, 'config', { 'name': 'Server' })['name'], server['status'])
     endfunction
