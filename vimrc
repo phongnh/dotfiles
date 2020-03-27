@@ -2671,7 +2671,7 @@ if s:IsPlugged('limelight.vim')
     let g:limelight_priority            = -1
 
     nnoremap <silent> <Leader>I :Limelight!!<CR>
-    vmap              <Leader>I <Esc><Leader>Fgv
+    vmap              <Leader>I <Esc><Leader>Igv
     nmap              <Leader>i <Plug>(Limelight)
     xmap              <Leader>i <Plug>(Limelight)
 endif
