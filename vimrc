@@ -1019,9 +1019,6 @@ if s:IsPlugged('vim-tmuxify')
     let g:tmuxify_map_prefix     = ''
     let g:tmuxify_global_maps    = 1
 
-    " Update TxClear command
-    command! -nargs=0 -bar -bang TxClear call tmuxify#pane_send_raw('C-u C-l C-u', <q-bang>)
-
     function! s:SetupTmuxifyMappings(prefix, suffix) abort
         execute 'nnoremap <silent> ' . a:prefix . 'b :TxSigInt'    . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'c :TxClear'     . a:suffix . '<CR>'
@@ -1038,15 +1035,32 @@ if s:IsPlugged('vim-tmuxify')
         execute 'nmap     <silent> ' . a:prefix . 'w mmviw'        . a:prefix . 's`m'
         execute 'nnoremap <silent> ' . a:prefix . 'a :TxSend'      . a:suffix . '(@m)<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'k :TxSendKey'   . a:suffix . '<CR>'
-        execute 'nnoremap <silent> ' . a:prefix . 'u :TxSendKey'   . a:suffix . " 'C-u q C-u'<CR>"
-        execute 'nnoremap <silent> ' . a:prefix . 'm :TxSendKey'   . a:suffix . " 'Enter'<CR>"
-        execute 'nnoremap <silent> ' . a:prefix . 'd :TxSendKey'   . a:suffix . " 'C-d'<CR>"
+        execute 'nnoremap <silent> ' . a:prefix . 'u :TxSendKey'   . a:suffix . ' C-u q C-u<CR>'
+        execute 'nnoremap <silent> ' . a:prefix . 'm :TxSendKey'   . a:suffix . ' Enter<CR>'
+        execute 'nnoremap <silent> ' . a:prefix . 'd :TxSendKey'   . a:suffix . ' C-d<CR>'
     endfunction
 
     " Global mappings
     call s:SetupTmuxifyMappings('<Leader>m', '!')
     " Local mappings
     call s:SetupTmuxifyMappings('<Leader>v', '')
+
+    function! TmuxifySendKeys(keys, bang)
+        let keys = empty(a:keys) ? input('TxSendKeys> ') : a:keys
+        for key in split(keys)
+            call tmuxify#pane_send_raw(key, a:bang)
+        endfor
+    endfunction
+
+    function! s:RedefineTmuxifyCommands() abort
+        " Overwrite TxClear and TxSendKey commands
+        command! -nargs=0 -bar -bang TxClear   call TmuxifySendKeys('C-u C-l C-u', <q-bang>)
+        command! -nargs=? -bar -bang TxSendKey call TmuxifySendKeys(<q-args>, <q-bang>)
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd VimEnter * call <SID>RedefineTmuxifyCommands()
+    augroup END
 endif
 
 " tpope/vim-dispatch
