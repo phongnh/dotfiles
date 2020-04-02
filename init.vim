@@ -1674,9 +1674,10 @@ endif
 
 if s:IsPlugged('LeaderF')
     " Yggdroot/LeaderF
+    let g:Lf_ShowDevIcons  = g:zero_vim_devicons
     let g:Lf_WindowHeight  = 0.30
     let g:Lf_MruMaxFiles   = 200
-    " let g:Lf_CursorBlink   = 0 " When set this setting to 0, C-J & C-K do not work, temporarily disable it
+    let g:Lf_CursorBlink   = 1
     let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
 
     " Powerline Separator
