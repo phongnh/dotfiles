@@ -651,6 +651,12 @@ Plug 'chrisbra/unicode.vim'
     endif
 " }
 
+" Rust {
+    if s:Use('rust')
+        Plug 'rust-lang/rust.vim'
+    endif
+" }
+
 " Fish Shell {
     Plug 'georgewitteman/vim-fish'
 " }
@@ -664,6 +670,7 @@ if s:Use('syntax')
     if s:Use('crystal') | call add(g:polyglot_disabled, 'crystal') | endif
     if s:Use('python') | call add(g:polyglot_disabled, 'python') | endif
     if s:Use('go') | call add(g:polyglot_disabled, 'go') | endif
+    if s:Use('rust') | call add(g:polyglot_disabled, 'rust') | endif
     Plug 'sheerun/vim-polyglot'
 endif
 
