@@ -609,6 +609,13 @@ Plug 'chrisbra/unicode.vim'
     endif
 " }
 
+" Crystal {
+    if s:Use('crystal')
+        Plug 'rhysd/vim-crystal'
+        Plug 'elorest/vim-slang'
+    endif
+" }
+
 " Python {
     if s:Use('python')
         Plug 'vim-python/python-syntax'
@@ -637,6 +644,7 @@ if s:Use('syntax')
     if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'javascript', 'jsx', 'json']) | endif
     if s:Use('coffee-script') | call add(g:polyglot_disabled, 'coffee-script') | endif
     if s:Use('ruby') | call extend(g:polyglot_disabled, ['ruby', 'yaml', 'yard', 'rspec']) | endif
+    if s:Use('crystal') | call add(g:polyglot_disabled, 'crystal') | endif
     if s:Use('python') | call add(g:polyglot_disabled, 'python') | endif
     if s:Use('go') | call add(g:polyglot_disabled, 'go') | endif
     Plug 'sheerun/vim-polyglot'
