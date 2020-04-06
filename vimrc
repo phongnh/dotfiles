@@ -657,6 +657,12 @@ Plug 'chrisbra/unicode.vim'
     endif
 " }
 
+" Elixir {
+    if s:Use('elixir')
+        Plug 'elixir-editors/vim-elixir'
+    endif
+" }
+
 " Fish Shell {
     Plug 'georgewitteman/vim-fish'
 " }
@@ -671,6 +677,7 @@ if s:Use('syntax')
     if s:Use('python') | call add(g:polyglot_disabled, 'python') | endif
     if s:Use('go') | call add(g:polyglot_disabled, 'go') | endif
     if s:Use('rust') | call add(g:polyglot_disabled, 'rust') | endif
+    if s:Use('elixir') | call add(g:polyglot_disabled, 'elixir') | endif
     Plug 'sheerun/vim-polyglot'
 endif
 
@@ -2756,6 +2763,8 @@ if s:IsPlugged('ale')
     call s:AddAleLinter('eslint', ['javascript', 'typescript'])
     call s:AddAleLinter('standardrb', 'ruby')
     call s:AddAleLinter('rubocop', 'ruby')
+    call s:AddAleLinter('elixir-ls', 'elixir')
+    call s:AddAleLinter('credo', 'elixir')
     call s:AddAleLinter('yamllint', 'yaml')
     call s:AddAleLinter('flake8', 'python')
     call s:AddAleLinter('pylint', 'python')
@@ -2779,6 +2788,7 @@ if s:IsPlugged('ale')
     call s:AddAleFixer('black', 'python')
     call s:AddAleFixer('gofmt', 'go')
     call s:AddAleFixer('rustfmt', 'rust')
+    call s:AddAleFixer('mix_format', 'elixir')
     call s:AddAleFixer('refmt', 'reason')
 
     " Don't auto-format files inside `node_modules`, minified files and jquery
