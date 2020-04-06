@@ -2006,7 +2006,7 @@ endif
 
 " Check if LSP is enabled
 function! s:IsEnabledLSP() abort
-    return s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim') || s:IsPlugged('coc.nvim')
+    return s:IsPlugged('coc.nvim') || s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim')
 endfunction
 
 if s:IsEnabledLSP()
@@ -2018,60 +2018,158 @@ endif
 
 " LSP Servers
 let g:language_servers = {
-            \ 'bash-language-server':             ['bash-language-server', 'start'],
-            \ 'ccls':                             ['ccls'],
-            \ 'clangd':                           ['clangd', '--background-index'],
-            \ 'clangd-9':                         ['clangd', '--background-index'],
-            \ 'cquery':                           ['cquery'],
-            \ 'css-languageserver':               ['css-languageserver', '--stdio'],
-            \ 'docker-langserver':                ['docker-langserver', '--stdio'],
-            \ 'flow':                             ['flow', 'lsp', '--from', 'vim'],
-            \ 'go-langserver':                    ['go-langserver', '-gocompletion'],
-            \ 'gopls':                            ['gopls', '-mode', 'stdio'],
-            \ 'html-languageserver':              ['html-languageserver', '--stdio'],
-            \ 'javascript-typescript-langserver': ['javascript-typescript-langserver'],
-            \ 'json-languageserver':              ['json-languageserver', '--stdio'],
-            \ 'metals':                           ['metals'],
-            \ 'pyls':                             ['pyls'],
-            \ 'pyls_ms':                          ['pyls_ms'],
-            \ 'ra_lsp_server':                    ['ra_lsp_server'],
-            \ 'rls':                              ['rls'],
-            \ 'rustup-nightly-rls':               ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
-            \ 'rustup-rls':                       ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-            \ 'solargraph':                       ['solargraph', 'stdio'],
-            \ 'srb':                              ['srb', 'tc', '--typed', 'true', '--enable-all-experimental-lsp-features', '--lsp', '--disable-watchman', '--dir', '.'],
-            \ 'sql-language-server':              ['sql-language-server', 'up', '--method', 'stdio'],
-            \ 'terraform-lsp':                    ['terraform-lsp'],
-            \ 'typescript-language-server':       ['typescript-language-server', '--stdio'],
-            \ 'vim-language-server':              ['vim-language-server', '--stdio'],
-            \ 'vls':                              ['vls'],
-            \ 'yaml-language-server':             ['yaml-language-server', '--stdio'],
+            \ 'bash-language-server': {
+            \   'cmd': ['bash-language-server', 'start'],
+            \   'filetypes': ['sh'],
+            \ },
+            \ 'ccls': {
+            \   'cmd': ['ccls'],
+            \   'filetypes': ['c', 'cpp'],
+            \ },
+            \ 'clangd': {
+            \   'cmd': ['clangd', '--background-index'],
+            \   'filetypes': ['c', 'cpp'],
+            \ },
+            \ 'clangd-9': {
+            \   'cmd': ['clangd-9', '--background-index'],
+            \   'filetypes': ['c', 'cpp'],
+            \ },
+            \ 'cquery': {
+            \   'cmd': ['cquery'],
+            \   'filetypes': ['c', 'cpp'],
+            \ },
+            \ 'css-languageserver': {
+            \   'cmd': ['css-languageserver', '--stdio'],
+            \   'filetypes': ['css', 'scss', 'less'],
+            \ },
+            \ 'docker-langserver': {
+            \   'cmd': ['docker-langserver', '--stdio'],
+            \   'filetypes': ['dockerfile'],
+            \ },
+            \ 'elixir-ls': {
+            \   'cmd': ['elixir-ls'],
+            \   'filetypes': ['elixir'],
+            \ },
+            \ 'flow': {
+            \   'cmd': ['flow', 'lsp', '--from', 'vim'],
+            \   'filetypes': ['javascript', 'javascripteact', 'javascript.jsx'],
+            \ },
+            \ 'go-langserver': {
+            \   'cmd': ['go-langserver', '-gocompletion'],
+            \   'filetypes': ['go'],
+            \ },
+            \ 'gopls': {
+            \   'cmd': ['gopls', '-mode', 'stdio'],
+            \   'filetypes': ['go'],
+            \ },
+            \ 'html-languageserver': {
+            \   'cmd': ['html-languageserver', '--stdio'],
+            \   'filetypes': ['html'],
+            \ },
+            \ 'javascript-typescript-langserver': { 'cmd': ['javascript-typescript-langserver'],
+            \   'filetypes': ['javascript', 'javascriptreact', 'javascript.jsx'],
+            \ },
+            \ 'json-languageserver': {
+            \   'cmd': ['json-languageserver', '--stdio'],
+            \   'filetypes': ['json'],
+            \ },
+            \ 'lua-lsp': {
+            \   'cmd': ['lua-lsp'],
+            \   'filetypes': ['lua'],
+            \ },
+            \ 'metals': {
+            \   'cmd': ['metals'],
+            \   'filetypes': ['scalar', 'sbt'],
+            \ },
+            \ 'pyls': {
+            \   'cmd': ['pyls'],
+            \   'filetypes': ['python'],
+            \ },
+            \ 'pyls_ms': {
+            \   'cmd': ['pyls_ms'],
+            \   'filetypes': ['python'],
+            \ },
+            \ 'ra_lsp_server': {
+            \   'cmd': ['ra_lsp_server'],
+            \   'filetypes': ['rust'],
+            \ },
+            \ 'rls': {
+            \   'cmd': ['rls'],
+            \   'filetypes': ['rust'],
+            \ },
+            \ 'rustup-nightly-rls': {
+            \   'cmd': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+            \   'filetypes': ['rust'],
+            \ },
+            \ 'rustup-rls': {
+            \   'cmd': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+            \   'filetypes': ['rust'],
+            \ },
+            \ 'scry': {
+            \  'cmd': ['scry'],
+            \   'filetypes': ['crystal'],
+            \ },
+            \ 'solargraph': {
+            \   'cmd': ['solargraph', 'stdio'],
+            \   'filetypes': ['ruby'],
+            \ },
+            \ 'sql-language-server': {
+            \   'cmd': ['sql-language-server', 'up', '--method', 'stdio'],
+            \   'filetypes': ['sql'],
+            \ },
+            \ 'srb': {
+            \   'cmd': ['srb', 'tc', '--typed', 'true', '--enable-all-experimental-lsp-features', '--lsp', '--disable-watchman', '--dir', '.'],
+            \   'filetypes': ['ruby'],
+            \ },
+            \ 'terraform-lsp': {
+            \   'cmd': ['terraform-lsp'],
+            \   'filetypes': ['terraform'],
+            \ },
+            \ 'typescript-language-server': {
+            \   'cmd': ['typescript-language-server', '--stdio'],
+            \   'filetypes': ['javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'],
+            \ },
+            \ 'vim-language-server': {
+            \   'cmd': ['vim-language-server', '--stdio'],
+            \   'filetypes': ['vim'],
+            \ },
+            \ 'vls': {
+            \   'cmd': ['vls'],
+            \   'filetypes': ['vue'],
+            \ },
+            \ 'yaml-language-server': {
+            \   'cmd': ['yaml-language-server', '--stdio'],
+            \   'filetypes': ['yaml'],
+            \ },
             \ }
 
 " Enabled Language Servers
-let s:enabled_language_servers = {
-            \ 'clangd':                           { 'cmd': g:language_servers['clangd'], 'filetypes': ['c', 'cpp'] },
-            \ 'clangd-9':                         { 'cmd': g:language_servers['clangd-9'], 'filetypes': ['c', 'cpp'] },
-            \ 'ccls':                             { 'cmd': g:language_servers['ccls'], 'filetypes': ['c', 'cpp'] },
-            \ 'gopls':                            { 'cmd': g:language_servers['gopls'], 'filetypes': ['go'] },
-            \ 'go-langserver':                    { 'cmd': g:language_servers['go-langserver'], 'filetypes': ['go'] },
-            \ 'rls':                              { 'cmd': g:language_servers['rls'], 'filetypes': ['rust'] },
-            \ 'ra_lsp_server':                    { 'cmd': g:language_servers['ra_lsp_server'], 'filetypes': ['rust'] },
-            \ 'metals':                           { 'cmd': g:language_servers['metals'], 'filetypes': ['sacalar', 'sbt'] },
-            \ 'pyls':                             { 'cmd': g:language_servers['pyls'], 'filetypes': ['python'] },
-            \ 'solargraph':                       { 'cmd': g:language_servers['solargraph'], 'filetypes': ['ruby'] },
-            \ 'yaml-language-server':             { 'cmd': g:language_servers['yaml-language-server'], 'filetypes': ['yaml'] },
-            \ 'html-languageserver':              { 'cmd': g:language_servers['html-languageserver'], 'filetypes': ['html'] },
-            \ 'css-languageserver':               { 'cmd': g:language_servers['css-languageserver'], 'filetypes': ['ccs', 'scss', 'less'] },
-            \ 'json-languageserver':              { 'cmd': g:language_servers['json-languageserver'], 'filetypes': ['json'] },
-            \ 'typescript-language-server':       { 'cmd': g:language_servers['typescript-language-server'], 'filetypes': ['javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'] },
-            \ 'javascript-typescript-langserver': { 'cmd': g:language_servers['javascript-typescript-langserver'], 'filetypes': ['javascript', 'javascriptreact', 'javascript.jsx'] },
-            \ 'flow':                             { 'cmd': g:language_servers['flow'], 'filetypes': ['javascript', 'javascripteact', 'javascript.jsx'] },
-            \ 'docker-langserver':                { 'cmd': g:language_servers['docker-langserver'], 'filetypes': ['dockerfile'] },
-            \ 'terraform-lsp':                    { 'cmd': g:language_servers['terraform-lsp'], 'filetypes': ['terraform'] },
-            \ 'bash-language-server':             { 'cmd': g:language_servers['bash-language-server'], 'filetypes': ['sh'] },
-            \ 'vim-language-server':              { 'cmd': g:language_servers['vim-language-server'], 'filetypes': ['vim'] },
-            \ }
+let s:enabled_language_servers = [
+            \ 'clangd',
+            \ 'clangd-9',
+            \ 'ccls',
+            \ 'solargraph',
+            \ 'scry',
+            \ 'pyls',
+            \ 'gopls',
+            \ 'go-langserver',
+            \ 'rls',
+            \ 'ra_lsp_server',
+            \ 'elixir-ls',
+            \ 'lua-lsp',
+            \ 'metals',
+            \ 'yaml-language-server',
+            \ 'html-languageserver',
+            \ 'css-languageserver',
+            \ 'json-languageserver',
+            \ 'typescript-language-server',
+            \ 'javascript-typescript-langserver',
+            \ 'flow',
+            \ 'docker-langserver',
+            \ 'terraform-lsp',
+            \ 'bash-language-server',
+            \ 'vim-language-server',
+            \ ]
 
 if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
@@ -2147,25 +2245,28 @@ if s:IsPlugged('vim-lsc')
                 \ 'suppress_stderr': v:true,
                 \ }
 
-    function! s:AddServer(name, server) abort
-        let cmd = a:server['cmd']
-        let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
-        if !executable(cmd[0])
-            return
-        endif
-        let l:default = get(s:, 'lsc_server_default_opts', {})
-        let l:opts = extend(copy(l:default), get(a:server, 'opts', {}))
-        call extend(l:opts, { 'name': a:name, 'command': join(cmd, ' ') })
-        for ft in a:server['filetypes']
-            if !has_key(g:lsc_server_commands, ft)
-                let g:lsc_server_commands[ft] = l:opts
+    function! s:SetupLanguageServers() abort
+        for l:name in s:enabled_language_servers
+            let l:server = g:language_servers[l:name]
+
+            let cmd = l:server['cmd']
+            let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
+
+            if executable(cmd[0])
+                let l:default = get(s:, 'lsc_server_default_opts', {})
+                let l:opts = extend(copy(l:default), get(l:server, 'opts', {}))
+                call extend(l:opts, { 'name': l:name, 'command': join(cmd, ' ') })
+
+                for ft in l:server['filetypes']
+                    if !has_key(g:lsc_server_commands, ft)
+                        let g:lsc_server_commands[ft] = l:opts
+                    endif
+                endfor
             endif
         endfor
     endfunction
 
-    for [name, server] in items(s:enabled_language_servers)
-        call s:AddServer(name, server)
-    endfor
+    call s:SetupLanguageServers()
 
     let g:lsc_auto_map = {
                 \ 'GoToDefinition':      '<Leader>k]',
@@ -2201,7 +2302,7 @@ if s:IsPlugged('vim-lsc')
     endfunction
 
     augroup MyAutoCmd
-        autocmd FileType c,cpp,go,rust,python,vim,sh call <SID>SetupLSC()
+        autocmd FileType c,cpp,ruby,crystal,python,go,rust,elixir,lua,vim,sh call <SID>SetupLSC()
     augroup END
 endif
 
@@ -2210,22 +2311,24 @@ if s:IsPlugged('LanguageClient-neovim')
     let g:LanguageClient_serverCommands = {}
     let g:LanguageClient_diagnosticsList = 'Location'
 
-    function! s:AddServer(name, server) abort
-        let cmd = a:server['cmd']
-        let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
-        if !executable(cmd[0])
-            return
-        endif
-        for ft in a:server['filetypes']
-            if !has_key(g:LanguageClient_serverCommands, ft)
-                let g:LanguageClient_serverCommands[ft] = cmd
+    function! s:SetupLanguageServers() abort
+        for l:name in s:enabled_language_servers
+            let l:server = g:language_servers[l:name]
+
+            let cmd = l:server['cmd']
+            let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
+
+            if executable(cmd[0])
+                for ft in l:server['filetypes']
+                    if !has_key(g:LanguageClient_serverCommands, ft)
+                        let g:LanguageClient_serverCommands[ft] = cmd
+                    endif
+                endfor
             endif
         endfor
     endfunction
 
-    for [name, server] in items(s:enabled_language_servers)
-        call s:AddServer(name, server)
-    endfor
+    call s:SetupLanguageServers()
 
     function! s:SetupLanguageClient() abort
         setlocal omnifunc=LanguageClient#complete
