@@ -1,10 +1,38 @@
+-- Global log level
+hs.logger.defaultLogLevel = "info"
+
+-- Hotkeys
+hs.hotkey.alertDuration = 0
+
 -- Disable window animation
 hs.window.animationDuration = 0
 
-hs.grid.MARGINX    = 0
-hs.grid.MARGINY    = 0
-hs.grid.GRIDHEIGHT = 10
-hs.grid.GRIDWIDTH  = 10
+-- Hints
+hs.hints.style           = "vimperator"
+hs.hints.showTitleThresh = 0
+
+-- Grid
+hs.grid.setMargins({ x = 0, y = 0 }).setGrid('6x4')
+hs.grid.ui.textSize = 150
+
+-- Default key
+local cocKey = { "ctrl", "alt", "cmd" }
+
+-- Load Spoons
+hs.loadSpoon('SpoonInstall')
+
+spoon.SpoonInstall.use_syncinstall = true
+
+spoon.SpoonInstall:andUse("Caffeine", {
+    hotkeys = {
+        toggle = { cocKey, "Z" }
+    },
+    start = true
+})
+
+spoon.SpoonInstall:andUse("SpeedMenu", {
+    start = true
+})
 
 --------------------------------------------------------------------------------
 -- HELPERS
@@ -28,115 +56,81 @@ local cmd    = { "cmd" }
 local winKey = { "ctrl", "alt", "cmd" }
 local appKey = { "ctrl", "alt", "cmd", "shift" }
 
-require "window"
+-- Load WinMan
+hs.loadSpoon('WinMan')
 
 -- Show windows with hints
-hs.hotkey.bind(cmd, "Escape", windowHints)
+hs.hotkey.bind(cmd, "Escape", function() spoon.WinMan:windowHints('') end)
 
 -- Snap window
-hs.hotkey.bind(winKey, "Space", snapWindow)
+hs.hotkey.bind(winKey, "Space", function() spoon.WinMan:snapWindow() end)
 
 -- Toggle fullscreen
-hs.hotkey.bind(winKey, "Return", toggleWindowFullScreen)
+hs.hotkey.bind(winKey, "Return", function() spoon.WinMan:toggleWindowFullScreen() end)
 
 -- Maximize
-hs.hotkey.bind(winKey, "M", maximizeWindow)
+hs.hotkey.bind(winKey, "M", function() spoon.WinMan:maximizeWindow() end)
 
 -- Toggle minimizing
-hs.hotkey.bind(winKey, "\\",  toggleMinimizingWindow)
+hs.hotkey.bind(winKey, "\\",  function() spoon.WinMan:toggleMinimizingWindow() end)
 
 -- Centralize
-hs.hotkey.bind(winKey, "/", centralizeWindow)
+hs.hotkey.bind(winKey, "/", function() spoon.WinMan:centralizeWindow() end)
 
 -- Move window to next / previous screen
-hs.hotkey.bind(winKey, "N", moveWindowToNextScreen)
-hs.hotkey.bind(winKey, "P", moveWindowToPreviousScreen)
+hs.hotkey.bind(winKey, "N", function() spoon.WinMan:moveWindowToNextScreen() end)
+hs.hotkey.bind(winKey, "P", function() spoon.WinMan:moveWindowToPreviousScreen() end)
 
-hs.hotkey.bind(winKey, "[", handleWindowWithFunction(hs.grid.pushWindowPrevScreen))
-hs.hotkey.bind(winKey, "]", handleWindowWithFunction(hs.grid.pushWindowNextScreen))
+hs.hotkey.bind(winKey, "[", function() spoon.WinMan:pushWindowToPrevScreen() end)
+hs.hotkey.bind(winKey, "]", function() spoon.WinMan:pushWindowToNextScreen() end)
 
-hs.hotkey.bind(winKey, "-", moveWindowToNextScreenWithScaling)
-hs.hotkey.bind(winKey, "=", moveWindowToPreviousScreenWithScaling)
+hs.hotkey.bind(winKey, "-", function() spoon.WinMan:moveWindowToNextScreenWithScaling() end)
+hs.hotkey.bind(winKey, "=", function() spoon.WinMan:moveWindowToPreviousScreenWithScaling() end)
 
-hs.hotkey.bind(winKey, ",", moveWindowToLeft65)
-hs.hotkey.bind(winKey, ".", moveWindowToRight35)
+hs.hotkey.bind(winKey, ",", function() spoon.WinMan:moveWindowToLeft65() end)
+hs.hotkey.bind(winKey, ".", function() spoon.WinMan:moveWindowToRight35() end)
 
-hs.hotkey.bind(winKey, "H", moveWindowToLeftHalf)
-hs.hotkey.bind(winKey, "J", moveWindowToBottomHalf)
-hs.hotkey.bind(winKey, "K", moveWindowToTopHalf)
-hs.hotkey.bind(winKey, "L", moveWindowToRightHalf)
+hs.hotkey.bind(winKey, "H", function() spoon.WinMan:moveWindowToLeftHalf() end)
+hs.hotkey.bind(winKey, "J", function() spoon.WinMan:moveWindowToBottomHalf() end)
+hs.hotkey.bind(winKey, "K", function() spoon.WinMan:moveWindowToTopHalf() end)
+hs.hotkey.bind(winKey, "L", function() spoon.WinMan:moveWindowToRightHalf() end)
 
-hs.hotkey.bind(winKey, "6", moveWindowTo6x6)
-hs.hotkey.bind(winKey, "7", moveWindowTo6x7)
-hs.hotkey.bind(winKey, "8", moveWindowTo6x8)
-hs.hotkey.bind(winKey, "9", moveWindowTo7x8_5)
+hs.hotkey.bind(winKey, "4", function() spoon.WinMan:moveWindowTo4x5() end)
+hs.hotkey.bind(winKey, "5", function() spoon.WinMan:moveWindowTo5x6() end)
+hs.hotkey.bind(winKey, "6", function() spoon.WinMan:moveWindowTo6x6() end)
+hs.hotkey.bind(winKey, "7", function() spoon.WinMan:moveWindowTo6x7() end)
+hs.hotkey.bind(winKey, "8", function() spoon.WinMan:moveWindowTo6x8() end)
+hs.hotkey.bind(winKey, "9", function() spoon.WinMan:moveWindowTo7x8_5() end)
 
-hs.hotkey.bind(winKey, 'Y', handleWindowWithFunction(hs.grid.resizeWindowThinner))
-hs.hotkey.bind(winKey, 'U', handleWindowWithFunction(hs.grid.resizeWindowTaller))
-hs.hotkey.bind(winKey, 'I', handleWindowWithFunction(hs.grid.resizeWindowShorter))
-hs.hotkey.bind(winKey, 'O', handleWindowWithFunction(hs.grid.resizeWindowWider))
+hs.hotkey.bind(winKey, 'Y', function() spoon.WinMan:resizeWindowThinner() end)
+hs.hotkey.bind(winKey, 'U', function() spoon.WinMan:resizeWindowTaller() end)
+hs.hotkey.bind(winKey, 'I', function() spoon.WinMan:resizeWindowShorter() end)
+hs.hotkey.bind(winKey, 'O', function() spoon.WinMan:resizeWindowWider() end)
 
-hs.hotkey.bind(winKey, 'UP',    handleWindowWithFunction(hs.grid.pushWindowUp))
-hs.hotkey.bind(winKey, 'DOWN',  handleWindowWithFunction(hs.grid.pushWindowDown))
-hs.hotkey.bind(winKey, 'LEFT',  handleWindowWithFunction(hs.grid.pushWindowLeft))
-hs.hotkey.bind(winKey, 'RIGHT', handleWindowWithFunction(hs.grid.pushWindowRight))
+hs.hotkey.bind(winKey, 'UP',    function() spoon.WinMan:pushWindowUp() end)
+hs.hotkey.bind(winKey, 'DOWN',  function() spoon.WinMan:pushWindowDown() end)
+hs.hotkey.bind(winKey, 'LEFT',  function() spoon.WinMan:pushWindowLeft() end)
+hs.hotkey.bind(winKey, 'RIGHT', function() spoon.WinMan:pushWindowRight() end)
+
+-- Grid Show
+hs.hotkey.bind(winKey, "G", function() hs.grid.show() end)
 
 -- Open my initial applications
-hs.hotkey.bind(winKey, "0", openInitialApplications)
+hs.hotkey.bind(winKey, "0", function()
+    hs.alert.show("Opening initial applications...")
+    hs.application.launchOrFocus("Slack")
+    hs.application.launchOrFocus("Google Chrome")
+    hs.application.launchOrFocus("Alacritty Light")
+end)
 
 -- Start Screensaver
-hs.hotkey.bind(winKey, "DELETE", hs.caffeinate.startScreensaver)
-
--- Launch and focus applications
-local apps = {
-    { key = "1", name = "System Preferences" },
-    { key = "2", name = "App Store"          },
-    { key = "3", name = "iTunes"             },
-
-    { key = "W", name = "Safari"             },
-    { key = "E", name = "Mail"               },
-    { key = "R", name = "Preview"            },
-    { key = "T", name = "Sublime Text"       },
-    { key = "Y", name = "Terminal"           },
-    { key = "U", name = "Upwork"             },
-    { key = "I", name = "iTerm2"             },
-    { key = "O", name = "LibreOffice"        },
-    { key = "P", name = "pgAdmin3"           },
-
-    { key = "A", name = "Android Studio"     },
-    { key = "S", name = "Skype"              },
-    { key = "D", name = "GoldenDict"         },
-    { key = "F", name = "Finder"             },
-    { key = "G", name = "Google Chrome"      },
-
-    { key = "Z", name = "Freeplane"          },
-    { key = "X", name = "Xcode"              },
-    { key = "C", name = "Chromium"           },
-    { key = "V", name = "MacVim"             },
-    { key = "B", name = "Firefox"            },
-    { key = "N", name = "Evernote"           },
-    { key = "M", name = "Monosnap"           }
-}
-
-hs.fnutils.each(apps, function(app)
-    hs.hotkey.bind(appKey, app.key, openApplicationFunction(app.name))
-end)
-
--- Activate application
-apps = {
-    { key = "[", name = "Git Gui" },
-    { key = "]", name = "Wish"    }
-}
-
-hs.fnutils.each(apps, function(app)
-    hs.hotkey.bind(appKey, app.key, activateApplicationFunction(app.name))
-end)
+hs.hotkey.bind(winKey, "DELETE", function() hs.caffeinate.startScreensaver() end)
 
 -- Focus application by directions
-hs.hotkey.bind(appKey, "H", focusLeftWindow)
-hs.hotkey.bind(appKey, "J", focusDownWindow)
-hs.hotkey.bind(appKey, "K", focusUpWindow)
-hs.hotkey.bind(appKey, "L", focusRightWindow)
+hs.hotkey.bind(appKey, "H", function() spoon.WinMan:focusLeftWindow() end)
+hs.hotkey.bind(appKey, "J", function() spoon.WinMan:focusDownWindow() end)
+hs.hotkey.bind(appKey, "K", function() spoon.WinMan:focusUpWindow() end)
+hs.hotkey.bind(appKey, "L", function() spoon.WinMan:focusRightWindow() end)
 
 
 -- MOUSE CURSOR HIGHLIGHT
