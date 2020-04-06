@@ -12,17 +12,41 @@ hs.hints.style           = "vimperator"
 hs.hints.showTitleThresh = 0
 
 -- Grid
-hs.grid.setMargins({ x = 0, y = 0 }).setGrid('6x4')
+hs.grid.setMargins({ x = 0, y = 0 }).setGrid("6x4")
 hs.grid.ui.textSize = 150
 
 -- Default key
 local cocKey = { "ctrl", "alt", "cmd" }
 
 -- Load Spoons
-hs.loadSpoon('SpoonInstall')
+hs.loadSpoon("SpoonInstall")
 
 spoon.SpoonInstall.use_syncinstall = true
 
+spoon.SpoonInstall:andUse("FnMate", {})
+
+spoon.SpoonInstall:andUse("ReloadConfiguration", {
+    hotkeys = {
+        reloadConfiguration = { cocKey, "R" }
+    },
+    start = true
+})
+
+spoon.SpoonInstall:andUse("MouseCircle", {
+    disable = true,
+    hotkeys = {
+        show = { cocKey, "C" }
+    }
+})
+
+spoon.SpoonInstall:andUse("FadeLogo", {
+    config = {
+        run_time = 1.0,
+    },
+    start = true
+})
+
+-- Caffeine Menu
 spoon.SpoonInstall:andUse("Caffeine", {
     hotkeys = {
         toggle = { cocKey, "Z" }
@@ -30,24 +54,37 @@ spoon.SpoonInstall:andUse("Caffeine", {
     start = true
 })
 
+-- Network Speed Menu
 spoon.SpoonInstall:andUse("SpeedMenu", {
     start = true
 })
 
---------------------------------------------------------------------------------
--- HELPERS
---------------------------------------------------------------------------------
-function hs.application:standardWindows()
-    return hs.fnutils.filter(self:allWindows(), function(w)
-        return w:id() and w:isStandard() and w:title() ~= ""
-    end)
-end
+spoon.SpoonInstall:andUse("MenubarFlag", {
+    disable = true,
+    config = {
+        colors = {
+            ["U.S."] = {},
+            ["Simple Telex"] = { hs.drawing.color.x11.red },
+        },
+    },
+    start = true
+})
 
-function hs.appfinder.appsFromName(name)
-    return hs.fnutils.filter(hs.application.runningApplications(), function(app)
-        return app:title() == name
-    end)
-end
+-- Show Clock
+spoon.SpoonInstall:andUse("CircleClock", {})
+
+-- Show Horizontal Calendar
+spoon.SpoonInstall:andUse("HCalendar", {})
+
+-- Download and set wallpaper from BingDaily / Unsplash
+spoon.SpoonInstall:andUse("BingDaily", {})
+-- spoon.SpoonInstall:andUse("UnsplashZ", {
+--     disable = true
+-- })
+-- spoon.SpoonInstall:andUse("UnsplashRandom", {
+--     disable = true
+-- })
+
 
 --------------------------------------------------------------------------------
 -- KEY BINDINGS
@@ -57,10 +94,10 @@ local winKey = { "ctrl", "alt", "cmd" }
 local appKey = { "ctrl", "alt", "cmd", "shift" }
 
 -- Load WinMan
-hs.loadSpoon('WinMan')
+hs.loadSpoon("WinMan")
 
 -- Show windows with hints
-hs.hotkey.bind(cmd, "Escape", function() spoon.WinMan:windowHints('') end)
+hs.hotkey.bind(cmd, "Escape", function() spoon.WinMan:windowHints() end)
 
 -- Snap window
 hs.hotkey.bind(winKey, "Space", function() spoon.WinMan:snapWindow() end)
@@ -102,15 +139,15 @@ hs.hotkey.bind(winKey, "7", function() spoon.WinMan:moveWindowTo6x7() end)
 hs.hotkey.bind(winKey, "8", function() spoon.WinMan:moveWindowTo6x8() end)
 hs.hotkey.bind(winKey, "9", function() spoon.WinMan:moveWindowTo7x8_5() end)
 
-hs.hotkey.bind(winKey, 'Y', function() spoon.WinMan:resizeWindowThinner() end)
-hs.hotkey.bind(winKey, 'U', function() spoon.WinMan:resizeWindowTaller() end)
-hs.hotkey.bind(winKey, 'I', function() spoon.WinMan:resizeWindowShorter() end)
-hs.hotkey.bind(winKey, 'O', function() spoon.WinMan:resizeWindowWider() end)
+hs.hotkey.bind(winKey, "Y", function() spoon.WinMan:resizeWindowThinner() end)
+hs.hotkey.bind(winKey, "U", function() spoon.WinMan:resizeWindowTaller() end)
+hs.hotkey.bind(winKey, "I", function() spoon.WinMan:resizeWindowShorter() end)
+hs.hotkey.bind(winKey, "O", function() spoon.WinMan:resizeWindowWider() end)
 
-hs.hotkey.bind(winKey, 'UP',    function() spoon.WinMan:pushWindowUp() end)
-hs.hotkey.bind(winKey, 'DOWN',  function() spoon.WinMan:pushWindowDown() end)
-hs.hotkey.bind(winKey, 'LEFT',  function() spoon.WinMan:pushWindowLeft() end)
-hs.hotkey.bind(winKey, 'RIGHT', function() spoon.WinMan:pushWindowRight() end)
+hs.hotkey.bind(winKey, "UP",    function() spoon.WinMan:pushWindowUp() end)
+hs.hotkey.bind(winKey, "DOWN",  function() spoon.WinMan:pushWindowDown() end)
+hs.hotkey.bind(winKey, "LEFT",  function() spoon.WinMan:pushWindowLeft() end)
+hs.hotkey.bind(winKey, "RIGHT", function() spoon.WinMan:pushWindowRight() end)
 
 -- Grid Show
 hs.hotkey.bind(winKey, "G", function() hs.grid.show() end)
@@ -133,11 +170,4 @@ hs.hotkey.bind(appKey, "K", function() spoon.WinMan:focusUpWindow() end)
 hs.hotkey.bind(appKey, "L", function() spoon.WinMan:focusRightWindow() end)
 
 
--- MOUSE CURSOR HIGHLIGHT
-require "mouse"
-hs.hotkey.bind(winKey, "C", mouseHighlight)
-
-
-hs.pathwatcher.new(hs.configdir, hs.reload):start()
-
-hs.alert.show("Hammerspoon started!")
+-- hs.alert.show("Hammerspoon started!")
