@@ -2066,7 +2066,8 @@ let g:language_servers = {
             \   'cmd': ['html-languageserver', '--stdio'],
             \   'filetypes': ['html'],
             \ },
-            \ 'javascript-typescript-langserver': { 'cmd': ['javascript-typescript-langserver'],
+            \ 'javascript-typescript-langserver': {
+            \   'cmd': ['javascript-typescript-langserver'],
             \   'filetypes': ['javascript', 'javascriptreact', 'javascript.jsx'],
             \ },
             \ 'json-languageserver': {
@@ -2255,7 +2256,7 @@ if s:IsPlugged('vim-lsc')
             if executable(cmd[0])
                 let l:default = get(s:, 'lsc_server_default_opts', {})
                 let l:opts = extend(copy(l:default), get(l:server, 'opts', {}))
-                call extend(l:opts, { 'name': l:name, 'command': join(cmd, ' ') })
+                call extend(l:opts, { 'name': l:name, 'command': cmd })
 
                 for ft in l:server['filetypes']
                     if !has_key(g:lsc_server_commands, ft)
