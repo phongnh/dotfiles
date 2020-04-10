@@ -25,6 +25,7 @@ let g:zero_vim_devicons        = index(['Kitty', 'Alacritty'], $TERM_PROGRAM) > 
 let g:zero_vim_true_color      = ($COLORTERM ==# 'truecolor' || $COLORTERM ==# '24bit')
 let g:zero_vim_powerline       = 1
 let g:zero_vim_popup           = 1
+let g:zero_vim_lsp_diagnostics = 0
 let g:zero_vim_autolint        = 0
 let g:zero_vim_autofix         = 0
 let g:zero_vim_git_gutter      = 0

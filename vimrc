@@ -83,6 +83,7 @@ let g:zero_vim_true_color        = 0
 let g:zero_vim_powerline         = 0
 let g:zero_vim_popup             = 0
 let g:zero_vim_solarized         = 0
+let g:zero_vim_lsp_diagnostics   = 0
 let g:zero_vim_autolint          = 0
 let g:zero_vim_autofix           = 0
 let g:zero_vim_git_gutter        = 1
@@ -2177,8 +2178,8 @@ if s:IsPlugged('vim-lsp')
     let g:lsp_signs_error   = { 'text': '●' }
     let g:lsp_signs_warning = { 'text': '.' }
 
-    let g:lsp_diagnostics_enabled          = 1
-    let g:lsp_diagnostics_echo_cursor      = 1 " enable echo under cursor when in normal mode
+    let g:lsp_diagnostics_enabled          = g:zero_vim_lsp_diagnostics
+    let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
     let g:lsp_highlight_references_enabled = 1
 
     " Use `[g` and `]g` to navigate diagnostics
@@ -2234,7 +2235,7 @@ endif
 if s:IsPlugged('vim-lsc')
     " natebosch/vim-lsc
     let g:lsc_auto_completeopt     = v:false
-    let g:lsc_enable_diagnostics   = v:true
+    let g:lsc_enable_diagnostics   = g:zero_vim_lsp_diagnostics ? v:true : v:false
     let g:lsc_reference_highlights = v:true
     let g:lsc_trace_level          = 'off'
 
@@ -2309,8 +2310,9 @@ endif
 
 if s:IsPlugged('LanguageClient-neovim')
     " autozimu/LanguageClient-neovim
-    let g:LanguageClient_serverCommands = {}
-    let g:LanguageClient_diagnosticsList = 'Location'
+    let g:LanguageClient_serverCommands    = {}
+    let g:LanguageClient_diagnosticsList   = 'Location'
+    let g:LanguageClient_diagnosticsEnable = g:zero_vim_lsp_diagnostics
 
     function! s:SetupLanguageServers() abort
         for l:name in s:enabled_language_servers
