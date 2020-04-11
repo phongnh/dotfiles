@@ -1067,8 +1067,8 @@ nnoremap <silent> <Leader>bs :BGrepCCword<CR>
 xnoremap <silent> <Leader>bs <Esc>:BGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 " Grep with current buffer file type
-nnoremap <silent> <Leader>sb :FTGrepCCword<CR>
-xnoremap <silent> <Leader>sb <Esc>:FTGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>sb :TGrepCCword<CR>
+xnoremap <silent> <Leader>sb <Esc>:TGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 " Tig Status
 nnoremap <silent> <Leader>gt :TigStatus<CR>
@@ -1158,7 +1158,7 @@ if s:IsPlugged('vim-grepper')
     command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
     command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
 
-    function! s:FTGrepper(qargs) abort
+    function! s:TGrepper(qargs) abort
         if exists(':GrepperRg') == 2
             let cmd = 'GrepperRg ' . vim_helpers#ParseGrepFileTypeOption('rg')
         elseif exists(':GrepperAg') == 2
@@ -1171,21 +1171,21 @@ if s:IsPlugged('vim-grepper')
         execute vim_helpers#strip(cmd . ' ' . a:qargs)
     endfunction
 
-    function! s:FTGrepperCword(word_boundary, qargs) abort
+    function! s:TGrepperCword(word_boundary, qargs) abort
         if a:word_boundary
             let cword = vim_helpers#CCwordForGrep()
         else
             let cword = vim_helpers#CwordForGrep()
         endif
-        call s:FTGrepper(cword . ' ' . a:qargs)
+        call s:TGrepper(cword . ' ' . a:qargs)
     endfunction
 
-    command! -nargs=+ -complete=dir FTGrepper       call <SID>FTGrepper(<q-args>)
-    command! -nargs=? -complete=dir FTGrepperCCword call <SID>FTGrepperCword(1, <q-args>)
-    command! -nargs=? -complete=dir FTGrepperCword  call <SID>FTGrepperCword(0, <q-args>)
+    command! -nargs=+ -complete=dir TGrepper       call <SID>TGrepper(<q-args>)
+    command! -nargs=? -complete=dir TGrepperCCword call <SID>TGrepperCword(1, <q-args>)
+    command! -nargs=? -complete=dir TGrepperCword  call <SID>TGrepperCword(0, <q-args>)
 
-    nmap gs <plug>(GrepperOperator)
-    xmap gs <plug>(GrepperOperator)
+    nmap gs <Plug>(GrepperOperator)
+    xmap gs <Plug>(GrepperOperator)
 
     nnoremap <silent> <Leader>S  :Grepper<CR>
     nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
@@ -1204,8 +1204,8 @@ if s:IsPlugged('vim-grepper')
     xnoremap <silent> <Leader>bs <Esc>:BGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
     " Grepper with current buffer file type
-    nnoremap <silent> <Leader>sb :FTGrepperCCword<CR>
-    xnoremap <silent> <Leader>sb <Esc>:FTGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+    nnoremap <silent> <Leader>sb :TGrepperCCword<CR>
+    xnoremap <silent> <Leader>sb <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 endif
 
 if s:IsPlugged('ctrlsf.vim')
@@ -1253,23 +1253,23 @@ if s:IsPlugged('ctrlsf.vim')
         let g:ctrlsf_ackprg = 'rg'
     endif
 
-    function! s:FTCtrlSF(qargs) abort
+    function! s:TCtrlSF(qargs) abort
         let cmd = 'CtrlSF ' . s:CtrlSFParseFileTypeOption(get(g:, 'ctrlsf_ackprg', ''))
         execute vim_helpers#strip(cmd . ' ' . a:qargs)
     endfunction
 
-    function! s:FTCtrlSFCword(word_boundary, qargs) abort
+    function! s:TCtrlSFCword(word_boundary, qargs) abort
         if a:word_boundary && get(g:, 'ctrlsf_ackprg', '') =~# 'ag\|rg'
-            let cword = '-R ' . expand('<cword>')
+            let cword = '-R \b' . expand('<cword>') . '\b'
         else
             let cword = expand('<cword>')
         endif
-        call s:FTCtrlSF(cword . ' ' . a:qargs)
+        call s:TCtrlSF(cword . ' ' . a:qargs)
     endfunction
 
-    command! -nargs=+ -complete=dir FTCtrlSF       call <SID>FTCtrlSF(<q-args>)
-    command! -nargs=? -complete=dir FTCtrlSFCCword call <SID>FTCtrlSFCword(1, <q-args>)
-    command! -nargs=? -complete=dir FTCtrlSFCword  call <SID>FTCtrlSFCword(0, <q-args>)
+    command! -nargs=+ -complete=dir TCtrlSF       call <SID>TCtrlSF(<q-args>)
+    command! -nargs=? -complete=dir TCtrlSFCCword call <SID>TCtrlSFCword(1, <q-args>)
+    command! -nargs=? -complete=dir TCtrlSFCword  call <SID>TCtrlSFCword(0, <q-args>)
 
     nmap              <Leader>sp <Plug>CtrlSFPrompt
     nmap              <Leader>sf <Plug>CtrlSFCCwordExec
@@ -1280,8 +1280,8 @@ if s:IsPlugged('ctrlsf.vim')
     nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
 
     " CtrlSF with current buffer file type
-    nnoremap <silent> <Leader>sn :FTCtrlSFCCword<CR>
-    xnoremap <silent> <Leader>sn <Esc>:FTCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+    nnoremap <silent> <Leader>sn :TCtrlSFCCword<CR>
+    xnoremap <silent> <Leader>sn <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 endif
 
 " scrooloose/nerdcommenter
