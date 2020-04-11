@@ -1567,9 +1567,6 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>q :cclose<CR>:Quickfix<CR>
     nnoremap <silent> <Leader>l :lclose<CR>:LocationList<CR>
 
-    nnoremap <silent> <Leader>st :Tags! <C-r><C-w><CR>
-    vnoremap <silent> <Leader>st <Esc>:Tags! <C-r>=vim_helpers#SelectedText()<CR><CR>
-
     nnoremap <silent> <Leader>sg :Ag! <C-r><C-w><CR>
     xnoremap <silent> <Leader>sg <Esc>:Ag! -F <C-r>=vim_helpers#SelectedText()<CR><CR>
 endif
@@ -1820,8 +1817,6 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>; :LeaderfCommand<CR>
     nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
     nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
-
-    nnoremap <silent> <Leader>st :LeaderfTagCword<CR>
 
     nmap              <Leader>sg <Plug>LeaderfRgCwordLiteralBoundary<CR>
     vmap              <Leader>sg <Plug>LeaderfRgVisualLiteralNoBoundary<CR>
@@ -3476,7 +3471,6 @@ if s:IsPlugged('vim-which-key')
                 \ 'u':    'ctrlsf-search-update',
                 \ 'o':    'toogle-ctrlsf-search-result',
                 \ 'n':    'ctrlsf-search-cword-with-file-type',
-                \ 't':    'search-cword-in-tag',
                 \ 'g':    'search-cword-fuzzy',
                 \ 'w':    'surround-cword',
                 \ 'W':    'surround-CWORD',
