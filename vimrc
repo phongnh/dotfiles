@@ -3083,16 +3083,16 @@ if s:IsPlugged('vim-fugitive')
     " tpope/vim-fugitive
     nnoremap          <Leader>gi :Git add -p %<CR><CR>
     nnoremap          <Leader>ga :Git add -p<CR><CR>
-    nnoremap <silent> <Leader>gs :Gstatus<CR>
-    nnoremap <silent> <Leader>gd :Gdiff<CR>
-    nnoremap <silent> <Leader>gc :Gcommit<CR>
-    nnoremap <silent> <Leader>gb :Gblame<CR>
+    nnoremap <silent> <Leader>gs :Git<CR>
+    nnoremap <silent> <Leader>gd :Gdiffsplit<CR>
+    nnoremap <silent> <Leader>gc :Git commit<CR>
+    nnoremap <silent> <Leader>gb :Git blame<CR>
     nnoremap          <Leader>ge :Gedit<Space>
     nnoremap <silent> <Leader>gr :Gread<CR>
     nnoremap <silent> <Leader>gw :Gwrite<CR>
-    nnoremap <silent> <Leader>gf :Gfetch<CR>
-    nnoremap <silent> <Leader>gp :Gpush<CR>
-    nnoremap <silent> <Leader>gu :Gpull --rebase<CR>
+    nnoremap <silent> <Leader>gf :Git fetch<CR>
+    nnoremap <silent> <Leader>gp :Git push<CR>
+    nnoremap <silent> <Leader>gu :Git pull --rebase<CR>
 
     augroup MyAutoCmd
         autocmd FileType gitcommit nmap <buffer> <silent> U :Git checkout -- <C-r><C-g><CR>
