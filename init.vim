@@ -1421,23 +1421,8 @@ if s:IsPlugged('targets.vim')
     " wellle/targets.vim
     let g:targets_nl = 'nN'
 
-    " " Prefer multiline targets around cursor over distant targets within cursor line:
-    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB rr ll rb al rB Al bb aa bB Aa BB AA'
-
-    " " Never seek backwards:
-    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr rr lb ar ab lB Ar aB Ab AB rb rB bb bB BB'
-
-    " " Only seek if next/last targets touch current line:
-    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr rr ll lb ar ab lB Ar aB Ab AB rb rB al Al'
-
-    " " Only consider targets fully visible on screen:
-    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab rr rb bb ll al aa'
-
-    " " Only consider targets around cursor:
-    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB'
-
-    " Only consider targets fully contained in current line:
-    let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr rr ll'
+    " Prefer multiline targets around cursor over distant targets within cursor line:
+    let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB rr ll rb al rB Al bb aa bB Aa BB AA'
 
     augroup MyAutoCmd
         autocmd User targets#mappings#user call targets#mappings#extend({
