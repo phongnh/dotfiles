@@ -1133,7 +1133,7 @@ let g:better_whitespace_filetypes_blacklist = [
             \ ]
 
 nnoremap <silent> <Leader>bu :StripWhitespace<CR>:update<CR>
-vnoremap <silent> <Leader>bu :StripWhitespace<CR>:update<CR>
+vnoremap <silent> <Leader>bu :StripWhitespace<CR>:update<CR>gv
 nnoremap <silent> yo<Space>  :ToggleWhitespace<CR>
 
 " phongnh/ZoomWin
@@ -2001,11 +2001,11 @@ if s:IsPlugged('neosnippet.vim')
 endif
 
 " Check if LSP is enabled
-function! s:IsEnabledLSP() abort
+function! s:IsLSPEnabled() abort
     return s:IsPlugged('coc.nvim') || s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim')
 endfunction
 
-if s:IsEnabledLSP()
+if s:IsLSPEnabled()
     " Always draw the signcolumn
     set signcolumn=yes
     " Don't give |ins-completion-menu| messages.
@@ -2023,11 +2023,7 @@ let g:language_servers = {
             \   'filetypes': ['c', 'cpp'],
             \ },
             \ 'clangd': {
-            \   'cmd': ['clangd', '--background-index'],
-            \   'filetypes': ['c', 'cpp'],
-            \ },
-            \ 'clangd-9': {
-            \   'cmd': ['clangd-9', '--background-index'],
+            \   'cmd': [executable('clangd-9') ? 'clangd-9' : 'clangd', '--background-index'],
             \   'filetypes': ['c', 'cpp'],
             \ },
             \ 'cquery': {
@@ -2082,8 +2078,8 @@ let g:language_servers = {
             \   'cmd': ['pyls'],
             \   'filetypes': ['python'],
             \ },
-            \ 'pyls_ms': {
-            \   'cmd': ['pyls_ms'],
+            \ 'pyls-ms': {
+            \   'cmd': ['pyls-ms'],
             \   'filetypes': ['python'],
             \ },
             \ 'ra_lsp_server': {
@@ -2141,32 +2137,54 @@ let g:language_servers = {
             \ }
 
 " Enabled Language Servers
-let s:enabled_language_servers = [
-            \ 'clangd',
-            \ 'clangd-9',
-            \ 'ccls',
-            \ 'solargraph',
-            \ 'scry',
-            \ 'pyls',
-            \ 'gopls',
-            \ 'go-langserver',
-            \ 'rls',
-            \ 'ra_lsp_server',
-            \ 'elixir-ls',
-            \ 'lua-lsp',
-            \ 'metals',
-            \ 'yaml-language-server',
-            \ 'html-languageserver',
-            \ 'css-languageserver',
-            \ 'json-languageserver',
-            \ 'typescript-language-server',
-            \ 'javascript-typescript-langserver',
-            \ 'flow',
-            \ 'docker-langserver',
-            \ 'terraform-lsp',
-            \ 'bash-language-server',
-            \ 'vim-language-server',
-            \ ]
+function! s:GetEnabledLanguageServers() abort
+    if exists('s:enabled_language_servers')
+        return s:enabled_language_servers
+    endif
+
+    let l:server_names = get(g:, 'zero_vim_enabled_language_servers', [
+                \ 'clangd',
+                \ 'ccls',
+                \ 'solargraph',
+                \ 'scry',
+                \ 'pyls-ms',
+                \ 'pyls',
+                \ 'gopls',
+                \ 'go-langserver',
+                \ 'rls',
+                \ 'ra_lsp_server',
+                \ 'elixir-ls',
+                \ 'lua-lsp',
+                \ 'metals',
+                \ 'yaml-language-server',
+                \ 'html-languageserver',
+                \ 'css-languageserver',
+                \ 'json-languageserver',
+                \ 'typescript-language-server',
+                \ 'javascript-typescript-langserver',
+                \ 'flow',
+                \ 'docker-langserver',
+                \ 'terraform-lsp',
+                \ 'bash-language-server',
+                \ 'vim-language-server',
+                \ ])
+
+    let s:enabled_language_servers = []
+
+    for l:name in l:server_names
+        if !has_key(g:language_servers, l:name)
+            continue
+        endif
+
+        let cmd = g:language_servers[l:name]['cmd']
+
+        if executable(cmd[0])
+            call add(s:enabled_language_servers, l:name)
+        endif
+    endfor
+
+    return s:enabled_language_servers
+endfunction
 
 if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
@@ -2225,6 +2243,33 @@ if s:IsPlugged('vim-lsp')
     augroup MyAutoCmd
         autocmd User lsp_buffer_enabled call <SID>OnLspBufferEnabled()
     augroup END
+
+    if s:IsPlugged('vim-lsp-settings')
+        " mattn/vim-lsp-settings
+        let g:lsp_settings = {}
+        let g:lsp_file_types = {}
+
+        function! s:SetupLanguageServers() abort
+            for l:name in keys(g:language_servers)
+                let g:lsp_settings[l:name] = { 'disabled': v:true }
+            endfor
+
+            for l:name in s:GetEnabledLanguageServers()
+                let l:server = g:language_servers[l:name]
+
+                for ft in l:server['filetypes']
+                    if !has_key(g:lsp_file_types, ft)
+                        let g:lsp_file_types[ft] = l:name
+                        let g:lsp_settings[l:name] = { 'disabled': v:false, 'cmd': l:server['cmd'] }
+                    else
+                        let g:lsp_settings[l:name] = { 'disabled': v:true }
+                    endif
+                endfor
+            endfor
+        endfunction
+
+        call s:SetupLanguageServers()
+    endif
 endif
 
 if s:IsPlugged('vim-lsc')
@@ -2243,23 +2288,18 @@ if s:IsPlugged('vim-lsc')
                 \ }
 
     function! s:SetupLanguageServers() abort
-        for l:name in s:enabled_language_servers
+        for l:name in s:GetEnabledLanguageServers()
             let l:server = g:language_servers[l:name]
 
-            let cmd = l:server['cmd']
-            let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
+            let l:default = get(s:, 'lsc_server_default_opts', {})
+            let l:opts = extend(copy(l:default), get(l:server, 'opts', {}))
+            call extend(l:opts, { 'name': l:name, 'command': l:server['cmd'] })
 
-            if executable(cmd[0])
-                let l:default = get(s:, 'lsc_server_default_opts', {})
-                let l:opts = extend(copy(l:default), get(l:server, 'opts', {}))
-                call extend(l:opts, { 'name': l:name, 'command': cmd })
-
-                for ft in l:server['filetypes']
-                    if !has_key(g:lsc_server_commands, ft)
-                        let g:lsc_server_commands[ft] = l:opts
-                    endif
-                endfor
-            endif
+            for ft in l:server['filetypes']
+                if !has_key(g:lsc_server_commands, ft)
+                    let g:lsc_server_commands[ft] = l:opts
+                endif
+            endfor
         endfor
     endfunction
 
@@ -2310,19 +2350,14 @@ if s:IsPlugged('LanguageClient-neovim')
     let g:LanguageClient_diagnosticsEnable = g:zero_vim_lsp_diagnostics
 
     function! s:SetupLanguageServers() abort
-        for l:name in s:enabled_language_servers
+        for l:name in s:GetEnabledLanguageServers()
             let l:server = g:language_servers[l:name]
 
-            let cmd = l:server['cmd']
-            let cmd = type(cmd) == type([]) ? cmd : split(cmd, '\s\+')
-
-            if executable(cmd[0])
-                for ft in l:server['filetypes']
-                    if !has_key(g:LanguageClient_serverCommands, ft)
-                        let g:LanguageClient_serverCommands[ft] = cmd
-                    endif
-                endfor
-            endif
+            for ft in l:server['filetypes']
+                if !has_key(g:LanguageClient_serverCommands, ft)
+                    let g:LanguageClient_serverCommands[ft] = l:server['cmd']
+                endif
+            endfor
         endfor
     endfunction
 
@@ -2726,6 +2761,32 @@ if s:IsPlugged('completor.vim')
 
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    if !s:IsLSPEnabled()
+        " Enable LSP
+        let g:completor_filetype_map = {}
+
+        function! s:SetupCompletorLanguageServers() abort
+            for l:name in s:GetEnabledLanguageServers()
+                let l:server = g:language_servers[l:name]
+
+                let l:opts = { 'ft': 'lsp', 'cmd': join(l:server['cmd'], ' ') }
+
+                for ft in l:server['filetypes']
+                    if !has_key(g:completor_filetype_map, ft)
+                        let g:completor_filetype_map[ft] = l:opts
+                    endif
+                endfor
+            endfor
+        endfunction
+
+        call s:SetupCompletorLanguageServers()
+
+        command! CompletorHover      call completor#do('hover')
+        command! CompletorDoc        call completor#do('doc')
+        command! CompletorDefinition call completor#do('definition')
+        command! CompletorFormat     call completor#do('format')
+    endif
 endif
 
 if s:IsPlugged('VimCompletesMe')
@@ -3229,7 +3290,7 @@ if s:IsPlugged('vim-go')
     " Use completion from LSP plugin instead of go#complete#Complete except for coc.nvim
     if s:IsPlugged('coc.nvim')
         let g:go_code_completion_enabled = 1
-    elseif s:IsEnabledLSP()
+    elseif s:IsLSPEnabled()
         let g:go_gopls_enabled           = 0
         let g:go_code_completion_enabled = 0
     endif
