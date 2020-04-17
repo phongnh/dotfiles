@@ -1953,7 +1953,7 @@ endif
 
 " Check if LSP is enabled
 function! s:IsLSPEnabled() abort
-    return s:IsPlugged('coc.nvim') || s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim')
+    return s:IsPlugged('coc.nvim') || s:IsPlugged('nvim-lsp') || s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim')
 endfunction
 
 if s:IsLSPEnabled()
@@ -1961,6 +1961,61 @@ if s:IsLSPEnabled()
     set signcolumn=yes
     " Don't give |ins-completion-menu| messages.
     set shortmess+=c
+endif
+
+if s:IsPlugged('nvim-lsp')
+    " neovim/nvim-lsp
+    :lua << EOF
+        local nvim_lsp = require('nvim_lsp')
+
+        local on_attach = function(_, bufnr)
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc',     'v:lua.vim.lsp.omnifunc')
+            vim.api.nvim_buf_set_option(bufnr, 'completefunc', 'v:lua.vim.lsp.omnifunc')
+
+            -- Mappings
+            local opts = { noremap=true, silent=true }
+
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>K',  '<Cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kh', '<Cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ke', '<cmd>lua vim.lsp.buf.rename()<CR>',                 opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kd', '<Cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>k]', '<Cmd>lua vim.lsp.buf.definition()<CR>',             opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ki', '<cmd>lua vim.lsp.buf.implementation()<CR>',         opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>km', '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>',      '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kt', '<cmd>lua vim.lsp.buf.type_definition()<CR>',        opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ks', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',        opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kr', '<cmd>lua vim.lsp.buf.references()<CR>',             opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kl', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
+        end
+
+        local servers = {
+            'bashls',
+            'clangd',
+            'cssls',
+            'dockerls',
+            'elmls',
+            'gopls',
+            'html',
+            'jsonls',
+            'metals',
+            'pyls',
+            'pyls_ms',
+            'rls',
+            'rust_analyzer',
+            'solargraph',
+            'sumneko_lua',
+            'terraformls',
+            'tsserver',
+            'vimls',
+            'yamlls',
+        }
+        for _, lsp in ipairs(servers) do
+            nvim_lsp[lsp].setup {
+                on_attach = on_attach,
+            }
+        end
+EOF
 endif
 
 " LSP Servers
@@ -2337,65 +2392,6 @@ if s:IsPlugged('LanguageClient-neovim')
     augroup MyAutoCmd
         autocmd User LanguageClientStarted call <SID>SetupLanguageClient()
     augroup END
-endif
-
-if s:IsPlugged('nvim-lsp')
-    " neovim/nvim-lsp
-    function! s:IsLSPEnabled() abort
-        return 1
-    endfunction
-
-    :lua << EOF
-        local nvim_lsp = require('nvim_lsp')
-
-        local on_attach = function(_, bufnr)
-            vim.api.nvim_buf_set_option(bufnr, 'omnifunc',     'v:lua.vim.lsp.omnifunc')
-            vim.api.nvim_buf_set_option(bufnr, 'completefunc', 'v:lua.vim.lsp.omnifunc')
-
-            -- Mappings
-            local opts = { noremap=true, silent=true }
-
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>K',  '<Cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kh', '<Cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ke', '<cmd>lua vim.lsp.buf.rename()<CR>',                 opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kd', '<Cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>k]', '<Cmd>lua vim.lsp.buf.definition()<CR>',             opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ki', '<cmd>lua vim.lsp.buf.implementation()<CR>',         opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>km', '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>',      '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kt', '<cmd>lua vim.lsp.buf.type_definition()<CR>',        opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ks', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',        opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kr', '<cmd>lua vim.lsp.buf.references()<CR>',             opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kl', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
-        end
-
-        local servers = {
-            'bashls',
-            'clangd',
-            'cssls',
-            'dockerls',
-            'elmls',
-            'gopls',
-            'html',
-            'jsonls',
-            'metals',
-            'pyls',
-            'pyls_ms',
-            'rls',
-            'rust_analyzer',
-            'solargraph',
-            'sumneko_lua',
-            'terraformls',
-            'tsserver',
-            'vimls',
-            'yamlls',
-        }
-        for _, lsp in ipairs(servers) do
-            nvim_lsp[lsp].setup {
-                on_attach = on_attach,
-            }
-        end
-EOF
 endif
 
 if s:IsPlugged('deoplete.nvim')
