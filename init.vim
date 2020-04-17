@@ -381,12 +381,12 @@ call plug#begin()
     if s:Use('deoplete') && has('python3')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'hrsh7th/deoplete-fname'
-        if s:IsPlugged('vim-lsp')
+        if s:IsPlugged('nvim-lsp')
+            Plug 'Shougo/deoplete-lsp'
+        elseif s:IsPlugged('vim-lsp')
             Plug 'lighttiger2505/deoplete-vim-lsp'
         elseif s:IsPlugged('vim-lsc')
             Plug 'hrsh7th/deoplete-vim-lsc'
-        elseif s:IsPlugged('nvim-lsp')
-            Plug 'Shougo/deoplete-lsp'
         endif
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
