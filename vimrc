@@ -440,6 +440,8 @@ call plug#begin()
         if s:IsPlugged('neosnippet')
             Plug 'maralla/completor-neosnippet'
         endif
+    elseif s:Use('mucomplete')
+        Plug 'lifepillar/vim-mucomplete'
     else
         Plug 'ajh17/VimCompletesMe'
     endif
@@ -1406,6 +1408,14 @@ elseif s:IsPlugged('completor.vim')
 
     function! Multiple_cursors_after_hook() abort
         silent! CompletorEnable
+    endfunction
+elseif s:IsPlugged('vim-mucomplete')
+    function! Multiple_cursors_before_hook() abort
+        silent! MUcompleteAutoOff
+    endfunction
+
+    function! Multiple_cursors_after_hook() abort
+        silent! MUcompleteAutoOn
     endfunction
 else
     function!  Multiple_cursors_before_hook() abort
@@ -2771,6 +2781,35 @@ if s:IsPlugged('completor.vim')
         command! CompletorDoc        call completor#do('doc')
         command! CompletorDefinition call completor#do('definition')
         command! CompletorFormat     call completor#do('format')
+    endif
+endif
+
+if s:IsPlugged('vim-mucomplete')
+    " lifepillar/vim-mucomplete
+    let g:mucomplete#enable_auto_at_startup = 1
+    let g:mucomplete#completion_delay       = 50
+    let g:mucomplete#reopen_immediately     = 0
+
+    let g:mucomplete#chains = {}
+    let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict', 'uspl']
+
+    if s:IsPlugged('ultisnips')
+        let g:mucomplete#chains.default = ['path', 'omni', 'ulti', 'keyn', 'dict', 'uspl']
+    elseif s:IsPlugged('neosnippet.vim')
+        let g:mucomplete#chains.default = ['path', 'omni', 'nsnp', 'keyn', 'dict', 'uspl']
+    endif
+
+    " Cancel the current menu and try completing the text I originally typed in a different way
+    inoremap <silent> <Plug>(MUcompleteFwdKey) <C-g>
+    imap <unique> <silent> <C-g> <Plug>(MUcompleteCycFwd)
+    inoremap <silent> <Plug>(MUcompleteBwdKey) <C-h>
+    imap <unique> <silent> <C-h> <Plug>(MUcompleteCycBwd)
+
+    " <CR>: close popup and insert newline
+    if has('patch-8.0.0283')
+        inoremap <expr> <CR> pumvisible() ? "<C-y><CR>" : "<CR>"
+    else
+        imap <expr> <CR> pumvisible() ? "<C-y><Plug>(MUcompleteCR)" : "<Plug>(MUcompleteCR)"
     endif
 endif
 
