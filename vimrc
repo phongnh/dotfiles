@@ -1377,14 +1377,6 @@ if s:IsPlugged('deoplete.nvim')
     function! Multiple_cursors_after_hook() abort
         call deoplete#custom#buffer_option('auto_complete', v:true)
     endfunction
-elseif s:IsPlugged('asyncomplete.vim')
-    function! Multiple_cursors_before_hook() abort
-        let g:asyncomplete_auto_popup = 0
-    endfunction
-
-    function! Multiple_cursors_after_hook() abort
-        let g:asyncomplete_auto_popup = 1
-    endfunction
 elseif s:IsPlugged('coc.nvim')
     function! Multiple_cursors_before_hook() abort
         let b:coc_suggest_disable = 1
@@ -1392,6 +1384,14 @@ elseif s:IsPlugged('coc.nvim')
 
     function! Multiple_cursors_after_hook() abort
         let b:coc_suggest_disable = 0
+    endfunction
+elseif s:IsPlugged('asyncomplete.vim')
+    function! Multiple_cursors_before_hook() abort
+        let g:asyncomplete_auto_popup = 0
+    endfunction
+
+    function! Multiple_cursors_after_hook() abort
+        let g:asyncomplete_auto_popup = 1
     endfunction
 elseif s:IsPlugged('ncm2')
     function! Multiple_cursors_before_hook() abort
