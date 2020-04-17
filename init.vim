@@ -388,6 +388,8 @@ call plug#begin()
         elseif s:IsPlugged('nvim-lsp')
             Plug 'Shougo/deoplete-lsp'
         endif
+    elseif s:Use('coc') && executable('yarn')
+        Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:Use('asyncomplete')
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
@@ -402,8 +404,6 @@ call plug#begin()
         if s:IsPlugged('vim-lsp')
             Plug 'prabirshrestha/asyncomplete-lsp.vim'
         endif
-    elseif s:Use('coc') && executable('yarn')
-        Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:Use('ncm2') && has('python3')
         Plug 'roxma/nvim-yarp'
         Plug 'ncm2/ncm2'
@@ -2477,101 +2477,6 @@ if s:IsPlugged('deoplete.nvim')
     inoremap <silent> <expr> <C-x><C-f> deoplete#manual_complete('file')
 endif
 
-if s:IsPlugged('asyncomplete.vim')
-    " prabirshrestha/asyncomplete.vim
-    let g:asyncomplete_auto_popup  = 1
-    let g:asyncomplete_popup_delay = 50
-
-    " Show autocomplete popup manually
-    imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
-
-    " <CR>: close popup and insert newline
-    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-
-    " <Tab>: completion
-    function! s:CheckBackSpace() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1] =~ '\s'
-    endfunction
-
-    function! s:CleverTab() abort
-        if pumvisible()
-            return "\<C-n>"
-        endif
-
-        if s:CheckBackSpace()
-            return "\<Tab>"
-        endif
-
-        return asyncomplete#force_refresh()
-    endfunction
-
-    imap <silent> <expr> <Tab> <SID>CleverTab()
-
-    " <S-Tab>: completion back
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-    " <C-y>: close popup
-    inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
-
-    " <C-e>: cancel popup
-    inoremap <expr> <C-e> pumvisible() ? asyncomplete#cancel_popup() : "\<C-e>"
-
-    function! s:SetupAsyncomplete() abort
-        if s:IsPlugged('asyncomplete-buffer.vim')
-            " prabirshrestha/asyncomplete-buffer.vim
-            call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-                        \ 'name':      'buffer',
-                        \ 'whitelist': ['*'],
-                        \ 'blacklist': ['go'],
-                        \ 'completor': function('asyncomplete#sources#buffer#completor'),
-                        \ }))
-        endif
-
-        if s:IsPlugged('asyncomplete-file.vim')
-            " prabirshrestha/asyncomplete-file.vim
-            call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-                        \ 'name':      'file',
-                        \ 'whitelist': ['*'],
-                        \ 'priority':  10,
-                        \ 'completor': function('asyncomplete#sources#file#completor'),
-                        \ }))
-        endif
-
-        if s:IsPlugged('asyncomplete-omni.vim')
-            " yami-beta/asyncomplete-omni.vim
-            call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-                        \ 'name':      'omni',
-                        \ 'whitelist': ['*'],
-                        \ 'blacklist': ['c', 'cpp', 'html', 'ruby'],
-                        \ 'completor': function('asyncomplete#sources#omni#completor'),
-                        \ }))
-        endif
-
-        if s:IsPlugged('asyncomplete-ultisnips.vim')
-            " prabirshrestha/asyncomplete-ultisnips.vim
-            call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-                        \ 'name':      'ultisnips',
-                        \ 'whitelist': ['*'],
-                        \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-                        \ }))
-        endif
-
-        if s:IsPlugged('asyncomplete-neosnippet.vim')
-            " prabirshrestha/asyncomplete-neosnippet.vim
-            call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-                        \ 'name':      'neosnippet',
-                        \ 'whitelist': ['*'],
-                        \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-                        \ }))
-        endif
-    endfunction
-
-    augroup MyAutoCmd
-        autocmd User asyncomplete_setup call s:SetupAsyncomplete()
-    augroup END
-endif
-
 if s:IsPlugged('coc.nvim')
     " neoclide/coc.nvim
     " https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions
@@ -2693,6 +2598,101 @@ if s:IsPlugged('coc.nvim')
         " Update signature help on jump placeholder
         autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
         autocmd CursorHold * silent call CocActionAsync('highlight')
+    augroup END
+endif
+
+if s:IsPlugged('asyncomplete.vim')
+    " prabirshrestha/asyncomplete.vim
+    let g:asyncomplete_auto_popup  = 1
+    let g:asyncomplete_popup_delay = 50
+
+    " Show autocomplete popup manually
+    imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
+
+    " <CR>: close popup and insert newline
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
+    " <Tab>: completion
+    function! s:CheckBackSpace() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
+
+    function! s:CleverTab() abort
+        if pumvisible()
+            return "\<C-n>"
+        endif
+
+        if s:CheckBackSpace()
+            return "\<Tab>"
+        endif
+
+        return asyncomplete#force_refresh()
+    endfunction
+
+    imap <silent> <expr> <Tab> <SID>CleverTab()
+
+    " <S-Tab>: completion back
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " <C-y>: close popup
+    inoremap <expr> <C-y> pumvisible() ? asyncomplete#close_popup() : "\<C-y>"
+
+    " <C-e>: cancel popup
+    inoremap <expr> <C-e> pumvisible() ? asyncomplete#cancel_popup() : "\<C-e>"
+
+    function! s:SetupAsyncomplete() abort
+        if s:IsPlugged('asyncomplete-buffer.vim')
+            " prabirshrestha/asyncomplete-buffer.vim
+            call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+                        \ 'name':      'buffer',
+                        \ 'whitelist': ['*'],
+                        \ 'blacklist': ['go'],
+                        \ 'completor': function('asyncomplete#sources#buffer#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('asyncomplete-file.vim')
+            " prabirshrestha/asyncomplete-file.vim
+            call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+                        \ 'name':      'file',
+                        \ 'whitelist': ['*'],
+                        \ 'priority':  10,
+                        \ 'completor': function('asyncomplete#sources#file#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('asyncomplete-omni.vim')
+            " yami-beta/asyncomplete-omni.vim
+            call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+                        \ 'name':      'omni',
+                        \ 'whitelist': ['*'],
+                        \ 'blacklist': ['c', 'cpp', 'html', 'ruby'],
+                        \ 'completor': function('asyncomplete#sources#omni#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('asyncomplete-ultisnips.vim')
+            " prabirshrestha/asyncomplete-ultisnips.vim
+            call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+                        \ 'name':      'ultisnips',
+                        \ 'whitelist': ['*'],
+                        \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+                        \ }))
+        endif
+
+        if s:IsPlugged('asyncomplete-neosnippet.vim')
+            " prabirshrestha/asyncomplete-neosnippet.vim
+            call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+                        \ 'name':      'neosnippet',
+                        \ 'whitelist': ['*'],
+                        \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+                        \ }))
+        endif
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd User asyncomplete_setup call s:SetupAsyncomplete()
     augroup END
 endif
 
