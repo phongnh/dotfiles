@@ -1456,18 +1456,19 @@ endif
 
 if s:IsPlugged('wildfire.vim')
     " gcmt/wildfire.vim
-    let s:wildfire_objects = ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}"]
-
-    let g:wildfire_objects = {
-                \ '*':        extend(copy(s:wildfire_objects), ['il', 'ip']),
-                \ 'html,xml': extend(copy(s:wildfire_objects), ['ix', 'it', 'at']),
-                \ 'ruby':     extend(copy(s:wildfire_objects), ['ir', 'ar']),
-                \ 'eruby':    extend(copy(s:wildfire_objects), ['iy', 'ay', 'ix', 'it', 'at']),
-                \ 'go':       extend(copy(s:wildfire_objects), ['if', 'af']),
-                \ }
-
     map  + <Plug>(wildfire-fuel)
     vmap _ <Plug>(wildfire-water)
+
+    let g:wildfire_objects = {
+                \ '*': ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'ip'],
+                \ }
+
+    call wildfire#triggers#Add('<C-\>', {
+                \ 'html,xml':        ['ix', 'it', 'at'],
+                \ 'ruby,rspec.ruby': ['ir', 'ar'],
+                \ 'eruby':           ['il', 'iy', 'ay', 'ix', 'it', 'at'],
+                \ 'go':              ['if', 'af'],
+                \ })
 endif
 
 " luochen1990/rainbow
