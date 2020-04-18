@@ -2143,7 +2143,6 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'ccls',
                 \ 'solargraph',
                 \ 'scry',
-                \ 'pyls-ms',
                 \ 'pyls',
                 \ 'gopls',
                 \ 'go-langserver',
