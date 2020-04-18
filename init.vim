@@ -3024,9 +3024,9 @@ if s:IsPlugged('syntastic')
     let g:syntastic_aggregate_errors         = 1
     let g:syntastic_echo_current_error       = 1
     let g:syntastic_error_symbol             = '●' " •
-    let g:syntastic_style_error_symbol       = '.'
-    let g:syntastic_warning_symbol           = '!'
-    let g:syntastic_style_warning_symbol     = '*'
+    let g:syntastic_warning_symbol           = '.'
+    let g:syntastic_style_error_symbol       = '●●'
+    let g:syntastic_style_warning_symbol     = '..'
 
     let s:syntastic_checker_exec_paths = {
                 \ 'eslint': 'npm run eslint --',
