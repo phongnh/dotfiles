@@ -390,6 +390,8 @@ call plug#begin()
         endif
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
+    elseif s:Use('YouCompleteMe') && has('python3') && executable('cmake')
+        Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --gocode-completer --rust-completer --ts-completer' }
     elseif s:Use('asyncomplete')
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
@@ -1342,6 +1344,14 @@ elseif s:IsPlugged('coc.nvim')
     function! Multiple_cursors_after_hook() abort
         let b:coc_suggest_disable = 0
     endfunction
+elseif s:IsPlugged('YouCompleteMe')
+    function! Multiple_cursors_before_hook() abort
+        let g:ycm_auto_trigger = 0
+    endfunction
+
+    function! Multiple_cursors_after_hook() abort
+        let g:ycm_auto_trigger = 1
+    endfunction
 elseif s:IsPlugged('asyncomplete.vim')
     function! Multiple_cursors_before_hook() abort
         let g:asyncomplete_auto_popup = 0
@@ -2143,6 +2153,24 @@ let g:language_servers = {
             \ },
             \ }
 
+function! s:CheckLanguageServers(server_names) abort
+    let l:valid_language_servers = []
+
+    for l:name in a:server_names
+        if !has_key(g:language_servers, l:name)
+            continue
+        endif
+
+        let cmd = g:language_servers[l:name]['cmd']
+
+        if executable(cmd[0])
+            call add(l:valid_language_servers, l:name)
+        endif
+    endfor
+
+    return l:valid_language_servers
+endfunction
+
 " Enabled Language Servers
 function! s:GetEnabledLanguageServers() abort
     if exists('s:enabled_language_servers')
@@ -2175,19 +2203,7 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'vim-language-server',
                 \ ])
 
-    let s:enabled_language_servers = []
-
-    for l:name in l:server_names
-        if !has_key(g:language_servers, l:name)
-            continue
-        endif
-
-        let cmd = g:language_servers[l:name]['cmd']
-
-        if executable(cmd[0])
-            call add(s:enabled_language_servers, l:name)
-        endif
-    endfor
+    let s:enabled_language_servers = s:CheckLanguageServers(l:server_names)
 
     return s:enabled_language_servers
 endfunction
@@ -2595,6 +2611,79 @@ if s:IsPlugged('coc.nvim')
         autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
         autocmd CursorHold * silent call CocActionAsync('highlight')
     augroup END
+endif
+
+if s:IsPlugged('YouCompleteMe')
+    " ycm-core/YouCompleteMe
+    let g:ycm_auto_trigger                        = 1
+    let g:ycm_disable_signature_help              = 1
+    let g:ycm_always_populate_location_list       = 1
+    let g:ycm_confirm_extra_conf                  = 0
+    let g:ycm_complete_in_comments_and_strings    = 0
+    let g:ycm_complete_in_comments                = 1
+    let g:ycm_complete_in_strings                 = 1
+    let g:ycm_collect_identifiers_from_tags_files = 0
+    let g:ycm_use_ultisnips_completer             = s:IsPlugged('ultisnips')
+    let g:ycm_key_detailed_diagnostics            = ''
+    let g:ycm_extra_conf_vim_data                 = ['&filetype']
+    let g:ycm_global_ycm_extra_conf               = filereadable(expand('~/.ycm_extra_conf.py')) ? expand('~/.ycm_extra_conf') : ''
+    let g:ycm_filetype_blacklist                  = {
+                \ 'ctrlp':    1,
+                \ 'tagbar':   1,
+                \ 'qf':       1,
+                \ 'nerdtree': 1,
+                \ 'fern':     1,
+                \ 'notes':    1,
+                \ 'markdown': 1,
+                \ 'netrw':    1,
+                \ 'unite':    1,
+                \ 'text':     1,
+                \ 'vimwiki':  1,
+                \ 'pandoc':   1,
+                \ 'infolog':  1,
+                \ 'leaderf':  1,
+                \ 'mail':     1
+                \ }
+
+    let g:ycm_error_symbol   = '●'
+    let g:ycm_warning_symbol = '.'
+
+    if !s:IsLSPEnabled()
+        let g:ycm_language_server = []
+
+        let s:ycm_enabled_language_servers = s:CheckLanguageServers([
+                    \ 'solargraph',
+                    \ 'scry',
+                    \ 'pyls',
+                    \ 'elixir-ls',
+                    \ 'lua-lsp',
+                    \ 'metals',
+                    \ 'yaml-language-server',
+                    \ 'html-languageserver',
+                    \ 'css-languageserver',
+                    \ 'json-languageserver',
+                    \ 'docker-langserver',
+                    \ 'terraform-lsp',
+                    \ 'bash-language-server',
+                    \ 'vim-language-server',
+                    \ ])
+
+        function! s:SetupYcmLanguageServers() abort
+            for l:name in s:ycm_enabled_language_servers
+                let l:server = g:language_servers[l:name]
+
+                let l:ycm_server = {
+                            \ 'name':      l:name,
+                            \ 'cmdline':   l:server['cmd'],
+                            \ 'filetypes': l:server['filetypes'],
+                            \ }
+
+                call add(g:ycm_language_server, l:ycm_server)
+            endfor
+        endfunction
+
+        call s:SetupYcmLanguageServers()
+    endif
 endif
 
 if s:IsPlugged('asyncomplete.vim')
