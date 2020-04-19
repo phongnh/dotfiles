@@ -2634,7 +2634,6 @@ if s:IsPlugged('YouCompleteMe')
     let g:ycm_disable_signature_help              = 1
     let g:ycm_always_populate_location_list       = 1
     let g:ycm_confirm_extra_conf                  = 0
-    let g:ycm_complete_in_comments_and_strings    = 0
     let g:ycm_complete_in_comments                = 1
     let g:ycm_complete_in_strings                 = 1
     let g:ycm_collect_identifiers_from_tags_files = 0
