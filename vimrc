@@ -378,6 +378,15 @@ call plug#begin()
 " }
 
 " Snippets and Autocomplete {
+    if s:Use('ultisnips') && has('python3')
+        Plug 'honza/vim-snippets'
+        Plug 'SirVer/ultisnips'
+    elseif s:Use('neosnippet')
+        Plug 'honza/vim-snippets'
+        Plug 'Shougo/neosnippet-snippets'
+        Plug 'Shougo/neosnippet.vim'
+    endif
+
     if s:Use('coc')
         " coc.nvim plugin has both autocomplete and lsp functions
     elseif s:Use('lsp')
@@ -394,15 +403,6 @@ call plug#begin()
         Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
-    endif
-
-    if s:Use('ultisnips') && has('python3')
-        Plug 'honza/vim-snippets'
-        Plug 'SirVer/ultisnips'
-    elseif s:Use('neosnippet')
-        Plug 'honza/vim-snippets'
-        Plug 'Shougo/neosnippet-snippets'
-        Plug 'Shougo/neosnippet.vim'
     endif
 
     if s:Use('deoplete') && v:version >= 800 && has('python3')
@@ -1947,6 +1947,77 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>l :lclose<CR>:CtrlPLocationlist<CR>
 endif
 
+if s:IsPlugged('ultisnips')
+    " SirVer/ultisnips
+    let g:UltiSnipsExpandTrigger       = '<Plug>(ultisnips_expand)'
+    let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
+    let g:UltiSnipsJumpBackwardTrigger = '<C-z>'
+    let g:UltiSnipsListSnippets        = ''
+
+    " Jump Forward result
+    let g:ulti_jump_forwards_res = 0 " (0: fail, 1: success)
+
+    function s:IsExpandableUltiSnips() abort
+        return !(
+                    \ col('.') <= 1
+                    \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
+                    \ || empty(UltiSnips#SnippetsInCurrentScope())
+                    \ )
+    endfunction
+
+    function! s:UltiSnipsExpand() abort
+        if s:IsExpandableUltiSnips()
+            return "\<Plug>(ultisnips_expand_or_jump)"
+        endif
+
+        if pumvisible()
+            return "\<C-e>"
+        endif
+
+        return "\<C-k>"
+    endfunction
+
+    inoremap <silent> <Plug>(ultisnips_expand_or_jump) <C-r>=UltiSnips#ExpandSnippetOrJump()<CR>
+    snoremap <silent> <Plug>(ultisnips_expand_or_jump) <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
+
+    imap <silent> <expr> <C-k> <SID>UltiSnipsExpand()
+    smap                 <C-k> <Plug>(ultisnips_expand_or_jump)
+    xmap                 <C-k> <Plug>(ultisnips_expand)
+endif
+
+if s:IsPlugged('neosnippet.vim')
+    " Shougo/neosnippet.vim
+    let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#enable_complete_done          = 1
+    let g:neosnippet#expand_word_boundary          = 1
+
+    let g:neosnippet#scope_aliases = {
+                \ 'ruby':   'ruby,rails',
+                \ 'objc':   'objc,c',
+                \ 'objcpp': 'objc,c',
+                \ }
+
+    function! s:NeoSnippetExpand() abort
+        if neosnippet#expandable_or_jumpable()
+            return "\<Plug>(neosnippet_expand_or_jump)"
+        endif
+
+        if pumvisible()
+            return "\<C-e>"
+        endif
+
+        return "\<C-k>"
+    endfunction
+
+    imap <silent> <expr> <C-k> <SID>NeoSnippetExpand()
+    smap                 <C-k> <Plug>(neosnippet_expand_or_jump)
+    xmap                 <C-k> <Plug>(neosnippet_expand_target)
+
+    imap <C-j> <Plug>(neosnippet_jump)
+    smap <C-j> <Plug>(neosnippet_jump)
+    smap <Tab> <Plug>(neosnippet_jump)
+endif
+
 if s:IsLSPEnabled()
     " Always draw the signcolumn
     set signcolumn=yes
@@ -2340,77 +2411,6 @@ if s:IsPlugged('vim-vsnip')
     " hrsh7th/vim-vsnip
     imap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : '<C-\>'
     smap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : '<C-\>'
-endif
-
-if s:IsPlugged('ultisnips')
-    " SirVer/ultisnips
-    let g:UltiSnipsExpandTrigger       = '<Plug>(ultisnips_expand)'
-    let g:UltiSnipsJumpForwardTrigger  = '<C-j>'
-    let g:UltiSnipsJumpBackwardTrigger = '<C-z>'
-    let g:UltiSnipsListSnippets        = ''
-
-    " Jump Forward result
-    let g:ulti_jump_forwards_res = 0 " (0: fail, 1: success)
-
-    function s:IsExpandableUltiSnips() abort
-        return !(
-                    \ col('.') <= 1
-                    \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
-                    \ || empty(UltiSnips#SnippetsInCurrentScope())
-                    \ )
-    endfunction
-
-    function! s:UltiSnipsExpand() abort
-        if s:IsExpandableUltiSnips()
-            return "\<Plug>(ultisnips_expand_or_jump)"
-        endif
-
-        if pumvisible()
-            return "\<C-e>"
-        endif
-
-        return "\<C-k>"
-    endfunction
-
-    inoremap <silent> <Plug>(ultisnips_expand_or_jump) <C-r>=UltiSnips#ExpandSnippetOrJump()<CR>
-    snoremap <silent> <Plug>(ultisnips_expand_or_jump) <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
-
-    imap <silent> <expr> <C-k> <SID>UltiSnipsExpand()
-    smap                 <C-k> <Plug>(ultisnips_expand_or_jump)
-    xmap                 <C-k> <Plug>(ultisnips_expand)
-endif
-
-if s:IsPlugged('neosnippet.vim')
-    " Shougo/neosnippet.vim
-    let g:neosnippet#enable_snipmate_compatibility = 1
-    let g:neosnippet#enable_complete_done          = 1
-    let g:neosnippet#expand_word_boundary          = 1
-
-    let g:neosnippet#scope_aliases = {
-                \ 'ruby':   'ruby,rails',
-                \ 'objc':   'objc,c',
-                \ 'objcpp': 'objc,c',
-                \ }
-
-    function! s:NeoSnippetExpand() abort
-        if neosnippet#expandable_or_jumpable()
-            return "\<Plug>(neosnippet_expand_or_jump)"
-        endif
-
-        if pumvisible()
-            return "\<C-e>"
-        endif
-
-        return "\<C-k>"
-    endfunction
-
-    imap <silent> <expr> <C-k> <SID>NeoSnippetExpand()
-    smap                 <C-k> <Plug>(neosnippet_expand_or_jump)
-    xmap                 <C-k> <Plug>(neosnippet_expand_target)
-
-    imap <C-j> <Plug>(neosnippet_jump)
-    smap <C-j> <Plug>(neosnippet_jump)
-    smap <Tab> <Plug>(neosnippet_jump)
 endif
 
 if s:IsPlugged('deoplete.nvim')
