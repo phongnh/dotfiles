@@ -404,7 +404,7 @@ call plug#begin()
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:Use('YouCompleteMe') && has('python3') && executable('cmake')
-        Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --gocode-completer --rust-completer --ts-completer' }
+        Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --go-completer --rust-completer --ts-completer' }
     elseif s:Use('asyncomplete')
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
@@ -1983,7 +1983,6 @@ if s:IsPlugged('nvim-lsp')
 
         local on_attach = function(_, bufnr)
             vim.api.nvim_buf_set_option(bufnr, 'omnifunc',     'v:lua.vim.lsp.omnifunc')
-            vim.api.nvim_buf_set_option(bufnr, 'completefunc', 'v:lua.vim.lsp.omnifunc')
 
             -- Mappings
             local opts = { noremap=true, silent=true }
@@ -2048,7 +2047,7 @@ let g:language_servers = {
             \   'filetypes': ['c', 'cpp'],
             \ },
             \ 'clangd': {
-            \   'cmd': [executable('clangd-9') ? 'clangd-9' : 'clangd', '--background-index'],
+            \   'cmd': ['clangd', '--background-index'],
             \   'filetypes': ['c', 'cpp'],
             \ },
             \ 'cquery': {
@@ -2119,10 +2118,6 @@ let g:language_servers = {
             \   'cmd': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
             \   'filetypes': ['rust'],
             \ },
-            \ 'rustup-rls': {
-            \   'cmd': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-            \   'filetypes': ['rust'],
-            \ },
             \ 'scry': {
             \  'cmd': ['scry'],
             \   'filetypes': ['crystal'],
@@ -2172,6 +2167,9 @@ function! s:CheckLanguageServers(server_names) abort
         let cmd = g:language_servers[l:name]['cmd']
 
         if executable(cmd[0])
+            if !empty(exepath(cmd[0]))
+                let cmd[0] = exepath(cmd[0])
+            endif
             call add(l:valid_language_servers, l:name)
         endif
     endfor
@@ -2218,6 +2216,8 @@ endfunction
 
 if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
+    let g:lsp_async_completion = 1
+
     let g:lsp_signs_error   = { 'text': '●' }
     let g:lsp_signs_warning = { 'text': '.' }
 
@@ -2246,7 +2246,6 @@ if s:IsPlugged('vim-lsp')
 
     function! s:OnLspBufferEnabled() abort
         setlocal omnifunc=lsp#complete
-        setlocal completefunc=lsp#complete
 
         nmap     <buffer> <silent> <Leader>K  <Plug>(lsp-hover)
         nmap     <buffer>          <Leader>kh <Leader>K
@@ -2365,7 +2364,6 @@ if s:IsPlugged('vim-lsc')
 
     function! s:SetupLSC() abort
         setlocal omnifunc=lsc#complete#complete
-        setlocal completefunc=lsc#complete#complete
     endfunction
 
     augroup MyAutoCmd
@@ -2395,7 +2393,6 @@ if s:IsPlugged('LanguageClient-neovim')
 
     function! s:SetupLanguageClient() abort
         setlocal omnifunc=LanguageClient#complete
-        setlocal completefunc=LanguageClient#complete
 
         nnoremap <buffer> <silent> <Leader>K  :call LanguageClient#textDocument_hover()<CR>
         nmap     <buffer>          <Leader>kh <Leader>K
@@ -2417,7 +2414,6 @@ if s:IsPlugged('LanguageClient-neovim')
         autocmd User LanguageClientStarted call <SID>SetupLanguageClient()
     augroup END
 endif
-
 
 if s:IsPlugged('vim-vsnip')
     " hrsh7th/vim-vsnip
@@ -2638,7 +2634,6 @@ if s:IsPlugged('YouCompleteMe')
     let g:ycm_complete_in_strings                 = 1
     let g:ycm_collect_identifiers_from_tags_files = 0
     let g:ycm_use_ultisnips_completer             = s:IsPlugged('ultisnips')
-    let g:ycm_key_detailed_diagnostics            = ''
     let g:ycm_extra_conf_vim_data                 = ['&filetype']
     let g:ycm_global_ycm_extra_conf               = filereadable(expand('~/.ycm_extra_conf.py')) ? expand('~/.ycm_extra_conf') : ''
     let g:ycm_filetype_blacklist                  = {
@@ -2661,6 +2656,12 @@ if s:IsPlugged('YouCompleteMe')
 
     let g:ycm_error_symbol   = '●'
     let g:ycm_warning_symbol = '.'
+
+    let g:ycm_key_detailed_diagnostics = ''
+    let g:ycm_key_invoke_completion    = '<C-x><C-r>'
+
+    " <CR>: close popup and insert newline
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
 
     if !s:IsLSPEnabled()
         let g:ycm_language_server = []
@@ -2913,6 +2914,9 @@ if s:IsPlugged('vim-mucomplete')
         let g:mucomplete#chains.default = ['path', 'omni', 'nsnp', 'keyn', 'dict', 'uspl']
     endif
 
+    " Disable vim-lsp's async completion
+    let g:lsp_async_completion = 0
+
     " Cancel the current menu and try completing the text I originally typed in a different way
     inoremap <silent> <Plug>(MUcompleteFwdKey) <C-g>
     imap <unique> <silent> <C-g> <Plug>(MUcompleteCycFwd)
@@ -2929,6 +2933,8 @@ endif
 
 if s:IsPlugged('VimCompletesMe')
     " ajh17/VimCompletesMe
+    " Disable vim-lsp's async completion
+    let g:lsp_async_completion = 0
 endif
 
 if s:IsPlugged('vim-startify')
@@ -3445,7 +3451,7 @@ if s:IsPlugged('vim-go')
     " Use completion from LSP plugin instead of go#complete#Complete except for coc.nvim
     if s:IsPlugged('coc.nvim')
         let g:go_code_completion_enabled = 1
-    elseif s:IsLSPEnabled()
+    elseif s:IsLSPEnabled() || s:IsPlugged('YouCompleteMe')
         let g:go_gopls_enabled           = 0
         let g:go_code_completion_enabled = 0
     endif
