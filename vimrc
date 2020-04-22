@@ -2179,7 +2179,6 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'scry',
                 \ 'pyls',
                 \ 'gopls',
-                \ 'go-langserver',
                 \ 'rls',
                 \ 'ra_lsp_server',
                 \ 'elixir-ls',
@@ -2190,8 +2189,6 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'css-languageserver',
                 \ 'json-languageserver',
                 \ 'typescript-language-server',
-                \ 'javascript-typescript-langserver',
-                \ 'flow',
                 \ 'docker-langserver',
                 \ 'terraform-lsp',
                 \ 'bash-language-server',
@@ -2485,8 +2482,8 @@ if s:IsPlugged('deoplete.nvim')
 
     inoremap          <expr> <C-x><C-g> deoplete#undo_completion()
     inoremap          <expr> <C-x><C-l> deoplete#complete_common_string()
-    inoremap          <expr> <C-x><C-r> deoplete#manual_complete()
     inoremap <silent> <expr> <C-x><C-f> deoplete#manual_complete('file')
+    inoremap          <expr> <C-g><C-g> deoplete#manual_complete()
 endif
 
 if s:IsPlugged('coc.nvim')
@@ -2560,11 +2557,11 @@ if s:IsPlugged('coc.nvim')
     " Coc only does snippet and additional edit on confirm.
     inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-    " Overwrite <C-x><C-r>
+    " Overwrite <C-x><C-u>
     imap <silent> <C-x><C-u> <Plug>(coc-complete-custom)
 
-    " Use <C-x><C-r> to trigger completion.
-    inoremap <silent> <expr> <C-x><C-r> coc#refresh()
+    " Use <C-g><C-g> to trigger completion.
+    inoremap <silent> <expr> <C-g><C-g> coc#refresh()
 
     " Use `[g` and `]g` to navigate diagnostics
     nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -2647,7 +2644,7 @@ if s:IsPlugged('YouCompleteMe')
     let g:ycm_warning_symbol = '.'
 
     let g:ycm_key_detailed_diagnostics = ''
-    let g:ycm_key_invoke_completion    = '<C-x><C-r>'
+    let g:ycm_key_invoke_completion    = '<C-g><C-g>'
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
@@ -2696,7 +2693,7 @@ if s:IsPlugged('asyncomplete.vim')
     let g:asyncomplete_popup_delay = 50
 
     " Show autocomplete popup manually
-    imap <C-x><C-r> <Plug>(asyncomplete_force_refresh)
+    imap <C-g><C-g> <Plug>(asyncomplete_force_refresh)
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
@@ -2799,7 +2796,7 @@ if s:IsPlugged('ncm2')
     " inoremap <C-c> <ESC>
 
     " Trigger complete manually
-    imap <C-x><C-r> <Plug>(ncm2_manual_trigger)
+    imap <C-g><C-g> <Plug>(ncm2_manual_trigger)
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
@@ -2840,7 +2837,7 @@ if s:IsPlugged('completor.vim')
     endif
 
     " Trigger complete manually
-    inoremap <silent> <expr> <C-x><C-r> "<C-r>=completor#do('complete')<CR>"
+    inoremap <silent> <expr> <C-g><C-g> "<C-r>=completor#do('complete')<CR>"
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
