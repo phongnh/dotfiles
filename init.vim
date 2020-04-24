@@ -331,6 +331,8 @@ call plug#begin()
     elseif s:Use('leaderf') && has('python3')
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+        " Solarized theme for LeaderF
+        Plug 'phongnh/vim-leaderf-solarized-theme'
     elseif s:Use('clap') && has('nvim-0.4.2')
         " Viewer & Finder for LSP symbols and tags
         Plug 'liuchengxu/vista.vim'
@@ -1714,6 +1716,8 @@ endif
 
 if s:IsPlugged('LeaderF')
     " Yggdroot/LeaderF
+    let g:leaderf_solarized_theme = g:zero_vim_solarized
+
     let g:Lf_ShowDevIcons  = g:zero_vim_devicons
     let g:Lf_WindowHeight  = 0.30
     let g:Lf_MruMaxFiles   = 200
@@ -1728,18 +1732,18 @@ if s:IsPlugged('LeaderF')
     endif
 
     " Popup Settings
+    let g:Lf_PopupShowStatusline  = 0
+    let g:Lf_PreviewInPopup       = 1
+    let g:Lf_PopupPreviewPosition = 'bottom'
     if get(g:, 'Lf_Popup', 0)
-        let g:Lf_WindowPosition       = 'popup'
-        let g:Lf_PopupShowStatusline  = 0
-        let g:Lf_PreviewInPopup       = 1
-        let g:Lf_PopupPreviewPosition = 'bottom'
+        let g:Lf_WindowPosition = 'popup'
     endif
 
     let g:Lf_UseCache       = 0  " rg/ag is enough fast, we don't need cache
     let g:Lf_NeedCacheTime  = 10 " 10 seconds
     let g:Lf_UseMemoryCache = 1
 
-    " let g:Lf_NoChdir              = 1
+    let g:Lf_NoChdir              = 1
     let g:Lf_WorkingDirectoryMode = 'c'
 
     let s:Lf_FindTools = {
@@ -1798,25 +1802,14 @@ if s:IsPlugged('LeaderF')
     endfunction
     command! -bar -nargs=0 LeaderfRoot call <SID>LeaderfRoot()
 
-    function! s:LeaderfFileInDir(dir) abort
-        let current = get(g:, 'Lf_WorkingDirectory', '')
-        try
-            let g:Lf_WorkingDirectory = a:dir
-            :LeaderfFile
-        finally
-            let g:Lf_WorkingDirectory = current
-        endtry
-    endfunction
-    command! -bar -nargs=1 -complete=dir LeaderfFileInDir call <SID>LeaderfFileInDir(<q-args>)
-
     nmap <Leader><Leader> <Leader>f
 
     nnoremap <silent> <C-p>     :LeaderfRoot<CR>
     nnoremap <silent> <Leader>p :LeaderfRoot<CR>
     nnoremap <silent> <Leader>o :LeaderfBuffer<CR>
     nnoremap <silent> <Leader>O :LeaderfMru<CR>
-    nnoremap <silent> <Leader>d :LeaderfFileInDir <C-r>=expand("%:h")<CR><CR>
-    nnoremap <silent> <Leader>D :LeaderfFileInDir <C-r>=expand("%:h:h")<CR><CR>
+    nnoremap <silent> <Leader>d :LeaderfFile <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :LeaderfFile <C-r>=expand("%:h:h")<CR><CR>
 
     nnoremap <silent> <Leader>\ :LeaderfTag<CR>
 
@@ -3767,8 +3760,8 @@ endif
 
 " Setup custom mapping to open specific folder
 function! OpenFolderWithMapping(folder, mapping) abort
-    if exists(':LeaderfFileInDir') == 2
-        let cmd = 'LeaderfFileInDir'
+    if exists(':LeaderfFile') == 2
+        let cmd = 'LeaderfFile'
     elseif exists(':Files') == 2
         let cmd = 'Files'
     elseif exists(':ClapFiles') == 2
