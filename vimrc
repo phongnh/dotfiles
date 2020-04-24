@@ -357,6 +357,9 @@ call plug#begin()
 
         " Modern performant generic finder and dispatcher for Vim and NeoVim
         Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
+
+        " Solarized theme for Clap Popup
+        Plug 'phongnh/vim-clap-solarized-theme'
     else
         if has('python3')
             Plug 'FelikZ/ctrlp-py-matcher'
@@ -1637,11 +1640,13 @@ endif
 
 if s:IsPlugged('vim-clap')
     " liuchengxu/vim-clap
+    let g:clap_solarized_theme = g:zero_vim_solarized
+
     let g:clap_search_box_border_style = 'nil'
     let g:clap_disable_run_rooter      = v:true
-    let g:clap_popup_cursor_shape      = '_'
-    let g:clap_current_selection_sign  = { 'text': '» ', 'texthl': 'WarningMsg', 'linehl': 'ClapCurrentSelection' }
-    let g:clap_selected_sign           = { 'text': ' »', 'texthl': 'WarningMsg', 'linehl': 'ClapSelected' }
+    let g:clap_popup_cursor_shape      = ''
+    let g:clap_current_selection_sign  = { 'text': '» ', 'texthl': 'ClapCurrentSelectionSign', 'linehl': 'ClapCurrentSelection' }
+    let g:clap_selected_sign           = { 'text': ' »', 'texthl': 'ClapSelectedSign', 'linehl': 'ClapSelected' }
     let g:clap_prompt_format           = ' %spinner%%forerunner_status%%provider_id%:'
     let g:clap_layout                  = { 'width': '70%', 'height': '50%',  'row': '20%', 'col': '15%' }
 
