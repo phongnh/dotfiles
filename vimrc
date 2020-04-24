@@ -362,7 +362,7 @@ call plug#begin()
         Plug 'phongnh/vim-clap-solarized-theme'
     else
         if has('python3')
-            Plug 'FelikZ/ctrlp-py-matcher'
+            Plug 'raghur/fruzzy', { 'do': ':call fruzzy#install()' }
         endif
 
         if has('python3') && executable('cmake')
@@ -1888,14 +1888,17 @@ if s:IsPlugged('ctrlp.vim')
     let g:ctrlp_find_tool = g:zero_vim_find_tool
     let g:ctrlp_cmd       = 'CtrlPRoot'
 
-    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so')
+    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so') && !s:Use('fruzzy')
         " nixprime/cpsm
         let g:cpsm_match_empty_query = 0
-        let g:cpsm_highlight_mode    = 'basic'
+        let g:cpsm_highlight_mode    = 'detailed'
         let g:ctrlp_match_func       = { 'match': 'cpsm#CtrlPMatch' }
-    elseif s:IsPlugged('ctrlp-py-matcher')
-        " FelikZ/ctrlp-py-matcher
-        let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+    elseif s:IsPlugged('fruzzy')
+        " raghur/fruzzy
+        let g:fruzzy#usenative       = 1
+        let g:fruzzy#sortonempty     = 0
+        let ctrlp_match_current_file = 1
+        let g:ctrlp_match_func       = { 'match': 'fruzzy#ctrlp#matcher' }
     endif
 
     nmap <Leader><Leader> <Leader>f
