@@ -386,6 +386,13 @@ call plug#begin()
         Plug 'mattn/vim-lsp-settings'
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
+        if s:IsPlugged('ultisnips')
+            Plug 'thomasfaingnaert/vim-lsp-snippets'
+            Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+        elseif s:IsPlugged('neosnippet.vim')
+            Plug 'thomasfaingnaert/vim-lsp-snippets'
+            Plug 'thomasfaingnaert/vim-lsp-neosnippet'
+        endif
     elseif s:Use('lsc')
         Plug 'natebosch/vim-lsc'
         Plug 'hrsh7th/vim-vsnip'
