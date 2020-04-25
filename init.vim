@@ -401,6 +401,10 @@ call plug#begin()
         Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
+    elseif s:Use('lamp')
+        Plug 'hrsh7th/vim-lamp'
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     endif
 
     if s:Use('deoplete') && has('python3')
@@ -412,6 +416,8 @@ call plug#begin()
             Plug 'lighttiger2505/deoplete-vim-lsp'
         elseif s:IsPlugged('vim-lsc')
             Plug 'hrsh7th/deoplete-vim-lsc'
+        elseif s:IsPlugged('vim-lamp')
+            Plug 'hrsh7th/deoplete-lamp'
         endif
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
@@ -430,6 +436,8 @@ call plug#begin()
         endif
         if s:IsPlugged('vim-lsp')
             Plug 'prabirshrestha/asyncomplete-lsp.vim'
+        elseif s:IsPlugged('vim-lamp')
+            Plug 'hrsh7th/asyncomplete-lamp'
         endif
     elseif s:Use('ncm2') && has('python3')
         Plug 'roxma/nvim-yarp'
@@ -2417,6 +2425,83 @@ if s:IsPlugged('LanguageClient-neovim')
 
     augroup MyAutoCmd
         autocmd User LanguageClientStarted call <SID>SetupLanguageClient()
+    augroup END
+endif
+
+if s:IsPlugged('vim-lamp')
+    " hrsh7th/vim-lamp
+    let s:lamp_enabled_language_servers = s:CheckLanguageServers([
+            \ 'clangd',
+            \ 'ccls',
+            \ 'solargraph',
+            \ 'scry',
+            \ 'go-langserver',
+            \ 'ra_lsp_server',
+            \ 'elixir-ls',
+            \ 'lua-lsp',
+            \ 'metals',
+            \ 'docker-langserver',
+            \ 'terraform-lsp',
+            \ 'bash-language-server',
+            \ ])
+
+    " Initialize Servers
+    function! s:OnInitializedLamp() abort
+        " built-in setting
+        call lamp#builtin#gopls()
+        call lamp#builtin#rls()
+        call lamp#builtin#pyls()
+        call lamp#builtin#yaml_language_server()
+        call lamp#builtin#typescript_language_server()
+        call lamp#builtin#html_languageserver()
+        call lamp#builtin#css_languageserver()
+        call lamp#builtin#json_languageserver()
+        call lamp#builtin#vim_language_server()
+
+        " Add some language servers
+        for l:name in s:lamp_enabled_language_servers
+            let l:server = g:language_servers[l:name]
+
+            call lamp#register(l:name, {
+                        \ 'command': l:server['cmd'],
+                        \ 'filetypes': l:server['filetypes'],
+                        \ })
+        endfor
+    endfunction
+
+    " Initialize Buffers
+    function! s:OnTextDocumentDidOpen() abort
+        setlocal omnifunc=lamp#complete
+
+        " Mappings
+        nnoremap <buffer> <Leader>k] :<C-u>LampDefinition edit<CR>
+        nnoremap <buffer> <Leader>k\ :<C-u>LampDefinition split<CR>
+        nnoremap <buffer> <Leader>k} :<C-u>LampDefinition vsplit<CR>
+        nnoremap <buffer> <Leader>kt :<C-u>LampTypeDefinition edit<CR>
+        " nnoremap <buffer> <Leader>kT :<C-u>LampTypeDefinition split<CR>
+        nnoremap <buffer> <Leader>kT :<C-u>LampTypeDefinition vsplit<CR>
+        nnoremap <buffer> <Leader>kd :<C-u>LampDeclaration edit<CR>
+        " nnoremap <buffer> <Leader>kD :<C-u>LampDeclaration split<CR>
+        nnoremap <buffer> <Leader>kD :<C-u>LampDeclaration vsplit<CR>
+        nnoremap <buffer> <Leader>K  :<C-u>LampHover<CR>
+        nmap     <buffer> <Leader>kh <Leader>K
+        nnoremap <buffer> <Leader>ke :<C-u>LampRename<CR>
+        nnoremap <buffer> <Leader>kr :<C-u>LampReferences<CR>
+        nnoremap <buffer> <Leader>kc :<C-u>LampDocumentHighlight<CR>
+        nnoremap <buffer> <Leader>KC :<C-u>LampDocumentHighlightClear<CR>
+        nnoremap <buffer> <Leader>kf :<C-u>LampFormatting<CR>
+        vnoremap <buffer> <Leader>kf :LampRangeFormatting<CR>
+        nnoremap <buffer> <Leader>ka :<C-u>LampCodeAction<CR>
+        vnoremap <buffer> <Leader>ka :LampCodeAction<CR>
+        nnoremap <buffer> <Leader>k= :<C-u>LampSelectionRangeExpand<CR>
+        nnoremap <buffer> <Leader>k- :<C-u>LampSelectionRangeCollapse<CR>
+        vnoremap <buffer> <Leader>k= :<C-u>LampSelectionRangeExpand<CR>
+        vnoremap <buffer> <Leader>k- :<C-u>LampSelectionRangeCollapse<CR>
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd User lamp#initialized call <SID>OnInitializedLamp()
+        autocmd User lamp#text_document_did_open call <SID>OnTextDocumentDidOpen()
     augroup END
 endif
 
