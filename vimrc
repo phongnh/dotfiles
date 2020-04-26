@@ -2424,7 +2424,6 @@ if s:IsPlugged('vim-lamp')
             \ 'ccls',
             \ 'solargraph',
             \ 'scry',
-            \ 'go-langserver',
             \ 'ra_lsp_server',
             \ 'elixir-ls',
             \ 'lua-lsp',
