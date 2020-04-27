@@ -2086,10 +2086,6 @@ let g:language_servers = {
             \   'cmd': ['flow', 'lsp', '--from', 'vim'],
             \   'filetypes': ['javascript', 'javascripteact', 'javascript.jsx'],
             \ },
-            \ 'go-langserver': {
-            \   'cmd': ['go-langserver', '-gocompletion'],
-            \   'filetypes': ['go'],
-            \ },
             \ 'gopls': {
             \   'cmd': ['gopls', '-mode', 'stdio'],
             \   'filetypes': ['go'],
