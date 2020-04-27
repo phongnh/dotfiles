@@ -2528,8 +2528,9 @@ if s:IsPlugged('deoplete.nvim')
                 \ })
 
     " Ignore sources
-    let g:deoplete#ignore_sources = { '_': ['dictionary', 'tag', 'syntax'] }
-    call deoplete#custom#option('ignore_sources', g:deoplete#ignore_sources)
+    call deoplete#custom#option('ignore_sources', {
+                \ '_': ['dictionary', 'tag', 'syntax'],
+                \ })
 
     call deoplete#custom#source('_', 'converters', [
                 \ 'converter_remove_overlap',
