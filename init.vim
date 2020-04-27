@@ -114,6 +114,11 @@ function! s:Use(group) abort
     return index(get(g:, 'zero_vim_groups', []), a:group) > - 1
 endfunction
 
+" Check if plugin group is not used
+function! s:NotUse(group) abort
+    return !s:Use(a:group)
+endfunction
+
 " Check if a plugin is plugged in plug section or not
 function! s:IsPlugged(plugin) abort
     return has_key(g:plugs, a:plugin)
@@ -685,7 +690,9 @@ Plug 'chrisbra/unicode.vim'
 " }
 
 " Fish Shell {
-    Plug 'georgewitteman/vim-fish'
+    if s:NotUse('syntax')
+        Plug 'georgewitteman/vim-fish'
+    endif
 " }
 
 if s:Use('syntax')
@@ -1861,7 +1868,7 @@ if s:IsPlugged('ctrlp.vim')
     let g:ctrlp_find_tool = g:zero_vim_find_tool
     let g:ctrlp_cmd       = 'CtrlPRoot'
 
-    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so') && !s:Use('fruzzy')
+    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so') && s:NotUse('fruzzy')
         " nixprime/cpsm
         let g:cpsm_match_empty_query = 0
         let g:cpsm_highlight_mode    = 'detailed'
