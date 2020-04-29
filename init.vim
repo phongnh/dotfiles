@@ -448,7 +448,6 @@ call plug#begin()
         Plug 'roxma/nvim-yarp'
         Plug 'ncm2/ncm2'
         Plug 'ncm2/ncm2-bufword'
-        Plug 'fgrsnau/ncm2-otherbuf'
         Plug 'ncm2/ncm2-path'
         if s:IsPlugged('ultisnips')
             Plug 'ncm2/ncm2-ultisnips'
