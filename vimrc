@@ -700,6 +700,8 @@ Plug 'chrisbra/unicode.vim'
 " Elixir {
     if s:Use('elixir')
         Plug 'elixir-editors/vim-elixir'
+        Plug 'andyl/vim-textobj-elixir'
+        Plug 'mhinz/vim-mix-format'
     endif
 " }
 
@@ -1506,6 +1508,15 @@ nnoremap <silent> ], :SidewaysJumpRight<CR>
 if s:IsPlugged('vim-textobj-ruby')
     " rhysd/vim-textobj-ruby
     let g:textobj_ruby_more_mappings = 0
+    let g:textobj_ruby_no_default_key_mappings = 1
+
+    augroup MyAutoCmd
+        autocmd FileType ruby
+                    \ omap <buffer> ar <Plug>(textobj-ruby-any-a)|
+                    \ xmap <buffer> ar <Plug>(textobj-ruby-any-a)|
+                    \ omap <buffer> ir <Plug>(textobj-ruby-any-i)|
+                    \ xmap <buffer> ir <Plug>(textobj-ruby-any-i)
+    augroup END
 endif
 
 if s:IsPlugged('vim-textobj-erb')
@@ -1513,10 +1524,13 @@ if s:IsPlugged('vim-textobj-erb')
     let g:textobj_erb_no_default_key_mappings = 1
 
     " Remap from 'E' to 'y'
-    omap ay <Plug>(textobj-erb-a)
-    xmap ay <Plug>(textobj-erb-a)
-    omap iy <Plug>(textobj-erb-i)
-    xmap iy <Plug>(textobj-erb-i)
+    augroup MyAutoCmd
+        autocmd FileType rhtml,eruby,eruby.yaml,eruby.html,html.eruby
+                    \ omap <buffer> ay <Plug>(textobj-erb-a)|
+                    \ xmap <buffer> ay <Plug>(textobj-erb-a)|
+                    \ omap <buffer> iy <Plug>(textobj-erb-i)|
+                    \ xmap <buffer> iy <Plug>(textobj-erb-i)
+    augroup END
 endif
 
 if s:IsPlugged('targets.vim')
@@ -3599,6 +3613,24 @@ if s:IsPlugged('vim-go')
 
     augroup MyAutoCmd
         autocmd FileType go call s:SetupVimGo()
+    augroup END
+endif
+
+if s:IsPlugged('vim-elixir')
+    " elixir-editors/vim-elixir
+endif
+
+if s:IsPlugged('vim-textobj-elixir')
+    " andyl/vim-textobj-elixir
+    let g:textobj_elixir_no_default_key_mappings = 1
+
+    " Remap from 'e' to 'r'
+    augroup MyAutoCmd
+        autocmd FileType elixir,eelixir
+                    \ omap <buffer> ar <Plug>(textobj-elixir-any-a)|
+                    \ xmap <buffer> ar <Plug>(textobj-elixir-any-a)|
+                    \ omap <buffer> ir <Plug>(textobj-elixir-any-i)|
+                    \ xmap <buffer> ir <Plug>(textobj-elixir-any-i)
     augroup END
 endif
 
