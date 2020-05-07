@@ -304,12 +304,6 @@ call plug#begin()
         Plug 'phongnh/lightline-settings.vim'
         " A light and configurable statusline/tabline plugin for Vim
         Plug 'itchyny/lightline.vim'
-    elseif s:Use('crystalline')
-        " My crystalline settings
-        let g:crystalline_powerline = g:zero_vim_powerline
-        Plug 'phongnh/crystalline-settings.vim'
-        " Functions for taking the monotony out of building your own fancy statusline in Vim
-        Plug 'rbong/vim-crystalline'
     else
         " My vim statusline
         Plug 'phongnh/vim-statusline'
