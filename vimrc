@@ -340,12 +340,7 @@ call plug#begin()
 " }
 
 " Fuzzy finder {
-    if s:Use('fzf')
-        " A command-line fuzzy finder written in Go
-        Plug 'junegunn/fzf', { 'do': './install --bin' }
-        Plug 'junegunn/fzf.vim'
-        Plug 'phongnh/fzf-settings.vim'
-    elseif s:Use('leaderf') && has('python3')
+    if s:Use('leaderf') && has('python3')
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
         " Solarized theme for LeaderF
@@ -360,24 +355,10 @@ call plug#begin()
         " Solarized theme for Clap Popup
         Plug 'phongnh/vim-clap-solarized-theme'
     else
-        if has('python3')
-            Plug 'raghur/fruzzy', { 'do': ':call fruzzy#install()' }
-        endif
-
-        if has('python3') && executable('cmake')
-            Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
-        endif
-
-        " Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
-        Plug 'ctrlpvim/ctrlp.vim'
-        Plug 'DavidEGx/ctrlp-smarttabs'
-        Plug 'tacahiroy/ctrlp-funky'
-        Plug 'mattn/ctrlp-register'
-        Plug 'LeafCage/yankround.vim'
-        Plug 'fisadev/vim-ctrlp-cmdpalette'
-        Plug 'ompugao/ctrlp-history'
-        Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
-        Plug 'phongnh/ctrlp-settings.vim'
+        " A command-line fuzzy finder written in Go
+        Plug 'junegunn/fzf', { 'do': './install --bin' }
+        Plug 'junegunn/fzf.vim'
+        Plug 'phongnh/fzf-settings.vim'
     endif
 " }
 
@@ -1629,42 +1610,126 @@ if s:IsPlugged('nerdtree')
     nnoremap <silent> <Leader>bg :NERDTreeVCS<CR>
 endif
 
-if s:IsPlugged('fzf')
-    " junegunn/fzf and junegunn/fzf.vim
-    let g:fzf_find_tool = g:zero_vim_find_tool
-    let g:fzf_settings_popup = g:zero_vim_popup
+if s:IsPlugged('LeaderF')
+    " Yggdroot/LeaderF
+    let g:leaderf_solarized_theme = g:zero_vim_solarized
+
+    let g:Lf_ShowDevIcons  = g:zero_vim_devicons
+    let g:Lf_WindowHeight  = 0.30
+    let g:Lf_MruMaxFiles   = 200
+    let g:Lf_CursorBlink   = 1
+    let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
+
+    " Powerline Separator
+    if g:zero_vim_powerline
+        let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2" }
+    else
+        let g:Lf_StlSeparator = { 'left': '', 'right': '' }
+    endif
+
+    " Popup Settings
+    let g:Lf_PopupShowStatusline  = 0
+    let g:Lf_PreviewInPopup       = 1
+    let g:Lf_PopupPreviewPosition = 'bottom'
+    if get(g:, 'Lf_Popup', 0)
+        let g:Lf_WindowPosition = 'popup'
+    endif
+
+    let g:Lf_UseCache       = 0  " rg/ag is enough fast, we don't need cache
+    let g:Lf_NeedCacheTime  = 10 " 10 seconds
+    let g:Lf_UseMemoryCache = 1
+
+    let g:Lf_NoChdir              = 1
+    let g:Lf_WorkingDirectoryMode = 'c'
+
+    let s:Lf_FindTools = {
+            \ 'rg': 'rg %s --color=never --no-ignore-vcs --hidden --files',
+            \ 'ag': 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""',
+            \ 'fd': 'fd --color=never --no-ignore-vcs --ignore-file ~/.ignore --hidden --type file . %s',
+            \ }
+
+    if g:zero_vim_find_tool == 'fd' && executable('fd')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
+    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['ag']
+    elseif executable('rg')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['rg']
+    elseif executable('ag')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['ag']
+    elseif executable('fd')
+        let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
+    endif
+
+    let g:Lf_RgConfig = [
+                \ '-H',
+                \ '--no-heading',
+                \ '--hidden',
+                \ '--vimgrep',
+                \ '--smart-case'
+                \ ]
+    if g:zero_vim_grep_ignore_vcs
+        call add(g:Lf_RgConfig, '--no-ignore-vcs')
+    endif
+
+    " These options are passed to external tools (rg, ag and pt, ...)
+    let g:Lf_FollowLinks = 0
+    let g:Lf_ShowHidden  = 0
+
+    let g:Lf_WildIgnore = {
+                \ 'dir': ['.svn', '.git', '.hg', '.node_modules', '.gems'],
+                \ 'file': ['*.sw?', '~$*', '*.bak', '*.exe', '*.o', '*.so', '*.py[co]']
+                \ }
+
+    let g:Lf_ShortcutF = '<Leader>f'
+    let g:Lf_ShortcutB = '<Leader>bb'
+
+    let g:Lf_CtagsFuncOpts = {
+                \ 'ruby': '--ruby-kinds=fFS',
+                \ }
+
+    function! s:LeaderfRoot() abort
+        let current = get(g:, 'Lf_WorkingDirectoryMode', 'c')
+        try
+            let g:Lf_WorkingDirectoryMode = 'Ac'
+            :LeaderfFile
+        finally
+            let g:Lf_WorkingDirectoryMode = current
+        endtry
+    endfunction
+    command! -bar -nargs=0 LeaderfRoot call <SID>LeaderfRoot()
 
     nmap <Leader><Leader> <Leader>f
 
-    nnoremap <silent> <Leader>f :Files<CR>
-    nnoremap <silent> <C-p>     :PFiles<CR>
-    nnoremap <silent> <Leader>p :PFiles<CR>
-    nnoremap <silent> <Leader>o :Buffers<CR>
-    nnoremap <silent> <Leader>O :History<CR>
-    nnoremap <silent> <Leader>d :Files <C-r>=expand("%:h")<CR><CR>
-    nnoremap <silent> <Leader>D :Files <C-r>=expand("%:h:h")<CR><CR>
+    nnoremap <silent> <C-p>     :LeaderfRoot<CR>
+    nnoremap <silent> <Leader>p :LeaderfRoot<CR>
+    nnoremap <silent> <Leader>o :LeaderfBuffer<CR>
+    nnoremap <silent> <Leader>O :LeaderfMru<CR>
+    nnoremap <silent> <Leader>d :LeaderfFile <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :LeaderfFile <C-r>=expand("%:h:h")<CR><CR>
 
-    nnoremap <silent> <Leader>\ :Tags!<CR>
+    nnoremap <silent> <Leader>\ :LeaderfTag<CR>
 
     " Buffer-related mappings
     nmap              <Leader>bh <Leader>d
     nmap              <Leader>bp <Leader>p
-    nnoremap <silent> <Leader>bb :Buffers<CR>
-    nnoremap <silent> <Leader>bl :BLines<CR>
-    nnoremap <silent> <Leader>bt :BTags<CR>
-    nnoremap <silent> <Leader>bo :BOutline<CR>
+    nnoremap <silent> <Leader>bl :LeaderfLine<CR>
+    nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
+    nnoremap <silent> <Leader>]  :LeaderfBufTagAll<CR>
 
-    nnoremap <silent> <Leader>b; :Filetypes<CR>
+    nnoremap <silent> <Leader>bj :LeaderfTabBufferAll<CR>
 
-    nnoremap <silent> <Leader>; :Commands<CR>
-    nnoremap <silent> <Leader>: :History:<CR>
-    nnoremap <silent> <Leader>/ :History/<CR>
+    nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
+    nnoremap <silent> <Leader>[  :LeaderfFunctionAll<CR>
 
-    nnoremap <silent> <Leader>q :cclose<CR>:Quickfix<CR>
-    nnoremap <silent> <Leader>l :lclose<CR>:LocationList<CR>
+    nnoremap <silent> <Leader>b; :Leaderf filetype<CR>
 
-    nnoremap <silent> <Leader>sg :Ag! <C-r><C-w><CR>
-    xnoremap <silent> <Leader>sg <Esc>:Ag! -F <C-r>=vim_helpers#SelectedText()<CR><CR>
+    nnoremap <silent> <Leader>; :LeaderfCommand<CR>
+    nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
+    nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
+
+    nmap              <Leader>sg <Plug>LeaderfRgCwordLiteralBoundary<CR>
+    vmap              <Leader>sg <Plug>LeaderfRgVisualLiteralNoBoundary<CR>
+    nnoremap <silent> <Leader>sa :Leaderf rg --recall<CR>
 endif
 
 if s:IsPlugged('vim-clap')
@@ -1790,191 +1855,42 @@ if s:IsPlugged('vim-clap')
     xnoremap <silent> <Leader>sg <Esc>:Clap grep ++query=<C-r>=vim_helpers#SelectedText()<CR><CR>
 endif
 
-if s:IsPlugged('LeaderF')
-    " Yggdroot/LeaderF
-    let g:leaderf_solarized_theme = g:zero_vim_solarized
-
-    let g:Lf_ShowDevIcons  = g:zero_vim_devicons
-    let g:Lf_WindowHeight  = 0.30
-    let g:Lf_MruMaxFiles   = 200
-    let g:Lf_CursorBlink   = 1
-    let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
-
-    " Powerline Separator
-    if g:zero_vim_powerline
-        let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2" }
-    else
-        let g:Lf_StlSeparator = { 'left': '', 'right': '' }
-    endif
-
-    " Popup Settings
-    let g:Lf_PopupShowStatusline  = 0
-    let g:Lf_PreviewInPopup       = 1
-    let g:Lf_PopupPreviewPosition = 'bottom'
-    if get(g:, 'Lf_Popup', 0)
-        let g:Lf_WindowPosition = 'popup'
-    endif
-
-    let g:Lf_UseCache       = 0  " rg/ag is enough fast, we don't need cache
-    let g:Lf_NeedCacheTime  = 10 " 10 seconds
-    let g:Lf_UseMemoryCache = 1
-
-    let g:Lf_NoChdir              = 1
-    let g:Lf_WorkingDirectoryMode = 'c'
-
-    let s:Lf_FindTools = {
-            \ 'rg': 'rg %s --color=never --no-ignore-vcs --hidden --files',
-            \ 'ag': 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""',
-            \ 'fd': 'fd --color=never --no-ignore-vcs --ignore-file ~/.ignore --hidden --type file . %s',
-            \ }
-
-    if g:zero_vim_find_tool == 'fd' && executable('fd')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
-    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['ag']
-    elseif executable('rg')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['rg']
-    elseif executable('ag')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['ag']
-    elseif executable('fd')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
-    endif
-
-    let g:Lf_RgConfig = [
-                \ '-H',
-                \ '--no-heading',
-                \ '--hidden',
-                \ '--vimgrep',
-                \ '--smart-case'
-                \ ]
-    if g:zero_vim_grep_ignore_vcs
-        call add(g:Lf_RgConfig, '--no-ignore-vcs')
-    endif
-
-    " These options are passed to external tools (rg, ag and pt, ...)
-    let g:Lf_FollowLinks = 0
-    let g:Lf_ShowHidden  = 0
-
-    let g:Lf_WildIgnore = {
-                \ 'dir': ['.svn', '.git', '.hg', '.node_modules', '.gems'],
-                \ 'file': ['*.sw?', '~$*', '*.bak', '*.exe', '*.o', '*.so', '*.py[co]']
-                \ }
-
-    let g:Lf_ShortcutF = '<Leader>f'
-    let g:Lf_ShortcutB = '<Leader>bb'
-
-    let g:Lf_CtagsFuncOpts = {
-                \ 'ruby': '--ruby-kinds=fFS',
-                \ }
-
-    function! s:LeaderfRoot() abort
-        let current = get(g:, 'Lf_WorkingDirectoryMode', 'c')
-        try
-            let g:Lf_WorkingDirectoryMode = 'Ac'
-            :LeaderfFile
-        finally
-            let g:Lf_WorkingDirectoryMode = current
-        endtry
-    endfunction
-    command! -bar -nargs=0 LeaderfRoot call <SID>LeaderfRoot()
+if s:IsPlugged('fzf')
+    " junegunn/fzf and junegunn/fzf.vim
+    let g:fzf_find_tool = g:zero_vim_find_tool
+    let g:fzf_settings_popup = g:zero_vim_popup
 
     nmap <Leader><Leader> <Leader>f
 
-    nnoremap <silent> <C-p>     :LeaderfRoot<CR>
-    nnoremap <silent> <Leader>p :LeaderfRoot<CR>
-    nnoremap <silent> <Leader>o :LeaderfBuffer<CR>
-    nnoremap <silent> <Leader>O :LeaderfMru<CR>
-    nnoremap <silent> <Leader>d :LeaderfFile <C-r>=expand("%:h")<CR><CR>
-    nnoremap <silent> <Leader>D :LeaderfFile <C-r>=expand("%:h:h")<CR><CR>
+    nnoremap <silent> <Leader>f :Files<CR>
+    nnoremap <silent> <C-p>     :PFiles<CR>
+    nnoremap <silent> <Leader>p :PFiles<CR>
+    nnoremap <silent> <Leader>o :Buffers<CR>
+    nnoremap <silent> <Leader>O :History<CR>
+    nnoremap <silent> <Leader>d :Files <C-r>=expand("%:h")<CR><CR>
+    nnoremap <silent> <Leader>D :Files <C-r>=expand("%:h:h")<CR><CR>
 
-    nnoremap <silent> <Leader>\ :LeaderfTag<CR>
+    nnoremap <silent> <Leader>\ :Tags!<CR>
 
     " Buffer-related mappings
     nmap              <Leader>bh <Leader>d
     nmap              <Leader>bp <Leader>p
-    nnoremap <silent> <Leader>bl :LeaderfLine<CR>
-    nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
-    nnoremap <silent> <Leader>]  :LeaderfBufTagAll<CR>
+    nnoremap <silent> <Leader>bb :Buffers<CR>
+    nnoremap <silent> <Leader>bl :BLines<CR>
+    nnoremap <silent> <Leader>bt :BTags<CR>
+    nnoremap <silent> <Leader>bo :BOutline<CR>
 
-    nnoremap <silent> <Leader>bj :LeaderfTabBufferAll<CR>
+    nnoremap <silent> <Leader>b; :Filetypes<CR>
 
-    nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
-    nnoremap <silent> <Leader>[  :LeaderfFunctionAll<CR>
+    nnoremap <silent> <Leader>; :Commands<CR>
+    nnoremap <silent> <Leader>: :History:<CR>
+    nnoremap <silent> <Leader>/ :History/<CR>
 
-    nnoremap <silent> <Leader>b; :Leaderf filetype<CR>
+    nnoremap <silent> <Leader>q :cclose<CR>:Quickfix<CR>
+    nnoremap <silent> <Leader>l :lclose<CR>:LocationList<CR>
 
-    nnoremap <silent> <Leader>; :LeaderfCommand<CR>
-    nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
-    nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
-
-    nmap              <Leader>sg <Plug>LeaderfRgCwordLiteralBoundary<CR>
-    vmap              <Leader>sg <Plug>LeaderfRgVisualLiteralNoBoundary<CR>
-    nnoremap <silent> <Leader>sa :Leaderf rg --recall<CR>
-endif
-
-if s:IsPlugged('ctrlp.vim')
-    " ctrlpvim/ctrlp.vim
-    let g:ctrlp_find_tool = g:zero_vim_find_tool
-    let g:ctrlp_cmd       = 'CtrlPRoot'
-
-    if s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'bin/cpsm_py.so') && s:NotUse('fruzzy')
-        " nixprime/cpsm
-        let g:cpsm_match_empty_query = 0
-        let g:cpsm_highlight_mode    = 'detailed'
-        let g:ctrlp_match_func       = { 'match': 'cpsm#CtrlPMatch' }
-    elseif s:IsPlugged('fruzzy')
-        " raghur/fruzzy
-        let g:fruzzy#usenative       = 1
-        let g:fruzzy#sortonempty     = 0
-        let ctrlp_match_current_file = 1
-        let g:ctrlp_match_func       = { 'match': 'fruzzy#ctrlp#matcher' }
-    endif
-
-    nmap <Leader><Leader> <Leader>f
-
-    nnoremap <silent> <Leader>f :CtrlP<CR>
-    nnoremap <silent> <Leader>p :CtrlPRoot<CR>
-    nnoremap <silent> <Leader>o :CtrlPBuffer<CR>
-    nnoremap <silent> <Leader>O :CtrlPMRUFiles<CR>
-    nnoremap <silent> <Leader>d :CtrlPCurFile<CR>
-    nnoremap <silent> <Leader>D :CtrlP <C-r>=expand("%:h:h")<CR><CR>
-
-    nnoremap <silent> <Leader>\ :CtrlPTag<CR>
-
-    nnoremap <silent> <Leader>q :cclose<CR>:CtrlPQuickfix<CR>
-
-    " Buffer-related mappings
-    nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
-    nmap              <Leader>bh <Leader>d
-    nmap              <Leader>bp <Leader>p
-    nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
-    nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
-    nnoremap <silent> <Leader>]  :CtrlPBufTagAll<CR>
-
-    " DavidEGx/ctrlp-smarttabs
-    nnoremap <silent> <Leader>bj :CtrlPSmartTabs<CR>
-
-    " tacahiroy/ctrlp-funky
-    nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
-    nnoremap <silent> <Leader>[  :CtrlPFunkyMulti<CR>
-
-    " mattn/ctrlp-register
-    nnoremap <silent> <Leader>Y :CtrlPRegister<CR>
-
-    " LeafCage/yankround.vim
-    let g:yankround_max_history = 100
-
-    nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
-
-    " fisadev/vim-ctrlp-cmdpalette
-    nnoremap <silent> <Leader>; :CtrlPCmdPalette<CR>
-
-    " ompugao/ctrlp-history
-    nnoremap <silent> <Leader>: :CtrlPCmdHistory<CR>
-    nnoremap <silent> <Leader>/ :CtrlPSearchHistory<CR>
-
-    " slimane/ctrlp-locationlist
-    nnoremap <silent> <Leader>l :lclose<CR>:CtrlPLocationlist<CR>
+    nnoremap <silent> <Leader>sg :Ag! <C-r><C-w><CR>
+    xnoremap <silent> <Leader>sg <Esc>:Ag! -F <C-r>=vim_helpers#SelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('ultisnips')
@@ -3594,7 +3510,7 @@ if s:IsPlugged('vim-go')
         nnoremap <buffer> g} :GoImport<Space>
         nnoremap <buffer> g{ :GoDrop<Space>
 
-        if s:IsPlugged('ctrlp.vim') || s:IsPlugged('fzf.vim')
+        if s:IsPlugged('fzf.vim')
             nnoremap <buffer> <silent> <LocalLeader>o :GoDecls<CR>
             nnoremap <buffer> <silent> <LocalLeader>O :GoDeclsDir<CR>
             nnoremap <buffer>          <LocalLeader>p :GoDeclsDir<Space>
