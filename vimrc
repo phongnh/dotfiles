@@ -2035,8 +2035,8 @@ let g:language_servers = {
             \   'cmd': ['pyls-ms'],
             \   'filetypes': ['python'],
             \ },
-            \ 'ra_lsp_server': {
-            \   'cmd': ['ra_lsp_server'],
+            \ 'rust-analyzer': {
+            \   'cmd': ['rust-analyzer'],
             \   'filetypes': ['rust'],
             \ },
             \ 'rls': {
@@ -2120,7 +2120,7 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'pyls',
                 \ 'gopls',
                 \ 'rls',
-                \ 'ra_lsp_server',
+                \ 'rust-analyzer',
                 \ 'elixir-ls',
                 \ 'lua-lsp',
                 \ 'metals',
@@ -2348,7 +2348,7 @@ if s:IsPlugged('vim-lamp')
             \ 'ccls',
             \ 'solargraph',
             \ 'scry',
-            \ 'ra_lsp_server',
+            \ 'rust-analyzer',
             \ 'elixir-ls',
             \ 'lua-lsp',
             \ 'metals',
