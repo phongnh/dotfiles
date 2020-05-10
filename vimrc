@@ -81,7 +81,6 @@ augroup END
 let g:zero_vim_devicons          = 0
 let g:zero_vim_true_color        = 0
 let g:zero_vim_powerline         = 0
-let g:zero_vim_popup             = 0
 let g:zero_vim_solarized         = 0
 let g:zero_vim_lsp_diagnostics   = 0
 let g:zero_vim_autolint          = 0
@@ -1631,7 +1630,7 @@ if s:IsPlugged('LeaderF')
     let g:Lf_PopupShowStatusline  = 0
     let g:Lf_PreviewInPopup       = 1
     let g:Lf_PopupPreviewPosition = 'bottom'
-    if get(g:, 'Lf_Popup', 0)
+    if exists('*popup_create') && has('patch-8.1.1615')
         let g:Lf_WindowPosition = 'popup'
     endif
 
@@ -1858,7 +1857,6 @@ endif
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
     let g:fzf_find_tool = g:zero_vim_find_tool
-    let g:fzf_settings_popup = g:zero_vim_popup
 
     nmap <Leader><Leader> <Leader>f
 
