@@ -2063,6 +2063,10 @@ let g:language_servers = {
             \   'cmd': ['srb', 'tc', '--typed', 'true', '--enable-all-experimental-lsp-features', '--lsp', '--disable-watchman', '--dir', '.'],
             \   'filetypes': ['ruby'],
             \ },
+            \ 'terraform-ls': {
+            \   'cmd': ['terraform-ls'],
+            \   'filetypes': ['terraform'],
+            \ },
             \ 'terraform-lsp': {
             \   'cmd': ['terraform-lsp'],
             \   'filetypes': ['terraform'],
@@ -2130,6 +2134,7 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'json-languageserver',
                 \ 'typescript-language-server',
                 \ 'docker-langserver',
+                \ 'terraform-ls',
                 \ 'terraform-lsp',
                 \ 'bash-language-server',
                 \ 'vim-language-server',
@@ -2681,6 +2686,7 @@ if s:IsPlugged('YouCompleteMe')
                     \ 'css-languageserver',
                     \ 'json-languageserver',
                     \ 'docker-langserver',
+                    \ 'terraform-ls',
                     \ 'terraform-lsp',
                     \ 'bash-language-server',
                     \ 'vim-language-server',
