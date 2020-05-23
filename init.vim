@@ -3204,11 +3204,44 @@ endif
 
 if s:IsPlugged('vim-gutentags')
     " ludovicchabant/vim-gutentags
+    function! s:IsUniversalCtags(ctags_path) abort
+        let cmd = printf("%s --version", a:ctags_path)
+        return system(cmd) =~# 'Universal Ctags'
+    endfunction
+
+    function! s:DetectUniversalCtags() abort
+        let ctags_paths = [
+                    \ 'ctags-universal',
+                    \ '/usr/local/bin/ctags',
+                    \ '/usr/bin/ctags',
+                    \ ]
+
+        for ctags_path in ctags_paths
+            if executable(ctags_path) && s:IsUniversalCtags(ctags_path)
+                return ctags_path
+            endif
+        endfor
+
+        return ''
+    endfunction
+
+    let s:universal_ctags_path = s:DetectUniversalCtags()
+    let s:has_universal_ctags = strlen(s:universal_ctags_path)
+
     " Enable only ctags module
     let g:gutentags_modules = ['ctags']
 
     " Generate datebases in my cache directory, prevent gtags files polluting my project
     let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+    " Universal Ctags
+    if s:has_universal_ctags
+        let g:gutentags_ctag_executable = s:universal_ctags_path
+
+        if filereadable(expand('~/.ctagsignore'))
+            let g:gutentags_ctags_exclude = [ '@' . expand('~/.ctagsignore') ]
+        endif
+    endif
 
     " Ignored file types
     let g:gutentags_exclude_filetypes = ['html', 'xml', 'css', 'sass', 'scss', 'coffee', 'less', 'eruby', 'haml', 'hamlc', 'text',  'git', 'gitcommit', 'fugitiveblame']
