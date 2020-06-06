@@ -2145,8 +2145,8 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'json-languageserver',
                 \ 'typescript-language-server',
                 \ 'docker-langserver',
-                \ 'terraform-ls',
                 \ 'terraform-lsp',
+                \ 'terraform-ls',
                 \ 'bash-language-server',
                 \ 'vim-language-server',
                 \ ])
