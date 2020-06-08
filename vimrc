@@ -679,15 +679,16 @@ Plug 'chrisbra/unicode.vim'
     endif
 " }
 
-" Fish Shell {
+" Others {
     if s:NotUse('syntax')
         Plug 'georgewitteman/vim-fish'
+        Plug 'hashivim/vim-terraform'
     endif
 " }
 
 if s:Use('syntax')
     " A solid language pack for Vim
-    let g:polyglot_disabled = ['fish']
+    let g:polyglot_disabled = ['fish', 'terraform']
     if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'javascript', 'jsx', 'json']) | endif
     if s:Use('coffee-script') | call add(g:polyglot_disabled, 'coffee-script') | endif
     if s:Use('ruby') | call extend(g:polyglot_disabled, ['ruby', 'yaml', 'yard', 'rspec']) | endif
