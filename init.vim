@@ -1534,12 +1534,13 @@ if s:IsPlugged('fern.vim')
     endfunction
 
     function! s:InitFern() abort
-        nmap     <buffer> <nowait> o  <Plug>(fern-open-or-expand)
-        nmap     <buffer> <nowait> p  <Plug>(fern-action-leave)
-        nmap     <buffer> <nowait> r  <Plug>(fern-action-reload)
-        nmap     <buffer> <nowait> I  <Plug>(fern-action-hidden-toggle)
-        nmap     <buffer> <nowait> cd <Plug>(fern-action-cd)
-        nnoremap <buffer> <nowait> q  :quit<CR>
+        nmap     <buffer> o  <Plug>(fern-open-or-expand)
+        nmap     <buffer> p  <Plug>(fern-action-leave)
+        nmap     <buffer> u  <Plug>(fern-action-leave)
+        nmap     <buffer> r  <Plug>(fern-action-reload)<Plug>(fern-action-redraw)
+        nmap     <buffer> I  <Plug>(fern-action-hidden-toggle)
+        nmap     <buffer> cd <Plug>(fern-action-cd)
+        nnoremap <buffer> q  :<C-u>quit<CR>
     endfunction
 
     augroup MyAutoCmd
