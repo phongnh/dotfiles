@@ -1692,6 +1692,11 @@ if s:IsPlugged('LeaderF')
 endif
 
 if s:IsPlugged('vim-clap')
+    " liuchenxu/vista.vim
+    if executable('ctags-universal')
+        let g:vista_ctags_executable = 'ctags-universal'
+    endif
+
     " liuchengxu/vim-clap
     let g:clap_solarized_theme = g:zero_vim_solarized
 
@@ -1750,7 +1755,7 @@ if s:IsPlugged('vim-clap')
 
     command! -bang -nargs=? -complete=dir ClapFiles execute printf('%s files ++finder=%s', <bang>0 ? 'Clap!' : 'Clap', s:clap_find_tool) <q-args>
 
-    function! s:clap_find_project_dir(starting_path) abort
+    function! s:ClapFindProjectDir(starting_path) abort
         if empty(a:starting_path)
             return ''
         endif
@@ -1772,7 +1777,7 @@ if s:IsPlugged('vim-clap')
         return ''
     endfunction
 
-    command! -bang -nargs=0 ClapRoot execute (<bang>0 ? 'ClapFiles!' : 'ClapFiles') s:clap_find_project_dir(expand('%:p:h'))
+    command! -bang -nargs=0 ClapRoot execute (<bang>0 ? 'ClapFiles!' : 'ClapFiles') s:ClapFindProjectDir(expand('%:p:h'))
 
     nmap <Leader><Leader> <Leader>f
 
