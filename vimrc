@@ -3343,7 +3343,7 @@ if s:IsPlugged('vim-fugitive')
     nnoremap <silent> <Leader>gb :Git blame<CR>
     nnoremap          <Leader>ge :Gedit<Space>
     nnoremap <silent> <Leader>gr :Gread<CR>
-    nnoremap <silent> <Leader>gw :Gwrite<CR>
+    nnoremap <silent> <Leader>gw :Gwq<CR>
     nnoremap <silent> <Leader>gf :Git fetch<CR>
     nnoremap <silent> <Leader>gp :Git push<CR>
     nnoremap <silent> <Leader>gu :Git pull --rebase<CR>
@@ -3356,6 +3356,8 @@ endif
 
 if s:IsPlugged('git-messenger.vim')
     " rhysd/git-messenger.vim
+    nmap <C-w>m <Plug>(git-messenger)
+
     augroup MyAutoCmd
         " Hack for the case Git Messenger popup closed immediately after it opened on Vim 8.2
         autocmd FileType gitmessengerpopup setlocal updatetime=300000
