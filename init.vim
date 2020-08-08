@@ -2162,8 +2162,8 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'json-languageserver',
                 \ 'typescript-language-server',
                 \ 'docker-langserver',
-                \ 'terraform-lsp',
                 \ 'terraform-ls',
+                \ 'terraform-lsp',
                 \ 'bash-language-server',
                 \ 'vim-language-server',
                 \ ])
@@ -2376,35 +2376,37 @@ endif
 
 if s:IsPlugged('vim-lamp')
     " hrsh7th/vim-lamp
-    let s:lamp_enabled_language_servers = s:CheckLanguageServers([
-            \ 'clangd',
-            \ 'ccls',
-            \ 'solargraph',
-            \ 'scry',
-            \ 'rust-analyzer',
-            \ 'elixir-ls',
-            \ 'lua-lsp',
-            \ 'metals',
-            \ 'docker-langserver',
-            \ 'terraform-lsp',
-            \ 'bash-language-server',
-            \ ])
-
     " Initialize Servers
     function! s:OnInitializedLamp() abort
         " built-in setting
+        call lamp#builtin#pyls()
         call lamp#builtin#gopls()
         call lamp#builtin#rls()
-        call lamp#builtin#pyls()
         call lamp#builtin#yaml_language_server()
-        call lamp#builtin#typescript_language_server()
         call lamp#builtin#html_languageserver()
         call lamp#builtin#css_languageserver()
         call lamp#builtin#json_languageserver()
+        call lamp#builtin#typescript_language_server()
         call lamp#builtin#vim_language_server()
 
+        let l:lamp_disabled_language_servers = [
+                    \ 'pyls',
+                    \ 'gopls',
+                    \ 'rls',
+                    \ 'yaml-language-server',
+                    \ 'html-languageserver',
+                    \ 'css-languageserver',
+                    \ 'json-languageserver',
+                    \ 'typescript-language-server',
+                    \ 'vim-language-server',
+                    \ ]
+
         " Add some language servers
-        for l:name in s:lamp_enabled_language_servers
+        for l:name in s:GetEnabledLanguageServers()
+            if index(l:lamp_disabled_language_servers, l:name) > -1
+                continue
+            endif
+
             let l:server = g:language_servers[l:name]
 
             call lamp#register(l:name, {
@@ -2696,26 +2698,21 @@ if s:IsPlugged('YouCompleteMe')
     if !s:IsLSPEnabled()
         let g:ycm_language_server = []
 
-        let s:ycm_enabled_language_servers = s:CheckLanguageServers([
-                    \ 'solargraph',
-                    \ 'scry',
-                    \ 'pyls',
-                    \ 'elixir-ls',
-                    \ 'lua-lsp',
-                    \ 'metals',
-                    \ 'yaml-language-server',
-                    \ 'html-languageserver',
-                    \ 'css-languageserver',
-                    \ 'json-languageserver',
-                    \ 'docker-langserver',
-                    \ 'terraform-ls',
-                    \ 'terraform-lsp',
-                    \ 'bash-language-server',
-                    \ 'vim-language-server',
-                    \ ])
-
         function! s:SetupYcmLanguageServers() abort
-            for l:name in s:ycm_enabled_language_servers
+            let l:ycm_disabled_language_servers = [
+                        \ 'clangd',
+                        \ 'ccls',
+                        \ 'gopls',
+                        \ 'rls',
+                        \ 'rust-analyzer',
+                        \ 'typescript-language-server',
+                        \ ]
+
+            for l:name in s:GetEnabledLanguageServers()
+                if index(l:ycm_disabled_language_servers, l:name) > -1
+                    continue
+                endif
+
                 let l:server = g:language_servers[l:name]
 
                 let l:ycm_server = {
