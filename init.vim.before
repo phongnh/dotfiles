@@ -1,5 +1,6 @@
 let g:zero_vim_groups = [
             \ 'grep',
+            \ 'multiple-cursors',
             \ 'text-objects',
             \ 'lightline',
             \ 'fzf',
@@ -21,7 +22,7 @@ let g:zero_vim_groups = [
             \ 'go',
             \ ]
 
-let g:zero_vim_devicons        = index(['Kitty', 'Alacritty'], $TERM_PROGRAM) > -1
+let g:zero_vim_devicons        = index(['Kitty', 'Alacritty', 'iTerm.app'], $TERM_PROGRAM) > -1
 let g:zero_vim_true_color      = ($COLORTERM ==# 'truecolor' || $COLORTERM ==# '24bit')
 let g:zero_vim_powerline       = 1
 let g:zero_vim_lsp_diagnostics = 0

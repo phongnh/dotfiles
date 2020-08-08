@@ -246,8 +246,13 @@ call plug#begin()
     " insert or delete brackets, parens, quotes in pair
     Plug 'jiangmiao/auto-pairs'
 
-    " True Sublime Text style multiple selections for Vim
-    Plug 'terryma/vim-multiple-cursors'
+    if s:Use('multiple-cursors')
+        " True Sublime Text style multiple selections for Vim
+        Plug 'terryma/vim-multiple-cursors'
+    else
+        " Multiple cursors plugin for vim/neovim
+        Plug 'mg979/vim-visual-multi'
+    endif
 
     " emmet for vim: http://emmet.io
     Plug 'mattn/emmet-vim'
@@ -1383,81 +1388,108 @@ let g:AutoPairsShortcutJump       = '<M-n>'
 let g:AutoPairsShortcutBackInsert = ''
 let g:AutoPairsMoveCharacter      = ''
 
-" terryma/vim-multiple-cursors
 if s:IsPlugged('deoplete.nvim')
-    " Called once right before you start selecting multiple cursors
-    function! Multiple_cursors_before_hook() abort
+    function! Disable_Completion_Hook() abort
         call deoplete#custom#buffer_option('auto_complete', v:false)
     endfunction
 
-    function! Multiple_cursors_after_hook() abort
+    function! Enable_Completion_Hook() abort
         call deoplete#custom#buffer_option('auto_complete', v:true)
     endfunction
 elseif s:IsPlugged('coc.nvim')
-    function! Multiple_cursors_before_hook() abort
+    function! Disable_Completion_Hook() abort
         let b:coc_suggest_disable = 1
     endfunction
 
-    function! Multiple_cursors_after_hook() abort
+    function! Enable_Completion_Hook() abort
         let b:coc_suggest_disable = 0
     endfunction
 elseif s:IsPlugged('YouCompleteMe')
-    function! Multiple_cursors_before_hook() abort
+    function! Disable_Completion_Hook() abort
         let g:ycm_auto_trigger = 0
     endfunction
 
-    function! Multiple_cursors_after_hook() abort
+    function! Enable_Completion_Hook() abort
         let g:ycm_auto_trigger = 1
     endfunction
 elseif s:IsPlugged('asyncomplete.vim')
-    function! Multiple_cursors_before_hook() abort
+    function! Disable_Completion_Hook() abort
         let g:asyncomplete_auto_popup = 0
     endfunction
 
-    function! Multiple_cursors_after_hook() abort
+    function! Enable_Completion_Hook() abort
         let g:asyncomplete_auto_popup = 1
     endfunction
 elseif s:IsPlugged('ncm2')
-    function! Multiple_cursors_before_hook() abort
-        call ncm2#lock('vim-multiple-cursors')
+    function! Disable_Completion_Hook() abort
+        let b:ncm2_enable = 0
+        call ncm2#lock('vim-visual-multi')
     endfunction
 
-    function! Multiple_cursors_after_hook() abort
-        call ncm2#unlock('vim-multiple-cursors')
+    function! Enable_Completion_Hook() abort
+        let b:ncm2_enable = 1
+        call ncm2#unlock('vim-visual-multi')
     endfunction
 elseif s:IsPlugged('completor.vim')
-    function! Multiple_cursors_before_hook() abort
+    function! Disable_Completion_Hook() abort
         silent! CompletorDisable
     endfunction
 
-    function! Multiple_cursors_after_hook() abort
+    function! Enable_Completion_Hook() abort
         silent! CompletorEnable
     endfunction
 elseif s:IsPlugged('vim-mucomplete')
-    function! Multiple_cursors_before_hook() abort
+    function! Disable_Completion_Hook() abort
         silent! MUcompleteAutoOff
     endfunction
 
-    function! Multiple_cursors_after_hook() abort
+    function! Enable_Completion_Hook() abort
         silent! MUcompleteAutoOn
     endfunction
 else
-    function!  Multiple_cursors_before_hook() abort
+    function! Disable_Completion_Hook() abort
     endfunction
 
-    function!  Multiple_cursors_after_hook() abort
+    function! Enable_Completion_Hook() abort
     endfunction
 endif
 
-function! Multiple_cursors_before() abort
-    let b:autopairs_enabled = 0
-    call Multiple_cursors_before_hook()
-endfunction
+if s:IsPlugged('vim-multiple-cursors')
+    " terryma/vim-multiple-cursors
+    function! Multiple_cursors_before() abort
+        let b:autopairs_enabled = 0
+        call Disable_Completion_Hook()
+    endfunction
 
-function! Multiple_cursors_after() abort
-    let b:autopairs_enabled = 1
-    call Multiple_cursors_after_hook()
-endfunction
+    function! Multiple_cursors_after() abort
+        let b:autopairs_enabled = 1
+        call Enable_Completion_Hook()
+    endfunction
+endif
+
+if s:IsPlugged('vim-visual-multi')
+    " mg979/vim-visual-multi
+    let g:VM_custom_remaps = { '<C-p>': 'N', '<C-x>': 'q', '<C-c>': '<Esc>' }
+
+    function! VM_Start() abort
+        let b:autopairs_enabled = 0
+        call Disable_Completion_Hook()
+    endfunction
+
+    function! VM_Exit() abort
+        let b:autopairs_enabled = 1
+        call Enable_Completion_Hook()
+    endfunction
+
+    function! VM_Mappings() abort
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd User visual_multi_start call VM_Start()
+        autocmd User visual_multi_exit call VM_Exit()
+        autocmd User visual_multi_mappings call VM_Mappings()
+    augroup end
+endif
 
 " mattn/emmet-vim
 let g:user_emmet_leader_key = '<C-y>'
