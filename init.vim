@@ -358,7 +358,7 @@ call plug#begin()
         Plug 'honza/vim-snippets'
         Plug 'Shougo/neosnippet-snippets'
         Plug 'Shougo/neosnippet.vim'
-    elseif s:IsPlugged('vsnip')
+    elseif s:Use('vsnip')
         " Support LSP-client (vim-lsp, vim-lsc, LanguageClient-neovim, nvim-lsp and vim-lamp)
         " and completion-engine (deoplete.vim, asyncomplete.vim, vim-mucomplete and completion-nnvim)
         Plug 'hrsh7th/vim-vsnip'
