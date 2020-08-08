@@ -1529,7 +1529,7 @@ if s:IsPlugged('fern.vim')
     endfunction
 
     function! s:InitFern() abort
-        nmap     <buffer> o  <Plug>(fern-open-or-expand)
+        nmap     <buffer> o  <Plug>(fern-action-open-or-expand)
         nmap     <buffer> p  <Plug>(fern-action-leave)
         nmap     <buffer> u  <Plug>(fern-action-leave)
         nmap     <buffer> r  <Plug>(fern-action-reload)<Plug>(fern-action-redraw)
