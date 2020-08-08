@@ -642,7 +642,7 @@ Plug 'chrisbra/unicode.vim'
 
 " Crystal {
     if s:Use('crystal')
-        Plug 'rhysd/vim-crystal'
+        Plug 'vim-crystal/vim-crystal'
         Plug 'elorest/vim-slang'
     endif
 " }
