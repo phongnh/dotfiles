@@ -1391,71 +1391,13 @@ let g:AutoPairsShortcutJump       = '<M-n>'
 let g:AutoPairsShortcutBackInsert = ''
 let g:AutoPairsMoveCharacter      = ''
 
-if s:IsPlugged('deoplete.nvim')
-    function! Disable_Completion_Hook() abort
-        call deoplete#custom#buffer_option('auto_complete', v:false)
-    endfunction
+" Autocompletion plugins should define these functions to
+" integrate with vim-visual-multi / vim-multiple-cursors plugin
+function! Disable_Completion_Hook() abort
+endfunction
 
-    function! Enable_Completion_Hook() abort
-        call deoplete#custom#buffer_option('auto_complete', v:true)
-    endfunction
-elseif s:IsPlugged('coc.nvim')
-    function! Disable_Completion_Hook() abort
-        let b:coc_suggest_disable = 1
-    endfunction
-
-    function! Enable_Completion_Hook() abort
-        let b:coc_suggest_disable = 0
-    endfunction
-elseif s:IsPlugged('YouCompleteMe')
-    function! Disable_Completion_Hook() abort
-        let g:ycm_auto_trigger = 0
-    endfunction
-
-    function! Enable_Completion_Hook() abort
-        let g:ycm_auto_trigger = 1
-    endfunction
-elseif s:IsPlugged('asyncomplete.vim')
-    function! Disable_Completion_Hook() abort
-        let g:asyncomplete_auto_popup = 0
-    endfunction
-
-    function! Enable_Completion_Hook() abort
-        let g:asyncomplete_auto_popup = 1
-    endfunction
-elseif s:IsPlugged('ncm2')
-    function! Disable_Completion_Hook() abort
-        let b:ncm2_enable = 0
-        call ncm2#lock('vim-visual-multi')
-    endfunction
-
-    function! Enable_Completion_Hook() abort
-        let b:ncm2_enable = 1
-        call ncm2#unlock('vim-visual-multi')
-    endfunction
-elseif s:IsPlugged('completor.vim')
-    function! Disable_Completion_Hook() abort
-        silent! CompletorDisable
-    endfunction
-
-    function! Enable_Completion_Hook() abort
-        silent! CompletorEnable
-    endfunction
-elseif s:IsPlugged('vim-mucomplete')
-    function! Disable_Completion_Hook() abort
-        silent! MUcompleteAutoOff
-    endfunction
-
-    function! Enable_Completion_Hook() abort
-        silent! MUcompleteAutoOn
-    endfunction
-else
-    function! Disable_Completion_Hook() abort
-    endfunction
-
-    function! Enable_Completion_Hook() abort
-    endfunction
-endif
+function! Enable_Completion_Hook() abort
+endfunction
 
 if s:IsPlugged('vim-multiple-cursors')
     " terryma/vim-multiple-cursors
@@ -2557,6 +2499,15 @@ if s:IsPlugged('deoplete.nvim')
     inoremap          <expr> <C-x><C-l> deoplete#complete_common_string()
     inoremap <silent> <expr> <C-x><C-f> deoplete#manual_complete('file')
     inoremap          <expr> <C-g><C-g> deoplete#manual_complete()
+
+    " Integrate with vim-visual-multi / vim-multiple-cursors plugin
+    function! Disable_Completion_Hook() abort
+        call deoplete#custom#buffer_option('auto_complete', v:false)
+    endfunction
+
+    function! Enable_Completion_Hook() abort
+        call deoplete#custom#buffer_option('auto_complete', v:true)
+    endfunction
 endif
 
 if s:IsPlugged('coc.nvim')
@@ -2681,6 +2632,15 @@ if s:IsPlugged('coc.nvim')
         autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
         autocmd CursorHold * silent call CocActionAsync('highlight')
     augroup END
+
+    " Integrate with vim-visual-multi / vim-multiple-cursors plugin
+    function! Disable_Completion_Hook() abort
+        let b:coc_suggest_disable = 1
+    endfunction
+
+    function! Enable_Completion_Hook() abort
+        let b:coc_suggest_disable = 0
+    endfunction
 endif
 
 if s:IsPlugged('YouCompleteMe')
@@ -2754,6 +2714,15 @@ if s:IsPlugged('YouCompleteMe')
 
         call s:SetupYcmLanguageServers()
     endif
+
+    " Integrate with vim-visual-multi / vim-multiple-cursors plugin
+    function! Disable_Completion_Hook() abort
+        let g:ycm_auto_trigger = 0
+    endfunction
+
+    function! Enable_Completion_Hook() abort
+        let g:ycm_auto_trigger = 1
+    endfunction
 endif
 
 if s:IsPlugged('asyncomplete.vim')
@@ -2849,6 +2818,15 @@ if s:IsPlugged('asyncomplete.vim')
     augroup MyAutoCmd
         autocmd User asyncomplete_setup call s:SetupAsyncomplete()
     augroup END
+
+    " Integrate with vim-visual-multi / vim-multiple-cursors plugin
+    function! Disable_Completion_Hook() abort
+        let g:asyncomplete_auto_popup = 0
+    endfunction
+
+    function! Enable_Completion_Hook() abort
+        let g:asyncomplete_auto_popup = 1
+    endfunction
 endif
 
 if s:IsPlugged('ncm2')
@@ -2892,6 +2870,17 @@ if s:IsPlugged('ncm2')
 
     " <S-Tab>: completion back
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " Integrate with vim-visual-multi / vim-multiple-cursors plugin
+    function! Disable_Completion_Hook() abort
+        let b:ncm2_enable = 0
+        call ncm2#lock('vim-visual-multi')
+    endfunction
+
+    function! Enable_Completion_Hook() abort
+        let b:ncm2_enable = 1
+        call ncm2#unlock('vim-visual-multi')
+    endfunction
 endif
 
 if s:IsPlugged('completor.vim')
@@ -2952,6 +2941,15 @@ if s:IsPlugged('completor.vim')
         command! CompletorDefinition call completor#do('definition')
         command! CompletorFormat     call completor#do('format')
     endif
+
+    " Integrate with vim-visual-multi / vim-multiple-cursors plugin
+    function! Disable_Completion_Hook() abort
+        silent! CompletorDisable
+    endfunction
+
+    function! Enable_Completion_Hook() abort
+        silent! CompletorEnable
+    endfunction
 endif
 
 if s:IsPlugged('vim-mucomplete')
@@ -2984,6 +2982,15 @@ if s:IsPlugged('vim-mucomplete')
     else
         imap <expr> <CR> pumvisible() ? "<C-y><Plug>(MUcompleteCR)" : "<Plug>(MUcompleteCR)"
     endif
+
+    " Integrate with vim-visual-multi / vim-multiple-cursors plugin
+    function! Disable_Completion_Hook() abort
+        silent! MUcompleteAutoOff
+    endfunction
+
+    function! Enable_Completion_Hook() abort
+        silent! MUcompleteAutoOn
+    endfunction
 endif
 
 if s:IsPlugged('VimCompletesMe')
