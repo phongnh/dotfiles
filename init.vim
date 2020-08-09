@@ -358,21 +358,20 @@ call plug#begin()
         Plug 'honza/vim-snippets'
         Plug 'Shougo/neosnippet-snippets'
         Plug 'Shougo/neosnippet.vim'
-    elseif s:Use('vsnip')
-        " Support LSP-client (vim-lsp, vim-lsc, LanguageClient-neovim, nvim-lsp and vim-lamp)
-        " and completion-engine (deoplete.vim, asyncomplete.vim, vim-mucomplete and completion-nnvim)
-        Plug 'hrsh7th/vim-vsnip'
-        Plug 'hrsh7th/vim-vsnip-integ'
     endif
 
     if s:Use('coc')
         " coc.nvim plugin has both autocomplete and lsp functions
     elseif s:Use('nvim-lsp') && has('nvim-0.5-nightly')
         Plug 'neovim/nvim-lsp'
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('lsp') || s:Use('nvim-lsp')
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/vim-lsp'
         Plug 'mattn/vim-lsp-settings'
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
         if s:IsPlugged('ultisnips')
             Plug 'thomasfaingnaert/vim-lsp-snippets'
             Plug 'thomasfaingnaert/vim-lsp-ultisnips'
@@ -382,10 +381,16 @@ call plug#begin()
         endif
     elseif s:Use('lsc')
         Plug 'natebosch/vim-lsc'
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('LanguageClient')
         Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('lamp')
         Plug 'hrsh7th/vim-lamp'
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     endif
 
     if s:Use('deoplete') && has('python3')
@@ -1964,21 +1969,6 @@ if s:IsPlugged('neosnippet.vim')
     smap <Tab> <Plug>(neosnippet_jump)
 endif
 
-if s:IsPlugged('vim-vsnip')
-    " hrsh7th/vim-vsnip
-    " Expand
-    imap <expr> <C-\> vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-\>'
-    smap <expr> <C-\> vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-\>'
-    " Expand or jump
-    imap <expr> <C-k> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-k>'
-    smap <expr> <C-k> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-k>'
-    " Jump forward or backward
-    imap <expr> <C-j> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<C-j>'
-    smap <expr> <C-j> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<C-j>'
-    imap <expr> <C-z> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<C-z>'
-    smap <expr> <C-z> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<C-z>'
-endif
-
 if s:IsPlugged('nvim-lsp')
     " neovim/nvim-lsp
     :lua << EOF
@@ -2494,6 +2484,12 @@ if s:IsPlugged('vim-lamp')
     augroup END
 endif
 
+if s:IsPlugged('vim-vsnip')
+    " hrsh7th/vim-vsnip
+    imap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : '<C-\>'
+    smap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : '<C-\>'
+endif
+
 if s:IsPlugged('deoplete.nvim')
     " Shougo/deoplete.nvim
     let g:deoplete#enable_at_startup = 1
@@ -2572,6 +2568,7 @@ if s:IsPlugged('deoplete.nvim')
     inoremap          <expr> <C-x><C-l> deoplete#complete_common_string()
     inoremap <silent> <expr> <C-x><C-f> deoplete#manual_complete('file')
     inoremap          <expr> <C-g><C-g> deoplete#manual_complete()
+
 endif
 
 if s:IsPlugged('coc.nvim')
