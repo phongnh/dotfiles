@@ -2037,6 +2037,7 @@ let g:language_servers = {
             \ 'solargraph': {
             \   'cmd': ['solargraph', 'stdio'],
             \   'filetypes': ['ruby'],
+            \   'root_markers': ['Gemfile', 'Gemfile.lock']
             \ },
             \ 'sql-language-server': {
             \   'cmd': ['sql-language-server', 'up', '--method', 'stdio'],
@@ -2621,6 +2622,10 @@ if s:IsPlugged('YouCompleteMe')
                             \ 'cmdline':   l:server['cmd'],
                             \ 'filetypes': l:server['filetypes'],
                             \ }
+
+                if has_key(l:server, 'root_markers')
+                    let l:ycm_server['project_root_files'] = l:server['root_markers']
+                endif
 
                 call add(g:ycm_language_server, l:ycm_server)
             endfor
