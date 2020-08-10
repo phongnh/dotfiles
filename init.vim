@@ -1330,8 +1330,15 @@ nmap <Leader>sw ysiw
 nmap <Leader>sW ysiW
 
 " tpope/vim-abolish
-nnoremap <Leader>sv :%Subvert//gc<Left><Left><Left>
-xnoremap <Leader>sv :Subvert//gc<Left><Left><Left>
+nnoremap <Leader>V  :%Subvert//gc<Left><Left><Left>
+nmap     <Leader>rv <Leader>V
+nnoremap <Leader>sv :%Subvert/<C-r>=vim_helpers#CwordForSubstitute()<CR>/gc<Left><Left><Left>
+nmap     <Leader>rc <Leader>sv
+
+xnoremap <Leader>V  :Subvert//gc<Left><Left><Left>
+xmap     <Leader>rv <Leader>V
+xnoremap <Leader>sv <Esc>:%Subvert/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xmap     <Leader>rc <Leader>sv
 
 " jiangmiao/auto-pairs
 let g:AutoPairsFlyMode            = 0
