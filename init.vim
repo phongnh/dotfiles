@@ -2759,10 +2759,12 @@ if s:IsPlugged('asyncomplete.vim')
     " Integrate with vim-visual-multi / vim-multiple-cursors plugin
     function! Disable_Completion_Hook() abort
         let g:asyncomplete_auto_popup = 0
+        let b:asyncomplete_enable = 0
     endfunction
 
     function! Enable_Completion_Hook() abort
         let g:asyncomplete_auto_popup = 1
+        let b:asyncomplete_enable = 1
     endfunction
 endif
 
