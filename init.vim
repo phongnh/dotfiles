@@ -1783,17 +1783,21 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <Leader>d :ClapFiles <C-r>=expand("%:h")<CR><CR>
     nnoremap <silent> <Leader>D :ClapFiles <C-r>=expand("%:h:h")<CR><CR>
 
-    nnoremap <silent> <Leader>\ :Clap tags<CR>
+    nnoremap <silent> <Leader>\ :Clap proj_tags<CR>
+
+    nnoremap <silent> <Leader>. :Clap filer<CR>
 
     " Buffer-related mappings
     nmap              <Leader>bh <Leader>d
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :Clap blines<CR>
     nnoremap <silent> <Leader>bt :Clap tags<CR>
+    nnoremap <silent> <Leader>]  :Clap proj_tags<CR>
 
     nnoremap <silent> <Leader>bj :Clap windows<CR>
 
     nnoremap <silent> <Leader>bo :Clap tags<CR>
+    nnoremap <silent> <Leader>[  :Clap proj_tags<CR>
 
     nnoremap <silent> <Leader>b; :Clap filetypes<CR>
 
@@ -1809,8 +1813,11 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <Leader>q :cclose<CR>:Clap quickfix<CR>
     nnoremap <silent> <Leader>l :lclose<CR>:Clap loclist<CR>
 
-    nnoremap <silent> <Leader>sg :Clap grep ++query=<cword><CR>
-    xnoremap <silent> <Leader>sg <Esc>:Clap grep ++query=<C-r>=vim_helpers#SelectedText()<CR><CR>
+    nnoremap <silent> <Leader>sg :Clap grep2 ++query=<cword><CR>
+    xnoremap <silent> <Leader>sg <Esc>:Clap grep2 ++query=@visual<CR>
+
+    nnoremap <silent> <Leader>sa :Clap grep ++query=<cword><CR>
+    xnoremap <silent> <Leader>sa <Esc>:Clap grep ++query=@visual<CR>
 endif
 
 if s:IsPlugged('fzf')
