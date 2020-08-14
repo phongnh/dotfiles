@@ -1625,8 +1625,16 @@ if s:IsPlugged('LeaderF')
     let g:Lf_ShortcutF = '<Leader>f'
     let g:Lf_ShortcutB = '<Leader>bb'
 
+    if executable('ctags-universal')
+        let g:Lf_Ctags = 'ctags-universal'
+    endif
     let g:Lf_CtagsFuncOpts = {
                 \ 'ruby': '--ruby-kinds=fFS',
+                \ }
+
+    let g:Lf_CommandMap = {
+                \ '<F5>':  [ '<F5>', '<C-g>' ],
+                \ '<C-o>': [ '<C-o', '<C-e>' ],
                 \ }
 
     function! s:LeaderfRoot() abort
@@ -1668,6 +1676,9 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>; :LeaderfCommand<CR>
     nnoremap <silent> <Leader>: :LeaderfHistoryCmd<CR>
     nnoremap <silent> <Leader>/ :LeaderfHistorySearch<CR>
+
+    nnoremap <silent> <Leader>q :cclose<CR>:LeaderfQuickFix<CR>
+    nnoremap <silent> <Leader>l :lclose<CR>:LeaderfLocList<CR>
 
     nmap              <Leader>sg <Plug>LeaderfRgCwordLiteralBoundary<CR>
     vmap              <Leader>sg <Plug>LeaderfRgVisualLiteralNoBoundary<CR>
