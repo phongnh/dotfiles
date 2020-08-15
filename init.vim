@@ -2721,35 +2721,29 @@ if s:IsPlugged('asyncomplete.vim')
     inoremap <expr> <C-e> pumvisible() ? asyncomplete#cancel_popup() : "\<C-e>"
 
     function! s:SetupAsyncomplete() abort
-        if s:IsPlugged('asyncomplete-buffer.vim')
-            " prabirshrestha/asyncomplete-buffer.vim
-            call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-                        \ 'name':      'buffer',
-                        \ 'whitelist': ['*'],
-                        \ 'blacklist': ['go'],
-                        \ 'completor': function('asyncomplete#sources#buffer#completor'),
-                        \ }))
-        endif
+        " prabirshrestha/asyncomplete-buffer.vim
+        call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+                    \ 'name':      'buffer',
+                    \ 'whitelist': ['*'],
+                    \ 'blacklist': ['go'],
+                    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+                    \ }))
 
-        if s:IsPlugged('asyncomplete-file.vim')
-            " prabirshrestha/asyncomplete-file.vim
-            call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-                        \ 'name':      'file',
-                        \ 'whitelist': ['*'],
-                        \ 'priority':  10,
-                        \ 'completor': function('asyncomplete#sources#file#completor'),
-                        \ }))
-        endif
+        " prabirshrestha/asyncomplete-file.vim
+        call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+                    \ 'name':      'file',
+                    \ 'whitelist': ['*'],
+                    \ 'priority':  10,
+                    \ 'completor': function('asyncomplete#sources#file#completor'),
+                    \ }))
 
-        if s:IsPlugged('asyncomplete-omni.vim')
-            " yami-beta/asyncomplete-omni.vim
-            call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-                        \ 'name':      'omni',
-                        \ 'whitelist': ['*'],
-                        \ 'blacklist': ['c', 'cpp', 'html', 'ruby'],
-                        \ 'completor': function('asyncomplete#sources#omni#completor'),
-                        \ }))
-        endif
+        " yami-beta/asyncomplete-omni.vim
+        call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+                    \ 'name':      'omni',
+                    \ 'whitelist': ['*'],
+                    \ 'blacklist': ['c', 'cpp', 'html', 'ruby'],
+                    \ 'completor': function('asyncomplete#sources#omni#completor'),
+                    \ }))
 
         if s:IsPlugged('asyncomplete-ultisnips.vim')
             " prabirshrestha/asyncomplete-ultisnips.vim
