@@ -130,7 +130,7 @@ endfunction
 
 " Check if LSP is enabled
 function! s:IsLSPEnabled() abort
-    return s:IsPlugged('coc.nvim') || s:IsPlugged('nvim-lsp') || s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim') || s:IsPlugged('vim-lamp')
+    return s:IsPlugged('coc.nvim') || s:IsPlugged('nvim-lsp') || s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim')
 endfunction
 
 " Find and source .init.vim.before from root to current folder
