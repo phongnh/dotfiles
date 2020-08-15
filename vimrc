@@ -1541,6 +1541,16 @@ if s:IsPlugged('fern.vim')
     " lambdalisue/fern.vim
     let g:fern#drawer_width = 35
 
+    if s:IsPlugged('fern-renderer-nerdfont.vim')
+        let g:fern#renderer#nerdfont#leading = '   '
+    else
+        let g:fern#renderer#default#root_symbol      = ''
+        let g:fern#renderer#default#leading          = '  '
+        let g:fern#renderer#default#leaf_symbol      = '  '
+        let g:fern#renderer#default#collapsed_symbol = '+ '
+        let g:fern#renderer#default#expanded_symbol  = '~ '
+    endif
+
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernDrawerToggle Fern <args> -drawer -toggle
     command! -nargs=0 FernDrawerReveal Fern %:h -drawer -reveal=%:t
     command! -nargs=0 FernDrawerCWD call s:OpenFernDrawerCWD()
