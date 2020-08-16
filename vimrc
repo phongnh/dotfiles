@@ -90,6 +90,7 @@ let g:zero_vim_grep_ignore_vcs   = 0
 let g:zero_vim_find_tool         = 'rg'
 let g:zero_vim_indent_char       = '┊'
 let g:zero_vim_indent_first_char = '│'
+let g:zero_vim_ctags             = executable('ctags-universal') ? 'ctags-universal' : 'ctags'
 
 " Helpers
 " Find and source vimrc from root to current folder
@@ -137,6 +138,12 @@ endfunction
 " Check if LSP is enabled
 function! s:IsLSPEnabled() abort
     return s:IsPlugged('coc.nvim') || s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim')
+endfunction
+
+" Check if ctags is Universal Ctags
+function! s:IsUniversalCtags(ctags_path) abort
+    let cmd = printf("%s --version", a:ctags_path)
+    return system(cmd) =~# 'Universal Ctags'
 endfunction
 
 " Find and source .vimrc.before from root to current folder.
@@ -507,26 +514,22 @@ call plug#begin()
 " }
 
 " Ctags {
-    if s:Use('ctags') && executable('ctags')
+    if s:Use('ctags') && executable(g:zero_vim_ctags)
         " A Vim plugin that manages your tag files
         Plug 'ludovicchabant/vim-gutentags'
 
-        if s:Use('ctags-cscope') && executable('gtags-cscope')
+        if s:Use('gtags-cscope') && executable('gtags-cscope')
             " The right way to use gtags with gutentags
             Plug 'skywind3000/gutentags_plus'
         endif
-    endif
-" }
-
-" Gtags {
-    if s:Use('gtags') && executable('gtags')
+    elseif s:Use('gen_tags') && executable(g:zero_vim_ctags)
         " Async plugin for vim and neovim to ease the use of ctags/gtags
         Plug 'jsfaint/gen_tags.vim'
     endif
 " }
 
 " Tagbar {
-    if s:Use('tagbar') && executable('ctags')
+    if s:Use('tagbar') && executable(g:zero_vim_ctags)
         " A class outline viewer for Vim
         Plug 'majutsushi/tagbar'
         Plug 'phongnh/vim-tagbar-settings'
@@ -1677,9 +1680,7 @@ if s:IsPlugged('LeaderF')
     let g:Lf_ShortcutF = '<Leader>f'
     let g:Lf_ShortcutB = '<Leader>bb'
 
-    if executable('ctags-universal')
-        let g:Lf_Ctags = 'ctags-universal'
-    endif
+    let g:Lf_Ctags         = g:zero_vim_ctags
     let g:Lf_CtagsFuncOpts = {
                 \ 'ruby': '--ruby-kinds=fFS',
                 \ }
@@ -1739,9 +1740,7 @@ endif
 
 if s:IsPlugged('vim-clap')
     " liuchenxu/vista.vim
-    if executable('ctags-universal')
-        let g:vista_ctags_executable = 'ctags-universal'
-    endif
+    let g:vista_ctags_executable = g:zero_vim_ctags
 
     " liuchengxu/vim-clap
     let g:clap_solarized_theme = g:zero_vim_solarized
@@ -3202,44 +3201,33 @@ endif
 
 if s:IsPlugged('vim-gutentags')
     " ludovicchabant/vim-gutentags
-    function! s:IsUniversalCtags(ctags_path) abort
-        let cmd = printf("%s --version", a:ctags_path)
-        return system(cmd) =~# 'Universal Ctags'
-    endfunction
-
-    function! s:DetectUniversalCtags() abort
-        let ctags_paths = [
-                    \ 'ctags-universal',
-                    \ '/usr/local/bin/ctags',
-                    \ '/usr/bin/ctags',
-                    \ ]
-
-        for ctags_path in ctags_paths
-            if executable(ctags_path) && s:IsUniversalCtags(ctags_path)
-                return ctags_path
-            endif
-        endfor
-
-        return ''
-    endfunction
-
-    let s:universal_ctags_path = s:DetectUniversalCtags()
-    let s:has_universal_ctags = strlen(s:universal_ctags_path)
-
     " Enable only ctags module
     let g:gutentags_modules = ['ctags']
 
+    let g:gutentags_generate_on_missing = 1
+    let g:gutentags_generate_on_new     = 1
+    let g:gutentags_generate_on_write   = 1
+
     " Generate datebases in my cache directory, prevent gtags files polluting my project
-    let g:gutentags_cache_dir = expand('~/.cache/tags')
+    let g:gutentags_cache_dir       = expand('~/.cache/tags')
+    let g:gutentags_ctag_executable = g:zero_vim_ctags
 
     " Universal Ctags
-    if s:has_universal_ctags
-        let g:gutentags_ctag_executable = s:universal_ctags_path
-
-        if filereadable(expand('~/.ctagsignore'))
-            let g:gutentags_ctags_exclude = [ '@' . expand('~/.ctagsignore') ]
-        endif
+    if s:IsUniversalCtags(g:gutentags_ctag_executable) && filereadable(expand('~/.ctagsignore'))
+        let g:gutentags_ctags_exclude = [ '@' . expand('~/.ctagsignore') ]
     endif
+
+    " Ignored directories
+    let g:gutentags_exclude_project_root = split(glob('~/.vim/plugged/*'))
+    let g:gutentags_exclude_project_root += split(glob('~/.vim/*'))
+    let g:gutentags_exclude_project_root += [
+                \ $HOME,
+                \ '/usr/local',
+                \ '/usr',
+                \ '/opt',
+                \ '/etc',
+                \ '/',
+                \ ]
 
     " Ignored file types
     let g:gutentags_exclude_filetypes = ['html', 'xml', 'css', 'sass', 'scss', 'coffee', 'less', 'eruby', 'haml', 'hamlc', 'text',  'git', 'gitcommit', 'fugitiveblame']
@@ -3272,6 +3260,31 @@ if s:IsPlugged('gutentags_plus')
     noremap <silent> <C-\>d :GscopeFind d <C-r><C-W><CR>
     noremap <silent> <C-\>a :GscopeFind a <C-r><C-W><CR>
     noremap <silent> <C-\>k :GscopeKill<CR>
+endif
+
+if s:IsPlugged('gen_tags.vim')
+    " jsfaint/gen_tags.vim
+    let g:gen_tags#ctags_auto_gen    = 1
+    let g:gen_tags#ctags_auto_update = 1
+    let g:gen_tags#cache_dir         = expand('~/.cache/tags')
+    let g:gen_tags#ctags_bin         = g:zero_vim_ctags
+
+    " Universal Ctags
+    if s:IsUniversalCtags(g:gen_tags#ctags_bin) && filereadable(expand('~/.ctagsignore'))
+        let g:gen_tags#ctags_opts = [ '--exclude=@' . expand('~/.ctagsignore') ]
+    endif
+
+    " Ignored directories
+    let g:gen_tags#blacklist = split(glob('~/.vim/plugged/*'))
+    let g:gen_tags#blacklist += split(glob('~/.vim/*'))
+    let g:gen_tags#blacklist += [
+                \ $HOME,
+                \ '/usr/local',
+                \ '/usr',
+                \ '/opt',
+                \ '/etc',
+                \ '/',
+                \ ]
 endif
 
 if s:IsPlugged('tagbar')
