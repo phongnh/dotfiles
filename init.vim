@@ -1387,6 +1387,7 @@ if s:IsPlugged('vim-visual-multi')
     endfunction
 
     function! VM_Mappings() abort
+        imap <nowait> <buffer> <C-c> <Esc><Esc>
     endfunction
 
     augroup MyAutoCmd
