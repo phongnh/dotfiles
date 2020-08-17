@@ -503,7 +503,7 @@ call plug#begin()
         " A Vim plugin that manages your tag files
         Plug 'ludovicchabant/vim-gutentags'
 
-        if s:Use('gtags-cscope') && executable('gtags-cscope')
+        if s:Use('gtags-cscope') && has('cscope') && executable('gtags-cscope')
             " The right way to use gtags with gutentags
             Plug 'skywind3000/gutentags_plus'
         endif
@@ -3280,6 +3280,9 @@ if s:IsPlugged('gen_tags.vim')
     let g:gen_tags#ctags_auto_update = 1
     let g:gen_tags#cache_dir         = expand('~/.cache/tags')
     let g:gen_tags#ctags_bin         = g:zero_vim_ctags
+
+    " Disable gtags support if cscope or gtags is missing
+    let g:loaded_gentags#gtags = !has('cscope') || !executable('gtags')
 
     " Universal Ctags
     if s:IsUniversalCtags(g:gen_tags#ctags_bin) && filereadable(expand('~/.ctagsignore'))
