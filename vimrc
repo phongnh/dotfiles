@@ -423,7 +423,34 @@ call plug#begin()
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:Use('YouCompleteMe') && has('python3') && executable('cmake')
-        Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --go-completer --rust-completer --ts-completer' }
+        function! BuildYCM(info) abort
+            if a:info.status == 'unchanged' && !a:info.force
+                return
+            endif
+
+            let l:cmd = '!./install.py'
+
+            if !executable('clangd')
+                let l:cmd .= ' --clangd-completer'
+            endif
+
+            if !executable('gopls')
+                let l:cmd .= ' --go-completer'
+            endif
+
+            if !executable('rustc')
+                let l:cmd .= ' --rust-completer'
+            endif
+
+            if !executable('tsserver')
+                let l:cmd .= ' --ts-completer'
+            endif
+
+            echomsg '[vim-plug] YouCompleteMe:' l:cmd
+            execute l:cmd
+        endfunction
+
+        Plug 'ycm-core/YouCompleteMe', { 'do': function('BuildYCM') }
     elseif s:Use('asyncomplete') && v:version >= 800
         Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
@@ -2631,6 +2658,29 @@ if s:IsPlugged('YouCompleteMe')
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
+    if executable('clangd')
+        let g:ycm_use_clangd         = 1
+        let g:ycm_clangd_binary_path = exepath('clangd')
+        let g:ycm_clangd_args        = []
+    endif
+
+    if executable('gopls')
+        let g:ycm_gopls_binary_path = exepath('gopls')
+        let g:ycm_gopls_args        = []
+    endif
+
+    if executable('rls')
+        let g:ycm_rls_binary_path = exepath('rls')
+    endif
+
+    if executable('rustc')
+        let g:ycm_rustc_binary_path = exepath('rustc')
+    endif
+
+    if executable('tsserver')
+        let g:ycm_tsserver_binary_path = exepath('tsserver')
+    endif
 
     if !s:IsLSPEnabled()
         let g:ycm_language_server = []
