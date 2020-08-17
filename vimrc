@@ -1035,6 +1035,11 @@ xmap     <Leader>rr <Leader>R
 xnoremap <Leader>sr <Esc>:%s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
 xmap     <Leader>rw <Leader>sr
 
+" Search and Replace entries in quickfix with :cdo
+nnoremap <Leader>Q  :cdo s//<Left>
+nnoremap <Leader>sq :cdo s/<C-r>=vim_helpers#CwordForSubstitute()<CR>/<Left>
+xnoremap <Leader>sq <Esc>:cdo s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//<Left>
+
 " Buffer-related mappings
 " gl: Go to Last buffer
 nnoremap <silent> gl :buffer#<CR>
