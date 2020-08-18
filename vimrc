@@ -250,8 +250,13 @@ call plug#begin()
     " use CTRL-A/CTRL-X to increment dates, times, and more
     Plug 'tpope/vim-speeddating'
 
-    " insert or delete brackets, parens, quotes in pair
-    Plug 'jiangmiao/auto-pairs'
+    if s:Use('auto-pairs')
+        " insert or delete brackets, parens, quotes in pair
+        Plug 'jiangmiao/auto-pairs'
+    else
+        " Auto close parentheses and repeat by dot dot dot...
+        Plug 'cohama/lexima.vim'
+    endif
 
     if s:Use('multiple-cursors')
         " True Sublime Text style multiple selections for Vim
@@ -1416,13 +1421,25 @@ xmap     <Leader>rv <Leader>V
 xnoremap <Leader>sv <Esc>:%Subvert/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
 xmap     <Leader>rc <Leader>sv
 
-" jiangmiao/auto-pairs
-let g:AutoPairsFlyMode            = 0
-let g:AutoPairsShortcutToggle     = '<M-p>'
-let g:AutoPairsShortcutFastWrap   = ''
-let g:AutoPairsShortcutJump       = '<M-n>'
-let g:AutoPairsShortcutBackInsert = ''
-let g:AutoPairsMoveCharacter      = ''
+if s:IsPlugged('auto-pairs')
+    " jiangmiao/auto-pairs
+    let g:AutoPairsFlyMode            = 0
+    let g:AutoPairsShortcutToggle     = '<M-p>'
+    let g:AutoPairsShortcutFastWrap   = ''
+    let g:AutoPairsShortcutJump       = '<M-n>'
+    let g:AutoPairsShortcutBackInsert = ''
+    let g:AutoPairsMoveCharacter      = ''
+endif
+
+if s:IsPlugged('lexima.vim')
+    " cohama/lexima.vim
+    let g:lexima_enable_basic_rules   = 1
+    let g:lexima_enable_newline_rules = 1
+    let g:lexima_enable_space_rules   = 1
+    let g:lexima_enable_endwise_rules = 1
+    let g:lexima_ctrlh_as_backspace   = 1
+    let g:lexima_map_escape           = ''  " Disabled Esc mapping
+endif
 
 " Autocompletion plugins should define these functions to
 " integrate with vim-visual-multi / vim-multiple-cursors plugin
