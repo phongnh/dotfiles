@@ -1426,11 +1426,13 @@ if s:IsPlugged('vim-visual-multi')
 
     function! VM_Start() abort
         let b:autopairs_enabled = 0
+        let b:lexima_disabled = 1
         call Disable_Completion_Hook()
     endfunction
 
     function! VM_Exit() abort
         let b:autopairs_enabled = 1
+        let b:lexima_disabled = 0
         call Enable_Completion_Hook()
     endfunction
 
