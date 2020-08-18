@@ -344,7 +344,6 @@ call plug#begin()
             let g:fern#renderer = 'nerdfont'
             Plug 'lambdalisue/nerdfont.vim'
             Plug 'lambdalisue/fern-renderer-nerdfont.vim'
-            Plug 'lambdalisue/glyph-palette.vim'
         endif
     else
         " A tree explorer plugin for vim
@@ -1613,14 +1612,6 @@ if s:IsPlugged('fern.vim')
     nnoremap <silent> <Leader>e  :FernDrawerToggle .<CR>
     nnoremap <silent> <Leader>E  :FernDrawerCWD<CR>
     nnoremap <silent> <Leader>bf :FernDrawerReveal<CR>
-
-    if s:IsPlugged('glyph-palette.vim')
-        " lambdalisue/glyph-palette.vim
-        augroup MyAutoCmd
-            autocmd FileType fern call glyph_palette#apply()
-            autocmd FileType startify call glyph_palette#apply()
-        augroup END
-    endif
 endif
 
 if s:IsPlugged('nerdtree')
