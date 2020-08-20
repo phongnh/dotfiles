@@ -3042,12 +3042,37 @@ endif
 
 if s:IsPlugged('goyo.vim')
     " junegunn/goyo.vim
-    let g:goyo_width  = '80%'
+    let g:goyo_width  = '70%'
     let g:goyo_height = '85%'
     let g:goyo_linenr = 0
 
-    nnoremap <silent> <Leader><Enter> :Goyo<CR>
-    vmap              <Leader><Enter> <Esc><Leader><Enter>gv
+    let s:goyo_current_mode = 0
+    let s:goyo_modes        = [
+                \ [ g:goyo_width, g:goyo_height ],
+                \ [ '120', g:goyo_height ],
+                \ [ '100', g:goyo_height ],
+                \ [ '80', g:goyo_height ],
+                \ ]
+
+    function! s:CycleGoyoMode(direction) abort
+        if exists('#goyo')
+            let s:goyo_current_mode += a:direction
+            if s:goyo_current_mode >= len(s:goyo_modes)
+                let s:goyo_current_mode = 0
+            elseif s:goyo_current_mode < 0
+                let s:goyo_current_mode = len(s:goyo_modes) - 1
+            endif
+        else
+            let s:goyo_current_mode = a:direction == 1 ? 0 : len(s:goyo_modes) - 1
+        endif
+        let l:goyo_mode = s:goyo_modes[s:goyo_current_mode]
+        let g:goyo_width = l:goyo_mode[0]
+        let g:goyo_height = l:goyo_mode[1]
+        execute 'Goyo ' join(l:goyo_mode, 'x')
+    endfunction
+
+    command! NextGoyoMode call <SID>CycleGoyoMode(1)
+    command! PrevGoyoMode call <SID>CycleGoyoMode(-1)
 
     function! s:OnGoyoEnter() abort
         let s:goyo_settings = {
@@ -3081,6 +3106,15 @@ if s:IsPlugged('goyo.vim')
         autocmd! User GoyoEnter nested call <SID>OnGoyoEnter()
         autocmd! User GoyoLeave nested call <SID>OnGoyoLeave()
     augroup END
+
+    nnoremap <silent> <Leader><Enter> :Goyo<CR>
+    vmap              <Leader><Enter> <Esc><Leader><Enter>gv
+
+    nnoremap <silent> ]<Enter> :NextGoyoMode<CR>
+    vmap              ]<Enter> <Esc>]<Enter>gv
+
+    nnoremap <silent> [<Enter> :PrevGoyoMode<CR>
+    vmap              [<Enter> <Esc>[<Enter>gv
 endif
 
 if s:IsPlugged('limelight.vim')
