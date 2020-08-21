@@ -3082,8 +3082,18 @@ if s:IsPlugged('goyo.vim')
         execute 'Goyo ' join(l:goyo_mode, 'x')
     endfunction
 
+    function! s:RefreshGoyoMode() abort
+        if exists('#goyo')
+            silent! cclose
+            silent! lclose
+            silent! helpclose
+            execute 'Goyo ' join([ g:goyo_width, g:goyo_height ], 'x')
+        endif
+    endfunction
+
     command! NextGoyoMode call <SID>CycleGoyoMode(1)
     command! PrevGoyoMode call <SID>CycleGoyoMode(-1)
+    command! RefreshGoyoMode call <SID>RefreshGoyoMode()
 
     function! s:OnGoyoEnter() abort
         let s:goyo_settings = {
@@ -3126,6 +3136,9 @@ if s:IsPlugged('goyo.vim')
 
     nnoremap <silent> [<Enter> :PrevGoyoMode<CR>
     vmap              [<Enter> <Esc>[<Enter>gv
+
+    nnoremap <silent> <Leader>bz :RefreshGoyoMode<CR>
+    vmap              <Leader>bz <Esc><Leader>bzgv
 endif
 
 if s:IsPlugged('limelight.vim')
