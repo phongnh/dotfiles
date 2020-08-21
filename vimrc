@@ -142,8 +142,17 @@ endfunction
 
 " Check if ctags is Universal Ctags
 function! s:IsUniversalCtags(ctags_path) abort
-    let cmd = printf("%s --version", a:ctags_path)
-    return system(cmd) =~# 'Universal Ctags'
+    if !exists('s:universal_ctags')
+        let s:universal_ctags = {}
+    endif
+    if !has_key(s:universal_ctags, a:ctags_path)
+        try
+            let s:universal_ctags[a:ctags_path] = system(printf('%s --version', a:ctags_path)) =~# 'Universal Ctags'
+        catch
+            let s:universal_ctags[a:ctags_path] = 0
+        endtry
+    endif
+    return s:universal_ctags[a:ctags_path]
 endfunction
 
 " Find and source .vimrc.before from root to current folder.
@@ -1784,6 +1793,11 @@ endif
 if s:IsPlugged('vim-clap')
     " liuchenxu/vista.vim
     let g:vista_ctags_executable = g:zero_vim_ctags
+    if filereadable(expand('~/.ctagsignore'))
+        let g:vista_ctags_project_opts = join([
+                    \ '--exclude=@' . expand('~/.ctagsignore'),
+                    \ ], ' ')
+    endif
 
     " liuchengxu/vim-clap
     let g:clap_solarized_theme = g:zero_vim_solarized

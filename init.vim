@@ -1742,6 +1742,11 @@ endif
 if s:IsPlugged('vim-clap')
     " liuchenxu/vista.vim
     let g:vista_ctags_executable = g:zero_vim_ctags
+    if filereadable(expand('~/.ctagsignore'))
+        let g:vista_ctags_project_opts = join([
+                    \ '--exclude=@' . expand('~/.ctagsignore'),
+                    \ ], ' ')
+    endif
 
     " liuchengxu/vim-clap
     let g:clap_solarized_theme = g:zero_vim_solarized
