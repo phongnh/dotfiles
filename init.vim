@@ -3087,18 +3087,18 @@ if s:IsPlugged('goyo.vim')
         execute 'Goyo ' join(l:goyo_mode, 'x')
     endfunction
 
-    function! s:RefreshGoyoMode() abort
+    function! s:RefreshGoyoMode(bang) abort
         if exists('#goyo')
-            silent! cclose
-            silent! lclose
-            silent! helpclose
+            if a:bang
+                silent! cclose | lclose | helpclose
+            endif
             execute 'Goyo ' join([ g:goyo_width, g:goyo_height ], 'x')
         endif
     endfunction
 
-    command! NextGoyoMode call <SID>CycleGoyoMode(1)
-    command! PrevGoyoMode call <SID>CycleGoyoMode(-1)
-    command! RefreshGoyoMode call <SID>RefreshGoyoMode()
+    command! -bar NextGoyoMode call <SID>CycleGoyoMode(1)
+    command! -bar PrevGoyoMode call <SID>CycleGoyoMode(-1)
+    command! -bar -bang RefreshGoyoMode call <SID>RefreshGoyoMode(<bang>0)
 
     function! s:OnGoyoEnter() abort
         let s:goyo_settings = {
@@ -3128,9 +3128,18 @@ if s:IsPlugged('goyo.vim')
         endfor
     endfunction
 
+    function! s:GoyoHooksOnQuickFix()
+        nnoremap <silent> <buffer> q          :close<CR>:RefreshGoyoMode<CR>
+        nmap     <silent> <buffer> <C-w>c     <C-w>c:RefreshGoyoMode<CR>
+        nmap     <silent> <buffer> <C-w><C-c> <C-w><C-c>:RefreshGoyoMode<CR>
+        nmap     <silent> <buffer> <C-w>q     <C-w>q:RefreshGoyoMode<CR>
+    endfunction
+
     augroup MyAutoCmd
         autocmd! User GoyoEnter nested call <SID>OnGoyoEnter()
         autocmd! User GoyoLeave nested call <SID>OnGoyoLeave()
+        autocmd FileType qf call <SID>GoyoHooksOnQuickFix()
+        autocmd VimResized * RefreshGoyoMode
     augroup END
 
     nnoremap <silent> <Leader><Enter> :Goyo<CR>
@@ -3142,7 +3151,7 @@ if s:IsPlugged('goyo.vim')
     nnoremap <silent> [<Enter> :PrevGoyoMode<CR>
     vmap              [<Enter> <Esc>[<Enter>gv
 
-    nnoremap <silent> <Leader>bz :RefreshGoyoMode<CR>
+    nnoremap <silent> <Leader>bz :RefreshGoyoMode!<CR>
     vmap              <Leader>bz <Esc><Leader>bzgv
 endif
 
