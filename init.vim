@@ -1391,12 +1391,13 @@ endif
 
 if s:IsPlugged('lexima.vim')
     " cohama/lexima.vim
-    let g:lexima_enable_basic_rules   = 1
-    let g:lexima_enable_newline_rules = 1
-    let g:lexima_enable_space_rules   = 1
-    let g:lexima_enable_endwise_rules = 1
-    let g:lexima_ctrlh_as_backspace   = 1
-    let g:lexima_map_escape           = ''  " Disabled Esc mapping
+    let g:lexima_enable_basic_rules    = 1
+    let g:lexima_enable_newline_rules  = 1
+    let g:lexima_enable_space_rules    = 1
+    let g:lexima_enable_endwise_rules  = 0
+    let g:lexima_accept_pum_with_enter = 0   " Always insert new line regardless if popup menu is visible
+    let g:lexima_ctrlh_as_backspace    = 1
+    let g:lexima_map_escape            = ''  " Disabled Esc mapping
 endif
 
 " Autocompletion plugins should define these functions to
