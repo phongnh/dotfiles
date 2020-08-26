@@ -196,8 +196,13 @@ call plug#begin()
     " A Narrow Region Plugin for vim (like Emacs Narrow Region)
     Plug 'chrisbra/NrrwRgn'
 
-    " Open a Quickfix item in a window you choose. (Vim plugin)
-    Plug 'yssl/QFEnter'
+    if s:Use('quickfix-enhanced')
+        " Tame the quickfix window
+        Plug 'romainl/vim-qf'
+    else
+        " Open a Quickfix item in a window you choose. (Vim plugin)
+        Plug 'yssl/QFEnter'
+    endif
 " }
 
 " Search {
@@ -1184,14 +1189,22 @@ augroup MyAutoCmd
     autocmd FileType * let b:nrrw_aucmd_create = 'nnoremap <buffer> <silent> <Leader>bn :WidenRegion!<CR>'
 augroup END
 
-" yssl/QFEnter
-let g:qfenter_enable_autoquickfix = 0
+if s:IsPlugged('vim-qf')
+    " romainl/vim-qf
+    let g:qf_auto_open_quickfix = 0
+    let g:qf_auto_open_loclist  = 0
+    let g:qf_mapping_ack_style  = 1
+endif
 
-let g:qfenter_keymap = {}
-let g:qfenter_keymap.vopen = ['<C-v>']
-let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
-let g:qfenter_keymap.topen = ['<C-t>']
+if s:IsPlugged('QFEnter')
+    " yssl/QFEnter
+    let g:qfenter_enable_autoquickfix = 0
 
+    let g:qfenter_keymap = {}
+    let g:qfenter_keymap.vopen = ['<C-v>']
+    let g:qfenter_keymap.hopen = ['<C-CR>', '<C-s>', '<C-x>']
+    let g:qfenter_keymap.topen = ['<C-t>']
+endif
 
 if s:IsPlugged('vim-grepper')
     " mhinz/vim-grepper
