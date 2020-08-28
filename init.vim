@@ -3337,8 +3337,12 @@ if s:IsPlugged('vim-autoformat')
     let g:autoformat_remove_trailing_spaces = 0
     let g:autoformat_verbosemode            = 0
 
-    nnoremap <silent> <Leader>= :Autoformat <Bar> update<CR>
-    xnoremap <silent> <Leader>= :Autoformat <Bar> update<CR>
+    " Terraform
+    let g:formatdef_terraform_fmt = '"terraform fmt -no-color -"'
+    let g:formatters_terraform    = ['terraform_fmt']
+
+    nnoremap <silent> <Leader>=  :Autoformat <Bar> update<CR>
+    xnoremap <silent> <Leader>=  :Autoformat <Bar> update<CR>
     nmap     <silent> <Leader>b= <Leader>=
     xmap     <silent> <Leader>b= <Leader>=
 endif
