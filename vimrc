@@ -1063,7 +1063,7 @@ xnoremap <Leader>sq <Esc>:cdo s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR
 nnoremap <silent> gl :buffer#<CR>
 
 " Edit file from buffer folder
-nnoremap <C-w><C-e> :edit <C-r>=fnameescape(expand('%:~:.:h')) . '/'<CR>
+nnoremap <C-w><C-e> :edit <C-r>=fnameescape(expand('%:p:~:.:h')) . '/'<CR>
 
 " Yank whole buffer to clipboard
 nnoremap <silent> <Leader>by :%y+<CR>
