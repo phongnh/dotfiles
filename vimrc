@@ -4,10 +4,10 @@ if &compatible
 endif
 
 if &shell =~# 'fish$' " && (v:version < 704 || v:version == 704 && !has('patch276'))
-    if executable('bash')
-        let &shell = exepath('bash')
-    elseif executable('zsh')
+    if executable('zsh')
         let &shell = exepath('zsh')
+    elseif executable('bash')
+        let &shell = exepath('bash')
     endif
 endif
 
