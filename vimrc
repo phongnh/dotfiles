@@ -120,11 +120,6 @@ function! s:Use(group) abort
     return index(get(g:, 'zero_vim_groups', []), a:group) > - 1
 endfunction
 
-" Check if plugin group is not used
-function! s:NotUse(group) abort
-    return !s:Use(a:group)
-endfunction
-
 " Check if a plugin is plugged in plug section or not
 function! s:IsPlugged(plugin) abort
     return has_key(g:plugs, a:plugin)
@@ -727,25 +722,24 @@ Plug 'chrisbra/unicode.vim'
 " }
 
 " Others {
-    if s:NotUse('syntax')
+    if s:Use('syntax')
+        " A solid language pack for Vim
+        let g:polyglot_disabled = ['autoindent']
+        if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'javascript', 'jsx', 'json']) | endif
+        if s:Use('coffee-script') | call add(g:polyglot_disabled, 'coffee-script') | endif
+        if s:Use('ruby') | call extend(g:polyglot_disabled, ['ruby', 'yaml', 'yard', 'rspec']) | endif
+        if s:Use('crystal') | call add(g:polyglot_disabled, 'crystal') | endif
+        if s:Use('python') | call add(g:polyglot_disabled, 'python') | endif
+        if s:Use('go') | call add(g:polyglot_disabled, 'go') | endif
+        if s:Use('rust') | call add(g:polyglot_disabled, 'rust') | endif
+        if s:Use('erlang') | call add(g:polyglot_disabled, 'erlang') | endif
+        if s:Use('elixir') | call add(g:polyglot_disabled, 'elixir') | endif
+        Plug 'sheerun/vim-polyglot'
+    else
         Plug 'georgewitteman/vim-fish'
         Plug 'hashivim/vim-terraform'
     endif
 " }
-
-if s:Use('syntax')
-    " A solid language pack for Vim
-    let g:polyglot_disabled = ['fish', 'terraform']
-    if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'javascript', 'jsx', 'json']) | endif
-    if s:Use('coffee-script') | call add(g:polyglot_disabled, 'coffee-script') | endif
-    if s:Use('ruby') | call extend(g:polyglot_disabled, ['ruby', 'yaml', 'yard', 'rspec']) | endif
-    if s:Use('crystal') | call add(g:polyglot_disabled, 'crystal') | endif
-    if s:Use('python') | call add(g:polyglot_disabled, 'python') | endif
-    if s:Use('go') | call add(g:polyglot_disabled, 'go') | endif
-    if s:Use('rust') | call add(g:polyglot_disabled, 'rust') | endif
-    if s:Use('elixir') | call add(g:polyglot_disabled, 'elixir') | endif
-    Plug 'sheerun/vim-polyglot'
-endif
 
 " Run your tests at the speed of thought
 Plug 'janko-m/vim-test'
