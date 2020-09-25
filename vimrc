@@ -713,6 +713,14 @@ Plug 'chrisbra/unicode.vim'
     endif
 " }
 
+" Erlang {
+    if s:Use('erlang')
+        Plug 'vim-erlang/vim-erlang-runtime'
+        Plug 'vim-erlang/vim-erlang-compiler'
+        Plug 'edkolev/erlang-motions.vim'
+    endif
+" }
+
 " Elixir {
     if s:Use('elixir')
         Plug 'elixir-editors/vim-elixir'
