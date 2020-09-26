@@ -372,7 +372,26 @@ call plug#begin()
 " }
 
 " Fuzzy finder {
-    if s:Use('leaderf') && has('python3')
+    if s:Use('ctrlp')
+        if has('python3')
+            Plug 'raghur/fruzzy', { 'do': ':call fruzzy#install()' }
+        endif
+
+        if has('python3') && executable('cmake')
+            Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
+        endif
+
+        " Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
+        Plug 'ctrlpvim/ctrlp.vim'
+        Plug 'DavidEGx/ctrlp-smarttabs'
+        Plug 'tacahiroy/ctrlp-funky'
+        Plug 'mattn/ctrlp-register'
+        Plug 'LeafCage/yankround.vim'
+        Plug 'fisadev/vim-ctrlp-cmdpalette'
+        Plug 'ompugao/ctrlp-history'
+        Plug 'https://bitbucket.org/slimane/ctrlp-locationlist'
+        Plug 'phongnh/ctrlp-settings.vim'
+    elseif s:Use('leaderf') && has('python3')
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
         " Solarized theme for LeaderF
@@ -1692,6 +1711,71 @@ if s:IsPlugged('nerdtree')
     noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
     nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
     nnoremap <silent> <Leader>bg :NERDTreeVCS<CR>
+endif
+
+if s:IsPlugged('ctrlp.vim')
+    " ctrlpvim/ctrlp.vim
+    let g:ctrlp_find_tool = g:zero_vim_find_tool
+    let g:ctrlp_cmd       = 'CtrlPRoot'
+
+    if s:IsPlugged('fruzzy') && s:Use('fruzzy')
+        " raghur/fruzzy
+        let g:fruzzy#usenative       = 1
+        let g:fruzzy#sortonempty     = 0
+        let ctrlp_match_current_file = 1
+        let g:ctrlp_match_func       = { 'match': 'fruzzy#ctrlp#matcher' }
+    elseif s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'autoload/cpsm_py.so')
+        " nixprime/cpsm
+        let g:cpsm_match_empty_query = 0
+        let g:cpsm_highlight_mode    = 'basic'
+        let g:ctrlp_match_func       = { 'match': 'cpsm#CtrlPMatch' }
+    endif
+
+    nmap <Leader><Leader> <Leader>f
+
+    nnoremap <silent> <Leader>f :CtrlP<CR>
+    nnoremap <silent> <Leader>p :CtrlPRoot<CR>
+    nnoremap <silent> <Leader>o :CtrlPBuffer<CR>
+    nnoremap <silent> <Leader>O :CtrlPMRUFiles<CR>
+    nnoremap <silent> <Leader>d :CtrlPCurFile<CR>
+    nnoremap <silent> <Leader>D :CtrlP <C-r>=expand("%:h:h")<CR><CR>
+
+    nnoremap <silent> <Leader>\ :CtrlPTag<CR>
+
+    nnoremap <silent> <Leader>q :cclose<CR>:CtrlPQuickfix<CR>
+
+    " Buffer-related mappings
+    nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
+    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bp <Leader>p
+    nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
+    nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
+    nnoremap <silent> <Leader>]  :CtrlPBufTagAll<CR>
+
+    " DavidEGx/ctrlp-smarttabs
+    nnoremap <silent> <Leader>bj :CtrlPSmartTabs<CR>
+
+    " tacahiroy/ctrlp-funky
+    nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
+    nnoremap <silent> <Leader>[  :CtrlPFunkyMulti<CR>
+
+    " mattn/ctrlp-register
+    nnoremap <silent> <Leader>Y :CtrlPRegister<CR>
+
+    " LeafCage/yankround.vim
+    let g:yankround_max_history = 100
+
+    nnoremap <silent> <Leader>y :CtrlPYankRound<CR>
+
+    " fisadev/vim-ctrlp-cmdpalette
+    nnoremap <silent> <Leader>; :CtrlPCmdPalette<CR>
+
+    " ompugao/ctrlp-history
+    nnoremap <silent> <Leader>: :CtrlPCmdHistory<CR>
+    nnoremap <silent> <Leader>/ :CtrlPSearchHistory<CR>
+
+    " slimane/ctrlp-locationlist
+    nnoremap <silent> <Leader>l :lclose<CR>:CtrlPLocationlist<CR>
 endif
 
 if s:IsPlugged('LeaderF')
@@ -3743,7 +3827,7 @@ if s:IsPlugged('vim-go')
         nnoremap <buffer> g} :GoImport<Space>
         nnoremap <buffer> g{ :GoDrop<Space>
 
-        if s:IsPlugged('fzf.vim')
+        if s:IsPlugged('ctrlp.vim') || s:IsPlugged('fzf.vim')
             nnoremap <buffer> <silent> <LocalLeader>o :GoDecls<CR>
             nnoremap <buffer> <silent> <LocalLeader>O :GoDeclsDir<CR>
             nnoremap <buffer>          <LocalLeader>p :GoDeclsDir<Space>
