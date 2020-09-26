@@ -81,6 +81,8 @@ augroup END
 let g:zero_vim_devicons          = 0
 let g:zero_vim_true_color        = 0
 let g:zero_vim_powerline         = 0
+let g:zero_vim_powerline_style   = 'default'
+let g:zero_vim_powerline_spaces  = {}
 let g:zero_vim_solarized         = 0
 let g:zero_vim_lsp_diagnostics   = 0
 let g:zero_vim_autolint          = 0
@@ -317,7 +319,9 @@ call plug#begin()
 " Appearance {
     if s:Use('airline')
         " My airline settings
-        let g:airline_powerline = g:zero_vim_powerline
+        let g:airline_powerline        = g:zero_vim_powerline
+        let g:airline_powerline_style  = g:zero_vim_powerline_style
+        let g:airline_powerline_spaces = g:zero_vim_powerline_spaces
         Plug 'phongnh/airline-settings.vim'
         " lean & mean status/tabline for vim that's light as air
         Plug 'vim-airline/vim-airline'
@@ -325,7 +329,9 @@ call plug#begin()
         Plug 'vim-airline/vim-airline-themes'
     elseif s:Use('lightline')
         " My lightline settings
-        let g:lightline_powerline = g:zero_vim_powerline
+        let g:lightline_powerline        = g:zero_vim_powerline
+        let g:lightline_powerline_style  = g:zero_vim_powerline_style
+        let g:lightline_powerline_spaces = g:zero_vim_powerline_spaces
         Plug 'phongnh/lightline-settings.vim'
         " A light and configurable statusline/tabline plugin for Vim
         Plug 'itchyny/lightline.vim'
