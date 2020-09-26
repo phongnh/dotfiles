@@ -1247,6 +1247,19 @@ if s:IsPlugged('vim-qf')
     let g:qf_auto_open_quickfix = 0
     let g:qf_auto_open_loclist  = 0
     let g:qf_mapping_ack_style  = 1
+
+    function! s:RemapQuickfixMappings() abort
+        execute 'nnoremap <silent> <expr> <buffer> <C-v> ' . maparg('v', 'n')
+        execute 'nnoremap <silent>        <buffer> <C-s> ' . maparg('s', 'n')
+        execute 'nnoremap <silent>        <buffer> <C-x> ' . maparg('s', 'n')
+        execute 'nnoremap <silent>        <buffer> <C-t> ' . maparg('t', 'n')
+        nnoremap <buffer> v v
+        nnoremap <buffer> t t
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd FileType qf call <SID>RemapQuickfixMappings()
+    augroup end
 endif
 
 if s:IsPlugged('QFEnter')
