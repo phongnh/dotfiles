@@ -1415,18 +1415,18 @@ if s:IsPlugged('ctrlsf.vim')
 
     " CtrlSF prefers ag over rg
     if executable('ag')
-        let g:ctrlsf_ackprg = 'ag'
+        let g:ctrlsf_backend = 'ag'
     elseif executable('rg')
-        let g:ctrlsf_ackprg = 'rg'
+        let g:ctrlsf_backend = 'rg'
     endif
 
     function! s:TCtrlSF(qargs) abort
-        let cmd = 'CtrlSF ' . s:CtrlSFParseFileTypeOption(get(g:, 'ctrlsf_ackprg', ''))
+        let cmd = 'CtrlSF ' . s:CtrlSFParseFileTypeOption(get(g:, 'ctrlsf_backend', ''))
         execute vim_helpers#strip(cmd . ' ' . a:qargs)
     endfunction
 
     function! s:TCtrlSFCword(word_boundary, qargs) abort
-        if a:word_boundary && get(g:, 'ctrlsf_ackprg', '') =~# 'ag\|rg'
+        if a:word_boundary && get(g:, 'ctrlsf_backend', '') =~# 'ag\|rg'
             let cword = '-R \b' . expand('<cword>') . '\b'
         else
             let cword = expand('<cword>')
