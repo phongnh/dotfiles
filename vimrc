@@ -373,8 +373,12 @@ call plug#begin()
 
 " Fuzzy finder {
     if s:Use('ctrlp')
-        if has('python3')
+        if s:Use('fruzzy') && has('python3')
             Plug 'raghur/fruzzy', { 'do': ':call fruzzy#install()' }
+        endif
+
+        if s:Use('fzy') && has('python3') && executable('fzy')
+            Plug 'phongnh/ctrlp-fzy-matcher'
         endif
 
         if has('python3') && executable('cmake')
@@ -1724,6 +1728,9 @@ if s:IsPlugged('ctrlp.vim')
         let g:fruzzy#sortonempty     = 0
         let ctrlp_match_current_file = 1
         let g:ctrlp_match_func       = { 'match': 'fruzzy#ctrlp#matcher' }
+    elseif s:IsPlugged('ctrlp-fzy-matcher') && s:Use('fzy')
+        " phongnh/ctrlp-fzy-matcher
+        let g:ctrlp_match_func       = { 'match': 'fzy_matcher#match' }
     elseif s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'autoload/cpsm_py.so')
         " nixprime/cpsm
         let g:cpsm_match_empty_query = 0
