@@ -2523,23 +2523,35 @@ if s:IsPlugged('LanguageClient-neovim')
 
     call s:SetupLanguageServers()
 
+    vnoremap <Plug>(lcn-format)            :call LanguageClient_textDocument_rangeFormatting()<CR>
+    nnoremap <Plug>(lcn-workspace-symbols) :call LanguageClient_workspace_symbol()<CR>
+    nnoremap <Plug>(lcn-clear-highlight)   :call LanguageClient_clearDocumentHighlight()<CR>
+    nnoremap <Plug>(lcn-server-status)     :echo LanguageClient_serverStatusMessage()<CR>
+
     function! s:SetupLanguageClient() abort
         setlocal omnifunc=LanguageClient#complete
 
-        nnoremap <buffer> <silent> <Leader>K  :call LanguageClient#textDocument_hover()<CR>
-        nmap     <buffer>          <Leader>kh <Leader>K
-        nnoremap <buffer> <silent> <Leader>ka :call LanguageClient#textDocument_codeAction()<CR>
-        nnoremap <buffer> <silent> <Leader>ke :call LanguageClient#textDocument_rename()<CR>
-        nnoremap <buffer> <silent> <Leader>kf :call LanguageClient#textDocument_formatting()<CR>
-        vnoremap <buffer> <silent> <Leader>kf :call LanguageClient#textDocument_rangeFormatting()<CR>
-        nnoremap <buffer> <silent> <Leader>k] :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <silent> <Leader>ki :call LanguageClient#textDocument_implementation()<CR>
-        nnoremap <buffer> <silent> <Leader>kr :call LanguageClient#textDocument_references()<CR>
-        nnoremap <buffer> <silent> <Leader>ks :call LanguageClient#textDocument_documentSymbol()<CR>
-        nnoremap <buffer> <silent> <Leader>kw :call LanguageClient#workspace_symbol()<CR>
-        nnoremap <buffer> <silent> <Leader>kc :call LanguageClient#textDocument_documentHighlight()<CR>
-        nnoremap <buffer> <silent> <Leader>kC :call LanguageClient#clearDocumentHighlight()<CR>
-        nnoremap <buffer> <silent> <Leader>k; :echo LanguageClient#serverStatusMessage()<CR>
+        nmap <silent> [g <Plug>(lcn-diagnostics-prev)
+        nmap <silent> ]g <Plug>(lcn-diagnostics-next)
+
+        nmap <buffer> <silent> <Leader>K  <Plug>(lcn-hover)
+        nmap <buffer>          <Leader>kh <Leader>K
+        nmap <buffer>          <Leader>km <Plug>(lcn-menu)
+        nmap <buffer> <silent> <Leader>ka <Plug>(lcn-code-action)
+        vmap <buffer> <silent> <Leader>ka <Plug>(lcn-code-action)
+        nmap <buffer> <silent> <Leader>kA <Plug>(lcn-code-lens-action)
+        nmap <buffer> <silent> <Leader>ke <Plug>(lcn-rename)
+        nmap <buffer> <silent> <Leader>kf <Plug>(lcn-format)
+        vmap <buffer> <silent> <Leader>kf <Plug>(lcn-format)
+        nmap <buffer> <silent> <Leader>k] <Plug>(lcn-definition)
+        nmap <buffer> <silent> <Leader>ki <Plug>(lcn-implementation)
+        nmap <buffer> <silent> <Leader>kr <Plug>(lcn-references)
+        nmap <buffer> <silent> <Leader>ks <Plug>(lcn-symbols)
+        nmap <buffer> <silent> <Leader>kw <Plug>(lcn-workspace-symbols)
+        nmap <buffer> <silent> <Leader>kc <Plug>(lcn-highlight)
+        nmap <buffer> <silent> <Leader>kC <Plug>(lcn-clear-highlight)
+        nmap <buffer> <silent> <Leader>kv <Plug>(lcn-explain-error)
+        nmap <buffer> <silent> <Leader>k; <Plug>(lcn-server-status)
     endfunction
 
     augroup MyAutoCmd
