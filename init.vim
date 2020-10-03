@@ -3718,7 +3718,7 @@ endif
 
 " tpope/vim-markdown
 let g:markdown_fenced_languages = [
-            \ 'bash=sh', 'coffee', 'sass', 'scss', 'css', 'html', 'xml', 'erb=eruby', 'ruby',
+            \ 'bash=sh', 'sass', 'scss', 'css', 'html', 'xml', 'erb=eruby', 'ruby',
             \ 'javascript', 'js=javascript', 'json=javascript', 'python', 'sql', 'vim'
             \ ]
 
