@@ -364,6 +364,7 @@ call plug#begin()
     if s:Use('fern') && has('patch-8.1.2114')
         " General purpose asynchrnonous tree viewer written in Pure Vim script
         Plug 'lambdalisue/fern.vim'
+        Plug 'hrsh7th/fern-mapping-collapse-or-leave.vim'
         if g:zero_vim_devicons
             let g:fern#renderer = 'nerdfont'
             Plug 'lambdalisue/nerdfont.vim'
