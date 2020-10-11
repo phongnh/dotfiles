@@ -2565,8 +2565,17 @@ endif
 
 if s:IsPlugged('vim-vsnip')
     " hrsh7th/vim-vsnip
-    imap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : '<C-\>'
-    smap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : '<C-\>'
+    if s:IsPlugged('ultisnips') || s:IsPlugged('neosnippet.vim')
+        imap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : "\<C-\>"
+        smap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : "\<C-\>"
+    else
+        imap <expr> <C-k> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : "\<C-k>"
+        smap <expr> <C-k> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : "\<C-k>"
+        imap <expr> <C-j> vsnip#jumpable(1)  ? "\<Plug>(vsnip-jump-next)"      : "\<C-j>"
+        smap <expr> <C-j> vsnip#jumpable(1)  ? "\<Plug>(vsnip-jump-next)"      : "\<C-j>"
+        imap <expr> <C-z> vsnip#jumpable(-1) ? "\<Plug>(vsnip-jump-prev)"      : "\<C-z>"
+        smap <expr> <C-z> vsnip#jumpable(-1) ? "\<Plug>(vsnip-jump-prev)"      : "\<C-z>"
+    endif
 endif
 
 if s:IsPlugged('deoplete.nvim')
