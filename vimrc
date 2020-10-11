@@ -173,6 +173,10 @@ call plug#begin()
         Plug 'jebaum/vim-tmuxify'
     endif
 
+    " Fix CursorHold Performance
+    " https://github.com/neovim/neovim/issues/12587
+    Plug 'antoinemadec/FixCursorHold.nvim'
+
     " Asynchronous build and test dispatcher
     Plug 'tpope/vim-dispatch'
 
