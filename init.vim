@@ -407,7 +407,7 @@ call plug#begin()
     if s:Use('coc')
         " coc.nvim plugin has both autocomplete and lsp functions
     elseif s:Use('nvim-lsp') && has('nvim-0.5-nightly')
-        Plug 'neovim/nvim-lsp'
+        Plug 'neovim/nvim-lspconfig'
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('lsp') || s:Use('nvim-lsp')
@@ -2116,8 +2116,8 @@ if s:IsPlugged('neosnippet.vim')
     smap <Tab> <Plug>(neosnippet_jump)
 endif
 
-if s:IsPlugged('nvim-lsp')
-    " neovim/nvim-lsp
+if s:IsPlugged('nvim-lspconfig')
+    " neovim/nvim-lspconfig
     :lua << EOF
         local nvim_lsp = require('nvim_lsp')
 
@@ -2127,16 +2127,17 @@ if s:IsPlugged('nvim-lsp')
             -- Mappings
             local opts = { noremap=true, silent=true }
 
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>K',  '<Cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kh', '<Cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>K',  '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kh', '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ke', '<cmd>lua vim.lsp.buf.rename()<CR>',                 opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kd', '<Cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>k]', '<Cmd>lua vim.lsp.buf.definition()<CR>',             opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kd', '<cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>k]', '<cmd>lua vim.lsp.buf.definition()<CR>',             opts)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ki', '<cmd>lua vim.lsp.buf.implementation()<CR>',         opts)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>km', '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>',      '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kt', '<cmd>lua vim.lsp.buf.type_definition()<CR>',        opts)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ks', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',        opts)
+            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kw', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>',       opts)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kr', '<cmd>lua vim.lsp.buf.references()<CR>',             opts)
             vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kl', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
         end
@@ -2146,6 +2147,7 @@ if s:IsPlugged('nvim-lsp')
             'clangd',
             'cssls',
             'dockerls',
+            'elixirls',
             'elmls',
             'gopls',
             'html',
@@ -2154,6 +2156,7 @@ if s:IsPlugged('nvim-lsp')
             'pyls',
             'rls',
             'rust_analyzer',
+            'scry',
             'solargraph',
             'sumneko_lua',
             'terraformls',
