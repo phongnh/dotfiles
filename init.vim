@@ -2947,15 +2947,15 @@ if s:IsPlugged('asyncomplete.vim')
         " prabirshrestha/asyncomplete-buffer.vim
         call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
                     \ 'name':      'buffer',
-                    \ 'whitelist': ['*'],
-                    \ 'blacklist': ['go'],
+                    \ 'allowlist': ['*'],
+                    \ 'blocklist': ['go'],
                     \ 'completor': function('asyncomplete#sources#buffer#completor'),
                     \ }))
 
         " prabirshrestha/asyncomplete-file.vim
         call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
                     \ 'name':      'file',
-                    \ 'whitelist': ['*'],
+                    \ 'allowlist': ['*'],
                     \ 'priority':  10,
                     \ 'completor': function('asyncomplete#sources#file#completor'),
                     \ }))
@@ -2963,8 +2963,8 @@ if s:IsPlugged('asyncomplete.vim')
         " yami-beta/asyncomplete-omni.vim
         call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
                     \ 'name':      'omni',
-                    \ 'whitelist': ['*'],
-                    \ 'blacklist': ['c', 'cpp', 'html', 'ruby'],
+                    \ 'allowlist': ['*'],
+                    \ 'blocklist': ['c', 'cpp', 'html', 'ruby'],
                     \ 'completor': function('asyncomplete#sources#omni#completor'),
                     \ }))
 
@@ -2972,7 +2972,7 @@ if s:IsPlugged('asyncomplete.vim')
             " prabirshrestha/asyncomplete-ultisnips.vim
             call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
                         \ 'name':      'ultisnips',
-                        \ 'whitelist': ['*'],
+                        \ 'allowlist': ['*'],
                         \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
                         \ }))
         endif
@@ -2981,7 +2981,7 @@ if s:IsPlugged('asyncomplete.vim')
             " prabirshrestha/asyncomplete-neosnippet.vim
             call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
                         \ 'name':      'neosnippet',
-                        \ 'whitelist': ['*'],
+                        \ 'allowlist': ['*'],
                         \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
                         \ }))
         endif
