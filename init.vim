@@ -354,7 +354,7 @@ call plug#begin()
             Plug 'raghur/fruzzy', { 'do': ':call fruzzy#install()' }
         endif
 
-        if s:Use('fzy') && has('python3') && executable('fzy')
+        if s:Use('fzy-matcher') && has('python3') && executable('fzy')
             Plug 'phongnh/ctrlp-fzy-matcher'
         endif
 
@@ -1675,13 +1675,13 @@ if s:IsPlugged('ctrlp.vim')
     let g:ctrlp_find_tool = g:zero_vim_find_tool
     let g:ctrlp_cmd       = 'CtrlPRoot'
 
-    if s:IsPlugged('fruzzy') && s:Use('fruzzy')
+    if s:IsPlugged('fruzzy')
         " raghur/fruzzy
         let g:fruzzy#usenative       = 1
         let g:fruzzy#sortonempty     = 0
         let ctrlp_match_current_file = 1
         let g:ctrlp_match_func       = { 'match': 'fruzzy#ctrlp#matcher' }
-    elseif s:IsPlugged('ctrlp-fzy-matcher') && s:Use('fzy')
+    elseif s:IsPlugged('ctrlp-fzy-matcher')
         " phongnh/ctrlp-fzy-matcher
         let g:ctrlp_match_func       = { 'match': 'fzy_matcher#match' }
     elseif s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'autoload/cpsm_py.so')
