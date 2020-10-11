@@ -411,18 +411,10 @@ call plug#begin()
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('lsp') || s:Use('nvim-lsp')
-        Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/vim-lsp'
         Plug 'mattn/vim-lsp-settings'
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
-        if s:IsPlugged('ultisnips')
-            Plug 'thomasfaingnaert/vim-lsp-snippets'
-            Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-        elseif s:IsPlugged('neosnippet.vim')
-            Plug 'thomasfaingnaert/vim-lsp-snippets'
-            Plug 'thomasfaingnaert/vim-lsp-neosnippet'
-        endif
     elseif s:Use('lsc')
         Plug 'natebosch/vim-lsc'
         Plug 'hrsh7th/vim-vsnip'
@@ -475,7 +467,6 @@ call plug#begin()
 
         Plug 'ycm-core/YouCompleteMe', { 'do': function('BuildYCM') }
     elseif s:Use('asyncomplete')
-        Plug 'prabirshrestha/async.vim'
         Plug 'prabirshrestha/asyncomplete.vim'
         Plug 'prabirshrestha/asyncomplete-buffer.vim'
         Plug 'prabirshrestha/asyncomplete-file.vim'
@@ -2208,6 +2199,7 @@ let g:language_servers = {
             \ 'elixir-ls': {
             \   'cmd': ['elixir-ls'],
             \   'filetypes': ['elixir'],
+            \   'root_markers': ['mix.exs', 'mix.lock'],
             \ },
             \ 'flow': {
             \   'cmd': ['flow', 'lsp', '--from', 'vim'],
@@ -2388,6 +2380,8 @@ if s:IsPlugged('vim-lsp')
 
     function! s:OnLspBufferEnabled() abort
         setlocal omnifunc=lsp#complete
+
+        if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
         nmap     <buffer> <silent> <Leader>K  <Plug>(lsp-hover)
         nmap     <buffer>          <Leader>kh <Leader>K
