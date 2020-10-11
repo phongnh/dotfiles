@@ -2010,6 +2010,7 @@ endif
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
     let g:fzf_find_tool = g:zero_vim_find_tool
+    let g:fzf_ctags     = g:zero_vim_ctags
 
     nmap <Leader><Leader> <Leader>f
 
