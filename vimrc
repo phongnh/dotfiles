@@ -780,6 +780,9 @@ Plug 'janko-m/vim-test'
     " one colorscheme pack to rule them all!
     Plug 'flazz/vim-colorschemes'
 
+    " Code never sleeps in Gotham City
+    Plug 'whatyouhide/gotham'
+
     " True Color schemes
     Plug 'lifepillar/vim-solarized8'
     Plug 'lifepillar/vim-gruvbox8'
