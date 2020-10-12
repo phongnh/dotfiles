@@ -430,7 +430,11 @@ call plug#begin()
         Plug 'hrsh7th/vim-vsnip-integ'
     endif
 
-    if s:Use('deoplete') && has('python3')
+    if s:Use('completion-nvim') && has('nvim-0.5-nightly')
+        Plug 'nvim-lua/completion-nvim'
+        Plug 'steelsojka/completion-buffers'
+        Plug 'kristijanhusak/completion-tags'
+    elseif s:Use('deoplete') && has('python3')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'hrsh7th/deoplete-fname'
         if s:IsPlugged('nvim-lsp')
@@ -2682,6 +2686,105 @@ if s:IsPlugged('vim-vsnip')
         imap <expr> <C-z> vsnip#jumpable(-1) ? "\<Plug>(vsnip-jump-prev)"      : "\<C-z>"
         smap <expr> <C-z> vsnip#jumpable(-1) ? "\<Plug>(vsnip-jump-prev)"      : "\<C-z>"
     endif
+endif
+
+if s:IsPlugged('completion-nvim')
+    " nvim-lua/completion-nvim
+    let g:completion_enable_auto_popup  = 1
+    let g:completion_timer_cycle        = 100
+    let g:completion_confirm_key        = "\<C-y>"
+    let g:completion_enable_auto_paren  = 0
+    let g:completion_trigger_on_delete  = 1
+    let g:completion_auto_change_source = 1
+    let g:completion_enable_fuzzy_match = 0
+
+    " A list of filetypes that should be ignored from caching/gathering words.
+    " let g:completion_word_ignored_ft = []
+
+    if s:IsPlugged('ultisnips')
+        let g:completion_enable_snippet = 'UltiSnips'
+        let s:default_complete_items = [ 'lsp', 'UltiSnips', 'vim-vsnip', 'tags' ]
+    elseif s:IsPlugged('neosnippet.vim')
+        let g:completion_enable_snippet = 'Neosnippet'
+        let s:default_complete_items = [ 'lsp', 'Neosnippet', 'vim-vsnip', 'tags' ]
+    else
+        let s:default_complete_items = [ 'lsp', 'vim-vsnip', 'tags' ]
+    endif
+
+    let g:completion_chain_complete_list = {
+                \ 'default': [
+                \   { 'complete_items': s:default_complete_items },
+                \   { 'complete_items': [ 'buffers' ] },
+                \   { 'mode': '<c-p>' },
+                \   { 'mode': '<c-n>' }
+                \ ]
+                \ }
+
+    " <Tab>: completion
+    " function! s:CheckBackSpace() abort
+    "     let col = col('.') - 1
+    "     return !col || getline('.')[col - 1] =~ '\s'
+    " endfunction
+
+    " function! s:CleverTab() abort
+    "     if pumvisible()
+    "         return "\<C-n>"
+    "     endif
+
+    "     if s:CheckBackSpace()
+    "         return "\<Tab>"
+    "     endif
+
+    "     return "\<Plug>(completion_trigger)"
+    " endfunction
+
+    " imap <silent> <expr> <Tab> <SID>CleverTab()
+
+    " <S-Tab>: completion back
+    " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " <Tab>: smart completion
+    imap <Tab> <Plug>(completion_smart_tab)
+    " <S-Tab>: smart completion
+    imap <S-Tab> <Plug>(completion_smart_s_tab)
+
+    " <CR>: close popup and insert newline (works with auto-pairs)
+    function! s:CleverCR() abort
+        if pumvisible()
+            if complete_info()['selected'] != '-1'
+                return "\<Plug>(completion_confirm_completion)"
+            endif
+
+            return "\<C-e>\<CR>"
+        endif
+
+        return "\<CR>"
+    endfunction
+
+    imap <expr> <CR> <SID>CleverCR()
+
+    " Switch to previous completion
+    imap <silent> <C-g><C-j> <Plug>(completion_next_source)
+    " Switch to next completion
+    imap <silent> <C-g><C-k> <Plug>(completion_prev_source)
+    " Trigger completion manually
+    imap <silent> <C-g><C-g> <Plug>(completion_trigger)
+
+    " Integrate with vim-visual-multi / vim-multiple-cursors plugin
+    function! Disable_Completion_Hook() abort
+        let b:completion_enable            = 0
+        let g:completion_enable_auto_popup = 0
+    endfunction
+
+    function! Enable_Completion_Hook() abort
+        let b:completion_enable            = 1
+        let g:completion_enable_auto_popup = 1
+    endfunction
+
+    augroup MyAutoCmd
+        " Use completion-nvim in every buffer
+        autocmd BufEnter * lua require'completion'.on_attach()
+    augroup end
 endif
 
 if s:IsPlugged('deoplete.nvim')
