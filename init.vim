@@ -409,6 +409,7 @@ call plug#begin()
         " coc.nvim plugin has both autocomplete and lsp functions
     elseif s:Use('nvim-lsp') && has('nvim-0.5-nightly')
         Plug 'neovim/nvim-lspconfig'
+        Plug 'nvim-lua/diagnostic-nvim'
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('lsp') || s:Use('nvim-lsp')
@@ -2128,8 +2129,10 @@ if s:IsPlugged('nvim-lspconfig')
     :lua << EOF
         local nvim_lsp = require('nvim_lsp')
 
-        local on_attach = function(_, bufnr)
-            vim.api.nvim_buf_set_option(bufnr, 'omnifunc',     'v:lua.vim.lsp.omnifunc')
+        local on_attach = function(client, bufnr)
+            require('diagnostic').on_attach(client)
+
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
             -- Mappings
             local opts = { noremap=true, silent=true }
@@ -2177,6 +2180,18 @@ if s:IsPlugged('nvim-lspconfig')
             }
         end
 EOF
+
+    " nvim-lua/diagnostic-nvim
+    let g:space_before_virtual_text        = 1
+    let g:diagnostic_enable_virtual_text   = 1
+    let g:diagnostic_virtual_text_prefix   = '🅓 '
+    let g:diagnostic_enable_underline      = 1
+    let g:diagnostic_auto_popup_while_jump = 0
+
+    call sign_define('LspDiagnosticsErrorSign', { 'text': '●', 'texthl': 'LspDiagnosticsError' })
+    call sign_define('LspDiagnosticsWarningSign', { 'text': '.', 'texthl': 'LspDiagnosticsWarning' })
+    call sign_define('LspDiagnosticsInformationSign', { 'text': 'ℹ', 'texthl': 'LspDiagnosticsInformation' })
+    call sign_define('LspDiagnosticsHintSign', { 'text': 'ℎ', 'texthl': 'LspDiagnosticsHint' })
 endif
 
 if s:IsLSPEnabled()
