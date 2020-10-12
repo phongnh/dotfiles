@@ -77,23 +77,6 @@ augroup MyAutoCmd
     autocmd!
 augroup END
 
-" Default zero settings
-let g:zero_vim_devicons          = 0
-let g:zero_vim_true_color        = 0
-let g:zero_vim_powerline         = 0
-let g:zero_vim_powerline_style   = 'default'
-let g:zero_vim_powerline_spaces  = {}
-let g:zero_vim_solarized         = 0
-let g:zero_vim_lsp_diagnostics   = 0
-let g:zero_vim_autolint          = 0
-let g:zero_vim_autofix           = 0
-let g:zero_vim_git_gutter        = 1
-let g:zero_vim_grep_ignore_vcs   = 0
-let g:zero_vim_find_tool         = 'rg'
-let g:zero_vim_indent_char       = '┊'
-let g:zero_vim_indent_first_char = '│'
-let g:zero_vim_ctags             = executable('ctags-universal') ? 'ctags-universal' : 'ctags'
-
 " Helpers
 " Find and source vimrc from root to current folder
 " ~/projects/hello $
@@ -154,6 +137,36 @@ endfunction
 
 " Find and source .vimrc.before from root to current folder.
 call s:Source('.vimrc.before')
+
+" Default zero settings
+let g:zero_vim_devicons          = get(g:, 'zero_vim_devicons',          0)
+let g:zero_vim_true_color        = get(g:, 'zero_vim_true_color',        0)
+let g:zero_vim_powerline         = get(g:, 'zero_vim_powerline',         0)
+let g:zero_vim_powerline_style   = get(g:, 'zero_vim_powerline_style',   'default')
+let g:zero_vim_powerline_spaces  = get(g:, 'zero_vim_powerline_spaces',  {})
+let g:zero_vim_solarized         = get(g:, 'zero_vim_solarized',         0)
+let g:zero_vim_lsp_diagnostics   = get(g:, 'zero_vim_lsp_diagnostics',   0)
+let g:zero_vim_autolint          = get(g:, 'zero_vim_autolint',          0)
+let g:zero_vim_autofix           = get(g:, 'zero_vim_autofix',           0)
+let g:zero_vim_git_gutter        = get(g:, 'zero_vim_git_gutter',        1)
+let g:zero_vim_grep_ignore_vcs   = get(g:, 'zero_vim_grep_ignore_vcs',   0)
+let g:zero_vim_find_tool         = get(g:, 'zero_vim_find_tool',         'rg')
+let g:zero_vim_indent_char       = get(g:, 'zero_vim_indent_char',       '┊')
+let g:zero_vim_indent_first_char = get(g:, 'zero_vim_indent_first_char', '│')
+let g:zero_vim_ctags             = get(g:, 'zero_vim_ctags',             executable('ctags-universal') ? 'ctags-universal' : 'ctags')
+
+" Default signs
+let s:zero_vim_default_signs = {
+            \ 'error':         '🅔',
+            \ 'style_error':   'Ⓔ',
+            \ 'warning':       '🅦',
+            \ 'style_warning': 'Ⓦ',
+            \ 'information':   '🅘',
+            \ 'hint':          '🅗',
+            \ 'virtual_text':  '🅓',
+            \ }
+if g:zero_vim_devicons | let s:zero_vim_default_signs.virtual_text = '' | endif
+let g:zero_vim_signs = extend(copy(s:zero_vim_default_signs), get(g:, 'zero_vim_signs', {}))
 
 " True Color settings
 if !has('guil_running') && g:zero_vim_true_color && has('termguicolors')
@@ -1941,7 +1954,7 @@ if s:IsPlugged('vim-clap')
     let g:clap_current_selection_sign  = { 'text': '» ', 'texthl': 'ClapCurrentSelectionSign', 'linehl': 'ClapCurrentSelection' }
     let g:clap_selected_sign           = { 'text': ' »', 'texthl': 'ClapSelectedSign', 'linehl': 'ClapSelected' }
     let g:clap_prompt_format           = ' %spinner%%forerunner_status%%provider_id%:'
-    let g:clap_layout                  = { 'width': '70%', 'height': '50%',  'row': '20%', 'col': '15%' }
+    let g:clap_layout                  = { 'relative': 'editor', 'width': '65%', 'height': '50%',  'row': '20%', 'col': '15%' }
 
     function! ClapPromptFormat() abort
         if g:clap.provider.id ==# 'files' && exists('g:__clap_provider_cwd')
@@ -2359,8 +2372,8 @@ if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
     let g:lsp_async_completion = 1
 
-    let g:lsp_signs_error   = { 'text': '●' }
-    let g:lsp_signs_warning = { 'text': '.' }
+    let g:lsp_signs_error   = { 'text': g:zero_vim_signs.error }
+    let g:lsp_signs_warning = { 'text': g:zero_vim_signs.warning }
 
     let g:lsp_diagnostics_enabled          = g:zero_vim_lsp_diagnostics
     let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
@@ -2574,11 +2587,11 @@ if s:IsPlugged('vim-lamp')
     " hrsh7th/vim-lamp
     " Initialize Servers
     function! s:OnInitializedLamp() abort
-        " call lamp#config('global.debug', expand("$HOME/.cache/lamp.log"))
-        call lamp#config('view.sign.error.text', '●') " Ⓔ ⓔ
-        call lamp#config('view.sign.warning.text', '.') " Ⓦ ⓦ
-        call lamp#config('view.sign.information.text', 'ℹ') " Ⓘ ⓘ
-        call lamp#config('view.sign.hint.text', 'ℎ') " Ⓗ ⓗ
+        " call lamp#config('global.debug',               expand("$HOME/.cache/lamp.log"))
+        call lamp#config('view.sign.error.text',       g:zero_vim_signs.error)
+        call lamp#config('view.sign.warning.text',     g:zero_vim_signs.warning)
+        call lamp#config('view.sign.information.text', g:zero_vim_signs.information)
+        call lamp#config('view.sign.hint.text',        g:zero_vim_signs.hint)
 
         " built-in setting
         call lamp#builtin#pyls()
@@ -2931,8 +2944,8 @@ if s:IsPlugged('YouCompleteMe')
                 \ 'mail':     1
                 \ }
 
-    let g:ycm_error_symbol   = '●'
-    let g:ycm_warning_symbol = '.'
+    let g:ycm_error_symbol   = g:zero_vim_signs.error
+    let g:ycm_warning_symbol = g:zero_vim_signs.warning
 
     let g:ycm_key_detailed_diagnostics = ''
     let g:ycm_key_invoke_completion    = '<C-g><C-g>'
@@ -3432,8 +3445,8 @@ if s:IsPlugged('ale')
     let g:ale_open_list                = 0
     let g:ale_fix_on_save              = g:zero_vim_autofix
 
-    let g:ale_sign_error   = '●' " •
-    let g:ale_sign_warning = '.'
+    let g:ale_sign_error   = g:zero_vim_signs.error
+    let g:ale_sign_warning = g:zero_vim_signs.warning
 
     let g:ale_linter_aliases = { 'javascript.jsx': 'javascript', 'jsx': 'javascript' }
 
@@ -3531,10 +3544,10 @@ if s:IsPlugged('syntastic')
     let g:syntastic_check_on_wq              = g:zero_vim_autolint
     let g:syntastic_aggregate_errors         = 1
     let g:syntastic_echo_current_error       = 1
-    let g:syntastic_error_symbol             = '●' " •
-    let g:syntastic_warning_symbol           = '.'
-    let g:syntastic_style_error_symbol       = '●●'
-    let g:syntastic_style_warning_symbol     = '..'
+    let g:syntastic_error_symbol             = g:zero_vim_signs.error
+    let g:syntastic_warning_symbol           = g:zero_vim_signs.warning
+    let g:syntastic_style_error_symbol       = g:zero_vim_signs.style_error
+    let g:syntastic_style_warning_symbol     = g:zero_vim_signs.style_warning
 
     let s:syntastic_checker_exec_paths = {
                 \ 'eslint': 'npm run eslint --',
