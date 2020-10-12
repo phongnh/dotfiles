@@ -1,3 +1,8 @@
+if has('vim_starting')
+    set encoding=utf-8
+endif
+scriptencoding utf-8
+
 if &shell =~# 'fish$' " && (v:version < 704 || v:version == 704 && !has('patch276'))
     if executable('zsh')
         let &shell = exepath('zsh')
@@ -9,6 +14,10 @@ endif
 " Python 3
 if executable('python3')
     let g:python3_host_prog = exepath('python3')
+endif
+
+if has('pythonx')
+    set pyxversion=3
 endif
 
 " Disable Python 2 support
@@ -448,6 +457,8 @@ call plug#begin()
         Plug 'nvim-lua/completion-nvim'
         Plug 'steelsojka/completion-buffers'
         Plug 'kristijanhusak/completion-tags'
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('deoplete') && has('python3')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'hrsh7th/deoplete-fname'
@@ -460,6 +471,8 @@ call plug#begin()
         elseif s:IsPlugged('vim-lamp')
             Plug 'hrsh7th/deoplete-lamp'
         endif
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('coc') && executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
     elseif s:Use('YouCompleteMe') && has('python3') && executable('cmake')
@@ -506,6 +519,8 @@ call plug#begin()
         elseif s:IsPlugged('vim-lamp')
             Plug 'hrsh7th/asyncomplete-lamp'
         endif
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('ncm2') && has('python3')
         Plug 'roxma/nvim-yarp'
         Plug 'ncm2/ncm2'
@@ -526,6 +541,8 @@ call plug#begin()
         endif
     elseif s:Use('mucomplete')
         Plug 'lifepillar/vim-mucomplete'
+        Plug 'hrsh7th/vim-vsnip'
+        Plug 'hrsh7th/vim-vsnip-integ'
     else
         Plug 'ajh17/VimCompletesMe'
     endif
