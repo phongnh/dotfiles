@@ -2230,7 +2230,7 @@ let g:language_servers = {
             \ 'elixir-ls': {
             \   'cmd': ['elixir-ls'],
             \   'filetypes': ['elixir'],
-            \   'root_markers': ['mix.exs', 'mix.lock'],
+            \   'root_markers': ['mix.exs'],
             \ },
             \ 'flow': {
             \   'cmd': ['flow', 'lsp', '--from', 'vim'],
@@ -2287,7 +2287,7 @@ let g:language_servers = {
             \ 'solargraph': {
             \   'cmd': ['solargraph', 'stdio'],
             \   'filetypes': ['ruby'],
-            \   'root_markers': ['Gemfile', 'Gemfile.lock']
+            \   'root_markers': ['Gemfile'],
             \ },
             \ 'sql-language-server': {
             \   'cmd': ['sql-language-server', 'up', '--method', 'stdio'],
