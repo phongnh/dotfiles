@@ -2317,6 +2317,7 @@ let g:language_servers = {
             \ 'solargraph': {
             \   'cmd': ['solargraph', 'stdio'],
             \   'filetypes': ['ruby'],
+            \   'initialization_options': { 'diagnostics': 'true' },
             \   'root_markers': ['Gemfile'],
             \ },
             \ 'sql-language-server': {
@@ -2475,7 +2476,6 @@ if s:IsPlugged('vim-lsp')
     if s:IsPlugged('vim-lsp-settings')
         " mattn/vim-lsp-settings
         let g:lsp_settings = {}
-        let g:lsp_file_types = {}
 
         function! s:SetupLanguageServers() abort
             for l:name in keys(g:language_servers)
@@ -2485,14 +2485,21 @@ if s:IsPlugged('vim-lsp')
             for l:name in s:GetEnabledLanguageServers()
                 let l:server = g:language_servers[l:name]
 
-                for ft in l:server['filetypes']
-                    if !has_key(g:lsp_file_types, ft)
-                        let g:lsp_file_types[ft] = l:name
-                        let g:lsp_settings[l:name] = { 'disabled': v:false, 'cmd': l:server['cmd'] }
-                    else
-                        let g:lsp_settings[l:name] = { 'disabled': v:true }
-                    endif
-                endfor
+                let l:server_settings = {
+                            \ 'disabled':  v:false,
+                            \ 'cmd':       l:server['cmd'],
+                            \ 'allowlist': l:server['filetypes'],
+                            \ }
+
+                if has_key(l:server, 'root_markers')
+                    let l:server_settings['root_uri_patterns'] = l:server['root_markers']
+                endif
+
+                if has_key(l:server, 'initialization_options')
+                    let l:server_settings['initialization_options'] = l:server['initialization_options']
+                endif
+
+                let g:lsp_settings[l:name] = l:server_settings
             endfor
         endfunction
 
@@ -2502,7 +2509,9 @@ endif
 
 if s:IsPlugged('vim-lsc')
     " natebosch/vim-lsc
-    let g:lsc_auto_completeopt     = v:false
+    set shortmess-=F
+
+    let g:lsc_complete_timeout     = 0.5 " Wait up to 0.5 second
     let g:lsc_enable_diagnostics   = g:zero_vim_lsp_diagnostics ? v:true : v:false
     let g:lsc_reference_highlights = v:true
     let g:lsc_trace_level          = 'off'
@@ -2511,8 +2520,9 @@ if s:IsPlugged('vim-lsc')
 
     " Default server options
     let s:lsc_server_default_opts = {
-                \ 'log_level':       -1,
-                \ 'suppress_stderr': v:true,
+                \ 'log_level':        -1,
+                \ 'suppress_stderr':  v:true,
+                \ 'workspace_config': {},
                 \ }
 
     function! s:SetupLanguageServers() abort
@@ -2520,12 +2530,24 @@ if s:IsPlugged('vim-lsc')
             let l:server = g:language_servers[l:name]
 
             let l:default = get(s:, 'lsc_server_default_opts', {})
-            let l:opts = extend(copy(l:default), get(l:server, 'opts', {}))
-            call extend(l:opts, { 'name': l:name, 'command': l:server['cmd'] })
+
+            let l:message_hooks = {}
+
+            if has_key(l:server, 'initialization_options')
+                let l:message_hooks['initialize'] = {
+                            \ 'initializationOptions': l:server['initialization_options'],
+                            \ }
+            endif
+
+            let l:server_settings = extend(copy(l:default), {
+                        \ 'name':          l:name,
+                        \ 'command':       l:server['cmd'],
+                        \ 'message_hooks': l:message_hooks,
+                        \ })
 
             for ft in l:server['filetypes']
                 if !has_key(g:lsc_server_commands, ft)
-                    let g:lsc_server_commands[ft] = l:opts
+                    let g:lsc_server_commands[ft] = l:server_settings
                 endif
             endfor
         endfor
@@ -2549,10 +2571,6 @@ if s:IsPlugged('vim-lsc')
                 \ 'Completion':          'omnifunc',
                 \ }
 
-    nnoremap <silent> <Leader>kl :LSClientAllDiagnostics<CR>
-    nnoremap <silent> <Leader>kL :LSClientLineDiagnostics<CR>
-    nnoremap <silent> <Leader>k; :call PrintLSCServerStatus()<CR>
-
     function! PrintLSCServerStatus(...) abort
         let ft = get(a:, 1, &filetype)
         let servers = lsc#server#forFileType(ft)
@@ -2562,19 +2580,21 @@ if s:IsPlugged('vim-lsc')
     endfunction
 
     function! s:SetupLSC() abort
-        setlocal omnifunc=lsc#complete#complete
+        nnoremap <buffer> <silent> <Leader>kl :LSClientAllDiagnostics<CR>
+        nnoremap <buffer> <silent> <Leader>kL :LSClientLineDiagnostics<CR>
+        nnoremap <buffer> <silent> <Leader>k; :call PrintLSCServerStatus()<CR>
     endfunction
 
     augroup MyAutoCmd
-        autocmd FileType c,cpp,ruby,crystal,python,go,rust,elixir,lua,vim,sh call <SID>SetupLSC()
+        execute printf('autocmd FileType %s call <SID>SetupLSC()', join(keys(g:lsc_server_commands), ','))
     augroup END
 endif
 
 if s:IsPlugged('LanguageClient-neovim')
     " autozimu/LanguageClient-neovim
-    let g:LanguageClient_serverCommands    = {}
-    let g:LanguageClient_diagnosticsList   = 'Location'
-    let g:LanguageClient_diagnosticsEnable = g:zero_vim_lsp_diagnostics
+    let g:LanguageClient_serverCommands     = {}
+    let g:LanguageClient_diagnosticsList    = 'Location'
+    let g:LanguageClient_diagnosticsEnable  = g:zero_vim_lsp_diagnostics
     let g:LanguageClient_diagnosticsDisplay = {
                 \ 1: { 'signText': g:zero_vim_signs.error },
                 \ 2: { 'signText': g:zero_vim_signs.warning },
