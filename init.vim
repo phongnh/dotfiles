@@ -3462,29 +3462,39 @@ if s:IsPlugged('vim-mucomplete')
     let g:mucomplete#completion_delay       = 50
     let g:mucomplete#reopen_immediately     = 0
 
-    let g:mucomplete#chains = {}
-    let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict', 'uspl']
+    function! s:SetupMUCompleteDefaultChains() abort
+        let l:chains = ['omni']
 
-    if s:IsPlugged('ultisnips')
-        let g:mucomplete#chains.default = ['path', 'omni', 'ulti', 'keyn', 'dict', 'uspl']
-    elseif s:IsPlugged('neosnippet.vim')
-        let g:mucomplete#chains.default = ['path', 'omni', 'nsnp', 'keyn', 'dict', 'uspl']
-    endif
+        if s:IsPlugged('vim-vsnip')
+            call add(l:chains, 'vsnip')
+        endif
+
+        if s:IsPlugged('ultisnips')
+            call add(l:chains, 'ulti')
+        elseif s:IsPlugged('neosnippet.vim')
+            call add(l:chains, 'nsnp')
+        endif
+
+        call extend(l:chains, ['keyn', 'path', 'dict', 'uspl'])
+
+        return l:chains
+    endfunction
+
+    let g:mucomplete#chains = {}
+    let g:mucomplete#chains.default = s:SetupMUCompleteDefaultChains()
 
     " Disable vim-lsp's async completion
     let g:lsp_async_completion = 0
 
     " Cancel the current menu and try completing the text I originally typed in a different way
-    inoremap <silent> <Plug>(MUcompleteFwdKey) <C-g>
     imap <unique> <silent> <C-g> <Plug>(MUcompleteCycFwd)
-    inoremap <silent> <Plug>(MUcompleteBwdKey) <C-h>
     imap <unique> <silent> <C-h> <Plug>(MUcompleteCycBwd)
 
     " <CR>: close popup and insert newline
-    if has('patch-8.0.0283')
-        inoremap <expr> <CR> pumvisible() ? "<C-y><CR>" : "<CR>"
+    if !has('patch-8.0.0283')
+        imap <expr> <CR> pumvisible() ? "\<C-y>\<Plug>(MUcompleteCR)" : "\<Plug>(MUcompleteCR)"
     else
-        imap <expr> <CR> pumvisible() ? "<C-y><Plug>(MUcompleteCR)" : "<Plug>(MUcompleteCR)"
+        inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
     endif
 
     " Integrate with vim-visual-multi / vim-multiple-cursors plugin
