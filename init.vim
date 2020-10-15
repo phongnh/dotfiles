@@ -2875,7 +2875,9 @@ if s:IsPlugged('deoplete.nvim')
                 \ 'max_list':             200,
                 \ })
 
-    call deoplete#custom#option('keyword_patterns', { '_': '[a-zA-Z_]\k*\(?' })
+    call deoplete#custom#option('keyword_patterns', {
+                \ '_': '[a-zA-Z_]\k*\(?',
+                \ })
 
     call deoplete#custom#option('omni_patterns', {
                 \ 'go': '[^. *\t]\.\w*',
@@ -2897,8 +2899,48 @@ if s:IsPlugged('deoplete.nvim')
 
     call deoplete#custom#source('_', 'matchers', [
                 \ 'matcher_fuzzy',
-                \ 'matcher_length'
+                \ 'matcher_length',
                 \ ])
+
+    let s:deoplete_snippet_converters = [
+                \ 'converter_remove_overlap',
+                \ 'converter_case',
+                \ 'converter_truncate_abbr',
+                \ 'converter_truncate_info',
+                \ 'converter_truncate_menu',
+                \ ]
+
+    let s:deoplete_snippet_matchers = [
+                \ 'matcher_fuzzy',
+                \ ]
+
+    call deoplete#custom#source('vsnip', {
+                \ 'rank':               250,
+                \ 'mark':               '[VS]',
+                \ 'min_pattern_length': 1,
+                \ 'converters':         s:deoplete_snippet_converters,
+                \ 'matchers':           s:deoplete_snippet_matchers,
+                \ })
+    call deoplete#custom#source('ultisnips', {
+                \ 'rank':               200,
+                \ 'mark':               '[US]',
+                \ 'min_pattern_length': 1,
+                \ 'converters':         s:deoplete_snippet_converters,
+                \ 'matchers':           s:deoplete_snippet_matchers,
+                \ })
+    call deoplete#custom#source('neosnippet', {
+                \ 'rank':               200,
+                \ 'mark':               '[NS]',
+                \ 'min_pattern_length': 1,
+                \ 'converters':         s:deoplete_snippet_converters,
+                \ 'matchers':           s:deoplete_snippet_matchers,
+                \ })
+    call deoplete#custom#source('around', {
+                \ 'rank': 180,
+                \ })
+    call deoplete#custom#source('fname', {
+                \ 'rank': 150,
+                \ })
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-h> deoplete#smart_close_popup()."\<C-h>"
