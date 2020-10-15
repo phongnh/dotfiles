@@ -2413,8 +2413,10 @@ if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
     let g:lsp_async_completion = 1
 
-    let g:lsp_signs_error   = { 'text': g:zero_vim_signs.error }
-    let g:lsp_signs_warning = { 'text': g:zero_vim_signs.warning }
+    let g:lsp_signs_error       = { 'text': g:zero_vim_signs.error }
+    let g:lsp_signs_warning     = { 'text': g:zero_vim_signs.warning }
+    let g:lsp_signs_information = { 'text': g:zero_vim_signs.information }
+    let g:lsp_signs_hint        = { 'text': g:zero_vim_signs.hint }
 
     let g:lsp_diagnostics_enabled          = g:zero_vim_lsp_diagnostics
     let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
@@ -2573,6 +2575,12 @@ if s:IsPlugged('LanguageClient-neovim')
     let g:LanguageClient_serverCommands    = {}
     let g:LanguageClient_diagnosticsList   = 'Location'
     let g:LanguageClient_diagnosticsEnable = g:zero_vim_lsp_diagnostics
+    let g:LanguageClient_diagnosticsDisplay = {
+                \ 1: { 'signText': g:zero_vim_signs.error },
+                \ 2: { 'signText': g:zero_vim_signs.warning },
+                \ 3: { 'signText': g:zero_vim_signs.information },
+                \ 4: { 'signText': g:zero_vim_signs.hint },
+                \ }
 
     function! s:SetupLanguageServers() abort
         for l:name in s:GetEnabledLanguageServers()
@@ -3585,8 +3593,11 @@ if s:IsPlugged('ale')
     let g:ale_open_list                = 0
     let g:ale_fix_on_save              = g:zero_vim_autofix
 
-    let g:ale_sign_error   = g:zero_vim_signs.error
-    let g:ale_sign_warning = g:zero_vim_signs.warning
+    let g:ale_sign_error         = g:zero_vim_signs.error
+    let g:ale_sign_warning       = g:zero_vim_signs.warning
+    let g:ale_sign_style_error   = g:zero_vim_signs.style_error
+    let g:ale_sign_style_warning = g:zero_vim_signs.style_warning
+    let g:ale_sign_info          = g:zero_vim_signs.information
 
     let g:ale_linter_aliases = { 'javascript.jsx': 'javascript', 'jsx': 'javascript' }
 
