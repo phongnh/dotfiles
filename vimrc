@@ -482,7 +482,6 @@ call plug#begin()
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
         Plug 'Shougo/deoplete.nvim'
-        Plug 'hrsh7th/deoplete-fname'
         if s:IsPlugged('vim-lsp')
             Plug 'lighttiger2505/deoplete-vim-lsp'
         elseif s:IsPlugged('vim-lsc')
@@ -2634,6 +2633,7 @@ if s:IsPlugged('vim-lamp')
     " Initialize Servers
     function! s:OnInitializedLamp() abort
         " call lamp#config('global.debug',               expand("$HOME/.cache/lamp.log"))
+        call lamp#config('global.timeout',             2000)
         call lamp#config('view.sign.error.text',       g:zero_vim_signs.error)
         call lamp#config('view.sign.warning.text',     g:zero_vim_signs.warning)
         call lamp#config('view.sign.information.text', g:zero_vim_signs.information)
@@ -2678,7 +2678,7 @@ if s:IsPlugged('vim-lamp')
             if has_key(l:server, 'root_markers')
                 let l:root_markers = copy(l:server['root_markers'])
                 call add(l:root_markers, '.git')
-                let l:lamp_server['root_uri'] = { -> lamp#findup(l:root_markers) }
+                let l:lamp_server['root_uri'] = { bufnr -> lamp#findup(l:root_markers, bufname(bufnr)) }
             endif
 
             call lamp#register(l:name, l:lamp_server)
@@ -2689,32 +2689,32 @@ if s:IsPlugged('vim-lamp')
     function! s:OnTextDocumentDidOpen() abort
         setlocal omnifunc=lamp#complete
 
-        nnoremap <buffer> [g :<C-u>LampDiagnosticsPrev<CR>
-        nnoremap <buffer> ]g :<C-u>LampDiagnosticsNext<CR>
+        nnoremap <buffer> <silent> [g :<C-u>LampDiagnosticsPrev<CR>
+        nnoremap <buffer> <silent> ]g :<C-u>LampDiagnosticsNext<CR>
 
-        nnoremap <buffer> <Leader>K  :<C-u>LampHover<CR>
-        nmap     <buffer> <Leader>kh <Leader>K
-        nnoremap <buffer> <Leader>ka :<C-u>LampCodeAction<CR>
-        vnoremap <buffer> <Leader>ka :LampCodeAction<CR>
-        nnoremap <buffer> <Leader>ke :<C-u>LampRename<CR>
-        nnoremap <buffer> <Leader>kf :<C-u>LampFormatting<CR>
-        vnoremap <buffer> <Leader>kf :LampRangeFormatting<CR>
-        nnoremap <buffer> <Leader>kd :<C-u>LampDeclaration edit<CR>
-        nnoremap <buffer> <Leader>kD :<C-u>LampDeclaration vsplit<CR>
-        nnoremap <buffer> <Leader>k] :<C-u>LampDefinition edit<CR>
-        nnoremap <buffer> <Leader>k\ :<C-u>LampDefinition vsplit<CR>
-        nnoremap <buffer> <Leader>k} :<C-u>LampDefinition vsplit<CR>
-        nnoremap <buffer> <Leader>kt :<C-u>LampTypeDefinition edit<CR>
-        nnoremap <buffer> <Leader>kT :<C-u>LampTypeDefinition vsplit<CR>
-        nnoremap <buffer> <Leader>ki :<C-u>LampImplementation edit<CR>
-        nnoremap <buffer> <Leader>kI :<C-u>LampImplementation vsplit<CR>
-        nnoremap <buffer> <Leader>kr :<C-u>LampReferences<CR>
-        nnoremap <buffer> <Leader>kc :<C-u>LampDocumentHighlight<CR>
-        nnoremap <buffer> <Leader>KC :<C-u>LampDocumentHighlightClear<CR>
-        nnoremap <buffer> <Leader>k= :<C-u>LampSelectionRangeExpand<CR>
-        nnoremap <buffer> <Leader>k- :<C-u>LampSelectionRangeCollapse<CR>
-        vnoremap <buffer> <Leader>k= :<C-u>LampSelectionRangeExpand<CR>
-        vnoremap <buffer> <Leader>k- :<C-u>LampSelectionRangeCollapse<CR>
+        nnoremap <buffer> <silent> <Leader>K  :<C-u>LampHover<CR>
+        nmap     <buffer> <silent> <Leader>kh <Leader>K
+        nnoremap <buffer> <silent> <Leader>ka :<C-u>LampCodeAction<CR>
+        vnoremap <buffer> <silent> <Leader>ka :LampCodeAction<CR>
+        nnoremap <buffer> <silent> <Leader>ke :<C-u>LampRename<CR>
+        nnoremap <buffer> <silent> <Leader>kf :<C-u>LampFormatting<CR>
+        vnoremap <buffer> <silent> <Leader>kf :LampRangeFormatting<CR>
+        nnoremap <buffer> <silent> <Leader>kd :<C-u>LampDeclaration edit<CR>
+        nnoremap <buffer> <silent> <Leader>kD :<C-u>LampDeclaration vsplit<CR>
+        nnoremap <buffer> <silent> <Leader>k] :<C-u>LampDefinition edit<CR>
+        nnoremap <buffer> <silent> <Leader>k\ :<C-u>LampDefinition vsplit<CR>
+        nnoremap <buffer> <silent> <Leader>k} :<C-u>LampDefinition vsplit<CR>
+        nnoremap <buffer> <silent> <Leader>kt :<C-u>LampTypeDefinition edit<CR>
+        nnoremap <buffer> <silent> <Leader>kT :<C-u>LampTypeDefinition vsplit<CR>
+        nnoremap <buffer> <silent> <Leader>ki :<C-u>LampImplementation edit<CR>
+        nnoremap <buffer> <silent> <Leader>kI :<C-u>LampImplementation vsplit<CR>
+        nnoremap <buffer> <silent> <Leader>kr :<C-u>LampReferences<CR>
+        nnoremap <buffer> <silent> <Leader>kc :<C-u>LampDocumentHighlight<CR>
+        nnoremap <buffer> <silent> <Leader>KC :<C-u>LampDocumentHighlightClear<CR>
+        nnoremap <buffer> <silent> <Leader>k= :<C-u>LampSelectionRangeExpand<CR>
+        nnoremap <buffer> <silent> <Leader>k- :<C-u>LampSelectionRangeCollapse<CR>
+        vnoremap <buffer> <silent> <Leader>k= :<C-u>LampSelectionRangeExpand<CR>
+        vnoremap <buffer> <silent> <Leader>k- :<C-u>LampSelectionRangeCollapse<CR>
     endfunction
 
     augroup MyAutoCmd
@@ -2743,14 +2743,17 @@ if s:IsPlugged('deoplete.nvim')
     let g:deoplete#enable_at_startup = 1
 
     call deoplete#custom#option({
-                \ 'auto_complete':        v:true,
-                \ 'auto_complete_delay':  50,
-                \ 'refresh_always':       v:true,
-                \ 'camel_case':           v:true,
-                \ 'skip_multibyte':       v:true,
-                \ 'prev_completion_mode': 'length',
-                \ 'auto_preview':         v:true,
-                \ 'max_list':             200,
+                \ 'auto_complete':       v:true,
+                \ 'auto_complete_delay': 50,
+                \ 'refresh_always':      v:true,
+                \ 'camel_case':          v:true,
+                \ 'skip_multibyte':      v:true,
+                \ 'auto_preview':        v:true,
+                \ })
+
+    " Ignore sources
+    call deoplete#custom#option('ignore_sources', {
+                \ '_': ['ale', 'dictionary', 'syntax', 'tag'],
                 \ })
 
     call deoplete#custom#option('keyword_patterns', {
@@ -2761,15 +2764,9 @@ if s:IsPlugged('deoplete.nvim')
                 \ 'go': '[^. *\t]\.\w*',
                 \ })
 
-    " Ignore sources
-    call deoplete#custom#option('ignore_sources', {
-                \ '_': ['dictionary', 'tag', 'syntax'],
-                \ })
-
     call deoplete#custom#source('_', 'converters', [
                 \ 'converter_remove_overlap',
                 \ 'converter_case',
-                \ 'matcher_length',
                 \ 'converter_truncate_abbr',
                 \ 'converter_truncate_info',
                 \ 'converter_truncate_menu',
@@ -2777,48 +2774,73 @@ if s:IsPlugged('deoplete.nvim')
 
     call deoplete#custom#source('_', 'matchers', [
                 \ 'matcher_fuzzy',
-                \ 'matcher_length',
                 \ ])
 
-    let s:deoplete_snippet_converters = [
-                \ 'converter_remove_overlap',
-                \ 'converter_case',
-                \ 'converter_truncate_abbr',
-                \ 'converter_truncate_info',
-                \ 'converter_truncate_menu',
-                \ ]
+    " Shougo/deoplete-lsp
+    " lighttiger2505/deoplete-vim-lsp
+    call deoplete#custom#source('lsp', {
+                \ 'rank':               500,
+                \ 'min_pattern_length': 1,
+                \ 'sorters':            [],
+                \ })
 
-    let s:deoplete_snippet_matchers = [
-                \ 'matcher_fuzzy',
-                \ ]
+    " hrsh7th/deoplete-vim-lsc
+    call deoplete#custom#source('lsc', {
+                \ 'is_volatile':        v:true,
+                \ 'rank':               500,
+                \ 'min_pattern_length': 1,
+                \ 'sorters':            [],
+                \ })
 
+    " autozimu/LanguageClient-neovim
+    call deoplete#custom#source('LanguageClient', {
+                \ 'rank':               500,
+                \ 'min_pattern_length': 1,
+                \ 'sorters':            [],
+                \ })
+
+    " hrsh7th/deoplete-lamp
+    call deoplete#custom#source('lamp', {
+                \ 'rank':    500,
+                \ 'mark':    '[lamp]',
+                \ 'sorters': [],
+                \ })
+
+    " hrsh7th/vim-vsnip-integ
     call deoplete#custom#source('vsnip', {
                 \ 'rank':               250,
-                \ 'mark':               '[VS]',
+                \ 'mark':               '[V]',
                 \ 'min_pattern_length': 1,
-                \ 'converters':         s:deoplete_snippet_converters,
-                \ 'matchers':           s:deoplete_snippet_matchers,
+                \ 'sorters':            ['sorter_word'],
                 \ })
+
+    " SirVer/ultisnips
     call deoplete#custom#source('ultisnips', {
                 \ 'rank':               200,
-                \ 'mark':               '[US]',
+                \ 'mark':               '[U]',
                 \ 'min_pattern_length': 1,
-                \ 'converters':         s:deoplete_snippet_converters,
-                \ 'matchers':           s:deoplete_snippet_matchers,
+                \ 'sorters':            ['sorter_word'],
                 \ })
+
+    " Shougo/neosnippet.vim
     call deoplete#custom#source('neosnippet', {
                 \ 'rank':               200,
-                \ 'mark':               '[NS]',
+                \ 'mark':               '[N]',
                 \ 'min_pattern_length': 1,
-                \ 'converters':         s:deoplete_snippet_converters,
-                \ 'matchers':           s:deoplete_snippet_matchers,
+                \ 'sorters':            ['sorter_word'],
                 \ })
+
+    call deoplete#custom#source('omni', {
+                \ 'is_volatile': v:true,
+                \ 'rank':        500,
+                \ })
+
     call deoplete#custom#source('around', {
                 \ 'rank': 180,
                 \ })
-    call deoplete#custom#source('fname', {
-                \ 'rank': 150,
-                \ })
+
+    " CTRL-E: Cancel popup
+    inoremap <expr> <C-e> deoplete#cancel_popup()
 
     " CTRL-H, <BS>: close popup and delete backword char
     inoremap <expr> <C-h> deoplete#smart_close_popup()."\<C-h>"
