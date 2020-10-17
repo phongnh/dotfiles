@@ -2238,6 +2238,11 @@ let g:language_servers = {
             \   'filetypes': ['elixir'],
             \   'root_markers': ['mix.exs'],
             \ },
+            \ 'erlang-ls': {
+            \   'cmd': ['erlang-ls'],
+            \   'filetypes': ['erlang'],
+            \   'root_markers': ['rebar.config'],
+            \ },
             \ 'flow': {
             \   'cmd': ['flow', 'lsp', '--from', 'vim'],
             \   'filetypes': ['javascript', 'javascripteact', 'javascript.jsx'],
@@ -2367,6 +2372,7 @@ function! s:GetEnabledLanguageServers() abort
                 \ 'rls',
                 \ 'rust-analyzer',
                 \ 'elixir-ls',
+                \ 'erlang-ls',
                 \ 'lua-lsp',
                 \ 'metals',
                 \ 'yaml-language-server',
