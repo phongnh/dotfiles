@@ -997,7 +997,7 @@ set splitright                  " Splitting a window will put the new window rig
 
 set t_Co=256                    " Enable 256 colors
 
-" Vim hardcodes Background Color Erase (BCE) even if the terminfo file does not contain BCE 
+" Vim hardcodes Background Color Erase (BCE) even if the terminfo file does not contain BCE
 " (not to mention that libvte based terminals incorrectly contain bce in their terminfo files).
 " This causes incorrect background rendering when using a color theme with a background color.
 set t_ut=
