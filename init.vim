@@ -159,7 +159,6 @@ let s:zero_vim_default_signs = {
             \ 'hint':          '🅗',
             \ 'virtual_text':  '🅓',
             \ }
-if g:zero_vim_devicons | let s:zero_vim_default_signs.virtual_text = '' | endif
 let g:zero_vim_signs = extend(copy(s:zero_vim_default_signs), get(g:, 'zero_vim_signs', {}))
 
 " True Color settings
