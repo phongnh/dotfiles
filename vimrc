@@ -820,15 +820,27 @@ Plug 'chrisbra/unicode.vim'
 Plug 'janko-m/vim-test'
 
 " Color schemes {
-    " one colorscheme pack to rule them all!
-    Plug 'flazz/vim-colorschemes'
+    " Default
+    Plug 'altercation/vim-colors-solarized'
+    Plug 'gruvbox-community/gruvbox'
+    Plug 'NLKNguyen/papercolor-theme'
 
     " Code never sleeps in Gotham City
     Plug 'whatyouhide/gotham'
 
-    " True Color schemes
+    " Dark
+    Plug 'dracula/vim'
+    Plug 'doums/darcula'
+
+    " True Color
     Plug 'lifepillar/vim-solarized8'
     Plug 'lifepillar/vim-gruvbox8'
+    Plug 'arcticicestudio/nord-vim'
+    Plug 'tyrannicaltoucan/vim-deep-space'
+    Plug 'drewtempelmeyer/palenight.vim'
+
+    " Simple
+    Plug 'pbrisbin/vim-colors-off'
 " }
 
 " DevIcons {
