@@ -381,6 +381,10 @@ call plug#begin()
             Plug 'phongnh/ctrlp-fzy-matcher'
         endif
 
+        if s:Use('cmatcher') && has('python3')
+            Plug 'phongnh/ctrlp-cmatcher', { 'do': './install.sh' }
+        endif
+
         if has('python3') && executable('cmake')
             Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
         endif
@@ -1743,6 +1747,9 @@ if s:IsPlugged('ctrlp.vim')
     elseif s:IsPlugged('ctrlp-fzy-matcher')
         " phongnh/ctrlp-fzy-matcher
         let g:ctrlp_match_func       = { 'match': 'fzy_matcher#match' }
+    elseif s:IsPlugged('ctrlp-cmatcher') && filereadable(s:PlugDir('ctrlp-cmatcher') . 'autoload/fuzzycomt.so')
+        " phongnh/ctrlp-cmatcher
+        let g:ctrlp_match_func       = { 'match': 'matcher#cmatch' }
     elseif s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'autoload/cpsm_py.so')
         " nixprime/cpsm
         let g:cpsm_match_empty_query = 0
