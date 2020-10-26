@@ -152,6 +152,7 @@ call s:Source('.vimrc.before')
 
 " Default zero settings
 let g:zero_vim_devicons          = get(g:, 'zero_vim_devicons',          0)
+let g:zero_vim_glyph_palette     = get(g:, 'zero_vim_glyph_palette',     0)
 let g:zero_vim_true_color        = get(g:, 'zero_vim_true_color',        0)
 let g:zero_vim_powerline         = get(g:, 'zero_vim_powerline',         0)
 let g:zero_vim_powerline_style   = get(g:, 'zero_vim_powerline_style',   'default')
@@ -830,6 +831,8 @@ Plug 'janko-m/vim-test'
     if g:zero_vim_devicons
         " Adds file type glyphs/icons to popular Vim plugins: NERDTree, vim-airline, Powerline, Unite, vim-startify and more
         Plug 'ryanoasis/vim-devicons'
+        " An universal palette for Nerd Fonts
+        Plug 'lambdalisue/glyph-palette.vim'
     endif
 " }
 
@@ -4173,6 +4176,14 @@ let g:solarized_term_italics = 1
 
 " lifepillar/vim-gruvbox8
 let g:gruvbox_italic = 1
+
+if s:IsPlugged('glyph-palette.vim') && g:zero_vim_glyph_palette
+    " lambdalisue/glyph-palette.vim
+    augroup MyAutoCmd
+        autocmd FileType fern call glyph_palette#apply()
+        autocmd FileType nerdtree,startify call glyph_palette#apply()
+    augroup END
+endif
 
 if s:IsPlugged('vim-which-key')
     " liuchengxu/vim-which-key
