@@ -1655,13 +1655,27 @@ if s:IsPlugged('fern.vim')
     let g:fern#drawer_width = 35
 
     if s:IsPlugged('fern-renderer-nerdfont.vim')
-        let g:fern#renderer#nerdfont#leading = '   '
+        let g:fern#renderer#nerdfont#leading = '  '
     else
-        let g:fern#renderer#default#root_symbol      = ''
+        let g:fern#renderer#default#root_symbol      = "\u2302\u00a0"
         let g:fern#renderer#default#leading          = '  '
         let g:fern#renderer#default#leaf_symbol      = '  '
         let g:fern#renderer#default#collapsed_symbol = '+ '
         let g:fern#renderer#default#expanded_symbol  = '~ '
+
+        let s:ESCAPE_PATTERN = '^$~.*[]\'
+        function! s:HighlightFern() abort
+            execute printf(
+                        \ 'syntax match FernBranchSymbol /^\%%(%s\)*\%%(%s\|%s\)/ contained nextgroup=FernBranchText',
+                        \ g:fern#renderer#default#leading =~ '\s\+' ? '\s\+' : escape(g:fern#renderer#default#leading, s:ESCAPE_PATTERN),
+                        \ escape(g:fern#renderer#default#collapsed_symbol, s:ESCAPE_PATTERN),
+                        \ escape(g:fern#renderer#default#expanded_symbol, s:ESCAPE_PATTERN),
+                        \)
+        endfunction
+
+        augroup MyAutoCmd
+            autocmd FileType fern call <SID>HighlightFern()
+        augroup END
     endif
 
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernDrawerToggle Fern <args> -drawer -toggle
