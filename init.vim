@@ -1708,14 +1708,20 @@ endif
 
 if s:IsPlugged('nerdtree')
     " scrooloose/nerdtree
-    let g:NERDTreeWinSize             = 35
-    let g:NERDTreeMouseMode           = 2
-    let g:NERDTreeMapChangeRoot       = '.' " Map . for changing root in NERDTree
-    let g:NERDTreeQuitOnOpen          = 0
-    let g:NERDTreeChDirMode           = 0
-    let g:NERDTreeShowBookmarks       = 1
-    let g:NERDTreeDirArrowExpandable  = '▸' " +
-    let g:NERDTreeDirArrowCollapsible = '▾' " ~
+    let g:NERDTreeWinSize       = 35
+    let g:NERDTreeMouseMode     = 2
+    let g:NERDTreeMapChangeRoot = '.' " Map . for changing root in NERDTree
+    let g:NERDTreeQuitOnOpen    = 0
+    let g:NERDTreeChDirMode     = 0
+    let g:NERDTreeShowBookmarks = 1
+
+    if g:zero_vim_devicons
+        let g:NERDTreeDirArrowExpandable  = "\u00a0"
+        let g:NERDTreeDirArrowCollapsible = "\u00a0"
+    else
+        let g:NERDTreeDirArrowExpandable  = '+'
+        let g:NERDTreeDirArrowCollapsible = '~'
+    endif
 
     nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
     noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
