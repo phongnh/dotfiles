@@ -2817,7 +2817,7 @@ if s:IsPlugged('deoplete.nvim')
     " hrsh7th/vim-vsnip-integ
     call deoplete#custom#source('vsnip', {
                 \ 'rank':               250,
-                \ 'mark':               '[V]',
+                \ 'mark':               '',
                 \ 'min_pattern_length': 1,
                 \ 'sorters':            ['sorter_word'],
                 \ })
@@ -3150,7 +3150,7 @@ if s:IsPlugged('asyncomplete.vim')
     imap <C-g><C-g> <Plug>(asyncomplete_force_refresh)
 
     " <CR>: close popup and insert newline
-    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+    inoremap <expr> <CR> pumvisible() ? asyncomplete#close_popup()."\<CR>" : "\<CR>"
 
     " <Tab>: completion
     function! s:CheckBackSpace() abort
@@ -3202,7 +3202,7 @@ if s:IsPlugged('asyncomplete.vim')
         call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
                     \ 'name':      'omni',
                     \ 'allowlist': ['*'],
-                    \ 'blocklist': ['c', 'cpp', 'html', 'ruby'],
+                    \ 'blocklist': ['c', 'cpp', 'html', 'css', 'ruby'],
                     \ 'completor': function('asyncomplete#sources#omni#completor'),
                     \ }))
 
@@ -3231,13 +3231,13 @@ if s:IsPlugged('asyncomplete.vim')
 
     " Integrate with vim-visual-multi / vim-multiple-cursors plugin
     function! Disable_Completion_Hook() abort
+        let b:asyncomplete_enable     = 0
         let g:asyncomplete_auto_popup = 0
-        let b:asyncomplete_enable = 0
     endfunction
 
     function! Enable_Completion_Hook() abort
+        let b:asyncomplete_enable     = 1
         let g:asyncomplete_auto_popup = 1
-        let b:asyncomplete_enable = 1
     endfunction
 endif
 
@@ -3383,7 +3383,7 @@ if s:IsPlugged('vim-mucomplete')
             call add(l:chains, 'nsnp')
         endif
 
-        call extend(l:chains, ['keyn', 'path', 'dict', 'uspl'])
+        call extend(l:chains, ['keyn', 'c-n', 'path'])
 
         return l:chains
     endfunction
