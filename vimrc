@@ -2942,23 +2942,6 @@ if s:IsPlugged('coc.nvim')
     " neoclide/coc.nvim
     " https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions
     " https://github.com/neoclide/coc.nvim/wiki/Language-servers
-    let g:coc_disabled_extensions = [
-                \ 'coc-flow',
-                \ 'coc-eslint',
-                \ 'coc-prettier',
-                \ 'coc-tailwindcss',
-                \ 'coc-clangd',
-                \ 'coc-rls',
-                \ 'coc-rust-analyzer',
-                \ 'coc-metals',
-                \ 'coc-highlight',
-                \ 'coc-yank',
-                \ 'coc-emmet',
-                \ 'coc-snippets',
-                \ 'coc-git',
-                \ 'coc-lists',
-                \ ]
-
     let g:coc_global_extensions = [
                 \ 'coc-json',
                 \ 'coc-tsserver',
@@ -2966,15 +2949,27 @@ if s:IsPlugged('coc.nvim')
                 \ 'coc-xml',
                 \ 'coc-css',
                 \ 'coc-markdownlint',
+                \ 'coc-eslint',
+                \ 'coc-clangd',
                 \ 'coc-python',
                 \ 'coc-pyright',
+                \ 'coc-jedi',
+                \ 'coc-go',
+                \ 'coc-rls',
+                \ 'coc-rust-analyzer',
+                \ 'coc-elixir',
+                \ 'coc-erlang_ls',
+                \ 'coc-metals',
                 \ 'coc-solargraph',
                 \ 'coc-yaml',
+                \ 'coc-sh',
                 \ 'coc-vimlsp',
                 \ ]
 
     if s:IsPlugged('ultisnips')
         call add(g:coc_global_extensions, 'coc-ultisnips')
+    elseif s:IsPlugged('neosnippet.vim')
+        call add(g:coc_global_extensions, 'coc-neosnippet')
     endif
 
     if executable('/usr/local/bin/node')
