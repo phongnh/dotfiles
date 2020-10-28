@@ -365,6 +365,11 @@ call plug#begin()
             Plug 'lambdalisue/nerdfont.vim'
             Plug 'lambdalisue/fern-renderer-nerdfont.vim'
         endif
+    elseif s:Use('vaffle')
+        Plug 'cocopon/vaffle.vim'
+        if g:zero_vim_devicons
+            Plug 'lambdalisue/nerdfont.vim'
+        endif
     else
         " A tree explorer plugin for vim
         Plug 'scrooloose/nerdtree'
@@ -1720,6 +1725,40 @@ if s:IsPlugged('fern.vim')
     nnoremap <silent> <Leader>e  :FernDrawerToggle .<CR>
     nnoremap <silent> <Leader>E  :FernDrawerCWD<CR>
     nnoremap <silent> <Leader>bf :FernDrawerReveal<CR>
+endif
+
+if s:IsPlugged('vaffle.vim')
+    " cocopon/vaffle.vim
+    " Hack for vaffle.vim with vim-projectionist
+    let g:projectionist_ignore_vaffle = 1
+
+    nnoremap <silent> <Leader>e  :Vaffle<CR>
+    nnoremap <silent> <Leader>bf :Vaffle <C-r>=expand("%:p:h")<CR><CR>
+
+    if s:IsPlugged('nerdfont.vim')
+        function! VaffleRenderCustomIcon(item) abort
+            return nerdfont#find(a:item.basename, a:item.is_dir)
+        endfunction
+
+        let g:vaffle_render_custom_icon = 'VaffleRenderCustomIcon'
+    elseif s:IsPlugged('vim-devicons')
+        function! VaffleRenderCustomIcon(item) abort
+            return WebDevIconsGetFileTypeSymbol(a:item.basename, a:item.is_dir)
+        endfunction
+
+        let g:vaffle_render_custom_icon = 'VaffleRenderCustomIcon'
+    endif
+
+    function! s:InitVaffle() abort
+        nmap <buffer> <silent> cd <Plug>(vaffle-chdir-here)
+        nmap <buffer> <silent> P  <Plug>(vaffle-open-root)
+        nmap <buffer> <silent> K  <Plug>(vaffle-mkdir)
+        nmap <buffer> <silent> N  <Plug>(vaffle-new-file)
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd FileType vaffle call s:InitVaffle()
+    augroup END
 endif
 
 if s:IsPlugged('nerdtree')
