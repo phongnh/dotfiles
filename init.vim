@@ -701,6 +701,13 @@ Plug 'chrisbra/unicode.vim'
     endif
 " }
 
+if s:Use('treesitter') && has('nvim-0.5-nightly')
+    Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'nvim-treesitter/nvim-treesitter-refactor'
+    Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+    " Plug 'romgrk/nvim-treesitter-context'
+endif
+
 " Web {
     if s:Use('web')
         Plug 'othree/html5.vim'
@@ -4179,6 +4186,75 @@ if s:IsPlugged('vim-hardtime')
     let g:hardtime_showmsg    = 1
     let g:list_of_visual_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<LEFT>', '<RIGHT>']
     let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<LEFT>', '<RIGHT>']
+endif
+
+if s:IsPlugged('nvim-treesitter')
+    " nvim-treesitter/nvim-treesitter
+    :lua << EOF
+        require'nvim-treesitter.configs'.setup {
+            ensure_installed = "maintained",
+            highlight = {
+                enable           = true,
+                use_languagetree = false,
+                disable          = { "c", "ruby", "rust" }
+            },
+            incremental_selection = {
+                enable = true,
+                keymaps = {
+                    init_selection    = "gnn",
+                    node_incremental  = "grn",
+                    scope_incremental = "grc",
+                    node_decremental  = "grm",
+                },
+            },
+            indent = {
+                enable = true,
+            },
+            refactor = {
+                highlight_definitions   = { enable = true },
+                highlight_current_scope = { enable = false },
+            },
+            textobjects = {
+                select = {
+                    enable = true,
+                    keymaps = {
+                        -- You can use the capture groups defined in textobjects.scm
+                        ["af"] = "@function.outer",
+                        ["if"] = "@function.inner",
+                        ["ac"] = "@class.outer",
+                        ["ic"] = "@class.inner",
+
+                        -- Or you can define your own textobjects like this
+                        ["iF"] = {
+                            python = "(function_definition) @function",
+                            cpp    = "(function_definition) @function",
+                            c      = "(function_definition) @function",
+                            java   = "(method_declaration) @function",
+                        },
+                    }
+                },
+                move = {
+                    enable = true,
+                    goto_next_start = {
+                        ["]m"] = "@function.outer",
+                        ["]]"] = "@class.outer",
+                    },
+                    goto_next_end = {
+                        ["]M"] = "@function.outer",
+                        ["]["] = "@class.outer",
+                    },
+                    goto_previous_start = {
+                        ["[m"] = "@function.outer",
+                        ["[["] = "@class.outer",
+                    },
+                    goto_previous_end = {
+                        ["[M"] = "@function.outer",
+                        ["[]"] = "@class.outer",
+                    },
+                },
+            },
+        }
+EOF
 endif
 
 " tpope/vim-markdown
