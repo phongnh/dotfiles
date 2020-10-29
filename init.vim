@@ -1706,23 +1706,24 @@ if s:IsPlugged('fern.vim')
         augroup END
     endif
 
+    command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernReveal Fern %:h <args> -reveal=%:t
+    command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernCWD execute printf('Fern %s <args>', getcwd())
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernDrawerToggle Fern <args> -drawer -toggle
-    command! -nargs=0 FernDrawerReveal Fern %:h -drawer -reveal=%:t
-    command! -nargs=0 FernDrawerCWD call s:OpenFernDrawerCWD()
-
-    function! s:OpenFernDrawerCWD() abort
-        let cwd = getcwd()
-        execute printf('Fern %s -drawer', cwd)
-    endfunction
+    command! -nargs=0 FernDrawerReveal FernReveal -drawer
+    command! -nargs=0 FernDrawerCWD FernCWD -drawer
 
     function! s:InitFern() abort
-        nmap     <buffer> o  <Plug>(fern-action-open-or-expand)
-        nmap     <buffer> p  <Plug>(fern-action-leave)
-        nmap     <buffer> u  <Plug>(fern-action-leave)
-        nmap     <buffer> r  <Plug>(fern-action-reload)<Plug>(fern-action-redraw)
-        nmap     <buffer> I  <Plug>(fern-action-hidden-toggle)
-        nmap     <buffer> cd <Plug>(fern-action-cd)
-        nnoremap <buffer> q  :<C-u>quit<CR>
+        nmap <buffer> <Plug>(fern-action-reload-and-redraw)
+                    \ <Plug>(fern-action-reload)
+                    \ <Plug>(fern-action-redraw)
+
+        nmap     <buffer> <silent> o  <Plug>(fern-action-open-or-expand)
+        nmap     <buffer> <silent> p  <Plug>(fern-action-leave)
+        nmap     <buffer> <silent> u  <Plug>(fern-action-leave)
+        nmap     <buffer> <silent> r  <Plug>(fern-action-reload-and-redraw)
+        nmap     <buffer> <silent> I  <Plug>(fern-action-hidden-toggle)
+        nmap     <buffer> <silent> cd <Plug>(fern-action-cd)
+        nnoremap <buffer> <silent> q  :<C-u>quit<CR>
     endfunction
 
     augroup MyAutoCmd
