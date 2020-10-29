@@ -1741,7 +1741,7 @@ if s:IsPlugged('vaffle.vim')
     let g:projectionist_ignore_vaffle = 1
 
     nnoremap <silent> <Leader>e  :Vaffle<CR>
-    nnoremap <silent> <Leader>bf :Vaffle <C-r>=expand("%:p:h")<CR><CR>
+    nnoremap <silent> <Leader>bf :Vaffle %<CR>
 
     if s:IsPlugged('nerdfont.vim')
         function! VaffleRenderCustomIcon(item) abort
@@ -1758,10 +1758,14 @@ if s:IsPlugged('vaffle.vim')
     endif
 
     function! s:InitVaffle() abort
+        setlocal cursorline
+
         nmap <buffer> <silent> cd <Plug>(vaffle-chdir-here)
         nmap <buffer> <silent> P  <Plug>(vaffle-open-root)
         nmap <buffer> <silent> K  <Plug>(vaffle-mkdir)
         nmap <buffer> <silent> N  <Plug>(vaffle-new-file)
+        nmap <buffer> <silent> s  <Plug>(vaffle-toggle-current)
+        nmap <buffer> <silent> b  :<C-u>b#<CR>
     endfunction
 
     augroup MyAutoCmd
@@ -4468,7 +4472,7 @@ if s:IsPlugged('glyph-palette.vim') && g:zero_vim_glyph_palette
     " lambdalisue/glyph-palette.vim
     augroup MyAutoCmd
         autocmd FileType fern call glyph_palette#apply()
-        autocmd FileType nerdtree,startify call glyph_palette#apply()
+        autocmd FileType nerdtree,vaffle,startify call glyph_palette#apply()
     augroup END
 endif
 
