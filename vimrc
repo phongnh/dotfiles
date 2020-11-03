@@ -2251,13 +2251,6 @@ if s:IsPlugged('neosnippet.vim')
     smap <Tab> <Plug>(neosnippet_jump)
 endif
 
-if s:IsLSPEnabled()
-    " Always draw the signcolumn
-    set signcolumn=yes
-    " Don't give |ins-completion-menu| messages.
-    set shortmess+=c
-endif
-
 " LSP Servers
 let g:language_servers = {
             \ 'bash-language-server': {
@@ -2543,9 +2536,7 @@ endif
 
 if s:IsPlugged('vim-lsc')
     " natebosch/vim-lsc
-    set shortmess-=F
-
-    let g:lsc_complete_timeout     = 0.5 " Wait up to 0.5 second
+    let g:lsc_complete_timeout     = 3 " Wait up to 3 seconds
     let g:lsc_enable_diagnostics   = g:zero_vim_lsp_diagnostics ? v:true : v:false
     let g:lsc_reference_highlights = v:true
     let g:lsc_trace_level          = 'off'
@@ -2691,7 +2682,7 @@ if s:IsPlugged('vim-lamp')
     " Initialize Servers
     function! s:OnInitializedLamp() abort
         " call lamp#config('global.debug',               expand("$HOME/.cache/lamp.log"))
-        call lamp#config('global.timeout',             2000)
+        call lamp#config('global.timeout',             3000)
         call lamp#config('view.sign.error.text',       g:zero_vim_signs.error)
         call lamp#config('view.sign.warning.text',     g:zero_vim_signs.warning)
         call lamp#config('view.sign.information.text', g:zero_vim_signs.information)
