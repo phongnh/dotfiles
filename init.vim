@@ -3419,8 +3419,9 @@ endif
 
 if s:IsPlugged('ncm2')
     " ncm2/ncm2
-    let g:ncm2#auto_popup  = 1
-    let g:ncm2#popup_delay = 50
+    let g:ncm2#auto_popup      = 1
+    let g:ncm2#popup_delay     = 50
+    let g:ncm2#complete_length = [ [1, 3], [7, 1] ]
 
     " Enable Autocomplete for all buffers
     augroup MyAutoCmd
