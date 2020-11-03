@@ -256,13 +256,11 @@ call plug#begin()
 " }
 
 " Search {
-    if s:Use('grep')
-        " Helps you win at grep.
-        Plug 'mhinz/vim-grepper'
+    " Helps you win at grep.
+    Plug 'mhinz/vim-grepper'
 
-        " An ack.vim alternative mimics Ctrl-Shift-F on Sublime Text 2
-        Plug 'dyng/ctrlsf.vim'
-    endif
+    " An ack.vim alternative mimics Ctrl-Shift-F on Sublime Text 2
+    Plug 'dyng/ctrlsf.vim'
 " }
 
 " Editing {
@@ -1254,27 +1252,6 @@ let g:dispatch_tmux_height     = 1
 " phongnh/vim-helpers
 let g:grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
 
-nnoremap          <Leader>S  :Grep<Space>
-nmap              <Leader>se <Leader>S
-nnoremap <silent> <Leader>ss :GrepCCword<CR>
-xnoremap <silent> <Leader>ss <Esc>:Grep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-nnoremap          <Leader>si :GrepCCword<Space>
-xnoremap          <Leader>si <Esc>:Grep <C-r>=vim_helpers#SelectedTextForShell()<CR><Space>
-nnoremap <silent> <Leader>s/ <Esc>:Grep <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
-nnoremap          <Leader>s? <Esc>:Grep <C-r>=vim_helpers#SearchTextForShell()<CR><Space>
-
-nnoremap          <Leader>L  :LGrep<Space>
-nnoremap <silent> <Leader>sl :LGrepCCword<CR>
-xnoremap <silent> <Leader>sl <Esc>:LGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-
-nnoremap          <Leader>B  :BGrep<Space>
-nnoremap <silent> <Leader>bs :BGrepCCword<CR>
-xnoremap <silent> <Leader>bs <Esc>:BGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-
-" Grep with current buffer file type
-nnoremap <silent> <Leader>sb :TGrepCCword<CR>
-xnoremap <silent> <Leader>sb <Esc>:TGrep <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-
 " Tig Status
 nnoremap <silent> <Leader>gt :TigStatus<CR>
 
@@ -1361,155 +1338,144 @@ if s:IsPlugged('QFEnter')
     let g:qfenter_keymap.topen = ['<C-t>']
 endif
 
-if s:IsPlugged('vim-grepper')
-    " mhinz/vim-grepper
-    let g:grepper = {
-                \ 'open':                1,
-                \ 'switch':              1,
-                \ 'jump':                0,
-                \ 'prompt_mapping_tool': '<C-\>',
-                \ 'tools':               ['rg', 'ag', 'git', 'grep', 'findstr'],
-                \ 'stop':                2000,
-                \ }
+" mhinz/vim-grepper
+let g:grepper = {
+            \ 'open':                1,
+            \ 'switch':              1,
+            \ 'jump':                0,
+            \ 'prompt_mapping_tool': '<C-\>',
+            \ 'tools':               ['rg', 'ag', 'git', 'grep', 'findstr'],
+            \ 'stop':                2000,
+            \ }
 
-    runtime plugin/grepper.vim
+runtime plugin/grepper.vim
 
-    if has_key(g:grepper, 'rg')
-        let g:grepper.rg.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
-    endif
-
-    if has_key(g:grepper, 'ag')
-        let g:grepper.ag.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --skip-vcs-ignores' : '')
-    endif
-
-    command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
-    command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
-
-    function! s:TGrepper(qargs) abort
-        if exists(':GrepperRg') == 2
-            let cmd = 'GrepperRg ' . vim_helpers#ParseGrepFileTypeOption('rg')
-        elseif exists(':GrepperAg') == 2
-            let cmd = 'GrepperAg ' . vim_helpers#ParseGrepFileTypeOption('ag')
-        elseif exists(':GrepperGrep') == 2
-            let cmd = 'GrepperGrep ' . vim_helpers#ParseGrepFileTypeOption('grep')
-        else
-            let cmd = 'Grepper'
-        endif
-        execute vim_helpers#strip(cmd . ' ' . a:qargs)
-    endfunction
-
-    function! s:TGrepperCword(word_boundary, qargs) abort
-        if a:word_boundary
-            let cword = vim_helpers#CCwordForGrep()
-        else
-            let cword = vim_helpers#CwordForGrep()
-        endif
-        call s:TGrepper(cword . ' ' . a:qargs)
-    endfunction
-
-    command! -nargs=+ -complete=dir TGrepper       call <SID>TGrepper(<q-args>)
-    command! -nargs=? -complete=dir TGrepperCCword call <SID>TGrepperCword(1, <q-args>)
-    command! -nargs=? -complete=dir TGrepperCword  call <SID>TGrepperCword(0, <q-args>)
-
-    nmap gs <Plug>(GrepperOperator)
-    xmap gs <Plug>(GrepperOperator)
-
-    nnoremap <silent> <Leader>S  :Grepper<CR>
-    nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-    nnoremap <silent> <Leader>si :Grepper -prompt -cword<CR>
-    xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-    nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
-    nnoremap <silent> <Leader>s? :Grepper -prompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
-
-    nnoremap <silent> <Leader>L  :LGrepper<CR>
-    nnoremap <silent> <Leader>sl :LGrepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>sl <Esc>:LGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-
-    nnoremap          <Leader>B  :BGrepper<CR>
-    nnoremap <silent> <Leader>bs :BGrepper -noprompt -cword<CR>
-    xnoremap <silent> <Leader>bs <Esc>:BGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-
-    " Grepper with current buffer file type
-    nnoremap <silent> <Leader>sb :TGrepperCCword<CR>
-    xnoremap <silent> <Leader>sb <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+if has_key(g:grepper, 'rg')
+    let g:grepper.rg.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
 endif
 
-if s:IsPlugged('ctrlsf.vim')
-    " dyng/ctrlsf.vim
-    let g:ctrlsf_populate_qflist = 1
-    let g:ctrlsf_auto_focus = {
-                \ 'at': 'start'
-                \ }
-
-    if g:zero_vim_grep_ignore_vcs
-        let g:ctrlsf_extra_backend_args = {
-                    \ 'rg': '--no-ignore-vcs',
-                    \ 'ag': '--skip-vcs-ignores',
-                    \ }
-    endif
-
-    function! s:CtrlSFParseFileTypeOption(cmd) abort
-        let ext = expand('%:e')
-
-        if a:cmd ==# 'rg'
-            let ft = vim_helpers#RgFileType(&filetype)
-
-            if strlen(ft) && vim_helpers#IsRgKnownFileType(ft)
-                return printf("-filetype %s", ft)
-            elseif strlen(ext)
-                return printf("-filematch '*.%s'", ext)
-            endif
-        elseif a:cmd ==# 'ag'
-            let ft = vim_helpers#AgFileType(&filetype)
-
-            if strlen(ft) && vim_helpers#IsAgKnownFileType(ft)
-                return printf("-filetype %s", ft)
-            elseif strlen(ext)
-                return printf("-filematch '.%s$'", ext)
-            endif
-        endif
-
-        return ''
-    endfunction
-
-    " CtrlSF prefers ag over rg
-    if executable('ag')
-        let g:ctrlsf_backend = 'ag'
-    elseif executable('rg')
-        let g:ctrlsf_backend = 'rg'
-    endif
-
-    function! s:TCtrlSF(qargs) abort
-        let cmd = 'CtrlSF ' . s:CtrlSFParseFileTypeOption(get(g:, 'ctrlsf_backend', ''))
-        execute vim_helpers#strip(cmd . ' ' . a:qargs)
-    endfunction
-
-    function! s:TCtrlSFCword(word_boundary, qargs) abort
-        if a:word_boundary && get(g:, 'ctrlsf_backend', '') =~# 'ag\|rg'
-            let cword = '-R \b' . expand('<cword>') . '\b'
-        else
-            let cword = expand('<cword>')
-        endif
-        call s:TCtrlSF(cword . ' ' . a:qargs)
-    endfunction
-
-    command! -nargs=+ -complete=dir TCtrlSF       call <SID>TCtrlSF(<q-args>)
-    command! -nargs=? -complete=dir TCtrlSFCCword call <SID>TCtrlSFCword(1, <q-args>)
-    command! -nargs=? -complete=dir TCtrlSFCword  call <SID>TCtrlSFCword(0, <q-args>)
-
-    nmap              <Leader>sp <Plug>CtrlSFPrompt
-    nmap              <Leader>sf <Plug>CtrlSFCCwordExec
-    vmap              <Leader>sf <Plug>CtrlSFVwordExec
-    nmap              <Leader>sc <Plug>CtrlSFCCwordPath
-    vmap              <Leader>sc <Plug>CtrlSFVwordPath
-    nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
-    nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
-
-    " CtrlSF with current buffer file type
-    nnoremap <silent> <Leader>sn :TCtrlSFCCword<CR>
-    xnoremap <silent> <Leader>sn <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+if has_key(g:grepper, 'ag')
+    let g:grepper.ag.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --skip-vcs-ignores' : '')
 endif
+
+command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
+command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
+
+function! s:TGrepper(qargs) abort
+    if exists(':GrepperRg') == 2
+        let cmd = 'GrepperRg ' . vim_helpers#ParseGrepFileTypeOption('rg')
+    elseif exists(':GrepperAg') == 2
+        let cmd = 'GrepperAg ' . vim_helpers#ParseGrepFileTypeOption('ag')
+    elseif exists(':GrepperGrep') == 2
+        let cmd = 'GrepperGrep ' . vim_helpers#ParseGrepFileTypeOption('grep')
+    else
+        let cmd = 'Grepper'
+    endif
+    execute vim_helpers#strip(cmd . ' ' . a:qargs)
+endfunction
+
+function! s:TGrepperCword(word_boundary, qargs) abort
+    if a:word_boundary
+        let cword = vim_helpers#CCwordForGrep()
+    else
+        let cword = vim_helpers#CwordForGrep()
+    endif
+    call s:TGrepper(cword . ' ' . a:qargs)
+endfunction
+
+command! -nargs=+ -complete=dir TGrepper       call <SID>TGrepper(<q-args>)
+command! -nargs=? -complete=dir TGrepperCCword call <SID>TGrepperCword(1, <q-args>)
+command! -nargs=? -complete=dir TGrepperCword  call <SID>TGrepperCword(0, <q-args>)
+
+nmap gs <Plug>(GrepperOperator)
+xmap gs <Plug>(GrepperOperator)
+
+nnoremap <silent> <Leader>S  :Grepper<CR>
+nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
+xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>si :Grepper -prompt -cword<CR>
+xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
+nnoremap <silent> <Leader>s? :Grepper -prompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
+
+nnoremap <silent> <Leader>L  :LGrepper<CR>
+nnoremap <silent> <Leader>sl :LGrepper -noprompt -cword<CR>
+xnoremap <silent> <Leader>sl <Esc>:LGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+nnoremap          <Leader>B  :BGrepper<CR>
+nnoremap <silent> <Leader>bs :BGrepper -noprompt -cword<CR>
+xnoremap <silent> <Leader>bs <Esc>:BGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+" Grepper with current buffer file type
+nnoremap <silent> <Leader>sb :TGrepperCCword<CR>
+xnoremap <silent> <Leader>sb <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+" dyng/ctrlsf.vim
+let g:ctrlsf_populate_qflist = 1
+let g:ctrlsf_auto_focus = {
+            \ 'at': 'start'
+            \ }
+
+function! s:CtrlSFParseFileTypeOption(cmd) abort
+    let ext = expand('%:e')
+
+    if a:cmd ==# 'rg'
+        let ft = vim_helpers#RgFileType(&filetype)
+
+        if strlen(ft) && vim_helpers#IsRgKnownFileType(ft)
+            return printf("-filetype %s", ft)
+        elseif strlen(ext)
+            return printf("-filematch '*.%s'", ext)
+        endif
+    elseif a:cmd ==# 'ag'
+        let ft = vim_helpers#AgFileType(&filetype)
+
+        if strlen(ft) && vim_helpers#IsAgKnownFileType(ft)
+            return printf("-filetype %s", ft)
+        elseif strlen(ext)
+            return printf("-filematch '.%s$'", ext)
+        endif
+    endif
+
+    return ''
+endfunction
+
+" CtrlSF prefers ag over rg
+if executable('ag')
+    let g:ctrlsf_backend = 'ag'
+elseif executable('rg')
+    let g:ctrlsf_backend = 'rg'
+endif
+
+function! s:TCtrlSF(qargs) abort
+    let cmd = 'CtrlSF ' . s:CtrlSFParseFileTypeOption(get(g:, 'ctrlsf_backend', ''))
+    execute vim_helpers#strip(cmd . ' ' . a:qargs)
+endfunction
+
+function! s:TCtrlSFCword(word_boundary, qargs) abort
+    if a:word_boundary && get(g:, 'ctrlsf_backend', '') =~# 'ag\|rg'
+        let cword = '-R \b' . expand('<cword>') . '\b'
+    else
+        let cword = expand('<cword>')
+    endif
+    call s:TCtrlSF(cword . ' ' . a:qargs)
+endfunction
+
+command! -nargs=+ -complete=dir TCtrlSF       call <SID>TCtrlSF(<q-args>)
+command! -nargs=? -complete=dir TCtrlSFCCword call <SID>TCtrlSFCword(1, <q-args>)
+command! -nargs=? -complete=dir TCtrlSFCword  call <SID>TCtrlSFCword(0, <q-args>)
+
+nmap              <Leader>sp <Plug>CtrlSFPrompt
+nmap              <Leader>sf <Plug>CtrlSFCCwordExec
+vmap              <Leader>sf <Plug>CtrlSFVwordExec
+nmap              <Leader>sc <Plug>CtrlSFCCwordPath
+vmap              <Leader>sc <Plug>CtrlSFVwordPath
+nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
+nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
+
+" CtrlSF with current buffer file type
+nnoremap <silent> <Leader>sn :TCtrlSFCCword<CR>
+xnoremap <silent> <Leader>sn <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 " scrooloose/nerdcommenter
 " Add spaces after comment delimiters by default
