@@ -1365,6 +1365,7 @@ if has_key(g:grepper, 'ag')
     let g:grepper.ag.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --skip-vcs-ignores' : '')
 endif
 
+command! -nargs=* -complete=customlist,grepper#complete PGrepper Grepper -dir repo,filecwd <args>
 command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
 command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
 
@@ -1400,6 +1401,8 @@ xmap gs <Plug>(GrepperOperator)
 nnoremap <silent> <Leader>S  :Grepper<CR>
 nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
 xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>sp :PGrepper -noprompt -cword<CR>
+xnoremap <silent> <Leader>sp <Esc>:PGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 nnoremap <silent> <Leader>si :Grepper -prompt -cword<CR>
 xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
@@ -1418,7 +1421,7 @@ nnoremap <silent> <Leader>sb :TGrepperCCword<CR>
 xnoremap <silent> <Leader>sb <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 " dyng/ctrlsf.vim
-let g:ctrlsf_populate_qflist = 1
+let g:ctrlsf_populate_qflist = 0
 let g:ctrlsf_auto_focus = {
             \ 'at': 'start'
             \ }
@@ -1472,7 +1475,7 @@ command! -nargs=+ -complete=dir TCtrlSF       call <SID>TCtrlSF(<q-args>)
 command! -nargs=? -complete=dir TCtrlSFCCword call <SID>TCtrlSFCword(1, <q-args>)
 command! -nargs=? -complete=dir TCtrlSFCword  call <SID>TCtrlSFCword(0, <q-args>)
 
-nmap              <Leader>sp <Plug>CtrlSFPrompt
+nmap              <Leader>F  <Plug>CtrlSFPrompt
 nmap              <Leader>sf <Plug>CtrlSFCCwordExec
 vmap              <Leader>sf <Plug>CtrlSFVwordExec
 nmap              <Leader>sc <Plug>CtrlSFCCwordPath
