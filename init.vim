@@ -3898,10 +3898,12 @@ if s:IsPlugged('vim-autoformat')
     let g:formatdef_terraform_fmt = '"terraform fmt -no-color -"'
     let g:formatters_terraform    = ['terraform_fmt']
 
-    nnoremap <silent> <Leader>=  :Autoformat <Bar> update<CR>
-    xnoremap <silent> <Leader>=  :Autoformat <Bar> update<CR>
-    nmap     <silent> <Leader>b= <Leader>=
-    xmap     <silent> <Leader>b= <Leader>=
+    nnoremap <silent> <Leader>A  :Autoformat <Bar> update<CR>
+    xnoremap <silent> <Leader>A  :Autoformat <Bar> update<CR>
+    nmap     <silent> <Leader>=  <Leader>A
+    xmap     <silent> <Leader>=  <Leader>A
+    nmap     <silent> <Leader>b= <Leader>A
+    xmap     <silent> <Leader>b= <Leader>A
 endif
 
 if s:IsPlugged('vim-prettier')
@@ -4381,6 +4383,20 @@ if s:IsPlugged('vim-textobj-elixir')
                     \ xmap <buffer> ar <Plug>(textobj-elixir-any-a)|
                     \ omap <buffer> ir <Plug>(textobj-elixir-any-i)|
                     \ xmap <buffer> ir <Plug>(textobj-elixir-any-i)
+    augroup END
+endif
+
+if s:IsPlugged('vim-mix-format')
+    " mhinz/vim-mix-format
+    let g:mix_format_on_save = 0
+
+    function! s:SetupMixFormat() abort
+        nnoremap <buffer> <silent> <Leader>mf :MixFormat<CR>
+        nnoremap <buffer> <silent> <Leader>mF :MixFormatDiff<CR>
+    endfunction
+
+    augroup MyAutoCmd
+        autocmd FileType elixir call s:SetupMixFormat()
     augroup END
 endif
 
