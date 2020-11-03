@@ -114,7 +114,7 @@ endfunction
 
 " Check if plugin group is used or not
 function! s:Use(group) abort
-    return index(get(g:, 'zero_vim_groups', []), a:group) > - 1
+    return index(g:zero_vim_groups, a:group) > -1
 endfunction
 
 " Check if a plugin is plugged in plug section or not
@@ -151,6 +151,7 @@ endfunction
 call s:Source('.vimrc.before')
 
 " Default zero settings
+let g:zero_vim_groups            = get(g:, 'zero_vim_groups',            [])
 let g:zero_vim_devicons          = get(g:, 'zero_vim_devicons',          0)
 let g:zero_vim_glyph_palette     = get(g:, 'zero_vim_glyph_palette',     0)
 let g:zero_vim_true_color        = get(g:, 'zero_vim_true_color',        0)
@@ -3086,6 +3087,7 @@ if s:IsPlugged('YouCompleteMe')
                 \ 'qf':       1,
                 \ 'nerdtree': 1,
                 \ 'fern':     1,
+                \ 'vaffle':   1,
                 \ 'notes':    1,
                 \ 'markdown': 1,
                 \ 'netrw':    1,
@@ -3095,7 +3097,7 @@ if s:IsPlugged('YouCompleteMe')
                 \ 'pandoc':   1,
                 \ 'infolog':  1,
                 \ 'leaderf':  1,
-                \ 'mail':     1
+                \ 'mail':     1,
                 \ }
 
     let g:ycm_error_symbol   = g:zero_vim_signs.error
@@ -3616,7 +3618,10 @@ if s:IsPlugged('ale')
     let g:ale_sign_style_warning = g:zero_vim_signs.style_warning
     let g:ale_sign_info          = g:zero_vim_signs.information
 
-    let g:ale_linter_aliases = { 'javascript.jsx': 'javascript', 'jsx': 'javascript' }
+    let g:ale_linter_aliases = {
+                \ 'jsx':            'javascript',
+                \ 'javascript.jsx': 'javascript',
+                \ }
 
     let g:ale_linters = {}
     let g:ale_fixers  = {
@@ -3805,7 +3810,22 @@ if s:IsPlugged('vim-gutentags')
                 \ ]
 
     " Ignored file types
-    let g:gutentags_exclude_filetypes = ['html', 'xml', 'css', 'sass', 'scss', 'coffee', 'less', 'eruby', 'haml', 'hamlc', 'text',  'git', 'gitcommit', 'fugitiveblame']
+    let g:gutentags_exclude_filetypes = [
+                \ 'html',
+                \ 'xml',
+                \ 'css',
+                \ 'sass',
+                \ 'scss',
+                \ 'coffee',
+                \ 'less',
+                \ 'eruby',
+                \ 'haml',
+                \ 'hamlc',
+                \ 'text',
+                \ 'git',
+                \ 'gitcommit',
+                \ 'fugitiveblame',
+                \ ]
 
     " Prevent gutentags adding gtags databases
     let g:gutentags_auto_add_gtags_cscope = 0
@@ -4025,8 +4045,20 @@ endif
 
 " tpope/vim-markdown
 let g:markdown_fenced_languages = [
-            \ 'bash=sh', 'sass', 'scss', 'css', 'html', 'xml', 'erb=eruby', 'ruby',
-            \ 'javascript', 'js=javascript', 'json=javascript', 'python', 'sql', 'vim'
+            \ 'bash=sh',
+            \ 'sass',
+            \ 'scss',
+            \ 'css',
+            \ 'html',
+            \ 'xml',
+            \ 'erb=eruby',
+            \ 'ruby',
+            \ 'javascript',
+            \ 'js=javascript',
+            \ 'json=javascript',
+            \ 'python',
+            \ 'sql',
+            \ 'vim',
             \ ]
 
 " pangloss/vim-javascript
@@ -4195,7 +4227,14 @@ if s:IsPlugged('vim-polyglot')
     " sheerun/vim-polyglot
     " plasticboy/vim-markdown
     let g:vim_markdown_no_default_key_mappings = 1
-    let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
+    let g:vim_markdown_fenced_languages        = [
+                \ "c++=cpp",
+                \ 'bash=sh',
+                \ 'erb=eruby',
+                \ 'js=javascript',
+                \ 'json=javascript',
+                \ 'viml=vim',
+                \ ]
 endif
 
 " vim-test/vim-test
