@@ -818,7 +818,7 @@ endif
 " }
 
 " Run your tests at the speed of thought
-Plug 'janko-m/vim-test'
+Plug 'vim-test/vim-test'
 
 " Color schemes {
     " Default
@@ -4433,7 +4433,7 @@ if s:IsPlugged('vim-polyglot')
     let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
 endif
 
-" janko-m/vim-test
+" vim-test/vim-test
 function! Neovim2Strategy(cmd) abort
     if g:test#neovim_mode ==? 's'
         let win = 'botright new'

@@ -822,7 +822,7 @@ Plug 'chrisbra/unicode.vim'
 " }
 
 " Run your tests at the speed of thought
-Plug 'janko-m/vim-test'
+Plug 'vim-test/vim-test'
 
 " Color schemes {
     " Default
@@ -4224,7 +4224,7 @@ if s:IsPlugged('vim-polyglot')
     let g:vim_markdown_fenced_languages        = ["c++=cpp", 'bash=sh', 'erb=eruby', 'js=javascript', 'json=javascript', 'viml=vim']
 endif
 
-" janko-m/vim-test
+" vim-test/vim-test
 if has('gui_running') && has('gui_macvim')
     let g:test#strategy = 'terminal'
 elseif s:IsPlugged('vim-tmuxify')
