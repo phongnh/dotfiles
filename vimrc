@@ -171,9 +171,9 @@ let g:zero_vim_ctags             = get(g:, 'zero_vim_ctags',             executa
 " Default signs
 let s:zero_vim_default_signs = {
             \ 'error':         '🅔',
-            \ 'style_error':   'Ⓔ',
+            \ 'style_error':   'ⓔ',
             \ 'warning':       '🅦',
-            \ 'style_warning': 'Ⓦ',
+            \ 'style_warning': 'ⓦ',
             \ 'information':   '🅘',
             \ 'hint':          '🅗',
             \ 'virtual_text':  '🅓',
@@ -2481,10 +2481,11 @@ if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
     let g:lsp_async_completion = 1
 
-    let g:lsp_signs_error       = { 'text': g:zero_vim_signs.error }
-    let g:lsp_signs_warning     = { 'text': g:zero_vim_signs.warning }
-    let g:lsp_signs_information = { 'text': g:zero_vim_signs.information }
-    let g:lsp_signs_hint        = { 'text': g:zero_vim_signs.hint }
+    let g:lsp_signs_error         = { 'text': g:zero_vim_signs.error }
+    let g:lsp_signs_warning       = { 'text': g:zero_vim_signs.warning }
+    let g:lsp_signs_information   = { 'text': g:zero_vim_signs.information }
+    let g:lsp_signs_hint          = { 'text': g:zero_vim_signs.hint }
+    let g:lsp_virtual_text_prefix = g:zero_vim_signs.virtual_text
 
     let g:lsp_diagnostics_enabled          = g:zero_vim_lsp_diagnostics
     let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
