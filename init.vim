@@ -158,7 +158,8 @@ let g:zero_vim_grep_ignore_vcs   = get(g:, 'zero_vim_grep_ignore_vcs',   0)
 let g:zero_vim_find_tool         = get(g:, 'zero_vim_find_tool',         'rg')
 let g:zero_vim_indent_char       = get(g:, 'zero_vim_indent_char',       '┊')
 let g:zero_vim_indent_first_char = get(g:, 'zero_vim_indent_first_char', '│')
-let g:zero_vim_ctags             = get(g:, 'zero_vim_ctags',             executable('ctags-universal') ? 'ctags-universal' : 'ctags')
+let g:zero_vim_ctags_bin         = get(g:, 'zero_vim_ctags_bin',         executable('ctags-universal') ? 'ctags-universal' : 'ctags')
+let g:zero_vim_ctags_ignore      = get(g:, 'zero_vim_ctags_ignore',      expand('~/.ctagsignore'))
 
 " Default signs
 let s:zero_vim_default_signs = {
@@ -614,25 +615,30 @@ call plug#begin()
 " }
 
 " Ctags {
-    if s:Use('ctags') && executable(g:zero_vim_ctags)
-        " A Vim plugin that manages your tag files
-        Plug 'ludovicchabant/vim-gutentags'
+    if executable(g:zero_vim_ctags_bin)
+        if s:Use('ctags')
+            " A Vim plugin that manages your tag files
+            Plug 'ludovicchabant/vim-gutentags'
 
-        if s:Use('gtags-cscope') && has('cscope') && executable('gtags-cscope')
-            " The right way to use gtags with gutentags
-            Plug 'skywind3000/gutentags_plus'
+            if s:Use('gtags-cscope') && has('cscope') && executable('gtags-cscope')
+                " The right way to use gtags with gutentags
+                Plug 'skywind3000/gutentags_plus'
+            endif
+        elseif s:Use('gen_tags')
+            " Async plugin for vim and neovim to ease the use of ctags/gtags
+            Plug 'jsfaint/gen_tags.vim'
         endif
-    elseif s:Use('gen_tags') && executable(g:zero_vim_ctags)
-        " Async plugin for vim and neovim to ease the use of ctags/gtags
-        Plug 'jsfaint/gen_tags.vim'
-    endif
-" }
 
-" Tagbar {
-    if s:Use('tagbar') && executable(g:zero_vim_ctags)
-        " A class outline viewer for Vim
-        Plug 'majutsushi/tagbar'
-        Plug 'phongnh/vim-tagbar-settings'
+        if s:Use('tagbar')
+            " A class outline viewer for Vim
+            Plug 'majutsushi/tagbar'
+            Plug 'phongnh/vim-tagbar-settings'
+        endif
+
+        if s:Use('vista') && s:IsUniversalCtags(g:zero_vim_ctags_bin)
+            " Viewer & Finder for LSP symbols and tags
+            Plug 'liuchengxu/vista.vim'
+        endif
     endif
 " }
 
@@ -1916,7 +1922,7 @@ if s:IsPlugged('LeaderF')
     let g:Lf_ShortcutF = '<Leader>f'
     let g:Lf_ShortcutB = '<Leader>bb'
 
-    let g:Lf_Ctags         = g:zero_vim_ctags
+    let g:Lf_Ctags         = g:zero_vim_ctags_bin
     let g:Lf_CtagsFuncOpts = {
                 \ 'ruby': '--ruby-kinds=fFS',
                 \ }
@@ -1975,14 +1981,6 @@ if s:IsPlugged('LeaderF')
 endif
 
 if s:IsPlugged('vim-clap')
-    " liuchenxu/vista.vim
-    let g:vista_ctags_executable = g:zero_vim_ctags
-    if filereadable(expand('~/.ctagsignore'))
-        let g:vista_ctags_project_opts = join([
-                    \ '--exclude=@' . expand('~/.ctagsignore'),
-                    \ ], ' ')
-    endif
-
     " liuchengxu/vim-clap
     let g:clap_solarized_theme = g:zero_vim_solarized
 
@@ -2009,16 +2007,10 @@ if s:IsPlugged('vim-clap')
 
     if executable('rg')
         let g:clap_provider_grep_executable = 'rg'
-        let g:clap_provider_grep_opts = '-H --no-heading --hidden --vimgrep --smart-case'
-        if g:zero_vim_grep_ignore_vcs
-            let g:clap_provider_grep_opts .= ' --no-ignore-vcs'
-        endif
+        let g:clap_provider_grep_opts = '-H --no-heading --hidden --vimgrep --smart-case' . (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
     elseif executable('ag')
         let g:clap_provider_grep_executable = 'ag'
-        let s:clap_provider_grep_opts = '--noheading --hidden --vimgrep --smart-case'
-        if g:zero_vim_grep_ignore_vcs
-            let g:clap_provider_grep_opts .= ' --skip-vcs-ignores'
-        endif
+        let s:clap_provider_grep_opts = '--noheading --hidden --vimgrep --smart-case' . (g:zero_vim_grep_ignore_vcs ? ' --skip-vcs-ignores' : '')
     endif
 
     let s:clap_find_tools = {
@@ -2115,7 +2107,7 @@ endif
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
     let g:fzf_find_tool = g:zero_vim_find_tool
-    let g:fzf_ctags     = g:zero_vim_ctags
+    let g:fzf_ctags     = g:zero_vim_ctags_bin
 
     nmap <Leader><Leader> <Leader>f
 
@@ -3930,11 +3922,11 @@ if s:IsPlugged('vim-gutentags')
 
     " Generate datebases in my cache directory, prevent gtags files polluting my project
     let g:gutentags_cache_dir       = expand('~/.cache/tags')
-    let g:gutentags_ctag_executable = g:zero_vim_ctags
+    let g:gutentags_ctag_executable = g:zero_vim_ctags_bin
 
     " Universal Ctags
-    if s:IsUniversalCtags(g:gutentags_ctag_executable) && filereadable(expand('~/.ctagsignore'))
-        let g:gutentags_ctags_exclude = [ '@' . expand('~/.ctagsignore') ]
+    if s:IsUniversalCtags(g:gutentags_ctag_executable) && filereadable(g:zero_vim_ctags_ignore)
+        let g:gutentags_ctags_exclude = [ '@' . g:zero_vim_ctags_ignore ]
     endif
 
     " Ignored directories
@@ -4002,14 +3994,14 @@ if s:IsPlugged('gen_tags.vim')
     let g:gen_tags#ctags_auto_gen    = 1
     let g:gen_tags#ctags_auto_update = 1
     let g:gen_tags#cache_dir         = expand('~/.cache/tags')
-    let g:gen_tags#ctags_bin         = g:zero_vim_ctags
+    let g:gen_tags#ctags_bin         = g:zero_vim_ctags_bin
 
     " Disable gtags support if cscope or gtags is missing
     let g:loaded_gentags#gtags = !has('cscope') || !executable('gtags')
 
     " Universal Ctags
-    if s:IsUniversalCtags(g:gen_tags#ctags_bin) && filereadable(expand('~/.ctagsignore'))
-        let g:gen_tags#ctags_opts = [ '--exclude=@' . expand('~/.ctagsignore') ]
+    if s:IsUniversalCtags(g:gen_tags#ctags_bin) && filereadable(g:zero_vim_ctags_ignore)
+        let g:gen_tags#ctags_opts = [ '--exclude=@' . g:zero_vim_ctags_ignore ]
     endif
 
     " Ignored directories
@@ -4033,6 +4025,24 @@ if s:IsPlugged('tagbar')
     let g:tagbar_iconchars = ['▸', '▾']
 
     nnoremap <silent> <Leader>T :TagbarToggle<CR>
+endif
+
+if s:IsPlugged('vista.vim')
+    " liuchenxu/vista.vim
+    let g:vista#renderer#enable_icon = 0
+    let g:vista_ctags_executable     = g:zero_vim_ctags_bin
+
+    if s:IsUniversalCtags(g:vista_ctags_executable) && filereadable(g:zero_vim_ctags_ignore)
+        let g:vista_ctags_project_opts = '--exclude=@' . g:zero_vim_ctags_ignore
+    endif
+
+    let g:vista#executives = ['ctags']
+    if s:IsPlugged('ale') | call add(g:vista#executives, 'ale') | endif
+    if s:IsPlugged('coc.nvim') | call add(g:vista#executives, 'coc') | endif
+    if s:IsPlugged('nvim-lspconfig') | call add(g:vista#executives, 'nvim_lsp') | endif
+    if s:IsPlugged('vim-lsp') | call add(g:vista#executives, 'vim_lsp') | endif
+    if s:IsPlugged('vim-lsc') | call add(g:vista#executives, 'vim_lsc') | endif
+    if s:IsPlugged('LanguageClient-neovim') | call add(g:vista#executives, 'lcn') | endif
 endif
 
 if s:IsPlugged('gundo.vim')
