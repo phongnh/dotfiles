@@ -391,13 +391,16 @@ call plug#begin()
         Plug 'lambdalisue/fern.vim'
         Plug 'hrsh7th/fern-mapping-collapse-or-leave.vim'
         if g:zero_vim_devicons
-            let g:fern#renderer = 'nerdfont'
-            Plug 'lambdalisue/nerdfont.vim'
-            Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+            if s:Use('nerdfont')
+                Plug 'lambdalisue/nerdfont.vim'
+                Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+            else
+                Plug 'phongnh/fern-renderer-devicons.vim'
+            endif
         endif
     elseif s:Use('vaffle')
         Plug 'cocopon/vaffle.vim'
-        if g:zero_vim_devicons
+        if g:zero_vim_devicons && s:Use('nerdfont')
             Plug 'lambdalisue/nerdfont.vim'
         endif
     else
@@ -1700,7 +1703,12 @@ if s:IsPlugged('fern.vim')
     let g:fern#drawer_width = 35
 
     if s:IsPlugged('fern-renderer-nerdfont.vim')
+        let g:fern#renderer                  = 'nerdfont'
         let g:fern#renderer#nerdfont#leading = '  '
+    elseif s:IsPlugged('fern-renderer-devicons.vim')
+        let g:fern#renderer                          = 'devicons'
+        let g:fern_renderer_devicons_disable_warning = 1
+        let g:fern#renderer#devicons#leading         = '  '
     else
         let g:fern#renderer#default#root_symbol      = "\u2302\u00a0"
         let g:fern#renderer#default#leading          = '  '
