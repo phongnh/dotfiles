@@ -477,7 +477,6 @@ call plug#begin()
     if s:Use('completion-nvim') && has('nvim-0.5-nightly')
         Plug 'nvim-lua/completion-nvim'
         Plug 'steelsojka/completion-buffers'
-        Plug 'kristijanhusak/completion-tags'
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('deoplete') && has('python3')
@@ -2852,12 +2851,13 @@ if s:IsPlugged('completion-nvim')
 
     if s:IsPlugged('ultisnips')
         let g:completion_enable_snippet = 'UltiSnips'
-        let s:default_complete_items = [ 'lsp', 'UltiSnips', 'vim-vsnip', 'tags' ]
+        let s:default_complete_items = [ 'lsp', 'UltiSnips', 'vim-vsnip' ]
     elseif s:IsPlugged('neosnippet.vim')
         let g:completion_enable_snippet = 'Neosnippet'
-        let s:default_complete_items = [ 'lsp', 'Neosnippet', 'vim-vsnip', 'tags' ]
+        let s:default_complete_items = [ 'lsp', 'Neosnippet', 'vim-vsnip' ]
     else
-        let s:default_complete_items = [ 'lsp', 'vim-vsnip', 'tags' ]
+        let g:completion_enable_snippet = 'vim-vsnip'
+        let s:default_complete_items = [ 'lsp', 'vim-vsnip' ]
     endif
 
     let g:completion_chain_complete_list = {
