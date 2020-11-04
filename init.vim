@@ -1368,6 +1368,7 @@ nmap gs <Plug>(GrepperOperator)
 xmap gs <Plug>(GrepperOperator)
 
 nnoremap <silent> <Leader>S  :Grepper<CR>
+nmap              <Leader>se <Leader>S
 nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
 xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 nnoremap <silent> <Leader>sp :PGrepper -noprompt -cword<CR>
