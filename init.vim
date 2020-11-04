@@ -2838,64 +2838,62 @@ endif
 
 if s:IsPlugged('completion-nvim')
     " nvim-lua/completion-nvim
-    let g:completion_enable_auto_popup  = 1
-    let g:completion_timer_cycle        = 100
-    let g:completion_confirm_key        = "\<C-y>"
-    let g:completion_enable_auto_paren  = 0
-    let g:completion_trigger_on_delete  = 1
-    let g:completion_auto_change_source = 1
-    let g:completion_enable_fuzzy_match = 0
-
-    " A list of filetypes that should be ignored from caching/gathering words.
-    " let g:completion_word_ignored_ft = []
+    let g:completion_enable_auto_popup      = 1
+    let g:completion_timer_cycle            = 100
+    let g:completion_confirm_key            = "\<C-y>"
+    let g:completion_enable_auto_paren      = 0
+    let g:completion_trigger_on_delete      = 1
+    let g:completion_auto_change_source     = 1
+    let g:completion_matching_strategy_list = ['exact', 'fuzzy']
+    let g:completion_sorting                = 'none'
 
     if s:IsPlugged('ultisnips')
         let g:completion_enable_snippet = 'UltiSnips'
-        let s:default_complete_items = [ 'lsp', 'UltiSnips', 'vim-vsnip' ]
     elseif s:IsPlugged('neosnippet.vim')
         let g:completion_enable_snippet = 'Neosnippet'
-        let s:default_complete_items = [ 'lsp', 'Neosnippet', 'vim-vsnip' ]
-    else
-        let g:completion_enable_snippet = 'vim-vsnip'
-        let s:default_complete_items = [ 'lsp', 'vim-vsnip' ]
     endif
 
     let g:completion_chain_complete_list = {
                 \ 'default': [
-                \   { 'complete_items': s:default_complete_items },
-                \   { 'complete_items': [ 'buffers' ] },
-                \   { 'mode': '<c-p>' },
+                \   { 'complete_items': [ 'lsp', 'snippet', 'vim-vsnip', 'buffers', 'path' ] },
+                \   { 'mode': '<c-n>' },
                 \   { 'mode': '<c-n>' }
                 \ ]
                 \ }
 
+    " steelsojka/completion-buffers
+    let g:completion_word_min_length = 1
+
+    " A list of filetypes that should be ignored from caching/gathering words.
+    let g:completion_word_ignored_ft = []
+
     " <Tab>: completion
-    " function! s:CheckBackSpace() abort
-    "     let col = col('.') - 1
-    "     return !col || getline('.')[col - 1] =~ '\s'
-    " endfunction
+    function! s:CheckBackSpace() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1] =~ '\s'
+    endfunction
 
-    " function! s:CleverTab() abort
-    "     if pumvisible()
-    "         return "\<C-n>"
-    "     endif
+    function! s:CleverTab() abort
+        if pumvisible()
+            return "\<C-n>"
+        endif
 
-    "     if s:CheckBackSpace()
-    "         return "\<Tab>"
-    "     endif
+        if s:CheckBackSpace()
+            return "\<Tab>"
+        endif
 
-    "     return "\<Plug>(completion_trigger)"
-    " endfunction
+        return "\<Plug>(completion_trigger)"
+    endfunction
 
-    " imap <silent> <expr> <Tab> <SID>CleverTab()
+    imap <silent> <expr> <Tab> <SID>CleverTab()
 
     " <S-Tab>: completion back
-    " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-    " <Tab>: smart completion
-    imap <Tab> <Plug>(completion_smart_tab)
-    " <S-Tab>: smart completion
-    imap <S-Tab> <Plug>(completion_smart_s_tab)
+    " " <Tab>: smart completion
+    " imap <Tab> <Plug>(completion_smart_tab)
+    " " <S-Tab>: smart completion
+    " imap <S-Tab> <Plug>(completion_smart_s_tab)
 
     " <CR>: close popup and insert newline (works with auto-pairs)
     function! s:CleverCR() abort
