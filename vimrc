@@ -710,9 +710,6 @@ call plug#begin()
     endif
 " }
 
-" Query RFC database and download RFCs from within Vim.
-Plug 'mhinz/vim-rfc'
-
 " A Vim plugin that provides a completion function for Unicode glyphs
 Plug 'chrisbra/unicode.vim'
 
