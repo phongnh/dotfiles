@@ -698,9 +698,6 @@ call plug#begin()
     endif
 " }
 
-" A Vim plugin that provides a completion function for Unicode glyphs
-Plug 'chrisbra/unicode.vim'
-
 " Tasks {
     if s:Use('tasks')
         " An implementation of Sublime's PlainTasks plugin for Vim
@@ -4209,11 +4206,6 @@ if s:IsPlugged('vim-signify')
 
     nnoremap <silent> yog :SignifyToggle<CR>echo printf('%s Signify on buffer!', get(b:, 'sy', { 'active': 0 }).active ? 'Enabled' : 'Disabled')<CR>
 endif
-
-" chrisbra/unicode.vim
-nmap <F3> <Plug>(UnicodeSwapCompleteName)
-nmap <F4> <Plug>(MakeDigraph)
-vmap <F4> <Plug>(MakeDigraph)
 
 if s:IsPlugged('vim-hardtime')
     " takac/vim-hardtime
