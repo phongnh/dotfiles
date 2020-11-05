@@ -2796,6 +2796,21 @@ if s:IsPlugged('vim-vsnip')
         imap <expr> <C-z> vsnip#jumpable(-1) ? "\<Plug>(vsnip-jump-prev)"      : "\<C-z>"
         smap <expr> <C-z> vsnip#jumpable(-1) ? "\<Plug>(vsnip-jump-prev)"      : "\<C-z>"
     endif
+
+    " INFO: Fix key conflict on <M-l> with vim-fixkey plugin
+    if s:IsPlugged('vim-fixkey')
+        function! ClearConflictedKeys(timer_id) abort
+            execute 'set <M-l>='
+        endfunction
+
+        if exists('*timer_start')
+            call timer_start(15, 'ClearConflictedKeys')
+        else
+            augroup MyAutoCmd
+                autocmd TermResponse * call ClearConflictedKeys()
+            augroup END
+        endif
+    endif
 endif
 
 if s:IsPlugged('deoplete.nvim')
