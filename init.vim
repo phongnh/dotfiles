@@ -142,24 +142,25 @@ endfunction
 call s:Source('.init.vim.before')
 
 " Default zero settings
-let g:zero_vim_groups            = get(g:, 'zero_vim_groups',            [])
-let g:zero_vim_devicons          = get(g:, 'zero_vim_devicons',          0)
-let g:zero_vim_glyph_palette     = get(g:, 'zero_vim_glyph_palette',     0)
-let g:zero_vim_true_color        = get(g:, 'zero_vim_true_color',        0)
-let g:zero_vim_powerline         = get(g:, 'zero_vim_powerline',         0)
-let g:zero_vim_powerline_style   = get(g:, 'zero_vim_powerline_style',   'default')
-let g:zero_vim_powerline_spaces  = get(g:, 'zero_vim_powerline_spaces',  {})
-let g:zero_vim_solarized         = get(g:, 'zero_vim_solarized',         0)
-let g:zero_vim_lsp_diagnostics   = get(g:, 'zero_vim_lsp_diagnostics',   0)
-let g:zero_vim_autolint          = get(g:, 'zero_vim_autolint',          0)
-let g:zero_vim_autofix           = get(g:, 'zero_vim_autofix',           0)
-let g:zero_vim_git_gutter        = get(g:, 'zero_vim_git_gutter',        1)
-let g:zero_vim_grep_ignore_vcs   = get(g:, 'zero_vim_grep_ignore_vcs',   0)
-let g:zero_vim_find_tool         = get(g:, 'zero_vim_find_tool',         'rg')
-let g:zero_vim_indent_char       = get(g:, 'zero_vim_indent_char',       '┊')
-let g:zero_vim_indent_first_char = get(g:, 'zero_vim_indent_first_char', '│')
-let g:zero_vim_ctags_bin         = get(g:, 'zero_vim_ctags_bin',         executable('ctags-universal') ? 'ctags-universal' : 'ctags')
-let g:zero_vim_ctags_ignore      = get(g:, 'zero_vim_ctags_ignore',      expand('~/.ctagsignore'))
+let g:zero_vim_groups                   = get(g:, 'zero_vim_groups',                   [])
+let g:zero_vim_devicons                 = get(g:, 'zero_vim_devicons',                 0)
+let g:zero_vim_glyph_palette            = get(g:, 'zero_vim_glyph_palette',            0)
+let g:zero_vim_true_color               = get(g:, 'zero_vim_true_color',               0)
+let g:zero_vim_powerline                = get(g:, 'zero_vim_powerline',                0)
+let g:zero_vim_powerline_style          = get(g:, 'zero_vim_powerline_style',          'default')
+let g:zero_vim_powerline_spaces         = get(g:, 'zero_vim_powerline_spaces',         {})
+let g:zero_vim_solarized                = get(g:, 'zero_vim_solarized',                0)
+let g:zero_vim_lsp_diagnostics          = get(g:, 'zero_vim_lsp_diagnostics',          0)
+let g:zero_vim_lsp_highlight_references = get(g:, 'zero_vim_lsp_highlight_references', 0)
+let g:zero_vim_autolint                 = get(g:, 'zero_vim_autolint',                 0)
+let g:zero_vim_autofix                  = get(g:, 'zero_vim_autofix',                  0)
+let g:zero_vim_git_gutter               = get(g:, 'zero_vim_git_gutter',               1)
+let g:zero_vim_grep_ignore_vcs          = get(g:, 'zero_vim_grep_ignore_vcs',          0)
+let g:zero_vim_find_tool                = get(g:, 'zero_vim_find_tool',                'rg')
+let g:zero_vim_indent_char              = get(g:, 'zero_vim_indent_char',              '┊')
+let g:zero_vim_indent_first_char        = get(g:, 'zero_vim_indent_first_char',        '│')
+let g:zero_vim_ctags_bin                = get(g:, 'zero_vim_ctags_bin',                executable('ctags-universal') ? 'ctags-universal' : 'ctags')
+let g:zero_vim_ctags_ignore             = get(g:, 'zero_vim_ctags_ignore',             expand('~/.ctagsignore'))
 
 " Default signs
 let s:zero_vim_default_signs = {
@@ -169,7 +170,7 @@ let s:zero_vim_default_signs = {
             \ 'style_warning': 'ⓦ',
             \ 'information':   '🅘',
             \ 'hint':          '🅗',
-            \ 'virtual_text':  '🅓',
+            \ 'virtual_text':  '🅥',
             \ }
 let g:zero_vim_signs = extend(copy(s:zero_vim_default_signs), get(g:, 'zero_vim_signs', {}))
 
@@ -953,7 +954,7 @@ if has('conceal')
     set conceallevel=2 concealcursor=i
 endif
 
-set shortmess=aiToO                 " Print current file name, cursor position and file status (press C-g)
+set shortmess=aiToOc                " Print current file name, cursor position and file status (press C-g)
 
 " Wrap conditions
 set whichwrap=b,s,h,l,<,>,[,]       " Backspace and cursor keys wrap too
@@ -2230,60 +2231,69 @@ endif
 
 if s:IsPlugged('nvim-lspconfig')
     " neovim/nvim-lspconfig
-    :lua << EOF
-        local nvim_lsp = require('nvim_lsp')
+    function! s:InitNvimLSP() abort
+        try
+            :lua << EOF
+            local nvim_lsp = require'nvim_lsp'
+            local diagnostic = require'diagnostic'
 
-        local on_attach = function(client, bufnr)
-            require('diagnostic').on_attach(client)
+            local on_attach = function(client, bufnr)
+                diagnostic.on_attach(client)
 
-            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+                vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-            -- Mappings
-            local opts = { noremap=true, silent=true }
+                -- Mappings
+                local opts = { noremap=true, silent=true }
 
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>K',  '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kh', '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ke', '<cmd>lua vim.lsp.buf.rename()<CR>',                 opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kd', '<cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>k]', '<cmd>lua vim.lsp.buf.definition()<CR>',             opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ki', '<cmd>lua vim.lsp.buf.implementation()<CR>',         opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>km', '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>',      '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kt', '<cmd>lua vim.lsp.buf.type_definition()<CR>',        opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ks', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',        opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kw', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>',       opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kr', '<cmd>lua vim.lsp.buf.references()<CR>',             opts)
-            vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kl', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
-        end
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>K',  '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kh', '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ke', '<cmd>lua vim.lsp.buf.rename()<CR>',                 opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kd', '<cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>k]', '<cmd>lua vim.lsp.buf.definition()<CR>',             opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ki', '<cmd>lua vim.lsp.buf.implementation()<CR>',         opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>km', '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>',      '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kt', '<cmd>lua vim.lsp.buf.type_definition()<CR>',        opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ks', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',        opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kw', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>',       opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kr', '<cmd>lua vim.lsp.buf.references()<CR>',             opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kl', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
+            end
 
-        local servers = {
-            'bashls',
-            'clangd',
-            'cssls',
-            'dockerls',
-            'elixirls',
-            'elmls',
-            'gopls',
-            'html',
-            'jsonls',
-            'metals',
-            'pyls',
-            'rls',
-            'rust_analyzer',
-            'scry',
-            'solargraph',
-            'sumneko_lua',
-            'terraformls',
-            'tsserver',
-            'vimls',
-            'yamlls',
-        }
-        for _, lsp in ipairs(servers) do
-            nvim_lsp[lsp].setup {
-                on_attach = on_attach,
+            local servers = {
+                'bashls',
+                'clangd',
+                'cssls',
+                'dockerls',
+                'elixirls',
+                'elmls',
+                'gopls',
+                'html',
+                'jsonls',
+                'metals',
+                'pyls',
+                'rls',
+                'rust_analyzer',
+                'scry',
+                'solargraph',
+                'sumneko_lua',
+                'terraformls',
+                'tsserver',
+                'vimls',
+                'yamlls',
             }
-        end
+            for _, lsp in ipairs(servers) do
+                nvim_lsp[lsp].setup {
+                    on_attach = on_attach,
+                }
+            end
 EOF
+        catch /^Vim(lua):E5108/
+            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-lspconfig` and `diagnostic-nvim` plugins!' | echohl None
+        endtry
+    endfunction
+
+    call s:InitNvimLSP()
 endif
 
 if s:IsPlugged('diagnostic-nvim')
@@ -2497,7 +2507,7 @@ if s:IsPlugged('vim-lsp')
 
     let g:lsp_diagnostics_enabled          = g:zero_vim_lsp_diagnostics
     let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
-    let g:lsp_highlight_references_enabled = 1
+    let g:lsp_highlight_references_enabled = g:zero_vim_lsp_highlight_references
 
     " Use `[g` and `]g` to navigate diagnostics
     nmap <silent> [g <Plug>(lsp-previous-diagnostic)
@@ -2587,7 +2597,7 @@ if s:IsPlugged('vim-lsc')
     " natebosch/vim-lsc
     let g:lsc_complete_timeout     = 3 " Wait up to 3 seconds
     let g:lsc_enable_diagnostics   = g:zero_vim_lsp_diagnostics ? v:true : v:false
-    let g:lsc_reference_highlights = v:true
+    let g:lsc_reference_highlights = g:zero_vim_lsp_highlight_references ? v:true : v:false
     let g:lsc_trace_level          = 'off'
 
     let g:lsc_server_commands = {}
@@ -2669,6 +2679,7 @@ if s:IsPlugged('LanguageClient-neovim')
     let g:LanguageClient_serverCommands     = {}
     let g:LanguageClient_diagnosticsList    = 'Location'
     let g:LanguageClient_diagnosticsEnable  = g:zero_vim_lsp_diagnostics
+    let g:LanguageClient_virtualTextPrefix  = g:zero_vim_signs.virtual_text . ' '
     let g:LanguageClient_diagnosticsDisplay = {
                 \ 1: { 'signText': g:zero_vim_signs.error },
                 \ 2: { 'signText': g:zero_vim_signs.warning },
@@ -2928,9 +2939,17 @@ if s:IsPlugged('completion-nvim')
         let g:completion_enable_auto_popup = 1
     endfunction
 
+    function! s:InitCompletionNvim()
+        try
+            lua require'completion'.on_attach()
+        catch /^Vim(lua):E5108/
+            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `completion-nvim` plugin!' | echohl None
+        endtry
+    endfunction
+
     augroup MyAutoCmd
         " Use completion-nvim in every buffer
-        autocmd BufEnter * lua require'completion'.on_attach()
+        autocmd BufEnter * call <SID>InitCompletionNvim()
     augroup end
 endif
 

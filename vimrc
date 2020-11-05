@@ -151,24 +151,25 @@ endfunction
 call s:Source('.vimrc.before')
 
 " Default zero settings
-let g:zero_vim_groups            = get(g:, 'zero_vim_groups',            [])
-let g:zero_vim_devicons          = get(g:, 'zero_vim_devicons',          0)
-let g:zero_vim_glyph_palette     = get(g:, 'zero_vim_glyph_palette',     0)
-let g:zero_vim_true_color        = get(g:, 'zero_vim_true_color',        0)
-let g:zero_vim_powerline         = get(g:, 'zero_vim_powerline',         0)
-let g:zero_vim_powerline_style   = get(g:, 'zero_vim_powerline_style',   'default')
-let g:zero_vim_powerline_spaces  = get(g:, 'zero_vim_powerline_spaces',  {})
-let g:zero_vim_solarized         = get(g:, 'zero_vim_solarized',         0)
-let g:zero_vim_lsp_diagnostics   = get(g:, 'zero_vim_lsp_diagnostics',   0)
-let g:zero_vim_autolint          = get(g:, 'zero_vim_autolint',          0)
-let g:zero_vim_autofix           = get(g:, 'zero_vim_autofix',           0)
-let g:zero_vim_git_gutter        = get(g:, 'zero_vim_git_gutter',        1)
-let g:zero_vim_grep_ignore_vcs   = get(g:, 'zero_vim_grep_ignore_vcs',   0)
-let g:zero_vim_find_tool         = get(g:, 'zero_vim_find_tool',         'rg')
-let g:zero_vim_indent_char       = get(g:, 'zero_vim_indent_char',       '┊')
-let g:zero_vim_indent_first_char = get(g:, 'zero_vim_indent_first_char', '│')
-let g:zero_vim_ctags_bin         = get(g:, 'zero_vim_ctags_bin',         executable('ctags-universal') ? 'ctags-universal' : 'ctags')
-let g:zero_vim_ctags_ignore      = get(g:, 'zero_vim_ctags_ignore',      expand('~/.ctagsignore'))
+let g:zero_vim_groups                   = get(g:, 'zero_vim_groups',                   [])
+let g:zero_vim_devicons                 = get(g:, 'zero_vim_devicons',                 0)
+let g:zero_vim_glyph_palette            = get(g:, 'zero_vim_glyph_palette',            0)
+let g:zero_vim_true_color               = get(g:, 'zero_vim_true_color',               0)
+let g:zero_vim_powerline                = get(g:, 'zero_vim_powerline',                0)
+let g:zero_vim_powerline_style          = get(g:, 'zero_vim_powerline_style',          'default')
+let g:zero_vim_powerline_spaces         = get(g:, 'zero_vim_powerline_spaces',         {})
+let g:zero_vim_solarized                = get(g:, 'zero_vim_solarized',                0)
+let g:zero_vim_lsp_diagnostics          = get(g:, 'zero_vim_lsp_diagnostics',          0)
+let g:zero_vim_lsp_highlight_references = get(g:, 'zero_vim_lsp_highlight_references', 0)
+let g:zero_vim_autolint                 = get(g:, 'zero_vim_autolint',                 0)
+let g:zero_vim_autofix                  = get(g:, 'zero_vim_autofix',                  0)
+let g:zero_vim_git_gutter               = get(g:, 'zero_vim_git_gutter',               1)
+let g:zero_vim_grep_ignore_vcs          = get(g:, 'zero_vim_grep_ignore_vcs',          0)
+let g:zero_vim_find_tool                = get(g:, 'zero_vim_find_tool',                'rg')
+let g:zero_vim_indent_char              = get(g:, 'zero_vim_indent_char',              '┊')
+let g:zero_vim_indent_first_char        = get(g:, 'zero_vim_indent_first_char',        '│')
+let g:zero_vim_ctags_bin                = get(g:, 'zero_vim_ctags_bin',                executable('ctags-universal') ? 'ctags-universal' : 'ctags')
+let g:zero_vim_ctags_ignore             = get(g:, 'zero_vim_ctags_ignore',             expand('~/.ctagsignore'))
 
 " Default signs
 let s:zero_vim_default_signs = {
@@ -178,7 +179,7 @@ let s:zero_vim_default_signs = {
             \ 'style_warning': 'ⓦ',
             \ 'information':   '🅘',
             \ 'hint':          '🅗',
-            \ 'virtual_text':  '🅓',
+            \ 'virtual_text':  '🅥',
             \ }
 let g:zero_vim_signs = extend(copy(s:zero_vim_default_signs), get(g:, 'zero_vim_signs', {}))
 
@@ -969,7 +970,7 @@ if has('conceal')
 endif
 
 set display+=lastline           " When a line is long, do not omit it in @
-set shortmess=atToO             " Print current file name, cursor position and file status (press C-g)
+set shortmess=atToOc            " Print current file name, cursor position and file status (press C-g)
 
 " Wrap conditions
 set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
@@ -2457,7 +2458,7 @@ if s:IsPlugged('vim-lsp')
 
     let g:lsp_diagnostics_enabled          = g:zero_vim_lsp_diagnostics
     let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
-    let g:lsp_highlight_references_enabled = 1
+    let g:lsp_highlight_references_enabled = g:zero_vim_lsp_highlight_references
 
     " Use `[g` and `]g` to navigate diagnostics
     nmap <silent> [g <Plug>(lsp-previous-diagnostic)
@@ -2547,7 +2548,7 @@ if s:IsPlugged('vim-lsc')
     " natebosch/vim-lsc
     let g:lsc_complete_timeout     = 3 " Wait up to 3 seconds
     let g:lsc_enable_diagnostics   = g:zero_vim_lsp_diagnostics ? v:true : v:false
-    let g:lsc_reference_highlights = v:true
+    let g:lsc_reference_highlights = g:zero_vim_lsp_highlight_references ? v:true : v:false
     let g:lsc_trace_level          = 'off'
 
     let g:lsc_server_commands = {}
@@ -2629,6 +2630,7 @@ if s:IsPlugged('LanguageClient-neovim')
     let g:LanguageClient_serverCommands     = {}
     let g:LanguageClient_diagnosticsList    = 'Location'
     let g:LanguageClient_diagnosticsEnable  = g:zero_vim_lsp_diagnostics
+    let g:LanguageClient_virtualTextPrefix  = g:zero_vim_signs.virtual_text . ' '
     let g:LanguageClient_diagnosticsDisplay = {
                 \ 1: { 'signText': g:zero_vim_signs.error },
                 \ 2: { 'signText': g:zero_vim_signs.warning },
