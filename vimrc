@@ -1603,16 +1603,23 @@ let g:user_emmet_settings = {
             \ }
 
 " AndrewRadev/sideways.vim
+let g:sideways_search_timeout = 50
+
 omap <silent> aa <Plug>SidewaysArgumentTextobjA
 xmap <silent> aa <Plug>SidewaysArgumentTextobjA
 omap <silent> ia <Plug>SidewaysArgumentTextobjI
 xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 
-nmap <, <Plug>SidewaysLeft
-nmap >, <Plug>SidewaysRight
+nmap <silent> si <Plug>SidewaysArgumentInsertBefore
+nmap <silent> sa <Plug>SidewaysArgumentAppendAfter
+nmap <silent> sf <Plug>SidewaysArgumentInsertFirst
+nmap <silent> sl <Plug>SidewaysArgumentAppendLast
 
-nnoremap <silent> [, :SidewaysJumpLeft<CR>
-nnoremap <silent> ], :SidewaysJumpRight<CR>
+nmap s< <Plug>SidewaysLeft
+nmap s> <Plug>SidewaysRight
+
+nnoremap <silent> s[ :SidewaysJumpLeft<CR>
+nnoremap <silent> s] :SidewaysJumpRight<CR>
 
 if s:IsPlugged('vim-textobj-ruby')
     " rhysd/vim-textobj-ruby
