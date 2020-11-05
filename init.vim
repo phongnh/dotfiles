@@ -2295,9 +2295,7 @@ EOF
     endfunction
 
     call s:InitNvimLSP()
-endif
 
-if s:IsPlugged('diagnostic-nvim')
     " nvim-lua/diagnostic-nvim
     let g:space_before_virtual_text        = 1
     let g:diagnostic_enable_virtual_text   = 1
