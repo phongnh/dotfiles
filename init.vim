@@ -711,6 +711,7 @@ call plug#begin()
     endif
 " }
 
+" Nvim Treesitter configurations and abstraction layer
 if s:Use('treesitter') && has('nvim-0.5-nightly')
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'nvim-treesitter/nvim-treesitter-refactor'
@@ -2236,85 +2237,6 @@ if s:IsPlugged('neosnippet.vim')
     smap <Tab> <Plug>(neosnippet_jump)
 endif
 
-if s:IsPlugged('nvim-lspconfig')
-    " neovim/nvim-lspconfig
-    function! s:InitNvimLSP() abort
-        try
-            :lua << EOF
-            local nvim_lsp = require'nvim_lsp'
-            local diagnostic = require'diagnostic'
-
-            local on_attach = function(client, bufnr)
-                diagnostic.on_attach(client)
-
-                vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-                -- Mappings
-                local opts = { noremap=true, silent=true }
-
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>K',  '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kh', '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ke', '<cmd>lua vim.lsp.buf.rename()<CR>',                 opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kd', '<cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>k]', '<cmd>lua vim.lsp.buf.definition()<CR>',             opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ki', '<cmd>lua vim.lsp.buf.implementation()<CR>',         opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>km', '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>',      '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kt', '<cmd>lua vim.lsp.buf.type_definition()<CR>',        opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ks', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',        opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kw', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>',       opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kr', '<cmd>lua vim.lsp.buf.references()<CR>',             opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>kl', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
-            end
-
-            local servers = {
-                'bashls',
-                'clangd',
-                'cssls',
-                'dockerls',
-                'elixirls',
-                'elmls',
-                'gopls',
-                'html',
-                'jsonls',
-                'metals',
-                'pyls',
-                'rls',
-                'rust_analyzer',
-                'scry',
-                'solargraph',
-                'sumneko_lua',
-                'terraformls',
-                'tsserver',
-                'vimls',
-                'yamlls',
-            }
-            for _, lsp in ipairs(servers) do
-                nvim_lsp[lsp].setup {
-                    on_attach = on_attach,
-                }
-            end
-EOF
-        catch /^Vim(lua):E5108/
-            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-lspconfig` and `diagnostic-nvim` plugins!' | echohl None
-        endtry
-    endfunction
-
-    call s:InitNvimLSP()
-
-    " nvim-lua/diagnostic-nvim
-    let g:space_before_virtual_text        = 1
-    let g:diagnostic_enable_virtual_text   = 1
-    let g:diagnostic_virtual_text_prefix   = g:zero_vim_signs.virtual_text . ' '
-    let g:diagnostic_enable_underline      = 1
-    let g:diagnostic_auto_popup_while_jump = 0
-
-    call sign_define('LspDiagnosticsErrorSign',       { 'text': g:zero_vim_signs.error,       'texthl': 'LspDiagnosticsError'       })
-    call sign_define('LspDiagnosticsWarningSign',     { 'text': g:zero_vim_signs.warning,     'texthl': 'LspDiagnosticsWarning'     })
-    call sign_define('LspDiagnosticsInformationSign', { 'text': g:zero_vim_signs.information, 'texthl': 'LspDiagnosticsInformation' })
-    call sign_define('LspDiagnosticsHintSign',        { 'text': g:zero_vim_signs.hint,        'texthl': 'LspDiagnosticsHint'        })
-endif
-
 " LSP Servers
 let g:language_servers = {
             \ 'bash-language-server': {
@@ -2499,6 +2421,100 @@ function! s:GetEnabledLanguageServers() abort
 
     return s:enabled_language_servers
 endfunction
+
+if s:IsPlugged('nvim-lspconfig')
+    " neovim/nvim-lspconfig
+    function! s:InitNvimLSP() abort
+        try
+            lua << EOF
+            local nvim_lsp = require'nvim_lsp'
+            local diagnostic = require'diagnostic'
+
+            local on_attach = function(client, bufnr)
+                diagnostic.on_attach(client)
+
+                vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+                -- Mappings
+                local opts = { noremap=true, silent=true }
+
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'H',  '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gA', '<cmd>lua vim.lsp.buf.code_action()<CR>',            opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'M',  '<cmd>lua vim.lsp.buf.rename()<CR>',                 opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gF', '<cmd>lua vim.lsp.buf.formating()<CR>',              opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g[', '<cmd>lua vim.lsp.buf.definition()<CR>',             opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>',        opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI', '<cmd>lua vim.lsp.buf.implementation()<CR>',         opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gm', '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'go', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',        opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gO', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>',       opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>',             opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gL', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g{', '<cmd>lua vim.lsp.util.incoming_calls()<CR>',        opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g}', '<cmd>lua vim.lsp.util.outgoing_calls()<CR>',        opts)
+            end
+
+            local servers = {
+                'bashls',
+                'clangd',
+                'cssls',
+                'dockerls',
+                'elixirls',
+                'elmls',
+                'gopls',
+                'html',
+                'jsonls',
+                'metals',
+                'pyls',
+                'rls',
+                'rust_analyzer',
+                'scry',
+                'solargraph',
+                'sumneko_lua',
+                'terraformls',
+                'tsserver',
+                'vimls',
+                'yamlls',
+            }
+            for _, lsp in ipairs(servers) do
+                nvim_lsp[lsp].setup {
+                    on_attach = on_attach,
+                }
+            end
+EOF
+        catch /^Vim(lua):E5108/
+            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-lspconfig` and `diagnostic-nvim` plugins!' | echohl None
+        endtry
+    endfunction
+
+    call s:InitNvimLSP()
+
+    " Shougo/neosnippet.vim: expand auto completed parameter and snippets
+    " let g:neosnippet#enable_completed_snippet = 1
+    " let g:neosnippet#enable_complete_done     = 1
+
+    function! s:LspReload() abort
+        lua vim.lsp.stop_client(vim.lsp.get_active_clients())
+        edit
+    endfunction
+
+    command! LspReload call <SID>LspReload()
+    command! LspInspect lua print(vim.inspect(vim.lsp.buf_get_clients(0)))
+    command! LspInspectAll lua print(vim.inspect(vim.lsp.buf_get_clients()))
+
+    " nvim-lua/diagnostic-nvim
+    let g:space_before_virtual_text        = 1
+    let g:diagnostic_enable_virtual_text   = 1
+    let g:diagnostic_virtual_text_prefix   = g:zero_vim_signs.virtual_text . ' '
+    let g:diagnostic_enable_underline      = 1
+    let g:diagnostic_auto_popup_while_jump = 0
+
+    call sign_define('LspDiagnosticsErrorSign',       { 'text': g:zero_vim_signs.error,       'texthl': 'LspDiagnosticsError'       })
+    call sign_define('LspDiagnosticsWarningSign',     { 'text': g:zero_vim_signs.warning,     'texthl': 'LspDiagnosticsWarning'     })
+    call sign_define('LspDiagnosticsInformationSign', { 'text': g:zero_vim_signs.information, 'texthl': 'LspDiagnosticsInformation' })
+    call sign_define('LspDiagnosticsHintSign',        { 'text': g:zero_vim_signs.hint,        'texthl': 'LspDiagnosticsHint'        })
+endif
 
 if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
@@ -4227,71 +4243,79 @@ endif
 
 if s:IsPlugged('nvim-treesitter')
     " nvim-treesitter/nvim-treesitter
-    :lua << EOF
-        require'nvim-treesitter.configs'.setup {
-            ensure_installed = "maintained",
-            highlight = {
-                enable           = true,
-                use_languagetree = false,
-                disable          = { "c", "ruby", "rust" }
-            },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    init_selection    = "gnn",
-                    node_incremental  = "grn",
-                    scope_incremental = "grc",
-                    node_decremental  = "grm",
+    function! s:InitTreesitter() abort
+        try
+            lua << EOF
+            require'nvim-treesitter.configs'.setup {
+                ensure_installed = "maintained",
+                highlight = {
+                    enable           = true,
+                    use_languagetree = false,
+                    disable          = { "c", "ruby", "rust" }
                 },
-            },
-            indent = {
-                enable = true,
-            },
-            refactor = {
-                highlight_definitions   = { enable = true },
-                highlight_current_scope = { enable = false },
-            },
-            textobjects = {
-                select = {
+                incremental_selection = {
                     enable = true,
                     keymaps = {
-                        -- You can use the capture groups defined in textobjects.scm
-                        ["af"] = "@function.outer",
-                        ["if"] = "@function.inner",
-                        ["ac"] = "@class.outer",
-                        ["ic"] = "@class.inner",
-
-                        -- Or you can define your own textobjects like this
-                        ["iF"] = {
-                            python = "(function_definition) @function",
-                            cpp    = "(function_definition) @function",
-                            c      = "(function_definition) @function",
-                            java   = "(method_declaration) @function",
-                        },
-                    }
+                        init_selection    = "sn",
+                        node_incremental  = "sj",
+                        scope_incremental = "ss",
+                        node_decremental  = "sk",
+                    },
                 },
-                move = {
+                indent = {
                     enable = true,
-                    goto_next_start = {
-                        ["]m"] = "@function.outer",
-                        ["]]"] = "@class.outer",
+                },
+                refactor = {
+                    highlight_definitions   = { enable = true },
+                    highlight_current_scope = { enable = false },
+                },
+                textobjects = {
+                    select = {
+                        enable = true,
+                        keymaps = {
+                            -- You can use the capture groups defined in textobjects.scm
+                            ["af"] = "@function.outer",
+                            ["if"] = "@function.inner",
+                            ["ac"] = "@class.outer",
+                            ["ic"] = "@class.inner",
+
+                            -- Or you can define your own textobjects like this
+                            ["iF"] = {
+                                python = "(function_definition) @function",
+                                cpp    = "(function_definition) @function",
+                                c      = "(function_definition) @function",
+                                java   = "(method_declaration) @function",
+                            },
+                        }
                     },
-                    goto_next_end = {
-                        ["]M"] = "@function.outer",
-                        ["]["] = "@class.outer",
-                    },
-                    goto_previous_start = {
-                        ["[m"] = "@function.outer",
-                        ["[["] = "@class.outer",
-                    },
-                    goto_previous_end = {
-                        ["[M"] = "@function.outer",
-                        ["[]"] = "@class.outer",
+                    move = {
+                        enable = true,
+                        goto_next_start = {
+                            ["]m"] = "@function.outer",
+                            ["]]"] = "@class.outer",
+                        },
+                        goto_next_end = {
+                            ["]M"] = "@function.outer",
+                            ["]["] = "@class.outer",
+                        },
+                        goto_previous_start = {
+                            ["[m"] = "@function.outer",
+                            ["[["] = "@class.outer",
+                        },
+                        goto_previous_end = {
+                            ["[M"] = "@function.outer",
+                            ["[]"] = "@class.outer",
+                        },
                     },
                 },
-            },
-        }
+            }
 EOF
+        catch /^Vim(lua):E5108/
+            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-treesitter` plugin!' | echohl None
+        endtry
+    endfunction
+
+    call s:InitTreesitter()
 endif
 
 " tpope/vim-markdown
