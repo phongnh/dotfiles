@@ -201,10 +201,6 @@ call plug#begin()
         Plug 'jebaum/vim-tmuxify'
     endif
 
-    " Fix CursorHold Performance
-    " https://github.com/neovim/neovim/issues/12587
-    Plug 'antoinemadec/FixCursorHold.nvim'
-
     " Asynchronous build and test dispatcher
     Plug 'tpope/vim-dispatch'
 
@@ -491,7 +487,7 @@ call plug#begin()
         Plug 'hrsh7th/vim-vsnip-integ'
     endif
 
-    if s:Use('deoplete') && v:version >= 800 && has('python3')
+    if s:Use('deoplete') && has('python3') && v:version >= 800
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
         Plug 'Shougo/deoplete.nvim'
@@ -552,7 +548,7 @@ call plug#begin()
         endif
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
-    elseif s:Use('ncm2') && v:version >= 800 && has('python3')
+    elseif s:Use('ncm2') && has('python3') && v:version >= 800
         Plug 'roxma/nvim-yarp'
         Plug 'roxma/vim-hug-neovim-rpc'
         Plug 'ncm2/ncm2'
@@ -566,7 +562,7 @@ call plug#begin()
         if s:IsPlugged('vim-lsp')
             Plug 'ncm2/ncm2-vim-lsp'
         endif
-    elseif s:Use('completor') && v:version >= 800 && has('python3')
+    elseif s:Use('completor') && has('python3') && v:version >= 800
         Plug 'maralla/completor.vim'
         if s:IsPlugged('neosnippet')
             Plug 'maralla/completor-neosnippet'
@@ -609,7 +605,7 @@ call plug#begin()
     if s:Use('lint') && has('job')
         " Asynchronous Lint Engine
         Plug 'dense-analysis/ale'
-    elseif s:Use('syntastic') || s:Use('lint')
+    elseif s:Use('syntastic')
         " Syntax checking hacks for vim
         Plug 'vim-syntastic/syntastic'
     endif
@@ -808,7 +804,7 @@ call plug#begin()
 " }
 
 " Others {
-    if s:Use('syntax')
+    if s:Use('syntax') || s:Use('polyglot')
         " A solid language pack for Vim
         let g:polyglot_disabled = ['autoindent', 'sensible']
         if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'javascript', 'jsx', 'json']) | endif
@@ -870,6 +866,10 @@ endif
 
 " My default filetype settings
 Plug 'phongnh/filetype-settings.vim'
+
+" Fix CursorHold Performance
+" https://github.com/neovim/neovim/issues/12587
+Plug 'antoinemadec/FixCursorHold.nvim'
 
 call plug#end()
 
@@ -1558,18 +1558,24 @@ if s:IsPlugged('vim-multiple-cursors')
     " terryma/vim-multiple-cursors
     function! Multiple_cursors_before() abort
         let b:autopairs_enabled = 0
+        let b:lexima_disabled = 1
         call Disable_Completion_Hook()
     endfunction
 
     function! Multiple_cursors_after() abort
         let b:autopairs_enabled = 1
+        let b:lexima_disabled = 0
         call Enable_Completion_Hook()
     endfunction
 endif
 
 if s:IsPlugged('vim-visual-multi')
     " mg979/vim-visual-multi
-    let g:VM_custom_remaps = { '<C-p>': 'N', '<C-x>': 'q', '<C-c>': '<Esc>' }
+    let g:VM_custom_remaps = {
+                \ '<C-p>': 'N',
+                \ '<C-x>': 'q',
+                \ '<C-c>': '<Esc>',
+                \ }
 
     function! VM_Start() abort
         let b:autopairs_enabled = 0
@@ -2656,7 +2662,6 @@ if s:IsPlugged('LanguageClient-neovim')
     vnoremap <Plug>(lcn-format)            :call LanguageClient_textDocument_rangeFormatting()<CR>
     nnoremap <Plug>(lcn-workspace-symbols) :call LanguageClient_workspace_symbol()<CR>
     nnoremap <Plug>(lcn-clear-highlight)   :call LanguageClient_clearDocumentHighlight()<CR>
-    nnoremap <Plug>(lcn-server-status)     :echo LanguageClient_serverStatusMessage()<CR>
 
     function! s:SetupLanguageClient() abort
         setlocal omnifunc=LanguageClient#complete

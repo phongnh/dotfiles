@@ -188,10 +188,6 @@ call plug#begin()
         Plug 'jebaum/vim-tmuxify'
     endif
 
-    " Fix CursorHold Performance
-    " https://github.com/neovim/neovim/issues/12587
-    Plug 'antoinemadec/FixCursorHold.nvim'
-
     " Asynchronous build and test dispatcher
     Plug 'tpope/vim-dispatch'
 
@@ -456,7 +452,7 @@ call plug#begin()
         Plug 'nvim-lua/diagnostic-nvim'
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
-    elseif s:Use('lsp') || s:Use('nvim-lsp')
+    elseif s:Use('lsp')
         Plug 'prabirshrestha/vim-lsp'
         Plug 'mattn/vim-lsp-settings'
         Plug 'hrsh7th/vim-vsnip'
@@ -803,7 +799,7 @@ endif
 " }
 
 " Others {
-    if s:Use('syntax')
+    if s:Use('syntax') || s:Use('polyglot')
         " A solid language pack for Vim
         let g:polyglot_disabled = ['autoindent', 'sensible']
         if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'javascript', 'jsx', 'json']) | endif
@@ -865,6 +861,10 @@ endif
 
 " My default filetype settings
 Plug 'phongnh/filetype-settings.vim'
+
+" Fix CursorHold Performance
+" https://github.com/neovim/neovim/issues/12587
+Plug 'antoinemadec/FixCursorHold.nvim'
 
 call plug#end()
 
@@ -1526,18 +1526,24 @@ if s:IsPlugged('vim-multiple-cursors')
     " terryma/vim-multiple-cursors
     function! Multiple_cursors_before() abort
         let b:autopairs_enabled = 0
+        let b:lexima_disabled = 1
         call Disable_Completion_Hook()
     endfunction
 
     function! Multiple_cursors_after() abort
         let b:autopairs_enabled = 1
+        let b:lexima_disabled = 0
         call Enable_Completion_Hook()
     endfunction
 endif
 
 if s:IsPlugged('vim-visual-multi')
     " mg979/vim-visual-multi
-    let g:VM_custom_remaps = { '<C-p>': 'N', '<C-x>': 'q', '<C-c>': '<Esc>' }
+    let g:VM_custom_remaps = {
+                \ '<C-p>': 'N',
+                \ '<C-x>': 'q',
+                \ '<C-c>': '<Esc>',
+                \ }
 
     function! VM_Start() abort
         let b:autopairs_enabled = 0
@@ -2703,7 +2709,6 @@ if s:IsPlugged('LanguageClient-neovim')
     vnoremap <Plug>(lcn-format)            :call LanguageClient_textDocument_rangeFormatting()<CR>
     nnoremap <Plug>(lcn-workspace-symbols) :call LanguageClient_workspace_symbol()<CR>
     nnoremap <Plug>(lcn-clear-highlight)   :call LanguageClient_clearDocumentHighlight()<CR>
-    nnoremap <Plug>(lcn-server-status)     :echo LanguageClient_serverStatusMessage()<CR>
 
     function! s:SetupLanguageClient() abort
         setlocal omnifunc=LanguageClient#complete
