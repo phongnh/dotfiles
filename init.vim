@@ -161,6 +161,7 @@ let g:zero_vim_indent_char              = get(g:, 'zero_vim_indent_char',       
 let g:zero_vim_indent_first_char        = get(g:, 'zero_vim_indent_first_char',        '│')
 let g:zero_vim_ctags_bin                = get(g:, 'zero_vim_ctags_bin',                executable('ctags-universal') ? 'ctags-universal' : 'ctags')
 let g:zero_vim_ctags_ignore             = get(g:, 'zero_vim_ctags_ignore',             expand('~/.ctagsignore'))
+let g:zero_vim_gtags_cscope             = get(g:, 'zero_vim_gtags_cscope',             0)
 
 " Default signs
 let s:zero_vim_default_signs = {
@@ -618,11 +619,6 @@ call plug#begin()
         if s:Use('ctags')
             " A Vim plugin that manages your tag files
             Plug 'ludovicchabant/vim-gutentags'
-
-            if s:Use('gtags-cscope') && has('cscope') && executable('gtags-cscope')
-                " The right way to use gtags with gutentags
-                Plug 'skywind3000/gutentags_plus'
-            endif
         elseif s:Use('gen_tags')
             " Async plugin for vim and neovim to ease the use of ctags/gtags
             Plug 'jsfaint/gen_tags.vim'
@@ -4012,45 +4008,27 @@ if s:IsPlugged('vim-gutentags')
                 \ 'fugitiveblame',
                 \ ]
 
-    " Prevent gutentags adding gtags databases
-    let g:gutentags_auto_add_gtags_cscope = 0
-
     " Define advanced commands
     let g:gutentags_define_advanced_commands = 1
-endif
 
-if s:IsPlugged('gutentags_plus')
-    " skywind3000/gutentags_plus
-    " Enable gtags module
-    let g:gutentags_modules = ['ctags', 'gtags_cscope']
+    " gtags_cscope
+    if g:zero_vim_gtags_cscope && has('cscope') && executable('gtags')
+        call add(g:gutentags_modules, 'gtags_cscope')
 
-    " Auto add the generated code database
-    let g:gutentags_auto_add_gtags_cscope = 1
-
-    " No default mapping
-    let g:gutentags_plus_nomap = 1
-
-    noremap <silent> <C-\>s :GscopeFind s <C-r><C-w><CR>
-    noremap <silent> <C-\>g :GscopeFind g <C-r><C-w><CR>
-    noremap <silent> <C-\>c :GscopeFind c <C-r><C-w><CR>
-    noremap <silent> <C-\>t :GscopeFind t <C-r><C-w><CR>
-    noremap <silent> <C-\>e :GscopeFind e <C-r><C-w><CR>
-    noremap <silent> <C-\>f :GscopeFind f <C-r>=expand("<cfile>")<CR><CR>
-    noremap <silent> <C-\>i :GscopeFind i <C-r>=expand("<cfile>")<CR><CR>
-    noremap <silent> <C-\>d :GscopeFind d <C-r><C-W><CR>
-    noremap <silent> <C-\>a :GscopeFind a <C-r><C-W><CR>
-    noremap <silent> <C-\>k :GscopeKill<CR>
+        " Automatically add gtags database
+        let g:gutentags_auto_add_gtags_cscope = 1
+    else
+        " Prevent gutentags adding gtags database
+        let g:gutentags_auto_add_gtags_cscope = 0
+    endif
 endif
 
 if s:IsPlugged('gen_tags.vim')
     " jsfaint/gen_tags.vim
     let g:gen_tags#ctags_auto_gen    = 1
     let g:gen_tags#ctags_auto_update = 1
-    let g:gen_tags#cache_dir         = expand('~/.cache/tags')
+    let g:gen_tags#cache_dir         = expand('~/.cache/gen_tags')
     let g:gen_tags#ctags_bin         = g:zero_vim_ctags_bin
-
-    " Disable gtags support if cscope or gtags is missing
-    let g:loaded_gentags#gtags = !has('cscope') || !executable('gtags')
 
     " Universal Ctags
     if s:IsUniversalCtags(g:gen_tags#ctags_bin) && filereadable(g:zero_vim_ctags_ignore)
@@ -4068,6 +4046,82 @@ if s:IsPlugged('gen_tags.vim')
                 \ '/etc',
                 \ '/',
                 \ ]
+
+    " No default gtags mappings
+    let g:gen_tags#gtags_default_map = 0
+
+    if g:zero_vim_gtags_cscope && has('cscope') && executable('gtags')
+        let g:loaded_gentags#gtags = 0
+    else
+        " Disable gtags support
+        let g:loaded_gentags#gtags = 1
+    endif
+endif
+
+" gtags_cscope mappings
+if g:zero_vim_gtags_cscope && has('cscope') && executable('gtags')
+    " The following maps all invoke one of the following cscope search types:
+    "   0 or s: Find this C symbol
+    "   1 or g: Find this definition
+    "   2 or d: Find functions called by this function
+    "   3 or c: Find functions calling this function
+    "   4 or t: Find this text string
+    "   6 or e: Find this egrep pattern
+    "   7 or f: Find this file
+    "   8 or i: Find files #including this file
+    "   9 or a: Find places where this symbol is assigned a value
+
+    nnoremap <silent> <C-\>s :cscope find s <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\>g :cscope find g <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\>d :cscope find d <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\>c :cscope find c <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\>t :cscope find t <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\>e :cscope find e <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\>f :cscope find f <C-r>=expand('<cfile>')<CR><CR>
+    nnoremap <silent> <C-\>i :cscope find i <C-r>=expand('<cfile>')<CR><CR>
+    nnoremap <silent> <C-\>a :cscope find a <C-r>=expand('<cword>')<CR><CR>
+
+    xnoremap <silent> <C-\>s :cscope find s <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\>g :cscope find g <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\>d :cscope find d <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\>c :cscope find c <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\>t :cscope find t <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\>e :cscope find e <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\>a :cscope find a <C-r>=vim_helpers#SelectedText()<CR><CR>
+
+    nnoremap <silent> <C-\><C-s> :vertical scscope find s <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\><C-g> :vertical scscope find g <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\><C-d> :vertical scscope find d <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\><C-c> :vertical scscope find c <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\><C-t> :vertical scscope find t <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\><C-e> :vertical scscope find e <C-r>=expand('<cword>')<CR><CR>
+    nnoremap <silent> <C-\><C-f> :vertical scscope find f <C-r>=expand('<cfile>')<CR><CR>
+    nnoremap <silent> <C-\><C-i> :vertical scscope find i <C-r>=expand('<cfile>')<CR><CR>
+    nnoremap <silent> <C-\><C-a> :vertical scscope find a <C-r>=expand('<cword>')<CR><CR>
+
+    xnoremap <silent> <C-\><C-s> :vertical scscope find s <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\><C-g> :vertical scscope find g <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\><C-d> :vertical scscope find d <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\><C-c> :vertical scscope find c <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\><C-t> :vertical scscope find t <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\><C-e> :vertical scscope find e <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <C-\><C-a> :vertical scscope find a <C-r>=vim_helpers#SelectedText()<CR><CR>
+
+    command! -nargs=+ -complete=customlist,<SID>CscopeSearchTypes CsFind  cscope find <args>
+    command! -nargs=+ -complete=customlist,<SID>CscopeSearchTypes ScsFind scscope find <args>
+    command! -nargs=+ -complete=customlist,<SID>CscopeSearchTypes VcsFind vertical scscope find <args>
+
+    function! s:CscopeSearchTypes(A, L, P) abort
+        let parts = split(a:L, '\s\+')
+        if len(parts) == 1
+            return ['s', 'g', 'd', 'c', 't', 'e', 'f', 'i', 'a']
+        elseif len(parts) == 2
+            let l:list = [expand('<cword>'), expand('<cWORD>'), expand('<cfile>')]
+            let l:list = uniq(sort(l:list))
+            return map(l:list, "escape(v:val, '#%')")
+        endif
+        return []
+    endfunction
 endif
 
 if s:IsPlugged('tagbar')
