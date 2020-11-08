@@ -2478,50 +2478,45 @@ if s:IsPlugged('vim-lsp')
     let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
     let g:lsp_highlight_references_enabled = g:zero_vim_lsp_highlight_references
 
-    " Use `[g` and `]g` to navigate diagnostics
-    nmap <silent> [g <Plug>(lsp-previous-diagnostic)
-    nmap <silent> ]g <Plug>(lsp-next-diagnostic)
-
-    " Use `[r` and `]r` to navigate references
-    nmap <silent> [r <Plug>(lsp-previous-reference)
-    nmap <silent> ]r <Plug>(lsp-next-reference)
-
-    " Use K to show documentation
-    nnoremap <silent> K :call <SID>ShowDocument()<CR>
-
-    function! s:ShowDocument() abort
-        if index(['vim', 'help'], &filetype) >= 0
-            execute 'help ' . expand('<cword>')
-        else
-            execute 'LspHover'
-        endif
-    endfunction
+    " Shougo/neosnippet.vim: expand auto completed parameter and snippets
+    " let g:neosnippet#enable_completed_snippet = 1
+    " let g:neosnippet#enable_complete_done     = 1
 
     function! s:OnLspBufferEnabled() abort
         setlocal omnifunc=lsp#complete
+        setlocal foldmethod=expr
+        setlocal foldexpr=lsp#ui#vim#folding#foldexpr()
+        setlocal foldtext=lsp#ui#vim#folding#foldtext()
 
         if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
-        nmap     <buffer> <silent> <Leader>K  <Plug>(lsp-hover)
-        nmap     <buffer>          <Leader>kh <Leader>K
-        nmap     <buffer> <silent> <Leader>ka <Plug>(lsp-code-action)
-        nmap     <buffer> <silent> <Leader>ke <Plug>(lsp-rename)
-        nmap     <buffer> <silent> <Leader>kf <Plug>(lsp-document-format)
-        vmap     <buffer> <silent> <Leader>kf <Plug>(lsp-document-format)
-        nmap     <buffer> <silent> <Leader>kF <Plug>(lsp-document-range-format)
-        xmap     <buffer> <silent> <Leader>kF <Plug>(lsp-document-range-format)
-        nmap     <buffer> <silent> <Leader>kd <Plug>(lsp-declaration)
-        nmap     <buffer> <silent> <Leader>k] <Plug>(lsp-definition)
-        nmap     <buffer> <silent> <Leader>ki <Plug>(lsp-implementation)
-        nmap     <buffer> <silent> <Leader>kt <Plug>(lsp-type-definition)
-        nmap     <buffer> <silent> <Leader>kT <Plug>(lsp-type-hierarchy)
-        nmap     <buffer> <silent> <Leader>kl <Plug>(lsp-document-diagnostics)
-        nmap     <buffer> <silent> <Leader>ks <Plug>(lsp-document-symbol)
-        nmap     <buffer> <silent> <Leader>kw <Plug>(lsp-workspace-symbol)
-        nmap     <buffer> <silent> <Leader>kr <Plug>(lsp-references)
-        nmap     <buffer> <silent> <Leader>kn <Plug>(lsp-next-error)
-        nmap     <buffer> <silent> <Leader>kp <Plug>(lsp-previous-error)
-        nnoremap <buffer> <silent> <Leader>k; :LspStatus<CR>
+        " Use `[g` and `]g` to navigate diagnostics
+        nmap <buffer> <silent> [g <Plug>(lsp-previous-diagnostic)
+        nmap <buffer> <silent> ]g <Plug>(lsp-next-diagnostic)
+        nmap <buffer> <silent> [k  <Plug>(lsp-previous-error)
+        nmap <buffer> <silent> ]k  <Plug>(lsp-next-error)
+
+        " Use `[r` and `]r` to navigate references
+        nmap <buffer> <silent> [r <Plug>(lsp-previous-reference)
+        nmap <buffer> <silent> ]r <Plug>(lsp-next-reference)
+
+        nmap <buffer> <silent> H  <Plug>(lsp-hover)
+        nmap <buffer> <silent> gA <Plug>(lsp-code-action)
+        nmap <buffer> <silent> M  <Plug>(lsp-rename)
+        nmap <buffer> <silent> gF <Plug>(lsp-document-format)
+        vmap <buffer> <silent> gF <Plug>(lsp-document-format)
+        nmap <buffer> <silent> gK <Plug>(lsp-document-range-format)
+        xmap <buffer> <silent> gK <Plug>(lsp-document-range-format)
+        nmap <buffer> <silent> gD <Plug>(lsp-declaration)
+        nmap <buffer> <silent> g[ <Plug>(lsp-definition)
+        nmap <buffer> <silent> gy <Plug>(lsp-type-definition)
+        nmap <buffer> <silent> gY <Plug>(lsp-type-hierarchy)
+        nmap <buffer> <silent> gI <Plug>(lsp-implementation)
+        nmap <buffer> <silent> L  <Plug>(lsp-document-diagnostics)
+        nmap <buffer> <silent> go <Plug>(lsp-document-symbol)
+        nmap <buffer> <silent> gO <Plug>(lsp-workspace-symbol)
+        nmap <buffer> <silent> gr <Plug>(lsp-references)
+        nmap <buffer> <silent> gm <Plug>(lsp-signature-help)
     endfunction
 
     augroup MyAutoCmd
@@ -2609,22 +2604,22 @@ if s:IsPlugged('vim-lsc')
     call s:SetupLanguageServers()
 
     let g:lsc_auto_map = {
-                \ 'GoToDefinition':      '<Leader>k]',
-                \ 'GoToDefinitionSplit': '<Leader>k\',
-                \ 'FindReferences':      '<Leader>kr',
+                \ 'GoToDefinition':      'g[',
+                \ 'GoToDefinitionSplit': '<C-w>[',
+                \ 'FindReferences':      'gr',
                 \ 'NextReference':       '[r',
                 \ 'PreviousReference':   ']r',
-                \ 'FindImplementations': '<Leader>ki',
-                \ 'FindCodeActions':     '<Leader>ka',
-                \ 'Rename':              '<Leader>ke',
-                \ 'ShowHover':           ['<Leader>K', '<Leader>kh'],
-                \ 'DocumentSymbol':      '<Leader>ks',
-                \ 'WorkspaceSymbol':     '<Leader>kw',
-                \ 'SignatureHelp':       '<Leader>km',
+                \ 'FindImplementations': 'gI',
+                \ 'FindCodeActions':     'gA',
+                \ 'Rename':              'M',
+                \ 'ShowHover':           'H',
+                \ 'DocumentSymbol':      'go',
+                \ 'WorkspaceSymbol':     'gO',
+                \ 'SignatureHelp':       'gm',
                 \ 'Completion':          'omnifunc',
                 \ }
 
-    function! PrintLSCServerStatus(...) abort
+    function! s:PrintLSCServerStatus(...) abort
         let ft = get(a:, 1, &filetype)
         let servers = lsc#server#forFileType(ft)
         if empty(servers) | echo 'No Server!' | return | endif
@@ -2632,10 +2627,11 @@ if s:IsPlugged('vim-lsc')
         echo printf('%s: %s!', get(server, 'config', { 'name': 'Server' })['name'], server['status'])
     endfunction
 
+    command! LSClientServerStatus call <SID>PrintLSCServerStatus()
+
     function! s:SetupLSC() abort
-        nnoremap <buffer> <silent> <Leader>kl :LSClientAllDiagnostics<CR>
-        nnoremap <buffer> <silent> <Leader>kL :LSClientLineDiagnostics<CR>
-        nnoremap <buffer> <silent> <Leader>k; :call PrintLSCServerStatus()<CR>
+        nnoremap <buffer> <silent> L  :LSClientAllDiagnostics<CR>
+        nnoremap <buffer> <silent> gL :LSClientWindowDiagnostics<CR>
     endfunction
 
     augroup MyAutoCmd
@@ -2656,6 +2652,9 @@ if s:IsPlugged('LanguageClient-neovim')
                 \ 4: { 'signText': g:zero_vim_signs.hint },
                 \ }
 
+    " Shougo/neosnippet.vim: expand auto completed parameter
+    " let g:neosnippet#enable_complete_done = 1
+
     function! s:SetupLanguageServers() abort
         for l:name in s:GetEnabledLanguageServers()
             let l:server = g:language_servers[l:name]
@@ -2670,34 +2669,35 @@ if s:IsPlugged('LanguageClient-neovim')
 
     call s:SetupLanguageServers()
 
-    vnoremap <Plug>(lcn-format)            :call LanguageClient_textDocument_rangeFormatting()<CR>
-    nnoremap <Plug>(lcn-workspace-symbols) :call LanguageClient_workspace_symbol()<CR>
-    nnoremap <Plug>(lcn-clear-highlight)   :call LanguageClient_clearDocumentHighlight()<CR>
+    command! LanguageClientServerStatusMessage echo LanguageClient_serverStatusMessage()
+
+    vnoremap <Plug>(lcn-format)            :<C-u>call LanguageClient_textDocument_rangeFormatting()<CR>
+    nnoremap <Plug>(lcn-workspace-symbols) :<C-u>call LanguageClient_workspace_symbol()<CR>
+    nnoremap <Plug>(lcn-clear-highlight)   :<C-u>call LanguageClient_clearDocumentHighlight()<CR>
 
     function! s:SetupLanguageClient() abort
         setlocal omnifunc=LanguageClient#complete
 
-        nmap <silent> [g <Plug>(lcn-diagnostics-prev)
-        nmap <silent> ]g <Plug>(lcn-diagnostics-next)
+        nmap <buffer> <silent> [g <Plug>(lcn-diagnostics-prev)
+        nmap <buffer> <silent> ]g <Plug>(lcn-diagnostics-next)
 
-        nmap <buffer> <silent> <Leader>K  <Plug>(lcn-hover)
-        nmap <buffer>          <Leader>kh <Leader>K
-        nmap <buffer>          <Leader>km <Plug>(lcn-menu)
-        nmap <buffer> <silent> <Leader>ka <Plug>(lcn-code-action)
-        vmap <buffer> <silent> <Leader>ka <Plug>(lcn-code-action)
-        nmap <buffer> <silent> <Leader>kA <Plug>(lcn-code-lens-action)
-        nmap <buffer> <silent> <Leader>ke <Plug>(lcn-rename)
-        nmap <buffer> <silent> <Leader>kf <Plug>(lcn-format)
-        vmap <buffer> <silent> <Leader>kf <Plug>(lcn-format)
-        nmap <buffer> <silent> <Leader>k] <Plug>(lcn-definition)
-        nmap <buffer> <silent> <Leader>ki <Plug>(lcn-implementation)
-        nmap <buffer> <silent> <Leader>kr <Plug>(lcn-references)
-        nmap <buffer> <silent> <Leader>ks <Plug>(lcn-symbols)
-        nmap <buffer> <silent> <Leader>kw <Plug>(lcn-workspace-symbols)
-        nmap <buffer> <silent> <Leader>kc <Plug>(lcn-highlight)
-        nmap <buffer> <silent> <Leader>kC <Plug>(lcn-clear-highlight)
-        nmap <buffer> <silent> <Leader>kv <Plug>(lcn-explain-error)
-        nmap <buffer> <silent> <Leader>k; <Plug>(lcn-server-status)
+        nmap <buffer> <silent> H  <Plug>(lcn-hover)
+        nmap <buffer>          gM <Plug>(lcn-menu)
+        nmap <buffer> <silent> gA <Plug>(lcn-code-action)
+        vmap <buffer> <silent> gA <Plug>(lcn-code-action)
+        nmap <buffer> <silent> gC <Plug>(lcn-code-lens-action)
+        nmap <buffer> <silent> M  <Plug>(lcn-rename)
+        nmap <buffer> <silent> gF <Plug>(lcn-format)
+        vmap <buffer> <silent> gF <Plug>(lcn-format)
+        nmap <buffer> <silent> g[ <Plug>(lcn-definition)
+        nmap <buffer> <silent> gy <Plug>(lcn-type-definition)
+        nmap <buffer> <silent> gI <Plug>(lcn-implementation)
+        nmap <buffer> <silent> gr <Plug>(lcn-references)
+        nmap <buffer> <silent> go <Plug>(lcn-symbols)
+        nmap <buffer> <silent> gO <Plug>(lcn-workspace-symbols)
+        nmap <buffer> <silent> sh <Plug>(lcn-highlight)
+        nmap <buffer> <silent> sH <Plug>(lcn-clear-highlight)
+        nmap <buffer> <silent> se <Plug>(lcn-explain-error)
     endfunction
 
     augroup MyAutoCmd
@@ -2769,29 +2769,27 @@ if s:IsPlugged('vim-lamp')
         nnoremap <buffer> <silent> [g :<C-u>LampDiagnosticsPrev<CR>
         nnoremap <buffer> <silent> ]g :<C-u>LampDiagnosticsNext<CR>
 
-        nnoremap <buffer> <silent> <Leader>K  :<C-u>LampHover<CR>
-        nmap     <buffer> <silent> <Leader>kh <Leader>K
-        nnoremap <buffer> <silent> <Leader>ka :<C-u>LampCodeAction<CR>
-        vnoremap <buffer> <silent> <Leader>ka :LampCodeAction<CR>
-        nnoremap <buffer> <silent> <Leader>ke :<C-u>LampRename<CR>
-        nnoremap <buffer> <silent> <Leader>kf :<C-u>LampFormatting<CR>
-        vnoremap <buffer> <silent> <Leader>kf :LampRangeFormatting<CR>
-        nnoremap <buffer> <silent> <Leader>kd :<C-u>LampDeclaration edit<CR>
-        nnoremap <buffer> <silent> <Leader>kD :<C-u>LampDeclaration vsplit<CR>
-        nnoremap <buffer> <silent> <Leader>k] :<C-u>LampDefinition edit<CR>
-        nnoremap <buffer> <silent> <Leader>k\ :<C-u>LampDefinition vsplit<CR>
-        nnoremap <buffer> <silent> <Leader>k} :<C-u>LampDefinition vsplit<CR>
-        nnoremap <buffer> <silent> <Leader>kt :<C-u>LampTypeDefinition edit<CR>
-        nnoremap <buffer> <silent> <Leader>kT :<C-u>LampTypeDefinition vsplit<CR>
-        nnoremap <buffer> <silent> <Leader>ki :<C-u>LampImplementation edit<CR>
-        nnoremap <buffer> <silent> <Leader>kI :<C-u>LampImplementation vsplit<CR>
-        nnoremap <buffer> <silent> <Leader>kr :<C-u>LampReferences<CR>
-        nnoremap <buffer> <silent> <Leader>kc :<C-u>LampDocumentHighlight<CR>
-        nnoremap <buffer> <silent> <Leader>KC :<C-u>LampDocumentHighlightClear<CR>
-        nnoremap <buffer> <silent> <Leader>k= :<C-u>LampSelectionRangeExpand<CR>
-        nnoremap <buffer> <silent> <Leader>k- :<C-u>LampSelectionRangeCollapse<CR>
-        vnoremap <buffer> <silent> <Leader>k= :<C-u>LampSelectionRangeExpand<CR>
-        vnoremap <buffer> <silent> <Leader>k- :<C-u>LampSelectionRangeCollapse<CR>
+        nnoremap <buffer> <silent> H       :<C-u>LampHover<CR>
+        nnoremap <buffer> <silent> gA      :<C-u>LampCodeAction<CR>
+        vnoremap <buffer> <silent> gA      :LampCodeAction<CR>
+        nnoremap <buffer> <silent> M       :<C-u>LampRename<CR>
+        nnoremap <buffer> <silent> gF      :<C-u>LampFormatting<CR>
+        vnoremap <buffer> <silent> gF      :LampRangeFormatting<CR>
+        nnoremap <buffer> <silent> gD      :<C-u>LampDeclaration edit<CR>
+        nnoremap <buffer> <silent> <C-w>gD :<C-u>LampDeclaration vsplit<CR>
+        nnoremap <buffer> <silent> g[      :<C-u>LampDefinition edit<CR>
+        nnoremap <buffer> <silent> <C-w>g[ :<C-u>LampDefinition vsplit<CR>
+        nnoremap <buffer> <silent> gy      :<C-u>LampTypeDefinition edit<CR>
+        nnoremap <buffer> <silent> <C-w>gy :<C-u>LampTypeDefinition vsplit<CR>
+        nnoremap <buffer> <silent> gI      :<C-u>LampImplementation edit<CR>
+        nnoremap <buffer> <silent> <C-w>gI :<C-u>LampImplementation vsplit<CR>
+        nnoremap <buffer> <silent> gr      :<C-u>LampReferences<CR>
+        nnoremap <buffer> <silent> sh      :<C-u>LampDocumentHighlight<CR>
+        nnoremap <buffer> <silent> sH      :<C-u>LampDocumentHighlightClear<CR>
+        nnoremap <buffer> <silent> s+      :<C-u>LampSelectionRangeExpand<CR>
+        nnoremap <buffer> <silent> s_      :<C-u>LampSelectionRangeCollapse<CR>
+        vnoremap <buffer> <silent> s+      :<C-u>LampSelectionRangeExpand<CR>
+        vnoremap <buffer> <silent> s_      :<C-u>LampSelectionRangeCollapse<CR>
     endfunction
 
     augroup MyAutoCmd
@@ -2971,7 +2969,7 @@ if s:IsPlugged('deoplete.nvim')
     inoremap          <expr> <C-x><C-g> deoplete#undo_completion()
     inoremap          <expr> <C-x><C-l> deoplete#complete_common_string()
     inoremap <silent> <expr> <C-x><C-f> deoplete#manual_complete('file')
-    inoremap          <expr> <C-g><C-g> deoplete#manual_complete()
+    inoremap          <expr> <C-x><C-x> deoplete#manual_complete()
 
     " Integrate with vim-visual-multi / vim-multiple-cursors plugin
     function! Disable_Completion_Hook() abort
@@ -3052,43 +3050,33 @@ if s:IsPlugged('coc.nvim')
     " Overwrite <C-x><C-u>
     imap <silent> <C-x><C-u> <Plug>(coc-complete-custom)
 
-    " Use <C-g><C-g> to trigger completion.
-    inoremap <silent> <expr> <C-g><C-g> coc#refresh()
+    " Use <C-x><C-x> to trigger completion.
+    inoremap <silent> <expr> <C-x><C-x> coc#refresh()
+
+    nnoremap <silent> <Plug>(coc-hover)       :<C-u>call CocAction('doHover')<CR>
+    nnoremap <silent> <Plug>(coc-hover-async) :<C-u>call CocActionAsync('doHover')<CR>
 
     " Use `[g` and `]g` to navigate diagnostics
-    nmap <silent> [g <Plug>(coc-diagnostic-prev)
-    nmap <silent> ]g <Plug>(coc-diagnostic-next)
+    nmap [g <Plug>(coc-diagnostic-prev)
+    nmap ]g <Plug>(coc-diagnostic-next)
+    nmap [k <Plug>(coc-diagnostic-prev-error)
+    nmap ]k <Plug>(coc-diagnostic-next-error)
 
-    " Use K to show documentation in preview window
-    nnoremap <silent> K :call <SID>ShowDocument()<CR>
-
-    function! s:ShowDocument() abort
-        if index(['vim', 'help'], &filetype) >= 0
-            execute 'help ' . expand('<cword>')
-        else
-            call CocAction('doHover')
-        endif
-    endfunction
-
-    nnoremap <silent> <Leader>K  :call CocAction('doHover')<CR>
-    nmap              <Leader>kh <Leader>K
-    nmap     <silent> <Leader>ka <Plug>(coc-codeaction)
-    vmap     <silent> <Leader>ka <Plug>(coc-codeaction-selected)
-    nmap     <silent> <Leader>ke <Plug>(coc-rename)
-    nmap     <silent> <Leader>kf <Plug>(coc-format)
-    vmap     <silent> <Leader>kf <Plug>(coc-format-selected)
-    nmap     <silent> <Leader>kl <Plug>(coc-diagnostic-info)
-    nmap     <silent> <Leader>kd <Plug>(coc-declaration)
-    nmap     <silent> <Leader>k] <Plug>(coc-definition)
-    nmap     <silent> <Leader>ki <Plug>(coc-implementation)
-    nmap     <silent> <Leader>kt <Plug>(coc-type-definition)
-    nmap     <silent> <Leader>kr <Plug>(coc-references)
-    nmap     <silent> <Leader>ko <Plug>(coc-openlink)
-    nmap     <silent> <Leader>kx <Plug>(coc-fix-current)
-    nmap     <silent> <Leader>ku <Plug>(coc-refactor)
-    nmap     <silent> <Leader>kn <Plug>(coc-diagnostic-next-error)
-    nmap     <silent> <Leader>kp <Plug>(coc-diagnostic-prev-error)
-    nnoremap <silent> <Leader>k; :CocInfo<CR>
+    nmap H  <Plug>(coc-hover)
+    nmap gA <Plug>(coc-codeaction)
+    vmap gA <Plug>(coc-codeaction-selected)
+    nmap M  <Plug>(coc-rename)
+    nmap gF <Plug>(coc-format)
+    vmap gF <Plug>(coc-format-selected)
+    nmap L  <Plug>(coc-diagnostic-info)
+    nmap gD <Plug>(coc-declaration)
+    nmap g[ <Plug>(coc-definition)
+    nmap gI <Plug>(coc-implementation)
+    nmap gy <Plug>(coc-type-definition)
+    nmap gr <Plug>(coc-references)
+    nmap so <Plug>(coc-openlink)
+    nmap sc <Plug>(coc-fix-current)
+    nmap sr <Plug>(coc-refactor)
 
     xmap ik <Plug>(coc-funcobj-i)
     xmap ak <Plug>(coc-funcobj-a)
@@ -3145,8 +3133,8 @@ if s:IsPlugged('YouCompleteMe')
     let g:ycm_error_symbol   = g:zero_vim_signs.error
     let g:ycm_warning_symbol = g:zero_vim_signs.warning
 
-    let g:ycm_key_detailed_diagnostics = ''
-    let g:ycm_key_invoke_completion    = '<C-g><C-g>'
+    let g:ycm_key_detailed_diagnostics = 'L'
+    let g:ycm_key_invoke_completion    = '<C-x><C-x>'
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
@@ -3227,7 +3215,7 @@ if s:IsPlugged('asyncomplete.vim')
     let g:asyncomplete_popup_delay = 50
 
     " Show autocomplete popup manually
-    imap <C-g><C-g> <Plug>(asyncomplete_force_refresh)
+    imap <C-x><C-x> <Plug>(asyncomplete_force_refresh)
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? asyncomplete#close_popup()."\<CR>" : "\<CR>"
@@ -3336,7 +3324,7 @@ if s:IsPlugged('ncm2')
     " inoremap <C-c> <ESC>
 
     " Trigger complete manually
-    imap <C-g><C-g> <Plug>(ncm2_manual_trigger)
+    imap <C-x><C-x> <Plug>(ncm2_manual_trigger)
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
@@ -3388,7 +3376,7 @@ if s:IsPlugged('completor.vim')
     endif
 
     " Trigger complete manually
-    inoremap <silent> <expr> <C-g><C-g> "<C-r>=completor#do('complete')<CR>"
+    inoremap <silent> <expr> <C-x><C-x> "<C-r>=completor#do('complete')<CR>"
 
     " <CR>: close popup and insert newline
     inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
@@ -3450,6 +3438,10 @@ if s:IsPlugged('vim-mucomplete')
     let g:mucomplete#enable_auto_at_startup = 1
     let g:mucomplete#completion_delay       = 50
     let g:mucomplete#reopen_immediately     = 0
+    let g:mucomplete#minimum_prefix_length  = 1
+
+    " prabirshrestha/vim-lsp: disable async completion
+    let g:lsp_async_completion = 0
 
     function! s:SetupMUCompleteDefaultChains() abort
         let l:chains = ['omni']
@@ -3464,27 +3456,28 @@ if s:IsPlugged('vim-mucomplete')
             call add(l:chains, 'nsnp')
         endif
 
-        call extend(l:chains, ['keyn', 'c-n', 'path'])
+        call extend(l:chains, ['c-p', 'path'])
 
         return l:chains
     endfunction
 
-    let g:mucomplete#chains = {}
-    let g:mucomplete#chains.default = s:SetupMUCompleteDefaultChains()
-
-    " Disable vim-lsp's async completion
-    let g:lsp_async_completion = 0
+    let g:mucomplete#chains = {
+                \ 'default': s:SetupMUCompleteDefaultChains(),
+                \ }
 
     " Cancel the current menu and try completing the text I originally typed in a different way
-    imap <unique> <silent> <C-g> <Plug>(MUcompleteCycFwd)
-    imap <unique> <silent> <C-h> <Plug>(MUcompleteCycBwd)
+    inoremap <silent> <Plug>(MUcompleteBwdKey) <C-h>
+    imap <unique> <silent> <C-x><C-h> <Plug>(MUcompleteCycBwd)
+
+    inoremap <silent> <Plug>(MUcompleteFwdKey) <C-j>
+    imap <unique> <silent> <C-x><C-j> <plug>(MUcompleteCycFwd)
 
     " <CR>: close popup and insert newline
-    if !has('patch-8.0.0283')
-        imap <expr> <CR> pumvisible() ? "\<C-y>\<Plug>(MUcompleteCR)" : "\<Plug>(MUcompleteCR)"
-    else
-        inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-    endif
+    inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+
+    " if !has('patch-8.0.0283')
+    "     imap <expr> <CR> pumvisible() ? "\<C-y>\<Plug>(MUcompleteCR)" : "\<Plug>(MUcompleteCR)"
+    " endif
 
     " Integrate with vim-visual-multi / vim-multiple-cursors plugin
     function! Disable_Completion_Hook() abort
