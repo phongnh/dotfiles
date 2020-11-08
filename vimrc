@@ -327,6 +327,8 @@ call plug#begin()
         Plug 'glts/vim-textobj-comment'               " c
         Plug 'mattn/vim-textobj-url'                  " u
         Plug 'rhysd/vim-textobj-conflict'             " =
+        Plug 'edkolev/erlang-motions.vim'
+        Plug 'andyl/vim-textobj-elixir'               " e, remapped to r
         Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
         Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y (rub[y])
         Plug 'inside/vim-textobj-jsxattr'             " x
@@ -787,14 +789,12 @@ call plug#begin()
     if s:Use('erlang')
         Plug 'vim-erlang/vim-erlang-runtime'
         Plug 'vim-erlang/vim-erlang-compiler'
-        Plug 'edkolev/erlang-motions.vim'
     endif
 " }
 
 " Elixir {
     if s:Use('elixir')
         Plug 'elixir-editors/vim-elixir'
-        Plug 'andyl/vim-textobj-elixir'
         Plug 'mhinz/vim-mix-format'
     endif
 " }
@@ -1623,6 +1623,20 @@ nmap s> <Plug>SidewaysRight
 nnoremap <silent> s[ :SidewaysJumpLeft<CR>
 nnoremap <silent> s] :SidewaysJumpRight<CR>
 
+if s:IsPlugged('vim-textobj-elixir')
+    " andyl/vim-textobj-elixir
+    let g:textobj_elixir_no_default_key_mappings = 1
+
+    " Remap from 'e' to 'r'
+    augroup MyAutoCmd
+        autocmd FileType elixir,eelixir
+                    \ omap <buffer> ar <Plug>(textobj-elixir-any-a)|
+                    \ xmap <buffer> ar <Plug>(textobj-elixir-any-a)|
+                    \ omap <buffer> ir <Plug>(textobj-elixir-any-i)|
+                    \ xmap <buffer> ir <Plug>(textobj-elixir-any-i)
+    augroup END
+endif
+
 if s:IsPlugged('vim-textobj-ruby')
     " rhysd/vim-textobj-ruby
     let g:textobj_ruby_more_mappings = 0
@@ -1651,6 +1665,24 @@ if s:IsPlugged('vim-textobj-erb')
     augroup END
 endif
 
+if s:IsPlugged('wildfire.vim')
+    " gcmt/wildfire.vim
+    map  + <Plug>(wildfire-fuel)
+    vmap _ <Plug>(wildfire-water)
+
+    let g:wildfire_objects = {
+                \ '*': ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'ip'],
+                \ }
+
+    call wildfire#triggers#Add('<C-\>', {
+                \ 'html,xml':        ['ix', 'it', 'at'],
+                \ 'elixir,eelixir':  ['ir', 'ar'],
+                \ 'ruby,rspec.ruby': ['ir', 'ar'],
+                \ 'eruby':           ['il', 'iy', 'ay', 'ix', 'it', 'at'],
+                \ 'go':              ['if', 'af'],
+                \ })
+endif
+
 if s:IsPlugged('targets.vim')
     " wellle/targets.vim
     let g:targets_nl = 'nN'
@@ -1675,23 +1707,6 @@ if s:IsPlugged('targets.vim')
                     \ },
                     \ })
     augroup END
-endif
-
-if s:IsPlugged('wildfire.vim')
-    " gcmt/wildfire.vim
-    map  + <Plug>(wildfire-fuel)
-    vmap _ <Plug>(wildfire-water)
-
-    let g:wildfire_objects = {
-                \ '*': ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'ip'],
-                \ }
-
-    call wildfire#triggers#Add('<C-\>', {
-                \ 'html,xml':        ['ix', 'it', 'at'],
-                \ 'ruby,rspec.ruby': ['ir', 'ar'],
-                \ 'eruby':           ['il', 'iy', 'ay', 'ix', 'it', 'at'],
-                \ 'go':              ['if', 'af'],
-                \ })
 endif
 
 " luochen1990/rainbow
@@ -4291,20 +4306,6 @@ endif
 
 if s:IsPlugged('vim-elixir')
     " elixir-editors/vim-elixir
-endif
-
-if s:IsPlugged('vim-textobj-elixir')
-    " andyl/vim-textobj-elixir
-    let g:textobj_elixir_no_default_key_mappings = 1
-
-    " Remap from 'e' to 'r'
-    augroup MyAutoCmd
-        autocmd FileType elixir,eelixir
-                    \ omap <buffer> ar <Plug>(textobj-elixir-any-a)|
-                    \ xmap <buffer> ar <Plug>(textobj-elixir-any-a)|
-                    \ omap <buffer> ir <Plug>(textobj-elixir-any-i)|
-                    \ xmap <buffer> ir <Plug>(textobj-elixir-any-i)
-    augroup END
 endif
 
 if s:IsPlugged('vim-mix-format')
