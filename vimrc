@@ -4214,15 +4214,6 @@ endif
 
 if s:IsPlugged('vim-go')
     " fatih/vim-go and phongnh/go-explorer
-    let g:go_highlight_functions         = 1
-    let g:go_highlight_methods           = 1
-    let g:go_highlight_fields            = 1
-    let g:go_highlight_structs           = 1
-    let g:go_highlight_interfaces        = 1
-    let g:go_highlight_operators         = 1
-    let g:go_highlight_build_constraints = 1
-    let g:go_highlight_extra_types       = 1
-
     let g:go_fmt_command       = 'goimports'
     let g:go_fmt_fail_silently = 1
 
@@ -4230,68 +4221,87 @@ if s:IsPlugged('vim-go')
     if s:IsPlugged('coc.nvim')
         let g:go_code_completion_enabled = 1
     elseif s:IsLSPEnabled() || s:IsPlugged('YouCompleteMe')
-        let g:go_gopls_enabled           = 0
+        let g:go_gopls_enabled           = 1
         let g:go_code_completion_enabled = 0
     endif
 
     let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
     let g:ale_linters = get(g:, 'ale_linters', {})
-    let g:ale_linters.go = ['golint', 'govet', 'errheck']
+    let g:ale_linters.go = ['golint', 'govet', 'errcheck']
+
+    let g:go_highlights_enabled = 0
+
+    " These highlights are enabled by default
+    " let g:go_highlight_string_spellcheck   = 1
+    " let g:go_highlight_format_strings      = 1
+    " let g:go_highlight_diagnostic_errors   = 1
+    " let g:go_highlight_diagnostic_warnings = 1
+    " let g:go_highlight_debug               = 1
+
+    function s:ToggleGoHighlights() abort
+        let g:go_highlights_enabled                  = !g:go_highlights_enabled
+        " let g:go_highlight_array_whitespace_error    = g:go_highlights_enabled
+        " let g:go_highlight_chan_whitespace_error     = g:go_highlights_enabled
+        let g:go_highlight_extra_types               = g:go_highlights_enabled
+        " let g:go_highlight_space_tab_error           = g:go_highlights_enabled
+        " let g:go_highlight_trailing_whitespace_error = g:go_highlights_enabled
+        " let g:go_highlight_operators                 = g:go_highlights_enabled
+        let g:go_highlight_functions                 = g:go_highlights_enabled
+        let g:go_highlight_function_parameters       = g:go_highlights_enabled
+        let g:go_highlight_function_calls            = g:go_highlights_enabled
+        let g:go_highlight_fields                    = g:go_highlights_enabled
+        let g:go_highlight_types                     = g:go_highlights_enabled
+        let g:go_highlight_build_constraints         = g:go_highlights_enabled
+        let g:go_highlight_generate_tags             = g:go_highlights_enabled
+        " let g:go_highlight_variable_assignments      = g:go_highlights_enabled
+        " let g:go_highlight_variable_declarations     = g:go_highlights_enabled
+        confirm edit
+        redraw!
+        echo printf('%s highlights!', g:go_highlights_enabled ? 'Enabled' : 'Disabled')
+    endfunction
+
+    command! ToggleGoHighlights call <SID>ToggleGoHighlights()
 
     function! s:SetupVimGo() abort
-        if strlen(mapcheck('<Plug>(go-run-split)'))
-            nmap <buffer> <LocalLeader>R <Plug>(go-run-split)
-        else
-            nnoremap <buffer> <silent> <LocalLeader>R :GoRun!<CR>:redraw!<CR>
+        if empty(mapcheck('<Plug>(go-run-split)'))
+            nnoremap <silent> <Plug>(go-run-split) :<C-u>GoRun!<CR>:redraw!<CR>
         endif
-        nmap <buffer> <LocalLeader>r <Plug>(go-run)
-        nmap <buffer> <LocalLeader>b <Plug>(go-build)
-        nmap <buffer> <LocalLeader>g <Plug>(go-generate)
-        nmap <buffer> <LocalLeader>i <Plug>(go-install)
-        nmap <buffer> <LocalLeader>I <Plug>(go-import)
-        nmap <buffer> <LocalLeader>t <Plug>(go-test)
-        nmap <buffer> <LocalLeader>T <Plug>(go-test-func)
-        nmap <buffer> <LocalLeader>C <Plug>(go-test-compile)
-        nmap <buffer> <LocalLeader>a <Plug>(go-alternate-edit)
-        nmap <buffer> <LocalLeader>A <Plug>(go-alternate-vertical)
-        nmap <buffer> <LocalLeader>c <Plug>(go-coverage)
-        nmap <buffer> <LocalLeader>v <Plug>(go-vet)
 
-        nmap <buffer> <LocalLeader>e <Plug>(go-rename)
+        nmap <buffer> <Leader>rr <Plug>(go-run)
+        nmap <buffer> <Leader>rs <Plug>(go-run-split)
+        nmap <buffer> <Leader>rb <Plug>(go-build)
+        nmap <buffer> <Leader>rg <Plug>(go-generate)
+        nmap <buffer> <Leader>ri <Plug>(go-install)
+        nmap <buffer> <Leader>rt <Plug>(go-test)
+        nmap <buffer> <Leader>rf <Plug>(go-test-func)
+        nmap <buffer> <Leader>rT <Plug>(go-test-compile)
+        nmap <buffer> <Leader>rc <Plug>(go-coverage)
+        nmap <buffer> <Leader>r< <Plug>(go-imports)
 
-        nmap <buffer> <LocalLeader>n <Plug>(go-info)
-        nmap <buffer> <LocalLeader>N <Plug>(go-deps)
-        nmap <buffer> <LocalLeader>s <Plug>(go-implements)
-
-        nnoremap <buffer> <LocalLeader>B :GoDocBrowser<Space>
-
-        nmap <buffer> <LocalLeader>d <Plug>(go-doc-vertical)
-        nmap <buffer> <LocalLeader>D <Plug>(go-doc-tab)
-
-        nmap <buffer> <LocalLeader>f <Plug>(go-def-vertical)
-        nmap <buffer> <LocalLeader>F <Plug>(go-def-tab)
-
-        nmap     <buffer> <LocalLeader>m <Plug>(go-metalinter)
-        nnoremap <buffer> <LocalLeader>M :GoMetaLinter<Space>
-        nnoremap <buffer> <LocalLeader>l :GoLint<Space>
-        nnoremap <buffer> <LocalLeader>E :GoErrCheck<Space>
-
-        nnoremap <buffer> <LocalLeader>G :GoGuruTags<Space>
-
-        nmap     <buffer> g> <Plug>(go-import)
-        nmap     <buffer> g< <Plug>(go-drop)
-        nnoremap <buffer> g} :GoImport<Space>
-        nnoremap <buffer> g{ :GoDrop<Space>
+        nmap <buffer> <Leader>rn <Plug>(go-rename)
 
         if s:IsPlugged('ctrlp.vim') || s:IsPlugged('fzf.vim')
-            nnoremap <buffer> <silent> <LocalLeader>o :GoDecls<CR>
-            nnoremap <buffer> <silent> <LocalLeader>O :GoDeclsDir<CR>
-            nnoremap <buffer>          <LocalLeader>p :GoDeclsDir<Space>
-            nnoremap <buffer>          <LocalLeader>P :GoDecls<Space>
+            nmap <buffer> <Leader>go <Plug>(go-decls)
+            nmap <buffer> <Leader>gO <Plug>(go-decls-dir)
         endif
 
-        " go install
-        nnoremap <buffer> <silent> <LocalLeader>u :update<CR>:execute "silent! !go install"<CR>:redraw!<CR>:echo '!go install'<CR>
+        nmap <buffer> <Leader>rd <Plug>(go-def)
+        nmap <buffer> <Leader>rD <Plug>(go-def-type)
+        nmap <buffer> <Leader>ro <Plug>(go-doc)
+        nmap <buffer> <Leader>rO <Plug>(go-doc-vertical)
+
+        nmap <buffer> <Leader>rm <Plug>(go-metalinter)
+        nmap <buffer> <Leader>rl <Plug>(go-lint)
+        nmap <buffer> <Leader>rv <Plug>(go-vet)
+
+        nmap <buffer> <Leader>ba <Plug>(go-alternate-edit)
+
+        nnoremap <buffer> g< :GoImport<Space>
+        nnoremap <buffer> g> :GoDrop<Space>
+        nnoremap <buffer> gB :GoDocBrowser<Space>
+
+        nnoremap <buffer> <silent> <Leader>rk :GoErrCheck<CR>
+        nnoremap <buffer> <silent> <Leader>rh :ToggleGoHighlights<CR>
     endfunction
 
     augroup MyAutoCmd
