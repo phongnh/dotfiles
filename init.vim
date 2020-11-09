@@ -2978,12 +2978,20 @@ if s:IsPlugged('completion-nvim')
     endfunction
 
     let g:completion_disable_filetypes = [
-                \ 'ctrlp',
-                \ 'tagbar',
-                \ 'qf',
                 \ 'nerdtree',
                 \ 'fern',
                 \ 'vaffle',
+                \ 'startify',
+                \ 'tagbar',
+                \ 'vista',
+                \ 'vim-plug',
+                \ 'terminal',
+                \ 'help',
+                \ 'qf',
+                \ 'godoc',
+                \ 'gitcommit',
+                \ 'fugitiveblame',
+                \ 'ctrlp',
                 \ 'leaderf',
                 \ 'clap_input',
                 \ ]
