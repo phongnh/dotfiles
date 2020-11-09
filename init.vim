@@ -2534,6 +2534,7 @@ endif
 if s:IsPlugged('vim-lsp')
     " prabirshrestha/vim-lsp
     let g:lsp_async_completion = 1
+    let g:lsp_fold_enabled     = 0
 
     let g:lsp_signs_error         = { 'text': g:zero_vim_signs.error }
     let g:lsp_signs_warning       = { 'text': g:zero_vim_signs.warning }
@@ -2551,9 +2552,10 @@ if s:IsPlugged('vim-lsp')
 
     function! s:OnLspBufferEnabled() abort
         setlocal omnifunc=lsp#complete
-        setlocal foldmethod=expr
-        setlocal foldexpr=lsp#ui#vim#folding#foldexpr()
-        setlocal foldtext=lsp#ui#vim#folding#foldtext()
+
+        " setlocal foldmethod=expr
+        " setlocal foldexpr=lsp#ui#vim#folding#foldexpr()
+        " setlocal foldtext=lsp#ui#vim#folding#foldtext()
 
         if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
