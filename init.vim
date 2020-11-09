@@ -1587,14 +1587,14 @@ xmap <silent> ia <Plug>SidewaysArgumentTextobjI
 
 nmap <silent> si <Plug>SidewaysArgumentInsertBefore
 nmap <silent> sa <Plug>SidewaysArgumentAppendAfter
-nmap <silent> sf <Plug>SidewaysArgumentInsertFirst
-nmap <silent> sl <Plug>SidewaysArgumentAppendLast
-
-nmap s< <Plug>SidewaysLeft
-nmap s> <Plug>SidewaysRight
+nmap <silent> sI <Plug>SidewaysArgumentInsertFirst
+nmap <silent> sA <Plug>SidewaysArgumentAppendLast
 
 nnoremap <silent> s[ :SidewaysJumpLeft<CR>
 nnoremap <silent> s] :SidewaysJumpRight<CR>
+
+nmap s< <Plug>SidewaysLeft
+nmap s> <Plug>SidewaysRight
 
 if s:IsPlugged('vim-textobj-elixir')
     " andyl/vim-textobj-elixir
