@@ -4239,7 +4239,7 @@ if s:IsPlugged('vim-go')
     let g:ale_linters.go = ['golint', 'govet', 'errheck']
 
     function! s:SetupVimGo() abort
-        if has('nvim')
+        if strlen(mapcheck('<Plug>(go-run-split)'))
             nmap <buffer> <LocalLeader>R <Plug>(go-run-split)
         else
             nnoremap <buffer> <silent> <LocalLeader>R :GoRun!<CR>:redraw!<CR>
