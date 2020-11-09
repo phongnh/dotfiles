@@ -718,7 +718,9 @@ if s:Use('treesitter') && has('nvim-0.5-nightly')
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'nvim-treesitter/nvim-treesitter-refactor'
     Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-    " Plug 'romgrk/nvim-treesitter-context'
+    if s:Use('treesitter-context')
+        Plug 'romgrk/nvim-treesitter-context'
+    endif
 endif
 
 " Web {
@@ -4320,23 +4322,43 @@ if s:IsPlugged('nvim-treesitter')
                 highlight = {
                     enable           = true,
                     use_languagetree = false,
-                    disable          = { "c", "ruby", "rust" }
+                    disable          = { "c", "ruby", "rust" },
                 },
                 incremental_selection = {
                     enable = true,
                     keymaps = {
                         init_selection    = "sn",
-                        node_incremental  = "sj",
-                        scope_incremental = "ss",
-                        node_decremental  = "sk",
+                        node_incremental  = "sn",
+                        scope_incremental = "sc",
+                        node_decremental  = "sp",
                     },
                 },
                 indent = {
                     enable = true,
                 },
                 refactor = {
-                    highlight_definitions   = { enable = true },
-                    highlight_current_scope = { enable = false },
+                    highlight_definitions = {
+                        enable = true,
+                    },
+                    highlight_current_scope = {
+                        enable = false,
+                    },
+                    smart_rename = {
+                        enable = true,
+                        keymaps = {
+                            smart_rename = "str",
+                        }
+                    },
+                    navigation = {
+                        enable = true,
+                        keymaps = {
+                            goto_definition      = "stg",
+                            list_definitions     = "std",
+                            list_definitions_toc = "stc",
+                            goto_next_usage      = "stn",
+                            goto_previous_usage  = "stp",
+                        },
+                    },
                 },
                 textobjects = {
                     select = {
@@ -4350,12 +4372,21 @@ if s:IsPlugged('nvim-treesitter')
 
                             -- Or you can define your own textobjects like this
                             ["iF"] = {
-                                python = "(function_definition) @function",
-                                cpp    = "(function_definition) @function",
-                                c      = "(function_definition) @function",
-                                java   = "(method_declaration) @function",
+                                c          = "(function_definition) @function",
+                                go         = "(function_definition) @function",
+                                javascript = "(function_declaration) @function",
+                                python     = "(function_definition) @function",
                             },
-                        }
+                        },
+                    },
+                    swap = {
+                        enable = false,
+                        swap_next = {
+                            ["sa"] = "@parameter.inner",
+                        },
+                        swap_previous = {
+                            ["sA"] = "@parameter.inner",
+                        },
                     },
                     move = {
                         enable = true,
@@ -4375,6 +4406,9 @@ if s:IsPlugged('nvim-treesitter')
                             ["[M"] = "@function.outer",
                             ["[]"] = "@class.outer",
                         },
+                    },
+                    lsp_interop = {
+                        enable = false,
                     },
                 },
             }
