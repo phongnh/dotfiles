@@ -2977,7 +2977,21 @@ if s:IsPlugged('completion-nvim')
         let g:completion_enable_auto_popup = 1
     endfunction
 
+    let g:completion_disable_filetypes = [
+                \ 'ctrlp',
+                \ 'tagbar',
+                \ 'qf',
+                \ 'nerdtree',
+                \ 'fern',
+                \ 'vaffle',
+                \ 'leaderf',
+                \ 'clap_input',
+                \ ]
+
     function! s:InitCompletionNvim()
+        if index(g:completion_disable_filetypes, &filetype) > -1
+            return
+        endif
         try
             lua require'completion'.on_attach()
         catch /^Vim(lua):E5108/
