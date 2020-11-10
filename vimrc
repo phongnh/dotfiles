@@ -679,11 +679,11 @@ call plug#begin()
         " An awesome Git wrapper so awesome
         Plug 'tpope/vim-fugitive'
 
-        " Vim and Neovim plugin to reveal the commit messages under the cursor
-        Plug 'rhysd/git-messenger.vim'
-
         " A git commit browser in Vim
         Plug 'junegunn/gv.vim'
+
+        " Vim and Neovim plugin to reveal the commit messages under the cursor
+        Plug 'rhysd/git-messenger.vim'
 
         " A Vim plugin for more pleasant editing on commit messages
         Plug 'rhysd/committia.vim'
@@ -4096,6 +4096,13 @@ if s:IsPlugged('vim-fugitive')
     augroup END
 endif
 
+if s:IsPlugged('gv.vim')
+    " junegunn/gv.vim
+    nnoremap <silent> <Leader>gk :GV<CR>
+    nnoremap <silent> <Leader>gK :GV!<CR>
+    nnoremap <silent> <Leader>gv :GV?<CR>
+endif
+
 if s:IsPlugged('git-messenger.vim')
     " rhysd/git-messenger.vim
     nmap <C-w>m <Plug>(git-messenger)
@@ -4104,13 +4111,6 @@ if s:IsPlugged('git-messenger.vim')
         " Hack for the case Git Messenger popup closed immediately after it opened on Vim 8.2
         autocmd FileType gitmessengerpopup setlocal updatetime=300000
     augroup END
-endif
-
-if s:IsPlugged('gv.vim')
-    " junegunn/gv.vim
-    nnoremap <silent> <Leader>gk :GV<CR>
-    nnoremap <silent> <Leader>gK :GV!<CR>
-    nnoremap <silent> <Leader>gv :GV?<CR>
 endif
 
 if s:IsPlugged('committia.vim')
