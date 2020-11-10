@@ -709,16 +709,6 @@ call plug#begin()
     endif
 " }
 
-" Nvim Treesitter configurations and abstraction layer
-if s:Use('treesitter') && has('nvim-0.5-nightly')
-    Plug 'nvim-treesitter/nvim-treesitter'
-    Plug 'nvim-treesitter/nvim-treesitter-refactor'
-    Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-    if s:Use('treesitter-context')
-        Plug 'romgrk/nvim-treesitter-context'
-    endif
-endif
-
 " Web {
     if s:Use('web')
         Plug 'othree/html5.vim'
@@ -820,6 +810,16 @@ endif
 
 " Run your tests at the speed of thought
 Plug 'vim-test/vim-test'
+
+" Nvim Treesitter configurations and abstraction layer
+if s:Use('treesitter') && has('nvim-0.5-nightly')
+    Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'nvim-treesitter/nvim-treesitter-refactor'
+    Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+    if s:Use('treesitter-context')
+        Plug 'romgrk/nvim-treesitter-context'
+    endif
+endif
 
 " Color schemes {
     " Default
@@ -4333,115 +4333,6 @@ if s:IsPlugged('vim-hardtime')
     let g:list_of_normal_keys = ['h', 'j', 'k', 'l', '<UP>', '<DOWN>', '<LEFT>', '<RIGHT>']
 endif
 
-if s:IsPlugged('nvim-treesitter')
-    " nvim-treesitter/nvim-treesitter
-    function! s:InitTreesitter() abort
-        try
-            lua << EOF
-            require'nvim-treesitter.configs'.setup {
-                ensure_installed = "maintained",
-                highlight = {
-                    enable           = true,
-                    use_languagetree = false,
-                    disable          = { "c", "ruby", "rust" },
-                },
-                incremental_selection = {
-                    enable = true,
-                    keymaps = {
-                        init_selection    = "sn",
-                        node_incremental  = "sn",
-                        scope_incremental = "sc",
-                        node_decremental  = "sp",
-                    },
-                },
-                indent = {
-                    enable = true,
-                },
-                refactor = {
-                    highlight_definitions = {
-                        enable = true,
-                    },
-                    highlight_current_scope = {
-                        enable = false,
-                    },
-                    smart_rename = {
-                        enable = true,
-                        keymaps = {
-                            smart_rename = "str",
-                        }
-                    },
-                    navigation = {
-                        enable = true,
-                        keymaps = {
-                            goto_definition      = "stg",
-                            list_definitions     = "std",
-                            list_definitions_toc = "stc",
-                            goto_next_usage      = "stn",
-                            goto_previous_usage  = "stp",
-                        },
-                    },
-                },
-                textobjects = {
-                    select = {
-                        enable = true,
-                        keymaps = {
-                            -- You can use the capture groups defined in textobjects.scm
-                            ["af"] = "@function.outer",
-                            ["if"] = "@function.inner",
-                            ["ac"] = "@class.outer",
-                            ["ic"] = "@class.inner",
-
-                            -- Or you can define your own textobjects like this
-                            ["iF"] = {
-                                c          = "(function_definition) @function",
-                                go         = "(function_definition) @function",
-                                javascript = "(function_declaration) @function",
-                                python     = "(function_definition) @function",
-                            },
-                        },
-                    },
-                    swap = {
-                        enable = false,
-                        swap_next = {
-                            ["sa"] = "@parameter.inner",
-                        },
-                        swap_previous = {
-                            ["sA"] = "@parameter.inner",
-                        },
-                    },
-                    move = {
-                        enable = true,
-                        goto_next_start = {
-                            ["]m"] = "@function.outer",
-                            ["]]"] = "@class.outer",
-                        },
-                        goto_next_end = {
-                            ["]M"] = "@function.outer",
-                            ["]["] = "@class.outer",
-                        },
-                        goto_previous_start = {
-                            ["[m"] = "@function.outer",
-                            ["[["] = "@class.outer",
-                        },
-                        goto_previous_end = {
-                            ["[M"] = "@function.outer",
-                            ["[]"] = "@class.outer",
-                        },
-                    },
-                    lsp_interop = {
-                        enable = false,
-                    },
-                },
-            }
-EOF
-        catch /^Vim(lua):E5108/
-            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-treesitter` plugin!' | echohl None
-        endtry
-    endfunction
-
-    call s:InitTreesitter()
-endif
-
 " tpope/vim-markdown
 let g:markdown_fenced_languages = [
             \ 'bash=sh',
@@ -4661,6 +4552,115 @@ nmap              <Leader>tn <Leader>tf
 nnoremap <silent> <Leader>tl :TestLast<CR>
 nnoremap <silent> <Leader>ts :TestSuite<CR>
 nnoremap <silent> <Leader>tv :TestVisit<CR>
+
+if s:IsPlugged('nvim-treesitter')
+    " nvim-treesitter/nvim-treesitter
+    function! s:InitTreesitter() abort
+        try
+            lua << EOF
+            require'nvim-treesitter.configs'.setup {
+                ensure_installed = "maintained",
+                highlight = {
+                    enable           = true,
+                    use_languagetree = false,
+                    disable          = { "c", "ruby", "rust" },
+                },
+                incremental_selection = {
+                    enable = true,
+                    keymaps = {
+                        init_selection    = "sn",
+                        node_incremental  = "sn",
+                        scope_incremental = "sc",
+                        node_decremental  = "sp",
+                    },
+                },
+                indent = {
+                    enable = true,
+                },
+                refactor = {
+                    highlight_definitions = {
+                        enable = true,
+                    },
+                    highlight_current_scope = {
+                        enable = false,
+                    },
+                    smart_rename = {
+                        enable = true,
+                        keymaps = {
+                            smart_rename = "str",
+                        }
+                    },
+                    navigation = {
+                        enable = true,
+                        keymaps = {
+                            goto_definition      = "stg",
+                            list_definitions     = "std",
+                            list_definitions_toc = "stc",
+                            goto_next_usage      = "stn",
+                            goto_previous_usage  = "stp",
+                        },
+                    },
+                },
+                textobjects = {
+                    select = {
+                        enable = true,
+                        keymaps = {
+                            -- You can use the capture groups defined in textobjects.scm
+                            ["af"] = "@function.outer",
+                            ["if"] = "@function.inner",
+                            ["ac"] = "@class.outer",
+                            ["ic"] = "@class.inner",
+
+                            -- Or you can define your own textobjects like this
+                            ["iF"] = {
+                                c          = "(function_definition) @function",
+                                go         = "(function_definition) @function",
+                                javascript = "(function_declaration) @function",
+                                python     = "(function_definition) @function",
+                            },
+                        },
+                    },
+                    swap = {
+                        enable = false,
+                        swap_next = {
+                            ["sa"] = "@parameter.inner",
+                        },
+                        swap_previous = {
+                            ["sA"] = "@parameter.inner",
+                        },
+                    },
+                    move = {
+                        enable = true,
+                        goto_next_start = {
+                            ["]m"] = "@function.outer",
+                            ["]]"] = "@class.outer",
+                        },
+                        goto_next_end = {
+                            ["]M"] = "@function.outer",
+                            ["]["] = "@class.outer",
+                        },
+                        goto_previous_start = {
+                            ["[m"] = "@function.outer",
+                            ["[["] = "@class.outer",
+                        },
+                        goto_previous_end = {
+                            ["[M"] = "@function.outer",
+                            ["[]"] = "@class.outer",
+                        },
+                    },
+                    lsp_interop = {
+                        enable = false,
+                    },
+                },
+            }
+EOF
+        catch /^Vim(lua):E5108/
+            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-treesitter` plugin!' | echohl None
+        endtry
+    endfunction
+
+    call s:InitTreesitter()
+endif
 
 " altercation/vim-colors-solarized
 let g:loaded_togglebg = 1
