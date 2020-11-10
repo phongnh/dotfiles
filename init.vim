@@ -2872,6 +2872,8 @@ endif
 
 if s:IsPlugged('vim-vsnip')
     " hrsh7th/vim-vsnip
+    let g:vsnip_snippet_dirs = ['~/.vim/vsnip']
+
     imap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : "\<C-\>"
     smap <expr> <C-\> vsnip#available(1) ? "\<Plug>(vsnip-expand-or-jump)" : "\<C-\>"
 
