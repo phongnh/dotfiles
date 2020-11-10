@@ -164,7 +164,7 @@ let g:zero_vim_ctags_ignore             = get(g:, 'zero_vim_ctags_ignore',      
 let g:zero_vim_gtags_cscope             = get(g:, 'zero_vim_gtags_cscope',             0)
 
 " Default signs
-let s:zero_vim_default_signs = {
+let g:zero_vim_signs = extend({
             \ 'error':         '🅔',
             \ 'style_error':   'ⓔ',
             \ 'warning':       '🅦',
@@ -172,8 +172,7 @@ let s:zero_vim_default_signs = {
             \ 'information':   '🅘',
             \ 'hint':          '🅗',
             \ 'virtual_text':  '🅥',
-            \ }
-let g:zero_vim_signs = extend(copy(s:zero_vim_default_signs), get(g:, 'zero_vim_signs', {}))
+            \ }, get(g:, 'zero_vim_signs', {}))
 
 " True Color settings
 if g:zero_vim_true_color && has('termguicolors')
