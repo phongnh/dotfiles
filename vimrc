@@ -1665,24 +1665,6 @@ if s:IsPlugged('vim-textobj-erb')
     augroup END
 endif
 
-if s:IsPlugged('wildfire.vim')
-    " gcmt/wildfire.vim
-    map  + <Plug>(wildfire-fuel)
-    vmap _ <Plug>(wildfire-water)
-
-    let g:wildfire_objects = {
-                \ '*': ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'ip'],
-                \ }
-
-    call wildfire#triggers#Add('<C-\>', {
-                \ 'html,xml':        ['ix', 'it', 'at'],
-                \ 'elixir,eelixir':  ['ir', 'ar'],
-                \ 'ruby,rspec.ruby': ['ir', 'ar'],
-                \ 'eruby':           ['il', 'iy', 'ay', 'ix', 'it', 'at'],
-                \ 'go':              ['if', 'af'],
-                \ })
-endif
-
 if s:IsPlugged('targets.vim')
     " wellle/targets.vim
     let g:targets_nl = 'nN'
@@ -1707,6 +1689,24 @@ if s:IsPlugged('targets.vim')
                     \ },
                     \ })
     augroup END
+endif
+
+if s:IsPlugged('wildfire.vim')
+    " gcmt/wildfire.vim
+    map  + <Plug>(wildfire-fuel)
+    vmap _ <Plug>(wildfire-water)
+
+    let g:wildfire_objects = {
+                \ '*': ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'ip'],
+                \ }
+
+    call wildfire#triggers#Add('<C-\>', {
+                \ 'html,xml':        ['ix', 'it', 'at'],
+                \ 'elixir,eelixir':  ['ir', 'ar'],
+                \ 'ruby,rspec.ruby': ['ir', 'ar'],
+                \ 'eruby':           ['il', 'iy', 'ay', 'ix', 'it', 'at'],
+                \ 'go':              ['if', 'af'],
+                \ })
 endif
 
 " luochen1990/rainbow
