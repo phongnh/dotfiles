@@ -724,14 +724,15 @@ call plug#begin()
 " Web {
     if s:Use('web')
         Plug 'othree/html5.vim'
-        Plug 'pangloss/vim-javascript'
-        Plug 'MaxMEllon/vim-jsx-pretty'
-        Plug 'elzr/vim-json'
-        Plug 'othree/javascript-libraries-syntax.vim'
-        Plug 'heavenshell/vim-jsdoc'
-        Plug 'tpope/vim-jdaddy'
         Plug 'hail2u/vim-css3-syntax'
-        Plug 'phongnh/vim-coloresque'
+        Plug 'HerringtonDarkholme/yats.vim'
+        Plug 'pangloss/vim-javascript' | Plug 'othree/javascript-libraries-syntax.vim'
+        Plug 'MaxMEllon/vim-jsx-pretty'
+        Plug 'jparise/vim-graphql'
+        Plug 'elzr/vim-json'
+        Plug 'tpope/vim-jdaddy'
+        Plug 'heavenshell/vim-jsdoc'
+        Plug 'gko/vim-coloresque'
     endif
 " }
 
@@ -803,7 +804,7 @@ call plug#begin()
     if s:Use('syntax') || s:Use('polyglot')
         " A solid language pack for Vim
         let g:polyglot_disabled = ['autoindent', 'sensible']
-        if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'javascript', 'jsx', 'json']) | endif
+        if s:Use('web') | call extend(g:polyglot_disabled, ['html5', 'typescript', 'javascript', 'jsx', 'graphql', 'json']) | endif
         if s:Use('coffee-script') | call add(g:polyglot_disabled, 'coffee-script') | endif
         if s:Use('ruby') | call extend(g:polyglot_disabled, ['ruby', 'yaml', 'yard', 'rspec']) | endif
         if s:Use('crystal') | call add(g:polyglot_disabled, 'crystal') | endif
@@ -4171,7 +4172,7 @@ let g:markdown_fenced_languages = [
 
 " pangloss/vim-javascript
 let g:javascript_plugin_jsdoc = 1
-let g:javascript_plugin_flow  = 1
+let g:javascript_plugin_flow  = 0
 
 if s:IsPlugged('vim-rails')
     " tpope/vim-rails
