@@ -604,6 +604,9 @@ call plug#begin()
     if s:Use('lint') && has('job')
         " Asynchronous Lint Engine
         Plug 'dense-analysis/ale'
+    elseif s:Use('neomake') && has('job')
+        " Asynchronous linting and make framework for Neovim/Vim
+        Plug 'neomake/neomake'
     elseif s:Use('syntastic')
         " Syntax checking hacks for vim
         Plug 'vim-syntastic/syntastic'
@@ -3740,6 +3743,26 @@ if s:IsPlugged('ale')
 
     nnoremap <silent> <Leader>bc :ALELint<CR>
     nnoremap <silent> <Leader>bC :ALEFix<CR>
+endif
+
+if s:IsPlugged('neomake')
+    " neomake/neomake
+    let g:neomake_open_list          = 2
+    let g:neomake_list_height        = 5
+    let g:neomake_echo_current_error = 1
+
+    let g:neomake_error_sign   = { 'text': g:zero_vim_signs.error   }
+    let g:neomake_warning_sign = { 'text': g:zero_vim_signs.warning }
+    let g:neomake_info_sign    = { 'text': g:zero_vim_signs.info    }
+    let g:neomake_message_sign = { 'text': g:zero_vim_signs.message }
+
+    let g:neomake_virtualtext_prefix = g:zero_vim_signs.virtual_text . ' '
+
+    if g:zero_vim_autolint
+        call neomake#configure#automake('w')
+    endif
+
+    nnoremap <silent> <Leader>bc :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
 endif
 
 if s:IsPlugged('syntastic')
