@@ -326,15 +326,12 @@ call plug#begin()
         Plug 'glts/vim-textobj-comment'               " c
         Plug 'mattn/vim-textobj-url'                  " u
         Plug 'rhysd/vim-textobj-conflict'             " =
-        Plug 'edkolev/erlang-motions.vim'
+        Plug 'rhysd/vim-textobj-word-column'          " v
+        Plug 'edkolev/erlang-motions.vim'             " m: function clause, M: function declaration
         Plug 'andyl/vim-textobj-elixir'               " e, remapped to r
         Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
         Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y (rub[y])
         Plug 'inside/vim-textobj-jsxattr'             " x
-        Plug 'rhysd/vim-textobj-word-column'          " v
-        Plug 'kana/vim-textobj-function'
-        Plug 'thinca/vim-textobj-function-javascript' " f
-        Plug 'haya14busa/vim-textobj-function-syntax'
 
         " Vim plugin that provides additional text objects
         Plug 'wellle/targets.vim'
