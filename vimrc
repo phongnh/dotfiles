@@ -290,7 +290,7 @@ call plug#begin()
     if s:Use('auto-pairs')
         " insert or delete brackets, parens, quotes in pair
         Plug 'jiangmiao/auto-pairs'
-    else
+    elseif s:Use('lexima')
         " Auto close parentheses and repeat by dot dot dot...
         Plug 'cohama/lexima.vim'
     endif
