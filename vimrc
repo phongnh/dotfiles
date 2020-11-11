@@ -334,9 +334,6 @@ call plug#begin()
 
         " Vim plugin that provides additional text objects
         Plug 'wellle/targets.vim'
-
-        " Smart selection of the closest text object
-        Plug 'gcmt/wildfire.vim'
     endif
 " }
 
@@ -1701,85 +1698,6 @@ if s:IsPlugged('targets.vim')
                     \ 'a': {},
                     \ })
     augroup END
-endif
-
-if s:IsPlugged('wildfire.vim')
-    " gcmt/wildfire.vim
-    map  + <Plug>(wildfire-fuel)
-    vmap _ <Plug>(wildfire-water)
-
-    let g:wildfire_objects = {
-                \ '*': ['iw', 'iW', "i'", "a'", 'i"', 'a"', 'i)', 'a)', 'i]', 'a]', 'i}', 'a}', 'ip'],
-                \ }
-
-    call wildfire#triggers#Add('<C-\>', {
-                \ 'html,xml':        ['ix', 'it', 'at'],
-                \ 'elixir,eelixir':  ['ir', 'ar'],
-                \ 'ruby,rspec.ruby': ['ir', 'ar'],
-                \ 'eruby':           ['iE', 'aE', 'ix', 'it', 'at'],
-                \ 'go':              ['if', 'af'],
-                \ })
-endif
-
-if s:IsPlugged('vim-expand-region')
-    " terryma/vim-expand-region
-    let g:expand_region_text_objects = {
-                \ 'iw': 0,
-                \ 'iW': 0,
-                \ 'i"': 0,
-                \ "i'": 0,
-                \ 'i]': 1,
-                \ 'i)': 1,
-                \ 'i}': 1,
-                \ 'ip': 0,
-                \ }
-
-    " HTML
-    let g:expand_region_text_objects_html = {
-                \ 'ix': 0,
-                \ 'it': 1,
-                \ 'at': 1,
-                \ }
-
-    " XML
-    let g:expand_region_text_objects_xml = {
-                \ 'ix': 0,
-                \ 'it': 1,
-                \ 'at': 1,
-                \ }
-
-    " Elixir
-    let g:expand_region_text_objects_elixir = {
-                \ 'ir': 1,
-                \ 'ar': 1,
-                \ }
-
-    " EElixir
-    let g:expand_region_text_objects_eelixir = {
-                \ 'ir': 1,
-                \ 'ar': 1,
-                \ }
-
-    " Ruby
-    let g:expand_region_text_objects_ruby = {
-                \ 'ir': 1,
-                \ 'ar': 1,
-                \ }
-
-    " Eruby
-    let g:expand_region_text_objects_eruby = {
-                \ 'iE': 0,
-                \ 'aE': 0,
-                \ 'ix': 0,
-                \ 'it': 1,
-                \ 'at': 1,
-                \ }
-
-    " Go
-    let g:expand_region_text_objects_go = {
-                \ 'if': 0,
-                \ 'af': 0,
-                \ }
 endif
 
 " luochen1990/rainbow
