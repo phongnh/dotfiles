@@ -4279,6 +4279,8 @@ endif
 
 if s:IsPlugged('git-messenger.vim')
     " rhysd/git-messenger.vim
+    let g:git_messenger_always_into_popup = v:true
+
     nmap <C-w>m <Plug>(git-messenger)
 
     augroup MyAutoCmd
