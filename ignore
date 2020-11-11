@@ -1,9 +1,6 @@
 .git/
 .hg/
 .svn/
-/.git/
-/.hg/
-/.svn/
 .sass-cache/
 .elixir_ls/
 .build/
@@ -12,6 +9,7 @@ _build/
 deps/
 .gems/
 gems/
+.next/
 node_modules/
 empty_node_modules/
 spec/javascripts/
@@ -19,15 +17,16 @@ tmp/cache/assets/
 bootsnap-compile-cache/
 bootsnap-load-path-cache
 public/js/
-/public/js/
 public/uploads/
-/public/uploads/
 log/
 vim/built/
-lost+found/
-.Trash-1000/
+vendor/github.com/
+vendor/golang.org/
+vendor/gopkg.in/
 target/
 .terraform/
+lost+found/
+.Trash-1000/
 *.pyc
 *.cache
 *.pdf
@@ -57,5 +56,5 @@ target/
 *.keep
 *.gitkeep
 .DS_Store
-tags*
-vim/built/
+/tags
+Icon*
