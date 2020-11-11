@@ -671,10 +671,14 @@ call plug#begin()
 
         " A git commit browser in Vim
         Plug 'junegunn/gv.vim'
+    endif
 
+    if s:Use('git-messenger')
         " Vim and Neovim plugin to reveal the commit messages under the cursor
         Plug 'rhysd/git-messenger.vim'
+    endif
 
+    if s:Use('committia')
         " A Vim plugin for more pleasant editing on commit messages
         Plug 'rhysd/committia.vim'
     endif
