@@ -299,21 +299,20 @@ call plug#begin()
 " }
 
 " Text Objects {
-    Plug 'kana/vim-textobj-user'
-
     if s:Use('text-objects')
+        Plug 'kana/vim-textobj-user'
         Plug 'kana/vim-textobj-entire'                " e
         Plug 'kana/vim-textobj-line'                  " l
         Plug 'kana/vim-textobj-indent'                " i
         Plug 'glts/vim-textobj-comment'               " c
         Plug 'mattn/vim-textobj-url'                  " u
-        Plug 'rhysd/vim-textobj-conflict'             " =
+        Plug 'rhysd/vim-textobj-conflict'             " =, remapped to C
         Plug 'rhysd/vim-textobj-word-column'          " v
+        Plug 'inside/vim-textobj-jsxattr'             " x
+        Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
+        Plug 'whatyouhide/vim-textobj-erb'            " E
         Plug 'edkolev/erlang-motions.vim'             " m: function clause, M: function declaration
         Plug 'andyl/vim-textobj-elixir'               " e, remapped to r
-        Plug 'rhysd/vim-textobj-ruby'                 " r: any block | ro: definitions, rl: loop, rc: control, rd: do, rr: any block
-        Plug 'whatyouhide/vim-textobj-erb'            " E, remapped to y (rub[y])
-        Plug 'inside/vim-textobj-jsxattr'             " x
 
         " Vim plugin that provides additional text objects
         Plug 'wellle/targets.vim'
@@ -1598,18 +1597,15 @@ nnoremap <silent> s] :SidewaysJumpRight<CR>
 nmap s< <Plug>SidewaysLeft
 nmap s> <Plug>SidewaysRight
 
-if s:IsPlugged('vim-textobj-elixir')
-    " andyl/vim-textobj-elixir
-    let g:textobj_elixir_no_default_key_mappings = 1
+if s:IsPlugged('vim-textobj-conflict')
+    " rhysd/vim-textobj-conflict
+    let g:textobj_conflict_no_default_key_mappings = 1
 
-    " Remap from 'e' to 'r'
-    augroup MyAutoCmd
-        autocmd FileType elixir,eelixir
-                    \ omap <buffer> ar <Plug>(textobj-elixir-any-a)|
-                    \ xmap <buffer> ar <Plug>(textobj-elixir-any-a)|
-                    \ omap <buffer> ir <Plug>(textobj-elixir-any-i)|
-                    \ xmap <buffer> ir <Plug>(textobj-elixir-any-i)
-    augroup END
+    " Remap from '=' to 'C'
+    omap aC <Plug>(textobj-conflict-_-a)
+    xmap aC <Plug>(textobj-conflict-_-a)
+    omap iC <Plug>(textobj-conflict-_-i)
+    xmap iC <Plug>(textobj-conflict-_-i)
 endif
 
 if s:IsPlugged('vim-textobj-ruby')
@@ -1630,13 +1626,26 @@ if s:IsPlugged('vim-textobj-erb')
     " whatyouhide/vim-textobj-erb
     let g:textobj_erb_no_default_key_mappings = 1
 
-    " Remap from 'E' to 'y'
     augroup MyAutoCmd
         autocmd FileType rhtml,eruby,eruby.yaml,eruby.html,html.eruby
-                    \ omap <buffer> ay <Plug>(textobj-erb-a)|
-                    \ xmap <buffer> ay <Plug>(textobj-erb-a)|
-                    \ omap <buffer> iy <Plug>(textobj-erb-i)|
-                    \ xmap <buffer> iy <Plug>(textobj-erb-i)
+                    \ omap <buffer> aE <Plug>(textobj-erb-a)|
+                    \ xmap <buffer> aE <Plug>(textobj-erb-a)|
+                    \ omap <buffer> iE <Plug>(textobj-erb-i)|
+                    \ xmap <buffer> iE <Plug>(textobj-erb-i)
+    augroup END
+endif
+
+if s:IsPlugged('vim-textobj-elixir')
+    " andyl/vim-textobj-elixir
+    let g:textobj_elixir_no_default_key_mappings = 1
+
+    " Remap from 'e' to 'r'
+    augroup MyAutoCmd
+        autocmd FileType elixir,eelixir
+                    \ omap <buffer> ar <Plug>(textobj-elixir-any-a)|
+                    \ xmap <buffer> ar <Plug>(textobj-elixir-any-a)|
+                    \ omap <buffer> ir <Plug>(textobj-elixir-any-i)|
+                    \ xmap <buffer> ir <Plug>(textobj-elixir-any-i)
     augroup END
 endif
 
@@ -1645,10 +1654,26 @@ if s:IsPlugged('targets.vim')
     let g:targets_nl = 'nN'
 
     " Prefer multiline targets around cursor over distant targets within cursor line:
-    let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB rr ll rb al rB Al bb aa bB Aa BB AA'
+    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB rr ll rb al rB Al bb aa bB Aa BB AA'
+
+    " Never seek backwards:
+    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr rr lb ar ab lB Ar aB Ab AB rb rB bb bB BB'
+
+    " Only seek if next/last targets touch current line:
+    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr rr ll lb ar ab lB Ar aB Ab AB rb rB al Al'
+
+    " Only consider targets fully visible on screen:
+    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab rr rb bb ll al aa'
+
+    " Only consider targets around cursor:
+    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB'
+
+    " Only consider targets fully contained in current line:
+    " let g:targets_seekRanges = 'cc cr cb cB lc ac Ac lr rr ll'
 
     augroup MyAutoCmd
         autocmd User targets#mappings#user call targets#mappings#extend({
+                    \ 'a': {},
                     \ 'd': {
                     \   'separator': [{'d':','}, {'d':'.'}, {'d':';'}, {'d':':'}, {'d':'+'}, {'d':'-'},
                     \                 {'d':'='}, {'d':'~'}, {'d':'_'}, {'d':'*'}, {'d':'#'}, {'d':'/'},
@@ -1672,16 +1697,77 @@ if s:IsPlugged('wildfire.vim')
     vmap _ <Plug>(wildfire-water)
 
     let g:wildfire_objects = {
-                \ '*': ['iw', 'iW', "i'", "a'", 'i"', 'a"', "i)", 'a)', "i]", "a]", "i}", "a}", 'il', 'ip'],
+                \ '*': ['iw', 'iW', "i'", "a'", 'i"', 'a"', 'i)', 'a)', 'i]', 'a]', 'i}', 'a}', 'ip'],
                 \ }
 
     call wildfire#triggers#Add('<C-\>', {
                 \ 'html,xml':        ['ix', 'it', 'at'],
                 \ 'elixir,eelixir':  ['ir', 'ar'],
                 \ 'ruby,rspec.ruby': ['ir', 'ar'],
-                \ 'eruby':           ['il', 'iy', 'ay', 'ix', 'it', 'at'],
+                \ 'eruby':           ['iE', 'aE', 'ix', 'it', 'at'],
                 \ 'go':              ['if', 'af'],
                 \ })
+endif
+
+if s:IsPlugged('vim-expand-region')
+    " terryma/vim-expand-region
+    let g:expand_region_text_objects = {
+                \ 'iw': 0,
+                \ 'iW': 0,
+                \ 'i"': 0,
+                \ "i'": 0,
+                \ 'i]': 1,
+                \ 'i)': 1,
+                \ 'i}': 1,
+                \ 'ip': 0,
+                \ }
+
+    " HTML
+    let g:expand_region_text_objects_html = {
+                \ 'ix': 0,
+                \ 'it': 1,
+                \ 'at': 1,
+                \ }
+
+    " XML
+    let g:expand_region_text_objects_xml = {
+                \ 'ix': 0,
+                \ 'it': 1,
+                \ 'at': 1,
+                \ }
+
+    " Elixir
+    let g:expand_region_text_objects_elixir = {
+                \ 'ir': 1,
+                \ 'ar': 1,
+                \ }
+
+    " EElixir
+    let g:expand_region_text_objects_eelixir = {
+                \ 'ir': 1,
+                \ 'ar': 1,
+                \ }
+
+    " Ruby
+    let g:expand_region_text_objects_ruby = {
+                \ 'ir': 1,
+                \ 'ar': 1,
+                \ }
+
+    " Eruby
+    let g:expand_region_text_objects_eruby = {
+                \ 'iE': 0,
+                \ 'aE': 0,
+                \ 'ix': 0,
+                \ 'it': 1,
+                \ 'at': 1,
+                \ }
+
+    " Go
+    let g:expand_region_text_objects_go = {
+                \ 'if': 0,
+                \ 'af': 0,
+                \ }
 endif
 
 " luochen1990/rainbow
