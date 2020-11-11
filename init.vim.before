@@ -1,8 +1,12 @@
 let g:zero_vim_groups = [
             \ 'grep',
             \ 'multiple-cursors',
+            \ 'auto-pairs',
             \ 'text-objects',
+            \ 'targets',
             \ 'lightline',
+            \ 'bufexplorer',
+            \ 'fern',
             \ 'fzf',
             \ 'neosnippet',
             \ 'deoplete',
@@ -15,15 +19,16 @@ let g:zero_vim_groups = [
             \ 'undo',
             \ 'indent',
             \ 'git',
+            \ 'git-messenger',
+            \ 'committia',
             \ 'gitgutter',
             \ 'diff-enhanced',
-            \ 'web',
-            \ 'ruby',
-            \ 'go',
+            \ 'polyglot',
             \ ]
 
-let g:zero_vim_devicons        = index(['Kitty', 'Alacritty', 'iTerm.app'], $TERM_PROGRAM) > -1
+let g:zero_vim_devicons        = index(['Kitty', 'Alacritty', 'iTerm.app', 'VTE', 'WezTerm'], $TERM_PROGRAM) > -1
 let g:zero_vim_true_color      = ($COLORTERM ==# 'truecolor' || $COLORTERM ==# '24bit')
+let g:zero_vim_glyph_palette   = 1
 let g:zero_vim_powerline       = 1
 let g:zero_vim_lsp_diagnostics = 0
 let g:zero_vim_autolint        = 0
