@@ -841,8 +841,11 @@ Plug 'vim-test/vim-test'
     Plug 'lifepillar/vim-solarized8'
     Plug 'lifepillar/vim-gruvbox8'
     Plug 'arcticicestudio/nord-vim'
-    Plug 'tyrannicaltoucan/vim-deep-space'
-    Plug 'drewtempelmeyer/palenight.vim'
+    Plug 'mhartington/oceanic-next'
+    Plug 'sainnhe/gruvbox-material'
+    Plug 'sainnhe/sonokai'
+    Plug 'sainnhe/forest-night'
+    Plug 'sainnhe/edge'
 
     " Simple
     Plug 'pbrisbin/vim-colors-off'
@@ -4393,6 +4396,15 @@ let g:solarized_term_italics = 1
 
 " lifepillar/vim-gruvbox8
 let g:gruvbox_italic = 1
+
+" mhartington/oceanic-next
+let g:oceanic_next_terminal_bold   = 1
+let g:oceanic_next_terminal_italic = 1
+
+" sainnhe/sonokai
+let g:sonokai_style                  = 'default'
+let g:sonokai_enable_italic          = 0
+let g:sonokai_disable_italic_comment = 0
 
 if s:IsPlugged('glyph-palette.vim') && g:zero_vim_glyph_palette
     " lambdalisue/glyph-palette.vim
