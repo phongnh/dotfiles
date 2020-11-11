@@ -331,7 +331,9 @@ call plug#begin()
         Plug 'whatyouhide/vim-textobj-erb'            " E
         Plug 'edkolev/erlang-motions.vim'             " m: function clause, M: function declaration
         Plug 'andyl/vim-textobj-elixir'               " e, remapped to r
+    endif
 
+    if s:Use('targets')
         " Vim plugin that provides additional text objects
         Plug 'wellle/targets.vim'
     endif
