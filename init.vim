@@ -4723,6 +4723,7 @@ if s:IsPlugged('vim-which-key')
     " liuchengxu/vim-which-key
     let g:which_key_map = {
                 \ '<CR>': 'toggle-distraction-free-writing',
+                \ 'A':    'auto-format-buffer',
                 \ '=':    'auto-format-buffer',
                 \ 'n':    'open-selected-region',
                 \ 'e':    'toggle-explorer',
@@ -4733,9 +4734,12 @@ if s:IsPlugged('vim-which-key')
                 \ 'T':    'toggle-tagbar',
                 \ 'U':    'toggle-undo-tree',
                 \ 'R':    'replace-prompt',
+                \ 'V':    'subvert-replace-prompt',
+                \ 'Q':    'cdo-replace-prompt',
                 \ 'S':    'search-prompt',
                 \ 'L':    'search-location-list-prompt',
                 \ 'B':    'search-in-buffer-prompt',
+                \ 'F':    'ctrlsf-search-prompt',
                 \ 'w':    'save-buffer',
                 \ 'x':    'save-and-close-buffer',
                 \ ' ':    'files',
@@ -4752,6 +4756,8 @@ if s:IsPlugged('vim-which-key')
                 \ ';':    'command-palette',
                 \ ':':    'command-history',
                 \ '/':    'search-history',
+                \ 'l':    'locationlist',
+                \ 'q':    'quickfix',
                 \ }
 
     let g:which_key_map.b = {
@@ -4784,6 +4790,8 @@ if s:IsPlugged('vim-which-key')
                 \ 'y':    'copy-buffer-to-clipboard',
                 \ 'n':    'open-selected-region',
                 \ 'm':    'maximize-buffer',
+                \ 'z':    'refresh-goyo-mode',
+                \ ';':    'set-buffer-type',
                 \ }
 
     let g:which_key_map.c = {
@@ -4821,6 +4829,7 @@ if s:IsPlugged('vim-which-key')
                 \ 'K':    'current-file-commit-browser',
                 \ 'v':    'current-file-revisions',
                 \ 'm':    'git-messenger',
+                \ 't':    'tig-status',
                 \ }
 
     let g:which_key_map.m = {
@@ -4872,12 +4881,13 @@ if s:IsPlugged('vim-which-key')
                 \ 's':    'search-cword',
                 \ 'i':    'search-cword-prompt',
                 \ 'r':    'search-and-replace-prompt',
-                \ 'v':    'subvert-prompt',
+                \ 'v':    'subvert-search-and-replace-prompt',
+                \ 'q':    'cdo-search-and-replace-prompt',
                 \ '/':    'search-pattern-from-/',
                 \ '?':    'search-pattern-from-/-prompt',
                 \ 'l':    'search-cword-location-list',
                 \ 'b':    'search-cword-with-file-type',
-                \ 'p':    'ctrlsf-search-prompt',
+                \ 'p':    'search-cword-in-repo-or-filecwd',
                 \ 'f':    'ctrlsf-search-cword',
                 \ 'c':    'ctrlsf-search-cword-prompt',
                 \ 'u':    'ctrlsf-search-update',
@@ -4902,7 +4912,10 @@ if s:IsPlugged('vim-which-key')
                 \ 'name': '+replace/rubocop/prettier',
                 \ 'r': 'replace-prompt',
                 \ 'w': 'search-and-replace-prompt',
+                \ 'v': 'subvert-replace-prompt',
+                \ 'c': 'subvert-search-and-replace-prompt',
                 \ 'f': 'prettier-async',
+                \ 'u': 'run-rubocop',
                 \ }
 
     call which_key#register('<Space>', 'g:which_key_map')
