@@ -1929,7 +1929,7 @@ if s:IsPlugged('LeaderF')
 
     let g:Lf_UseCache       = 0  " rg/fd is enough fast, we don't need cache
     let g:Lf_NeedCacheTime  = 10 " 10 seconds
-    let g:Lf_UseMemoryCache = 1
+    let g:Lf_UseMemoryCache = 0
 
     let g:Lf_NoChdir              = 1
     let g:Lf_WorkingDirectoryMode = 'c'
