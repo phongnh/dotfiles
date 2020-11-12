@@ -1940,7 +1940,7 @@ if s:IsPlugged('LeaderF')
     let s:Lf_FindTools = {
             \ 'rg': 'rg %s --color=never --no-ignore-vcs --hidden --files',
             \ 'ag': 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""',
-            \ 'fd': 'fd --color=never --no-ignore-vcs --ignore-file ~/.ignore --hidden --type file . %s',
+            \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file . %s',
             \ }
 
     if g:zero_vim_find_tool == 'fd' && executable('fd')
