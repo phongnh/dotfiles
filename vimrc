@@ -264,8 +264,10 @@ call plug#begin()
 " }
 
 " Editing {
-    " Vim plugin for intensely orgasmic commenting
-    Plug 'scrooloose/nerdcommenter'
+    if s:Use('nerdcommenter')
+        " Vim plugin for intensely orgasmic commenting
+        Plug 'scrooloose/nerdcommenter'
+    endif
 
     " commentary.vim: comment stuff out
     Plug 'tpope/vim-commentary'
@@ -273,8 +275,10 @@ call plug#begin()
     " A Vim alignment plugin
     Plug 'junegunn/vim-easy-align'
 
-    " Vim script for text filtering and alignment
-    Plug 'godlygeek/tabular'
+    if s:Use('tabular')
+        " Vim script for text filtering and alignment
+        Plug 'godlygeek/tabular'
+    endif
 
     " quoting/parenthesizing made simple
     Plug 'tpope/vim-surround'
@@ -378,8 +382,10 @@ call plug#begin()
 " }
 
 " Explorer {
-    " BufExplorer Plugin for Vim
-    Plug 'jlanzarotta/bufexplorer'
+    if s:Use('bufexplorer')
+        " BufExplorer Plugin for Vim
+        Plug 'jlanzarotta/bufexplorer'
+    endif
 
     if s:Use('fern') && has('patch-8.1.2114')
         " General purpose asynchrnonous tree viewer written in Pure Vim script
@@ -398,7 +404,7 @@ call plug#begin()
         if g:zero_vim_devicons && s:Use('nerdfont')
             Plug 'lambdalisue/nerdfont.vim'
         endif
-    else
+    elseif s:Use('nerdtree')
         " A tree explorer plugin for vim
         Plug 'scrooloose/nerdtree'
     endif
@@ -1502,23 +1508,27 @@ xnoremap <silent> <Leader>sk <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShel
 nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
 nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
 
-" scrooloose/nerdcommenter
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-" Enable trimming of trailing whitespace when uncommenting
-let g:NERDTrimTrailingWhitespace = 1
-" Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
-" Allow commenting and inverting empty lines (useful when commenting a region)
-" let g:NERDCommentEmptyLines = 1
+if s:IsPlugged('nerdcommenter')
+    " scrooloose/nerdcommenter
+    " Add spaces after comment delimiters by default
+    let g:NERDSpaceDelims = 1
+    " Enable trimming of trailing whitespace when uncommenting
+    let g:NERDTrimTrailingWhitespace = 1
+    " Use compact syntax for prettified multi-line comments
+    let g:NERDCompactSexyComs = 1
+    " Allow commenting and inverting empty lines (useful when commenting a region)
+    " let g:NERDCommentEmptyLines = 1
+endif
 
 " junegunn/vim-easy-align
 vmap <Enter> <Plug>(EasyAlign)
 
-" godlygeek/tabular
-" Overwrite ga behavior - call :ascii instead
-nnoremap ga :Tabularize<Space>/
-xnoremap ga :Tabularize<Space>/
+if s:IsPlugged('tabular')
+    " godlygeek/tabular
+    " Overwrite ga behavior - call :ascii instead
+    nnoremap ga :Tabularize<Space>/
+    xnoremap ga :Tabularize<Space>/
+endif
 
 " tpope/vim-surround
 let g:surround_indent             = 1
@@ -1725,12 +1735,14 @@ endif
 let g:rainbow_active = 0
 nnoremap <silent> <Leader>bv :RainbowToggle<CR>
 
-" jlanzarotta/bufexplorer
-let g:bufExplorerDisableDefaultKeyMapping = 1
-let g:bufExplorerShowDirectories          = 0
-let g:bufExplorerShowRelativePath         = 1
+if s:IsPlugged('bufexplorer')
+    " jlanzarotta/bufexplorer
+    let g:bufExplorerDisableDefaultKeyMapping = 1
+    let g:bufExplorerShowDirectories          = 0
+    let g:bufExplorerShowRelativePath         = 1
 
-nnoremap <silent> gb :ToggleBufExplorer<CR>
+    nnoremap <silent> gb :ToggleBufExplorer<CR>
+endif
 
 if s:IsPlugged('fern.vim')
     " lambdalisue/fern.vim

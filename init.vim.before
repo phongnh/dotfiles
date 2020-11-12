@@ -1,5 +1,7 @@
 let g:zero_vim_groups = [
             \ 'grep',
+            \ 'nerdcommenter',
+            \ 'tabular',
             \ 'multiple-cursors',
             \ 'auto-pairs',
             \ 'text-objects',
