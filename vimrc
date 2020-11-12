@@ -735,7 +735,11 @@ call plug#begin()
         Plug 'othree/html5.vim'
         Plug 'hail2u/vim-css3-syntax'
         Plug 'HerringtonDarkholme/yats.vim'
-        Plug 'pangloss/vim-javascript' | Plug 'othree/javascript-libraries-syntax.vim'
+        if s:Use('yajs')
+            Plug 'othree/yajs.vim' | Plug 'othree/es.next.syntax.vim' | Plug 'othree/javascript-libraries-syntax.vim'
+        else
+            Plug 'pangloss/vim-javascript' | Plug 'othree/javascript-libraries-syntax.vim'
+        endif
         Plug 'MaxMEllon/vim-jsx-pretty'
         Plug 'jparise/vim-graphql'
         Plug 'elzr/vim-json'
