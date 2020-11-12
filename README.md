@@ -6,8 +6,8 @@ My dotfiles for vim + tmux setup
 
     # Required packages
     brew install tmux reattach-to-user-namespace htop fpp urlview tig
-    brew install python python@2 cmake
-    brew install ripgrep the_silver_searcher fd
+    brew install python cmake
+    brew install ripgrep fd
     brew install global ctags
     brew unlink ctags
     brew install --HEAD universal-ctags/universal-ctags/universal-ctags
@@ -27,8 +27,6 @@ My dotfiles for vim + tmux setup
     brew install neovim --HEAD
     pip3 install --user --upgrade pip setuptools
     pip3 install --user --upgrade pynvim
-    pip2 install --user --upgrade pip setuptools
-    pip2 install --user --upgrade pynvim
 
 ## Setup vim and nvim folder
 

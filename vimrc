@@ -1366,7 +1366,7 @@ let g:grepper = {
             \ 'jump':                0,
             \ 'prompt':              1,
             \ 'prompt_mapping_tool': '<C-\>',
-            \ 'tools':               ['rg', 'ag', 'git', 'grep', 'findstr'],
+            \ 'tools':               ['rg', 'git', 'grep', 'findstr'],
             \ 'stop':                2000,
             \ }
 
@@ -1374,10 +1374,6 @@ runtime plugin/grepper.vim
 
 if has_key(g:grepper, 'rg')
     let g:grepper.rg.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
-endif
-
-if has_key(g:grepper, 'ag')
-    let g:grepper.ag.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --skip-vcs-ignores' : '')
 endif
 
 command! -nargs=* -complete=customlist,grepper#complete GrepperExec  Grepper -noprompt <args>
@@ -1393,8 +1389,6 @@ command! -nargs=* -complete=customlist,grepper#complete BGrepperExec LGrepperExe
 function! s:TGrepper(qargs) abort
     if exists(':GrepperRg') == 2
         let cmd = 'GrepperRg ' . vim_helpers#ParseGrepFileTypeOption('rg')
-    elseif exists(':GrepperAg') == 2
-        let cmd = 'GrepperAg ' . vim_helpers#ParseGrepFileTypeOption('ag')
     elseif exists(':GrepperGrep') == 2
         let cmd = 'GrepperGrep ' . vim_helpers#ParseGrepFileTypeOption('grep')
     else
@@ -1464,23 +1458,13 @@ function! s:CtrlSFParseFileTypeOption(cmd) abort
         elseif strlen(ext)
             return printf("-filematch '*.%s'", ext)
         endif
-    elseif a:cmd ==# 'ag'
-        let ft = vim_helpers#AgFileType(&filetype)
-
-        if strlen(ft) && vim_helpers#IsAgKnownFileType(ft)
-            return printf("-filetype %s", ft)
-        elseif strlen(ext)
-            return printf("-filematch '.%s$'", ext)
-        endif
     endif
 
     return ''
 endfunction
 
-" CtrlSF prefers ag over rg
-if executable('ag')
-    let g:ctrlsf_backend = 'ag'
-elseif executable('rg')
+" Prefer rg
+if executable('rg')
     let g:ctrlsf_backend = 'rg'
 endif
 
@@ -1490,7 +1474,7 @@ function! s:TCtrlSF(qargs) abort
 endfunction
 
 function! s:TCtrlSFCword(word_boundary, qargs) abort
-    if a:word_boundary && get(g:, 'ctrlsf_backend', '') =~# 'ag\|rg'
+    if a:word_boundary && get(g:, 'ctrlsf_backend', '') ==# 'rg'
         let cword = '-R \b' . expand('<cword>') . '\b'
     else
         let cword = expand('<cword>')
@@ -1967,7 +1951,7 @@ if s:IsPlugged('LeaderF')
         let g:Lf_WindowPosition = 'popup'
     endif
 
-    let g:Lf_UseCache       = 0  " rg/ag is enough fast, we don't need cache
+    let g:Lf_UseCache       = 0  " rg/fd is enough fast, we don't need cache
     let g:Lf_NeedCacheTime  = 10 " 10 seconds
     let g:Lf_UseMemoryCache = 1
 
@@ -1976,18 +1960,13 @@ if s:IsPlugged('LeaderF')
 
     let s:Lf_FindTools = {
             \ 'rg': 'rg %s --color=never --no-ignore-vcs --hidden --files',
-            \ 'ag': 'ag %s --nocolor --skip-vcs-ignores --hidden -l -g ""',
             \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file . %s',
             \ }
 
     if g:zero_vim_find_tool == 'fd' && executable('fd')
         let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
-    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['ag']
     elseif executable('rg')
         let g:Lf_ExternalCommand = s:Lf_FindTools['rg']
-    elseif executable('ag')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['ag']
     elseif executable('fd')
         let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
     endif
@@ -2003,7 +1982,7 @@ if s:IsPlugged('LeaderF')
         call add(g:Lf_RgConfig, '--no-ignore-vcs')
     endif
 
-    " These options are passed to external tools (rg, ag and pt, ...)
+    " These options are passed to external tools (rg, fd and pt, ...)
     let g:Lf_FollowLinks = 0
     let g:Lf_ShowHidden  = 0
 
@@ -2101,25 +2080,17 @@ if s:IsPlugged('vim-clap')
     if executable('rg')
         let g:clap_provider_grep_executable = 'rg'
         let g:clap_provider_grep_opts = '-H --no-heading --hidden --vimgrep --smart-case' . (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
-    elseif executable('ag')
-        let g:clap_provider_grep_executable = 'ag'
-        let s:clap_provider_grep_opts = '--noheading --hidden --vimgrep --smart-case' . (g:zero_vim_grep_ignore_vcs ? ' --skip-vcs-ignores' : '')
     endif
 
     let s:clap_find_tools = {
                 \ 'rg': 'rg --color=never --no-ignore-vcs --hidden --files',
-                \ 'ag': "ag --nocolor --skip-vcs-ignores --hidden -l -g ''",
                 \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file',
                 \ }
 
     if g:zero_vim_find_tool == 'fd' && executable('fd')
         let s:clap_find_tool = s:clap_find_tools['fd']
-    elseif g:zero_vim_find_tool == 'ag' && executable('ag')
-        let s:clap_find_tool = s:clap_find_tools['ag']
     elseif executable('rg')
         let s:clap_find_tool = s:clap_find_tools['rg']
-    elseif executable('ag')
-        let s:clap_find_tool = s:clap_find_tools['ag']
     elseif executable('fd')
         let s:clap_find_tool = s:clap_find_tools['fd']
     endif
@@ -4182,9 +4153,6 @@ if s:IsPlugged('vim-gitgutter')
 
     if executable('rg')
         let g:gitgutter_grep = 'rg --color=never'
-        let $GREP_OPTIONS    = ''
-    elseif executable('ag')
-        let g:gitgutter_grep = 'ag --nocolor'
         let $GREP_OPTIONS    = ''
     endif
 
