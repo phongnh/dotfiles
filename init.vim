@@ -156,6 +156,7 @@ let g:zero_vim_autolint                 = get(g:, 'zero_vim_autolint',          
 let g:zero_vim_autofix                  = get(g:, 'zero_vim_autofix',                  0)
 let g:zero_vim_git_gutter               = get(g:, 'zero_vim_git_gutter',               1)
 let g:zero_vim_grep_ignore_vcs          = get(g:, 'zero_vim_grep_ignore_vcs',          0)
+let g:zero_vim_leaderf_popup            = get(g:, 'zero_vim_leaderf_popup',            1)
 let g:zero_vim_find_tool                = get(g:, 'zero_vim_find_tool',                'rg')
 let g:zero_vim_indent_char              = get(g:, 'zero_vim_indent_char',              '┊')
 let g:zero_vim_indent_first_char        = get(g:, 'zero_vim_indent_first_char',        '│')
@@ -1919,11 +1920,11 @@ if s:IsPlugged('LeaderF')
     endif
 
     " Popup Settings
-    let g:Lf_PopupShowStatusline  = 0
-    let g:Lf_PreviewInPopup       = 1
-    let g:Lf_PopupPreviewPosition = 'bottom'
-    if exists('*nvim_win_set_config') && has('nvim-0.4.2')
-        let g:Lf_WindowPosition = 'popup'
+    if g:zero_vim_leaderf_popup && exists('*nvim_win_set_config') && has('nvim-0.4.2')
+        let g:Lf_PopupShowStatusline  = 0
+        let g:Lf_PreviewInPopup       = 1
+        let g:Lf_PopupPreviewPosition = 'bottom'
+        let g:Lf_WindowPosition       = 'popup'
     endif
 
     let g:Lf_UseCache       = 0  " rg/fd is enough fast, we don't need cache
