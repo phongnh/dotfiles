@@ -448,7 +448,7 @@ call plug#begin()
         Plug 'liuchengxu/vista.vim'
 
         " Modern performant generic finder and dispatcher for Vim and NeoVim
-        Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
+        Plug 'liuchengxu/vim-clap', { 'do': { -> clap#installer#force_download() } }
 
         " Solarized theme for Clap Popup
         Plug 'phongnh/vim-clap-solarized-theme'
