@@ -1327,6 +1327,7 @@ let g:grepper = {
             \ 'open':                1,
             \ 'switch':              1,
             \ 'jump':                0,
+            \ 'prompt':              1,
             \ 'prompt_mapping_tool': '<C-\>',
             \ 'tools':               ['rg', 'ag', 'git', 'grep', 'findstr'],
             \ 'stop':                2000,
@@ -1342,9 +1343,15 @@ if has_key(g:grepper, 'ag')
     let g:grepper.ag.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --skip-vcs-ignores' : '')
 endif
 
-command! -nargs=* -complete=customlist,grepper#complete PGrepper Grepper -dir repo,filecwd <args>
-command! -nargs=* -complete=customlist,grepper#complete LGrepper Grepper -noquickfix <args>
-command! -nargs=* -complete=customlist,grepper#complete BGrepper LGrepper -buffer <args>
+command! -nargs=* -complete=customlist,grepper#complete GrepperExec  Grepper -noprompt <args>
+command! -nargs=* -complete=customlist,grepper#complete PGrepper     Grepper -dir repo,filecwd <args>
+command! -nargs=* -complete=customlist,grepper#complete PGrepperExec Grepper -noprompt -dir repo,filecwd <args>
+command! -nargs=* -complete=customlist,grepper#complete DGrepper     Grepper -dir file <args>
+command! -nargs=* -complete=customlist,grepper#complete DGrepperExec Grepper -noprompt -dir file,filecwd <args>
+command! -nargs=* -complete=customlist,grepper#complete LGrepper     Grepper -noquickfix <args>
+command! -nargs=* -complete=customlist,grepper#complete LGrepperExec Grepper -noprompt -noquickfix <args>
+command! -nargs=* -complete=customlist,grepper#complete BGrepper     LGrepper -buffer <args>
+command! -nargs=* -complete=customlist,grepper#complete BGrepperExec LGrepperExec -buffer <args>
 
 function! s:TGrepper(qargs) abort
     if exists(':GrepperRg') == 2
@@ -1354,7 +1361,7 @@ function! s:TGrepper(qargs) abort
     elseif exists(':GrepperGrep') == 2
         let cmd = 'GrepperGrep ' . vim_helpers#ParseGrepFileTypeOption('grep')
     else
-        let cmd = 'Grepper'
+        let cmd = 'GrepperExec -query'
     endif
     execute vim_helpers#strip(cmd . ' ' . a:qargs)
 endfunction
@@ -1376,27 +1383,32 @@ nmap gs <Plug>(GrepperOperator)
 xmap gs <Plug>(GrepperOperator)
 
 nnoremap <silent> <Leader>S  :Grepper<CR>
-nmap              <Leader>se <Leader>S
-nnoremap <silent> <Leader>ss :Grepper -noprompt -cword<CR>
-xnoremap <silent> <Leader>ss <Esc>:Grepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-nnoremap <silent> <Leader>sp :PGrepper -noprompt -cword<CR>
-xnoremap <silent> <Leader>sp <Esc>:PGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-nnoremap <silent> <Leader>si :Grepper -prompt -cword<CR>
-xnoremap <silent> <Leader>si <Esc>:Grepper -prompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-nnoremap <silent> <Leader>s/ :Grepper -noprompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
-nnoremap <silent> <Leader>s? :Grepper -prompt -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
-
-nnoremap <silent> <Leader>L  :LGrepper<CR>
-nnoremap <silent> <Leader>sl :LGrepper -noprompt -cword<CR>
-xnoremap <silent> <Leader>sl <Esc>:LGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-
-nnoremap          <Leader>B  :BGrepper<CR>
-nnoremap <silent> <Leader>bs :BGrepper -noprompt -cword<CR>
-xnoremap <silent> <Leader>bs <Esc>:BGrepper -noprompt -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nmap              <Leader>se :Grepper -cword<CR>
+xnoremap <silent> <Leader>se <Esc>:Grepper -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>ss :GrepperExec -cword<CR>
+xnoremap <silent> <Leader>ss <Esc>:GrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>sp :PGrepperExec -cword<CR>
+xnoremap <silent> <Leader>sp <Esc>:PGrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>sd :DGrepperExec -cword<CR>
+xnoremap <silent> <Leader>sd <Esc>:DGrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>s/ :GrepperExec -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
+nnoremap <silent> <Leader>s? :Grepper -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
 
 " Grepper with current buffer file type
-nnoremap <silent> <Leader>sb :TGrepperCCword<CR>
-xnoremap <silent> <Leader>sb <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>st :TGrepperCCword<CR>
+xnoremap <silent> <Leader>st <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>sc :TGrepperCCword<CR>
+xnoremap <silent> <Leader>sc <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+nnoremap <silent> <Leader>L  :LGrepper<CR>
+nnoremap <silent> <Leader>sl :LGrepperExec -cword<CR>
+xnoremap <silent> <Leader>sl <Esc>:LGrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+nnoremap          <Leader>B  :BGrepper<CR>
+nnoremap <silent> <Leader>sb :BGrepperExec -cword<CR>
+xnoremap <silent> <Leader>sb <Esc>:BGrepper -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>bs :BGrepperExec -cword<CR>
+xnoremap <silent> <Leader>bs <Esc>:BGrepper -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 " dyng/ctrlsf.vim
 let g:ctrlsf_populate_qflist = 0
@@ -1453,17 +1465,20 @@ command! -nargs=+ -complete=dir TCtrlSF       call <SID>TCtrlSF(<q-args>)
 command! -nargs=? -complete=dir TCtrlSFCCword call <SID>TCtrlSFCword(1, <q-args>)
 command! -nargs=? -complete=dir TCtrlSFCword  call <SID>TCtrlSFCword(0, <q-args>)
 
-nmap              <Leader>F  <Plug>CtrlSFPrompt
-nmap              <Leader>sf <Plug>CtrlSFCCwordExec
-vmap              <Leader>sf <Plug>CtrlSFVwordExec
-nmap              <Leader>sc <Plug>CtrlSFCCwordPath
-vmap              <Leader>sc <Plug>CtrlSFVwordPath
-nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
-nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
+nmap <Leader>F  <Plug>CtrlSFPrompt
+nmap <Leader>sf <Plug>CtrlSFCCwordExec
+vmap <Leader>sf <Plug>CtrlSFVwordExec
+nmap <Leader>si <Plug>CtrlSFCCwordPath
+vmap <Leader>si <Plug>CtrlSFVwordPath
 
 " CtrlSF with current buffer file type
 nnoremap <silent> <Leader>sn :TCtrlSFCCword<CR>
 xnoremap <silent> <Leader>sn <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>sk :TCtrlSFCCword<CR>
+xnoremap <silent> <Leader>sk <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
+nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
 
 " scrooloose/nerdcommenter
 " Add spaces after comment delimiters by default
@@ -4877,22 +4892,25 @@ if s:IsPlugged('vim-which-key')
 
     let g:which_key_map.s = {
                 \ 'name': '+search/replace/surround',
-                \ 'e':    'search-prompt',
+                \ 'e':    'search-cword-prompt',
                 \ 's':    'search-cword',
-                \ 'i':    'search-cword-prompt',
+                \ 'p':    'search-cword-in-repo-or-filecwd',
+                \ 'd':    'search-cword-in-buffer-dir',
+                \ '/':    'search-pattern-from-/',
+                \ '?':    'search-pattern-from-/-prompt',
+                \ 't':    'search-cword-with-file-type',
+                \ 'c':    'search-cword-with-file-type',
+                \ 'l':    'search-cword-location-list',
+                \ 'b':    'search-cword-in-buffer',
+                \ 'f':    'ctrlsf-search-cword',
+                \ 'i':    'ctrlsf-search-cword-prompt',
+                \ 'n':    'ctrlsf-search-cword-with-buffer-file-type',
+                \ 'k':    'ctrlsf-search-cword-with-buffer-file-type',
+                \ 'u':    'ctrlsf-search-update',
+                \ 'o':    'toogle-ctrlsf-search-result',
                 \ 'r':    'search-and-replace-prompt',
                 \ 'v':    'subvert-search-and-replace-prompt',
                 \ 'q':    'cdo-search-and-replace-prompt',
-                \ '/':    'search-pattern-from-/',
-                \ '?':    'search-pattern-from-/-prompt',
-                \ 'l':    'search-cword-location-list',
-                \ 'b':    'search-cword-with-file-type',
-                \ 'p':    'search-cword-in-repo-or-filecwd',
-                \ 'f':    'ctrlsf-search-cword',
-                \ 'c':    'ctrlsf-search-cword-prompt',
-                \ 'u':    'ctrlsf-search-update',
-                \ 'o':    'toogle-ctrlsf-search-result',
-                \ 'n':    'ctrlsf-search-cword-with-file-type',
                 \ 'g':    'search-cword-fuzzy',
                 \ 'w':    'surround-cword',
                 \ 'W':    'surround-CWORD',
