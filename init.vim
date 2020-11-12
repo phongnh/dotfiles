@@ -2193,7 +2193,7 @@ if s:IsPlugged('ultisnips')
     " Jump Forward result
     let g:ulti_jump_forwards_res = 0 " (0: fail, 1: success)
 
-    function s:IsExpandableUltiSnips() abort
+    function! s:IsExpandableUltiSnips() abort
         return !(
                     \ col('.') <= 1
                     \ || !empty(matchstr(getline('.'), '\%' . (col('.') - 1) . 'c\s'))
@@ -4445,7 +4445,7 @@ if s:IsPlugged('vim-go')
     " let g:go_highlight_diagnostic_warnings = 1
     " let g:go_highlight_debug               = 1
 
-    function s:ToggleGoHighlights() abort
+    function! s:ToggleGoHighlights() abort
         let g:go_highlights_enabled                  = !g:go_highlights_enabled
         " let g:go_highlight_array_whitespace_error    = g:go_highlights_enabled
         " let g:go_highlight_chan_whitespace_error     = g:go_highlights_enabled
