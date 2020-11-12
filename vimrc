@@ -657,6 +657,14 @@ call plug#begin()
             " The ultimate undo history visualizer for VIM
             Plug 'mbbill/undotree'
         endif
+    elseif s:Use('mundo')
+        if has('python3')
+            " Vim undo tree visualizer
+            Plug 'simnalamburt/vim-mundo'
+        else
+            " The ultimate undo history visualizer for VIM
+            Plug 'mbbill/undotree'
+        endif
     endif
 " }
 
@@ -4063,6 +4071,18 @@ if s:IsPlugged('undotree')
     let g:undotree_SetFocusWhenToggle = 1
 
     nnoremap <silent> <Leader>U :UndotreeToggle<CR>
+endif
+
+if s:IsPlugged('vim-mundo')
+    " simnalamburt/vim-mundo
+    let g:mundo_prefer_python3 = 1
+    let g:mundo_right          = 1
+    let g:mundo_width          = 30
+    let g:mundo_preview_bottom = 1
+    let g:mundo_preview_height = 18
+    let g:mundo_auto_preview   = 1
+
+    nnoremap <silent> <Leader>U :MundoToggle<CR>
 endif
 
 if s:IsPlugged('indentLine')
