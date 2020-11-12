@@ -2012,6 +2012,13 @@ if s:IsPlugged('LeaderF')
                 \ 'ruby': '--ruby-kinds=fFS',
                 \ }
 
+    let g:Lf_GtagsAutoGenerate = 0
+    let g:Lf_GtagsAutoUpdate   = 0
+    let g:Lf_GtagsGutentags    = 0
+
+    let g:Lf_GtagsGutentags = ''
+    let g:Lf_Gtagslabel     = 'default'
+
     let g:Lf_CommandMap = {
                 \ '<F5>':  [ '<F5>', '<C-g>' ],
                 \ '<C-o>': [ '<C-o', '<C-e>' ],
