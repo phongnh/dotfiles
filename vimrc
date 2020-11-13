@@ -3862,14 +3862,20 @@ if s:IsPlugged('vim-autoformat')
     xmap     <silent> <Leader>=  <Leader>A
     nmap     <silent> <Leader>b= <Leader>A
     xmap     <silent> <Leader>b= <Leader>A
+    nmap     <silent> <Leader>bf <Leader>A
+    xmap     <silent> <Leader>bf <Leader>A
 endif
 
 if s:IsPlugged('vim-prettier')
     " prettier/vim-prettier
     let g:prettier#autoformat = 0
 
-    nmap <Leader>P  <Plug>(PrettierAsync)
-    nmap <Leader>rf <Plug>(PrettierAsync)
+    nmap <Leader>P <Plug>(Prettier)
+
+    augroup MyAutoCmd
+        autocmd FileType javascript,typescript,css,less,scss,json,graphql,markdown,vue,yaml,html
+                    \ nmap <buffer> <Leader>bf <Plug>(PrettierAsync)
+    augroup END
 endif
 
 if s:IsPlugged('vim-gutentags')
@@ -4385,8 +4391,8 @@ if s:IsPlugged('vim-mix-format')
     let g:mix_format_on_save = 0
 
     function! s:SetupMixFormat() abort
-        nnoremap <buffer> <silent> <Leader>mf :MixFormat<CR>
-        nnoremap <buffer> <silent> <Leader>mF :MixFormatDiff<CR>
+        nnoremap <buffer> <silent> <Leader>bf :MixFormat<CR>
+        nnoremap <buffer> <silent> <Leader>bF :MixFormatDiff<CR>
     endfunction
 
     augroup MyAutoCmd
