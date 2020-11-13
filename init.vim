@@ -1325,10 +1325,10 @@ if s:IsPlugged('vim-qf')
     let g:qf_mapping_ack_style  = 1
 
     function! s:RemapQuickfixMappings() abort
-        execute 'nnoremap <silent> <expr> <buffer> <C-v> ' . maparg('v', 'n')
-        execute 'nnoremap <silent>        <buffer> <C-s> ' . maparg('s', 'n')
-        execute 'nnoremap <silent>        <buffer> <C-x> ' . maparg('s', 'n')
-        execute 'nnoremap <silent>        <buffer> <C-t> ' . maparg('t', 'n')
+        execute 'nnoremap <buffer> <silent> <expr> <C-v> ' . maparg('v', 'n')
+        execute 'nnoremap <buffer> <silent>        <C-s> ' . maparg('s', 'n')
+        execute 'nnoremap <buffer> <silent>        <C-x> ' . maparg('s', 'n')
+        execute 'nnoremap <buffer> <silent>        <C-t> ' . maparg('t', 'n')
         nnoremap <buffer> v v
         nnoremap <buffer> t t
     endfunction
@@ -3817,10 +3817,10 @@ if s:IsPlugged('goyo.vim')
     endfunction
 
     function! s:GoyoHooksOnQuickFix()
-        nnoremap <silent> <buffer> q          :close<CR>:RefreshGoyoMode<CR>
-        nmap     <silent> <buffer> <C-w>c     <C-w>c:RefreshGoyoMode<CR>
-        nmap     <silent> <buffer> <C-w><C-c> <C-w><C-c>:RefreshGoyoMode<CR>
-        nmap     <silent> <buffer> <C-w>q     <C-w>q:RefreshGoyoMode<CR>
+        nnoremap <buffer> <silent> q          :close<CR>:RefreshGoyoMode<CR>
+        nmap     <buffer> <silent> <C-w>c     <C-w>c:RefreshGoyoMode<CR>
+        nmap     <buffer> <silent> <C-w><C-c> <C-w><C-c>:RefreshGoyoMode<CR>
+        nmap     <buffer> <silent> <C-w>q     <C-w>q:RefreshGoyoMode<CR>
     endfunction
 
     augroup MyAutoCmd
