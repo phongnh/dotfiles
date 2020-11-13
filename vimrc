@@ -1313,7 +1313,7 @@ let g:sayonara_confirm_quit = 1
 let g:sayonara_filetypes = {
             \ 'fern':        'close',
             \ 'nerdtree':    'NERDTreeClose',
-            \ 'vaffle':      'buffer#',
+            \ 'vaffle':      'call VaffleQuit()',
             \ 'bufexplorer': 'ToggleBufExplorer',
             \ 'undotree':    'UndotreeHide',
             \ 'gundo':       'GundoHide',
@@ -1783,7 +1783,7 @@ if s:IsPlugged('fern.vim')
     endif
 
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernReveal Fern %:h <args> -reveal=%:t
-    command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernCWD execute printf('Fern %s <args>', getcwd())
+    command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernCWD execute printf('Fern %s <args>', escape(getcwd(), ' '))
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernDrawerToggle Fern <args> -drawer -toggle
     command! FernDrawerReveal FernReveal -drawer
     command! FernDrawerCWD    FernCWD    -drawer
@@ -1808,16 +1808,13 @@ if s:IsPlugged('fern.vim')
 
     nnoremap <silent> <Leader>e  :FernDrawerToggle .<CR>
     nnoremap <silent> <Leader>E  :FernDrawerCWD<CR>
-    nnoremap <silent> <Leader>bf :FernDrawerReveal<CR>
+    nnoremap <silent> <Leader>bg :FernDrawerReveal<CR>
 endif
 
 if s:IsPlugged('vaffle.vim')
     " cocopon/vaffle.vim
     " Hack for vaffle.vim with vim-projectionist
     let g:projectionist_ignore_vaffle = 1
-
-    nnoremap <silent> <Leader>e  :Vaffle<CR>
-    nnoremap <silent> <Leader>bf :Vaffle %<CR>
 
     if s:IsPlugged('nerdfont.vim')
         function! VaffleRenderCustomIcon(item) abort
@@ -1833,6 +1830,16 @@ if s:IsPlugged('vaffle.vim')
         let g:vaffle_render_custom_icon = 'VaffleRenderCustomIcon'
     endif
 
+    command! VaffleCWD execute 'Vaffle' escape(getcwd(), ' ')
+
+    function! VaffleQuit() abort
+        try
+            :buffer #
+        catch
+            call vaffle#quit()
+        endtry
+    endfunction
+
     function! s:InitVaffle() abort
         setlocal cursorline
 
@@ -1841,12 +1848,17 @@ if s:IsPlugged('vaffle.vim')
         nmap <buffer> <silent> K  <Plug>(vaffle-mkdir)
         nmap <buffer> <silent> N  <Plug>(vaffle-new-file)
         nmap <buffer> <silent> s  <Plug>(vaffle-toggle-current)
-        nmap <buffer> <silent> b  :<C-u>b#<CR>
+        nmap <buffer> <silent> Q  <Plug>(vaffle-quit)
+        nmap <buffer> <silent> q  :<C-u>call VaffleQuit()<CR>
     endfunction
 
     augroup MyAutoCmd
         autocmd FileType vaffle call s:InitVaffle()
     augroup END
+
+    nnoremap <silent> <Leader>e  :Vaffle<CR>
+    nnoremap <silent> <Leader>E  :VaffleCWD<CR>
+    nnoremap <silent> <Leader>bg :Vaffle %<CR>
 endif
 
 if s:IsPlugged('nerdtree')
@@ -1868,7 +1880,7 @@ if s:IsPlugged('nerdtree')
 
     nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
     noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
-    nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
+    nnoremap <silent> <Leader>bg :NERDTreeFind<CR>
 endif
 
 if s:IsPlugged('ctrlp.vim')
