@@ -1274,8 +1274,8 @@ let g:better_whitespace_filetypes_blacklist = [
             \ 'markdown',
             \ ]
 
-nnoremap <silent> <Leader>bu :StripWhitespace<CR>:update<CR>
-vnoremap <silent> <Leader>bu :StripWhitespace<CR>:update<CR>gv
+nnoremap <silent> <Leader>bw :StripWhitespace<CR>:update<CR>
+vnoremap <silent> <Leader>bw :StripWhitespace<CR>:update<CR>gv
 nnoremap <silent> yo<Space>  :ToggleWhitespace<CR>
 
 " phongnh/ZoomWin
