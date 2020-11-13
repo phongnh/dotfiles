@@ -1156,6 +1156,9 @@ nnoremap <silent> gl :buffer#<CR>
 " Edit file from buffer folder
 nnoremap <C-w><C-e> :edit <C-r>=fnameescape(expand('%:p:~:.:h')) . '/'<CR>
 
+" Edit buffer
+nnoremap <C-w>e :edit<Space>
+
 " Yank whole buffer to clipboard
 nnoremap <silent> <Leader>by :%y+<CR>
 
@@ -1906,7 +1909,7 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>]  :CtrlPBufTagAll<CR>
 
     " DavidEGx/ctrlp-smarttabs
-    nnoremap <silent> <Leader>bj :CtrlPSmartTabs<CR>
+    nnoremap <silent> <Leader>bT :CtrlPSmartTabs<CR>
 
     " tacahiroy/ctrlp-funky
     nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
@@ -2045,7 +2048,8 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
     nnoremap <silent> <Leader>]  :LeaderfBufTagAll<CR>
 
-    nnoremap <silent> <Leader>bj :LeaderfTabBufferAll<CR>
+    nnoremap <silent> <Leader>bW :LeaderfWindow<CR>
+    nnoremap <silent> <Leader>bT :LeaderfTabBufferAll<CR>
 
     nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
     nnoremap <silent> <Leader>[  :LeaderfFunctionAll<CR>
@@ -2145,7 +2149,8 @@ if s:IsPlugged('vim-clap')
 
     nnoremap <silent> <Leader>\ :Clap proj_tags<CR>
 
-    nnoremap <silent> <Leader>. :Clap filer<CR>
+    " Ivy-like file explorer
+    nnoremap <silent> <C-w>e :Clap filer<CR>
 
     " Buffer-related mappings
     nmap              <Leader>bh <Leader>d
@@ -2154,7 +2159,7 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <Leader>bt :Clap tags<CR>
     nnoremap <silent> <Leader>]  :Clap proj_tags<CR>
 
-    nnoremap <silent> <Leader>bj :Clap windows<CR>
+    nnoremap <silent> <Leader>bW :Clap windows<CR>
 
     nnoremap <silent> <Leader>bo :Clap tags<CR>
     nnoremap <silent> <Leader>[  :Clap proj_tags<CR>
@@ -2205,6 +2210,8 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>bt :BTags<CR>
     nnoremap <silent> <Leader>bo :BOutline<CR>
 
+    nnoremap <silent> <Leader>bW :Windows<CR>
+
     nnoremap <silent> <Leader>b; :Filetypes<CR>
 
     nnoremap <silent> <Leader>; :Commands<CR>
@@ -2214,8 +2221,8 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>q :cclose<CR>:Quickfix<CR>
     nnoremap <silent> <Leader>l :lclose<CR>:LocationList<CR>
 
-    nnoremap <silent> <Leader>sg :Ag! <C-r><C-w><CR>
-    xnoremap <silent> <Leader>sg <Esc>:Ag! -F <C-r>=vim_helpers#SelectedText()<CR><CR>
+    nnoremap <silent> <Leader>sg :Rg! <C-r><C-w><CR>
+    xnoremap <silent> <Leader>sg <Esc>:Rg! -F <C-r>=vim_helpers#SelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('ultisnips')
