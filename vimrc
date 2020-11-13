@@ -2025,8 +2025,8 @@ if s:IsPlugged('LeaderF')
     let g:Lf_Gtagslabel     = 'default'
 
     let g:Lf_CommandMap = {
-                \ '<F5>':  [ '<F5>', '<C-g>' ],
-                \ '<C-o>': [ '<C-o', '<C-e>' ],
+                \ '<F5>':  ['<F5>', '<C-z>'],
+                \ '<Esc>': ['<Esc>', '<C-g>'],
                 \ }
 
     function! s:LeaderfRoot() abort
