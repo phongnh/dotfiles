@@ -1844,7 +1844,6 @@ if s:IsPlugged('nerdtree')
     nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
     noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
     nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
-    nnoremap <silent> <Leader>bg :NERDTreeVCS<CR>
 endif
 
 if s:IsPlugged('ctrlp.vim')
