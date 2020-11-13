@@ -453,7 +453,6 @@ call plug#begin()
         " coc.nvim plugin has both autocomplete and lsp functions
     elseif s:Use('nvim-lsp') && has('nvim-0.5-nightly')
         Plug 'neovim/nvim-lspconfig'
-        Plug 'nvim-lua/diagnostic-nvim'
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('lsp')
@@ -2477,35 +2476,56 @@ endfunction
 
 if s:IsPlugged('nvim-lspconfig')
     " neovim/nvim-lspconfig
+    call sign_define('LspDiagnosticsSignError',       { 'text': g:zero_vim_signs.error,       'texthl': 'LspDiagnosticsSignError'       })
+    call sign_define('LspDiagnosticsSignWarning',     { 'text': g:zero_vim_signs.warning,     'texthl': 'LspDiagnosticsSignWarning'     })
+    call sign_define('LspDiagnosticsSignInformation', { 'text': g:zero_vim_signs.information, 'texthl': 'LspDiagnosticsSignInformation' })
+    call sign_define('LspDiagnosticsSignHint',        { 'text': g:zero_vim_signs.hint,        'texthl': 'LspDiagnosticsSignHint'        })
+
     function! s:InitNvimLSP() abort
         try
             lua << EOF
+            vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+                vim.lsp.diagnostic.on_publish_diagnostics, {
+                    underline = true,
+                    virtual_text = {
+                        spacing = 2,
+                        prefix  = vim.g.zero_vim_signs.virtual_text,
+                    },
+                    signs = true,
+                    update_in_insert = true,
+                }
+            )
+
             local nvim_lsp = require'nvim_lsp'
-            local diagnostic = require'diagnostic'
 
             local on_attach = function(client, bufnr)
-                diagnostic.on_attach(client)
-
                 vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
                 -- Mappings
                 local opts = { noremap=true, silent=true }
 
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'H',  '<cmd>lua vim.lsp.buf.hover()<CR>',                  opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gA', '<cmd>lua vim.lsp.buf.code_action()<CR>',            opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'M',  '<cmd>lua vim.lsp.buf.rename()<CR>',                 opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gF', '<cmd>lua vim.lsp.buf.formating()<CR>',              opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>',            opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g[', '<cmd>lua vim.lsp.buf.definition()<CR>',             opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>',        opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI', '<cmd>lua vim.lsp.buf.implementation()<CR>',         opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gm', '<cmd>lua vim.lsp.buf.signature_help()<CR>',         opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'go', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',        opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gO', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>',       opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>',             opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gL', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g{', '<cmd>lua vim.lsp.util.incoming_calls()<CR>',        opts)
-                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g}', '<cmd>lua vim.lsp.util.outgoing_calls()<CR>',        opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'H',  '<cmd>lua vim.lsp.buf.hover()<CR>',                           opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gA', '<cmd>lua vim.lsp.buf.code_action()<CR>',                     opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'x', 'gA', '<cmd>lua vim.lsp.buf.range_code_action()<CR>',               opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'M',  '<cmd>lua vim.lsp.buf.rename()<CR>',                          opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gF', '<cmd>lua vim.lsp.buf.formating()<CR>',                       opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'x', 'gF', '<cmd>lua vim.lsp.buf.range_formating()<CR>',                 opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>',                     opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g[', '<cmd>lua vim.lsp.buf.definition()<CR>',                      opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>',                 opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gI', '<cmd>lua vim.lsp.buf.implementation()<CR>',                  opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gm', '<cmd>lua vim.lsp.buf.signature_help()<CR>',                  opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'go', '<cmd>lua vim.lsp.buf.document_symbol()<CR>',                 opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gO', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>',                opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>',                      opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g{', '<cmd>lua vim.lsp.buf.incoming_calls()<CR>',                  opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g}', '<cmd>lua vim.lsp.buf.outgoing_calls()<CR>',                  opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gL', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>',    opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', 'L',  '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>',              opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>',                opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>',                opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<CR>', opts)
+                vim.api.nvim_buf_set_keymap(bufnr, 'n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<CR>', opts)
             end
 
             local servers = {
@@ -2537,7 +2557,7 @@ if s:IsPlugged('nvim-lspconfig')
             end
 EOF
         catch /^Vim(lua):E5108/
-            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-lspconfig` and `diagnostic-nvim` plugins!' | echohl None
+            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-lspconfig` plugin!' | echohl None
         endtry
     endfunction
 
@@ -2555,18 +2575,6 @@ EOF
     command! LspReload call <SID>LspReload()
     command! LspInspect lua print(vim.inspect(vim.lsp.buf_get_clients(0)))
     command! LspInspectAll lua print(vim.inspect(vim.lsp.buf_get_clients()))
-
-    " nvim-lua/diagnostic-nvim
-    let g:space_before_virtual_text        = 1
-    let g:diagnostic_enable_virtual_text   = 1
-    let g:diagnostic_virtual_text_prefix   = g:zero_vim_signs.virtual_text . ' '
-    let g:diagnostic_enable_underline      = 1
-    let g:diagnostic_auto_popup_while_jump = 0
-
-    call sign_define('LspDiagnosticsErrorSign',       { 'text': g:zero_vim_signs.error,       'texthl': 'LspDiagnosticsError'       })
-    call sign_define('LspDiagnosticsWarningSign',     { 'text': g:zero_vim_signs.warning,     'texthl': 'LspDiagnosticsWarning'     })
-    call sign_define('LspDiagnosticsInformationSign', { 'text': g:zero_vim_signs.information, 'texthl': 'LspDiagnosticsInformation' })
-    call sign_define('LspDiagnosticsHintSign',        { 'text': g:zero_vim_signs.hint,        'texthl': 'LspDiagnosticsHint'        })
 endif
 
 if s:IsPlugged('vim-lsp')
