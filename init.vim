@@ -1239,7 +1239,7 @@ if s:IsPlugged('vim-tmuxify')
 
     function! s:RedefineTmuxifyCommands() abort
         " Overwrite TxClear and TxSendKey commands
-        command! -nargs=0 -bar -bang TxClear   call TmuxifySendKeys('C-u C-l C-u', <q-bang>)
+        command!          -bar -bang TxClear   call TmuxifySendKeys('C-u C-l C-u', <q-bang>)
         command! -nargs=? -bar -bang TxSendKey call TmuxifySendKeys(<q-args>, <q-bang>)
     endfunction
 
@@ -1755,8 +1755,8 @@ if s:IsPlugged('fern.vim')
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernReveal Fern %:h <args> -reveal=%:t
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernCWD execute printf('Fern %s <args>', getcwd())
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernDrawerToggle Fern <args> -drawer -toggle
-    command! -nargs=0 FernDrawerReveal FernReveal -drawer
-    command! -nargs=0 FernDrawerCWD FernCWD -drawer
+    command! FernDrawerReveal FernReveal -drawer
+    command! FernDrawerCWD    FernCWD    -drawer
 
     function! s:InitFern() abort
         nmap <buffer> <Plug>(fern-action-reload-and-redraw)
@@ -2008,7 +2008,7 @@ if s:IsPlugged('LeaderF')
             let g:Lf_WorkingDirectoryMode = current
         endtry
     endfunction
-    command! -bar -nargs=0 LeaderfRoot call <SID>LeaderfRoot()
+    command! -bar LeaderfRoot call <SID>LeaderfRoot()
 
     nmap <Leader><Leader> <Leader>f
 
@@ -2114,7 +2114,7 @@ if s:IsPlugged('vim-clap')
         return ''
     endfunction
 
-    command! -bang -nargs=0 ClapRoot execute (<bang>0 ? 'ClapFiles!' : 'ClapFiles') s:ClapFindProjectDir(expand('%:p:h'))
+    command! -bang ClapRoot execute (<bang>0 ? 'ClapFiles!' : 'ClapFiles') s:ClapFindProjectDir(expand('%:p:h'))
 
     nmap <Leader><Leader> <Leader>f
 
