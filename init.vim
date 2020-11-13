@@ -2157,10 +2157,10 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <Leader>l :lclose<CR>:Clap loclist<CR>
 
     nnoremap <silent> <Leader>sg :Clap grep2 ++query=<cword><CR>
-    xnoremap <silent> <Leader>sg <Esc>:Clap grep2 ++query=@visual<CR>
+    xnoremap <silent> <Leader>sg :Clap grep2 ++query=@visual<CR>
 
     nnoremap <silent> <Leader>sa :Clap grep ++query=<cword><CR>
-    xnoremap <silent> <Leader>sa <Esc>:Clap grep ++query=@visual<CR>
+    xnoremap <silent> <Leader>sa :Clap grep ++query=@visual<CR>
 endif
 
 if s:IsPlugged('fzf')
