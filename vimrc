@@ -1308,14 +1308,19 @@ nmap <silent> <Leader>bm <Plug>ZoomWin
 vmap          <Leader>bm <Esc><Leader>bmgv
 
 " mhinz/vim-sayonara
+let g:sayonara_confirm_quit = 1
+
 let g:sayonara_filetypes = {
+            \ 'fern':        'close',
             \ 'nerdtree':    'NERDTreeClose',
+            \ 'vaffle':      'buffer#',
             \ 'bufexplorer': 'ToggleBufExplorer',
             \ 'undotree':    'UndotreeHide',
             \ 'gundo':       'GundoHide',
+            \ 'Mundo':       'MundoHide',
             \ }
 
-nnoremap <silent> <Leader>bd :Sayonara!<CR>
+nnoremap <silent> <Leader>bd :Sayonara<CR>
 
 " chrisbra/NrrwRgn
 let g:nrrw_topbot_leftright  = 'belowright'
