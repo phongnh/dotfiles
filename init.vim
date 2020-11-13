@@ -4597,6 +4597,13 @@ if s:IsPlugged('vim-polyglot')
                 \ ]
 endif
 
+if s:IsPlugged('vim-polyglot') || s:IsPlugged('vim-terraform')
+    " hashivim/vim-terraform
+    augroup MyAutoCmd
+        autocmd FileType terraform nnoremap <buffer> <silent> <Leader>bf :TerraformFmt<CR>
+    augroup END
+endif
+
 " vim-test/vim-test
 function! Neovim2Strategy(cmd) abort
     if g:test#neovim_mode ==? 's'

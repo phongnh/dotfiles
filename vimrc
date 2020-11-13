@@ -4414,6 +4414,13 @@ if s:IsPlugged('vim-polyglot')
                 \ ]
 endif
 
+if s:IsPlugged('vim-polyglot') || s:IsPlugged('vim-terraform')
+    " hashivim/vim-terraform
+    augroup MyAutoCmd
+        autocmd FileType terraform nnoremap <buffer> <silent> <Leader>bf :TerraformFmt<CR>
+    augroup END
+endif
+
 " vim-test/vim-test
 if has('gui_running') && has('gui_macvim')
     let g:test#strategy = 'terminal'
