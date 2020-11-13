@@ -1207,6 +1207,7 @@ if s:IsPlugged('vim-tmuxify')
     function! s:SetupTmuxifyMappings(prefix, suffix) abort
         execute 'nnoremap <silent> ' . a:prefix . 'b :TxSigInt'    . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'c :TxClear'     . a:suffix . '<CR>'
+        execute 'nnoremap <silent> ' . a:prefix . 'C :TxSendClear' . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'n :TxCreate'    . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'p :TxSetPane'   . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'q :TxKill'      . a:suffix . '<CR>'
@@ -1239,8 +1240,9 @@ if s:IsPlugged('vim-tmuxify')
 
     function! s:RedefineTmuxifyCommands() abort
         " Overwrite TxClear and TxSendKey commands
-        command!          -bar -bang TxClear   call TmuxifySendKeys('C-u C-l C-u', <q-bang>)
-        command! -nargs=? -bar -bang TxSendKey call TmuxifySendKeys(<q-args>, <q-bang>)
+        command!          -bar -bang TxClear     call TmuxifySendKeys('C-u C-l C-u', <q-bang>)
+        command! -nargs=? -bar -bang TxSendKey   call TmuxifySendKeys(<q-args>, <q-bang>)
+        command!          -bar -bang TxSendClear call tmuxify#pane_run(<q-bang>, 'clear')
     endfunction
 
     augroup MyAutoCmd
