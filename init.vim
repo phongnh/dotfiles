@@ -3554,11 +3554,6 @@ if s:IsPlugged('ncm2')
     let g:ncm2#popup_delay     = 50
     let g:ncm2#complete_length = [ [1, 3], [7, 1] ]
 
-    " Enable Autocomplete for all buffers
-    augroup MyAutoCmd
-        autocmd BufEnter * call ncm2#enable_for_buffer()
-    augroup END
-
     " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
     " inoremap <C-c> <ESC>
 
@@ -3601,6 +3596,37 @@ if s:IsPlugged('ncm2')
         let b:ncm2_enable = 1
         call ncm2#unlock('vim-visual-multi')
     endfunction
+
+    let g:ncm2_disable_filetypes = [
+                \ 'nerdtree',
+                \ 'fern',
+                \ 'vaffle',
+                \ 'startify',
+                \ 'tagbar',
+                \ 'vista',
+                \ 'vim-plug',
+                \ 'terminal',
+                \ 'help',
+                \ 'qf',
+                \ 'godoc',
+                \ 'gitcommit',
+                \ 'fugitiveblame',
+                \ 'ctrlp',
+                \ 'leaderf',
+                \ 'clap_input',
+                \ ]
+
+    function! s:InitNcm2() abort
+        if index(g:ncm2_disable_filetypes, &filetype) > -1
+            return
+        endif
+        call ncm2#enable_for_buffer()
+    endfunction
+
+    " Enable Autocomplete for all buffers
+    augroup MyAutoCmd
+        autocmd BufEnter * call <SID>InitNcm2()
+    augroup END
 endif
 
 if s:IsPlugged('completor.vim')
