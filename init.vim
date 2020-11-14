@@ -1178,6 +1178,9 @@ vnoremap <silent> <Leader>w <Esc><Leader>wgv
 nnoremap <silent> <Leader>bw :update<CR>
 vmap              <Leader>bw <Esc><Leader>bwgv
 
+nmap <Leader>bu <Leader>bw
+vmap <Leader>bu <Leader>bw
+
 nnoremap <silent> <C-s> :update<CR>
 vmap              <C-s> <Esc><C-s>gv
 imap              <C-s> <Esc><C-s>
@@ -1307,6 +1310,7 @@ let g:sayonara_filetypes = {
             \ }
 
 nnoremap <silent> <Leader>bd :Sayonara<CR>
+nnoremap <silent> <Leader>bq :Sayonara!<CR>
 
 " chrisbra/NrrwRgn
 let g:nrrw_topbot_leftright  = 'belowright'
