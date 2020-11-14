@@ -2395,16 +2395,16 @@ let g:language_servers = {
             \   'cmd': ['pyls-ms'],
             \   'filetypes': ['python'],
             \ },
-            \ 'rust-analyzer': {
-            \   'cmd': ['rust-analyzer'],
-            \   'filetypes': ['rust'],
-            \ },
             \ 'rls': {
             \   'cmd': ['rls'],
             \   'filetypes': ['rust'],
             \ },
-            \ 'rustup-nightly-rls': {
+            \ 'rls-nightly': {
             \   'cmd': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+            \   'filetypes': ['rust'],
+            \ },
+            \ 'rust-analyzer': {
+            \   'cmd': ['rust-analyzer'],
             \   'filetypes': ['rust'],
             \ },
             \ 'scry': {
@@ -2426,7 +2426,7 @@ let g:language_servers = {
             \   'filetypes': ['ruby'],
             \ },
             \ 'terraform-ls': {
-            \   'cmd': ['terraform-ls'],
+            \   'cmd': ['terraform-ls', 'serve'],
             \   'filetypes': ['terraform'],
             \ },
             \ 'terraform-lsp': {
