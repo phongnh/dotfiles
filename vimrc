@@ -2523,10 +2523,6 @@ if s:IsPlugged('vim-lsp')
     let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
     let g:lsp_highlight_references_enabled = g:zero_vim_lsp_highlight_references
 
-    " Shougo/neosnippet.vim: expand auto completed parameter and snippets
-    " let g:neosnippet#enable_completed_snippet = 1
-    " let g:neosnippet#enable_complete_done     = 1
-
     function! s:OnLspBufferEnabled() abort
         setlocal omnifunc=lsp#complete
 

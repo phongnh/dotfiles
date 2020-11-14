@@ -138,6 +138,12 @@ function! s:IsUniversalCtags(ctags_path) abort
     return s:universal_ctags[a:ctags_path]
 endfunction
 
+function! s:Warn(message) abort
+    echohl WarningMsg
+    echomsg a:message
+    echohl None
+endfunction
+
 " Find and source .init.vim.before from root to current folder
 call s:Source('.init.vim.before')
 
@@ -2484,6 +2490,51 @@ endfunction
 
 if s:IsPlugged('nvim-lspconfig')
     " neovim/nvim-lspconfig
+    function! s:GetNvimLanguageServers() abort
+        let g:nvim_lsp_servers   = {}
+        let g:nvim_lsp_filetypes = {}
+
+        let l:nvim_language_server_mappings = {
+                    \ 'bash-language-server':       'bashls',
+                    \ 'ccls':                       'cssls',
+                    \ 'clangd':                     'clangd',
+                    \ 'cssls':                      'ccs-languageserver',
+                    \ 'docker-langserver':          'dockerls',
+                    \ 'elixir-ls':                  'elixirls',
+                    \ 'flow':                       'flow',
+                    \ 'gopls':                      'gopls',
+                    \ 'html-languageserver':        'html',
+                    \ 'json-languageserver':        'jsonls',
+                    \ 'metals':                     'metals',
+                    \ 'pyls':                       'pyls',
+                    \ 'pyls-ms':                    'pyls_ms',
+                    \ 'rls':                        'rls',
+                    \ 'rust-analyzer':              'rust_analyzer',
+                    \ 'scry':                       'scry',
+                    \ 'solargraph':                 'solargraph',
+                    \ 'lua-language-server':        'sumneko_lua',
+                    \ 'terraform-ls':               'terraformls',
+                    \ 'typescript-language-server': 'tsserver',
+                    \ 'vim-language-server':        'vimls',
+                    \ 'yaml-language-server':       'yamlls',
+                    \ }
+
+        for l:name in s:GetEnabledLanguageServers()
+            let l:server = g:language_servers[l:name]
+
+            for ft in l:server['filetypes']
+                if !has_key(g:nvim_lsp_filetypes, ft) && has_key(l:nvim_language_server_mappings, l:name)
+                    let l:nvim_server_name = l:nvim_language_server_mappings[l:name]
+                    let g:nvim_lsp_servers[l:nvim_server_name] = l:server
+                    let g:nvim_lsp_filetypes[ft] = 1
+                endif
+            endfor
+        endfor
+    endfunction
+
+    call s:GetNvimLanguageServers()
+
+    " Signs
     call sign_define('LspDiagnosticsSignError',       { 'text': g:zero_vim_signs.error,       'texthl': 'LspDiagnosticsSignError'       })
     call sign_define('LspDiagnosticsSignWarning',     { 'text': g:zero_vim_signs.warning,     'texthl': 'LspDiagnosticsSignWarning'     })
     call sign_define('LspDiagnosticsSignInformation', { 'text': g:zero_vim_signs.information, 'texthl': 'LspDiagnosticsSignInformation' })
@@ -2492,26 +2543,28 @@ if s:IsPlugged('nvim-lspconfig')
     function! s:InitNvimLSP() abort
         try
             lua << EOF
-            vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-                vim.lsp.diagnostic.on_publish_diagnostics, {
-                    underline = true,
-                    virtual_text = {
-                        spacing = 2,
-                        prefix  = vim.g.zero_vim_signs.virtual_text,
-                    },
-                    signs = true,
-                    update_in_insert = true,
-                }
-            )
+            local nvim_lsp = require('nvim_lsp')
+            local configs = require('nvim_lsp/configs')
 
-            local nvim_lsp = require'nvim_lsp'
+            local completion
+            if pcall(require, 'completion') then
+                completion = require('completion')
+            end
+
+            local ncm2
+            if pcall(require, 'ncm2') then
+                ncm2 = require('ncm2')
+            end
 
             local on_attach = function(client, bufnr)
                 vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-                -- Mappings
-                local opts = { noremap=true, silent=true }
+                if completion then
+                    completion.on_attach(client)
+                end
 
+                -- Mappings
+                local opts = { noremap = true, silent = true }
                 vim.api.nvim_buf_set_keymap(bufnr, 'n', 'H',  '<cmd>lua vim.lsp.buf.hover()<CR>',                           opts)
                 vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gA', '<cmd>lua vim.lsp.buf.code_action()<CR>',                     opts)
                 vim.api.nvim_buf_set_keymap(bufnr, 'x', 'gA', '<cmd>lua vim.lsp.buf.range_code_action()<CR>',               opts)
@@ -2536,53 +2589,61 @@ if s:IsPlugged('nvim-lspconfig')
                 vim.api.nvim_buf_set_keymap(bufnr, 'n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<CR>', opts)
             end
 
-            local servers = {
-                'bashls',
-                'clangd',
-                'cssls',
-                'dockerls',
-                'elixirls',
-                'elmls',
-                'gopls',
-                'html',
-                'jsonls',
-                'metals',
-                'pyls',
-                'rls',
-                'rust_analyzer',
-                'scry',
-                'solargraph',
-                'sumneko_lua',
-                'terraformls',
-                'tsserver',
-                'vimls',
-                'yamlls',
-            }
-            for _, lsp in ipairs(servers) do
-                nvim_lsp[lsp].setup {
-                    on_attach = on_attach,
+            for name, server_config in pairs(vim.g.nvim_lsp_servers) do
+                if not nvim_lsp[name] then
+                    configs[server_name] = {
+                        default_config = {
+                            cmd = server_config.cmd,
+                            filetypes = server_config.filetypes,
+                            root_dir = function(fname)
+                                return nvim_lsp.util.find_git_ancestor(fname) or vim.loop.os_homedir()
+                            end,
+                            settings = {},
+                        },
+                    }
+                end
+
+                local setup_config = {
+                    cmd       = server_config.cmd,
+                    filetypes = server_config.filetypes,
+                    on_attach = on_attach
                 }
+
+                if ncm2 then
+                    setup_config.on_init = ncm2.register_lsp_source
+                end
+
+                nvim_lsp[name].setup(setup_config)
             end
+
+            vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+                vim.lsp.diagnostic.on_publish_diagnostics, {
+                    underline = true,
+                    virtual_text = {
+                        spacing = 2,
+                        prefix  = vim.g.zero_vim_signs.virtual_text,
+                    },
+                    signs = true,
+                    update_in_insert = false,
+                }
+            )
 EOF
         catch /^Vim(lua):E5108/
-            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-lspconfig` plugin!' | echohl None
+            call s:Warn(v:exception)
         endtry
     endfunction
 
     call s:InitNvimLSP()
-
-    " Shougo/neosnippet.vim: expand auto completed parameter and snippets
-    " let g:neosnippet#enable_completed_snippet = 1
-    " let g:neosnippet#enable_complete_done     = 1
 
     function! s:LspReload() abort
         lua vim.lsp.stop_client(vim.lsp.get_active_clients())
         edit
     endfunction
 
-    command! LspReload call <SID>LspReload()
-    command! LspInspect lua print(vim.inspect(vim.lsp.buf_get_clients(0)))
-    command! LspInspectAll lua print(vim.inspect(vim.lsp.buf_get_clients()))
+    command! LspReload      call <SID>LspReload()
+    command! LspInspect     lua  print(vim.inspect(vim.lsp.buf_get_clients(0)))
+    command! LspInspectAll  lua  print(vim.inspect(vim.lsp.buf_get_clients()))
+    command! LspServerReady lua  print("Server Ready?", vim.lsp.buf.server_ready())
 endif
 
 if s:IsPlugged('vim-lsp')
@@ -2599,10 +2660,6 @@ if s:IsPlugged('vim-lsp')
     let g:lsp_diagnostics_enabled          = g:zero_vim_lsp_diagnostics
     let g:lsp_diagnostics_echo_cursor      = g:zero_vim_lsp_diagnostics " echo under cursor when in normal mode
     let g:lsp_highlight_references_enabled = g:zero_vim_lsp_highlight_references
-
-    " Shougo/neosnippet.vim: expand auto completed parameter and snippets
-    " let g:neosnippet#enable_completed_snippet = 1
-    " let g:neosnippet#enable_complete_done     = 1
 
     function! s:OnLspBufferEnabled() abort
         setlocal omnifunc=lsp#complete
@@ -2953,12 +3010,16 @@ if s:IsPlugged('completion-nvim')
         let g:completion_enable_snippet = 'UltiSnips'
     elseif s:IsPlugged('neosnippet.vim')
         let g:completion_enable_snippet = 'Neosnippet'
+        " Expand auto completed parameter and snippets
+        let g:neosnippet#enable_completed_snippet  = 1
+        let g:neosnippet#enable_optional_arguments = 1
+        let g:neosnippet#enable_complete_done      = 1
     endif
 
     let g:completion_chain_complete_list = {
                 \ 'default': [
                 \   { 'complete_items': ['lsp', 'snippet', 'vim-vsnip'] },
-                \   { 'complete_items': (s:IsPlugged('completion-treesitter') ? ['ts'] : []) + ['tags', 'buffers'] },
+                \   { 'complete_items': (s:IsPlugged('completion-treesitter') ? ['ts'] : []) + ['tags', 'buffers', 'path'] },
                 \   { 'mode': '<c-p>' },
                 \   { 'mode': '<c-n>' },
                 \ ]
@@ -3054,10 +3115,13 @@ if s:IsPlugged('completion-nvim')
         if index(g:completion_disable_filetypes, &filetype) > -1
             return
         endif
+        if exists('g:nvim_lsp_filetypes') && has_key(g:nvim_lsp_filetypes, &filetype)
+            return
+        endif
         try
-            lua require'completion'.on_attach()
+            lua require('completion').on_attach()
         catch /^Vim(lua):E5108/
-            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `completion-nvim` plugin!' | echohl None
+            call s:Warn(v:exception)
         endtry
     endfunction
 
