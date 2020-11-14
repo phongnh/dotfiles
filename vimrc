@@ -1998,7 +1998,7 @@ if s:IsPlugged('LeaderF')
     let g:Lf_WorkingDirectoryMode = 'c'
 
     let s:Lf_FindTools = {
-            \ 'rg': 'rg %s --color=never --no-ignore-vcs --hidden --files',
+            \ 'rg': 'rg %s --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --files',
             \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file . %s',
             \ }
 
@@ -2130,7 +2130,7 @@ if s:IsPlugged('vim-clap')
     endif
 
     let s:clap_find_tools = {
-                \ 'rg': 'rg --color=never --no-ignore-vcs --hidden --files',
+                \ 'rg': 'rg --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --files',
                 \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file',
                 \ }
 

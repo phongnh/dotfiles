@@ -2110,7 +2110,7 @@ if s:IsPlugged('vim-clap')
     endif
 
     let s:clap_find_tools = {
-                \ 'rg': 'rg --color=never --no-ignore-vcs --hidden --files',
+                \ 'rg': 'rg --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --files',
                 \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file',
                 \ }
 
