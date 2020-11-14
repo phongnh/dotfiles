@@ -1271,6 +1271,7 @@ let g:better_whitespace_filetypes_blacklist = [
             \ 'diff',
             \ 'git',
             \ 'gitcommit',
+            \ 'fugitiveblame',
             \ 'ctrlsf',
             \ 'unite',
             \ 'qf',
