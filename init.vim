@@ -4469,13 +4469,18 @@ if s:IsPlugged('vim-fugitive')
     nnoremap <silent> <Leader>gb :Git blame<CR>
     nnoremap          <Leader>ge :Gedit<Space>
     nnoremap <silent> <Leader>gr :Gread<CR>
-    nnoremap <silent> <Leader>gw :Gwq<CR>
+    nnoremap <silent> <Leader>gw :Gwrite<CR>
     nnoremap <silent> <Leader>gf :Git fetch<CR>
     nnoremap <silent> <Leader>gp :Git push<CR>
     nnoremap <silent> <Leader>gu :Git pull --rebase<CR>
 
+    function! s:SetupGitMappings() abort
+        nnoremap <buffer> <silent> <Leader>gw :Gwq <Bar> redraw<CR>
+        nnoremap <buffer> <silent> U          :Git checkout -- <C-r><C-g><CR>
+    endfunction
+
     augroup MyAutoCmd
-        autocmd FileType gitcommit nmap <buffer> <silent> U :Git checkout -- <C-r><C-g><CR>
+        autocmd FileType gitcommit call <SID>SetupGitMappings()
         autocmd BufReadPost fugitive://* set bufhidden=delete
     augroup END
 endif
