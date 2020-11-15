@@ -23,6 +23,12 @@ endif
 " Disable Python 2 support
 let g:loaded_python_provider = 0
 
+" Disable Ruby support
+let g:loaded_ruby_provider = 0
+
+" Disable Perl support
+let g:loaded_perl_provider = 0
+
 " Disable system plugins
 let g:loaded_getscript         = 1
 let g:loaded_getscriptPlugin   = 1
