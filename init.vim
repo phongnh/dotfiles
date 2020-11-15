@@ -1450,10 +1450,45 @@ nnoremap <silent> <Leader>bs :BGrepperExec -cword<CR>
 xnoremap <silent> <Leader>bs <Esc>:BGrepper -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 " dyng/ctrlsf.vim
+let g:ctrlsf_default_root    = 'cwd'
+let g:ctrlsf_follow_symlinks = 0
 let g:ctrlsf_populate_qflist = 0
 let g:ctrlsf_auto_focus = {
             \ 'at': 'start'
             \ }
+
+if g:zero_vim_grep_ignore_vcs
+    let g:ctrlsf_extra_backend_args = {
+                \ 'rg': '--no-ignore-vcs',
+                \ }
+endif
+
+" Prefer rg
+if executable('rg')
+    let g:ctrlsf_backend = 'rg'
+endif
+
+function! s:PCtrlSF(qargs) abort
+    try
+        let g:ctrlsf_default_root = 'project+fw'
+        execute vim_helpers#strip('CtrlSF ' . a:qargs)
+    finally
+        let g:ctrlsf_default_root = 'cwd'
+    endtry
+endfunction
+
+function! s:PCtrlSFCword(word_boundary, qargs) abort
+    if a:word_boundary && get(g:, 'ctrlsf_backend', '') ==# 'rg'
+        let cword = '-R \b' . expand('<cword>') . '\b'
+    else
+        let cword = expand('<cword>')
+    endif
+    call s:PCtrlSF(cword . ' ' . a:qargs)
+endfunction
+
+command! -nargs=+ PCtrlSF       call <SID>PCtrlSF(<q-args>)
+command! -nargs=? PCtrlSFCCword call <SID>PCtrlSFCword(1, <q-args>)
+command! -nargs=? PCtrlSFCword  call <SID>PCtrlSFCword(0, <q-args>)
 
 function! s:CtrlSFParseFileTypeOption(cmd) abort
     let ext = expand('%:e')
@@ -1470,11 +1505,6 @@ function! s:CtrlSFParseFileTypeOption(cmd) abort
 
     return ''
 endfunction
-
-" Prefer rg
-if executable('rg')
-    let g:ctrlsf_backend = 'rg'
-endif
 
 function! s:TCtrlSF(qargs) abort
     let cmd = 'CtrlSF ' . s:CtrlSFParseFileTypeOption(get(g:, 'ctrlsf_backend', ''))
@@ -1500,9 +1530,10 @@ vmap <Leader>sf <Plug>CtrlSFVwordExec
 nmap <Leader>si <Plug>CtrlSFCCwordPath
 vmap <Leader>si <Plug>CtrlSFVwordPath
 
+nnoremap <silent> <Leader>sm :PCtrlSFCCword<CR>
+xnoremap <silent> <Leader>sm <Esc>:PCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
 " CtrlSF with current buffer file type
-nnoremap <silent> <Leader>sn :TCtrlSFCCword<CR>
-xnoremap <silent> <Leader>sn <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 nnoremap <silent> <Leader>sk :TCtrlSFCCword<CR>
 xnoremap <silent> <Leader>sk <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
@@ -4955,8 +4986,8 @@ if s:IsPlugged('vim-which-key')
                 \ 'e':    'reload-buffer',
                 \ 'w':    'save-buffer',
                 \ 'x':    'save-and-close-buffer',
-                \ 'd':    'unload-buffer-with-sayonara',
-                \ 'q':    'unload-buffer',
+                \ 'd':    'delete-buffer-with-sayonara',
+                \ 'q':    'delete-buffer-with-sayonara!',
                 \ 'k':    'wipeout-buffer',
                 \ '-':    'wipeout-buffer',
                 \ 's':    'search-cword-in-buffer',
@@ -5062,8 +5093,8 @@ if s:IsPlugged('vim-which-key')
                 \ 'b':    'search-cword-in-buffer',
                 \ 'f':    'ctrlsf-search-cword',
                 \ 'i':    'ctrlsf-search-cword-prompt',
-                \ 'n':    'ctrlsf-search-cword-with-buffer-file-type',
                 \ 'k':    'ctrlsf-search-cword-with-buffer-file-type',
+                \ 'm':    'ctrlsf-search-cword-in-repo-or-cwd',
                 \ 'u':    'ctrlsf-search-update',
                 \ 'o':    'toogle-ctrlsf-search-result',
                 \ 'r':    'search-and-replace-prompt',
