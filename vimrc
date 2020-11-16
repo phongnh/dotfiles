@@ -4231,8 +4231,6 @@ if s:IsPlugged('git-messenger.vim')
     " rhysd/git-messenger.vim
     let g:git_messenger_always_into_popup = v:true
 
-    nmap <C-w>m <Plug>(git-messenger)
-
     augroup MyAutoCmd
         " Hack for the case Git Messenger popup closed immediately after it opened on Vim 8.2
         autocmd FileType gitmessengerpopup setlocal updatetime=300000
