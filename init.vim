@@ -1299,8 +1299,8 @@ vnoremap <silent> <Leader>bw :StripWhitespace<CR>:update<CR>gv
 nnoremap <silent> yo<Space>  :ToggleWhitespace<CR>
 
 " phongnh/ZoomWin
-nmap <silent> <Leader>bm <Plug>ZoomWin
-vmap          <Leader>bm <Esc><Leader>bmgv
+nmap <silent> <C-w>m <Plug>ZoomWin
+vmap          <C-w>m <Esc><C-w>mgv
 
 " mhinz/vim-sayonara
 let g:sayonara_confirm_quit = 1
