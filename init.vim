@@ -3905,7 +3905,7 @@ if s:IsPlugged('goyo.vim')
                 \ [ '80', g:goyo_height ],
                 \ ]
 
-    function! s:CycleGoyoMode(direction) abort
+    function! CycleGoyoMode(direction) abort
         if exists('#goyo')
             let s:goyo_current_mode += a:direction
             if s:goyo_current_mode >= len(s:goyo_modes)
@@ -3919,23 +3919,50 @@ if s:IsPlugged('goyo.vim')
         let l:goyo_mode = s:goyo_modes[s:goyo_current_mode]
         let g:goyo_width = l:goyo_mode[0]
         let g:goyo_height = l:goyo_mode[1]
-        execute 'Goyo ' join(l:goyo_mode, 'x')
+        let l:cmd = printf('Goyo %s', join(l:goyo_mode, 'x'))
+        echo l:cmd
+        execute l:cmd
     endfunction
 
-    function! s:RefreshGoyoMode(bang) abort
+    function! RefreshGoyoMode(...) abort
         if exists('#goyo')
-            if a:bang
-                silent! cclose | lclose | helpclose
+            if get(a:, 1, 0)
+                silent! cclose | lclose | pclose | helpclose
             endif
             execute 'Goyo ' join([ g:goyo_width, g:goyo_height ], 'x')
+            redraw
         endif
     endfunction
 
-    command! -bar NextGoyoMode call <SID>CycleGoyoMode(1)
-    command! -bar PrevGoyoMode call <SID>CycleGoyoMode(-1)
-    command! -bar -bang RefreshGoyoMode call <SID>RefreshGoyoMode(<bang>0)
-
     function! s:OnGoyoEnter() abort
+        augroup GoyoRefreshHooks
+            autocmd!
+            autocmd BufHidden * if &filetype ==# 'qf' && exists('*timer_start') | call timer_start(100, 'RefreshGoyoMode') | endif
+            autocmd VimResized * call RefreshGoyoMode()
+        augroup END
+
+        let s:goyo_maps = {
+                    \ '<C-w>r':     maparg('<C-w>r',     'n', 0, 1),
+                    \ '<C-w><C-r>': maparg('<C-w><C-r>', 'n', 0, 1),
+                    \ '<C-w>o':     maparg('<C-w>o',     'n', 0, 1),
+                    \ '<C-w><C-o>': maparg('<C-w><C-o>', 'n', 0, 1),
+                    \ '<C-w>m':     maparg('<C-w>m',     'n', 0, 1),
+                    \ '<C-w>M':     maparg('<C-w>M',     'n', 0, 1),
+                    \ }
+
+        nnoremap <silent> <C-w>r     :call RefreshGoyoMode()<CR>
+        vmap              <C-w>r     <Esc><C-w>rgv
+        nmap              <C-w><C-r> <C-w>r
+        vmap              <C-w><C-r> <C-w>r
+        nnoremap <silent> <C-w>o     :call RefreshGoyoMode(1)<CR>
+        vmap              <C-w>o     <Esc><C-w>ogv
+        nmap              <C-w><C-o> <C-w>o
+        vmap              <C-w><C-o> <C-w>o
+        nnoremap <silent> <C-w>m     :call CycleGoyoMode(1)<CR>
+        vmap              <C-w>m     <Esc><C-w>mgv
+        nnoremap <silent> <C-w>M     :call CycleGoyoMode(-1)<CR>
+        vmap              <C-w>M     <Esc><C-w>Mgv
+
         let s:goyo_settings = {
                     \ 'showmode':  &showmode,
                     \ 'linespace': &linespace,
@@ -3954,6 +3981,24 @@ if s:IsPlugged('goyo.vim')
     endfunction
 
     function! s:OnGoyoLeave() abort
+        autocmd! GoyoRefreshHooks *
+        augroup! GoyoRefreshHooks
+
+        for [k, v] in items(s:goyo_maps)
+            if !empty(v)
+                call mapset('n', 0, v)
+            else
+                execute printf('silent! nunmap %s', k)
+            endif
+            if strlen(mapcheck(k, 'v'))
+                execute printf('silent! vunmap %s', k)
+            endif
+        endfor
+
+        for [k, v] in items(s:goyo_settings)
+            execute printf('let &%s = %s', k, string(v))
+        endfor
+
         if has('fullscreen')
             set nofullscreen
         endif
@@ -3963,31 +4008,15 @@ if s:IsPlugged('goyo.vim')
         endfor
     endfunction
 
-    function! s:GoyoHooksOnQuickFix()
-        nnoremap <buffer> <silent> q          :close<CR>:RefreshGoyoMode<CR>
-        nmap     <buffer> <silent> <C-w>c     <C-w>c:RefreshGoyoMode<CR>
-        nmap     <buffer> <silent> <C-w><C-c> <C-w><C-c>:RefreshGoyoMode<CR>
-        nmap     <buffer> <silent> <C-w>q     <C-w>q:RefreshGoyoMode<CR>
-    endfunction
-
-    augroup MyAutoCmd
-        autocmd! User GoyoEnter nested call <SID>OnGoyoEnter()
-        autocmd! User GoyoLeave nested call <SID>OnGoyoLeave()
-        autocmd FileType qf call <SID>GoyoHooksOnQuickFix()
-        autocmd VimResized * RefreshGoyoMode
-    augroup END
+    autocmd! User GoyoEnter nested call <SID>OnGoyoEnter()
+    autocmd! User GoyoLeave nested call <SID>OnGoyoLeave()
 
     nnoremap <silent> <Leader><Enter> :Goyo<CR>
     vmap              <Leader><Enter> <Esc><Leader><Enter>gv
 
-    nnoremap <silent> ]<Enter> :NextGoyoMode<CR>
-    vmap              ]<Enter> <Esc>]<Enter>gv
-
-    nnoremap <silent> [<Enter> :PrevGoyoMode<CR>
-    vmap              [<Enter> <Esc>[<Enter>gv
-
-    nnoremap <silent> <Leader>bz :RefreshGoyoMode!<CR>
-    vmap              <Leader>bz <Esc><Leader>bzgv
+    " <C-w><C-m>
+    nnoremap <silent> <C-w><Enter> :Goyo<CR>
+    vmap              <C-w><Enter> <Esc><C-w><Enter>gv
 endif
 
 if s:IsPlugged('limelight.vim')
