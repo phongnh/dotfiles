@@ -3641,15 +3641,14 @@ if s:IsPlugged('goyo.vim')
                 \ ]
 
     function! CycleGoyoMode(direction) abort
-        if exists('#goyo')
-            let s:goyo_current_mode += a:direction
-            if s:goyo_current_mode >= len(s:goyo_modes)
-                let s:goyo_current_mode = 0
-            elseif s:goyo_current_mode < 0
-                let s:goyo_current_mode = len(s:goyo_modes) - 1
-            endif
-        else
-            let s:goyo_current_mode = a:direction == 1 ? 0 : len(s:goyo_modes) - 1
+        if !exists('#goyo')
+            return
+        endif
+        let s:goyo_current_mode += a:direction
+        if s:goyo_current_mode >= len(s:goyo_modes)
+            let s:goyo_current_mode = 0
+        elseif s:goyo_current_mode < 0
+            let s:goyo_current_mode = len(s:goyo_modes) - 1
         endif
         let l:goyo_mode = s:goyo_modes[s:goyo_current_mode]
         let g:goyo_width = l:goyo_mode[0]
@@ -3660,13 +3659,14 @@ if s:IsPlugged('goyo.vim')
     endfunction
 
     function! RefreshGoyoMode(...) abort
-        if exists('#goyo')
-            if get(a:, 1, 0)
-                silent! cclose | lclose | pclose | helpclose
-            endif
-            execute 'Goyo ' join([ g:goyo_width, g:goyo_height ], 'x')
-            redraw
+        if !exists('#goyo')
+            return
         endif
+        if get(a:, 1, 0)
+            silent! cclose | lclose | pclose | helpclose
+        endif
+        execute 'Goyo ' join([ g:goyo_width, g:goyo_height ], 'x')
+        redraw
     endfunction
 
     function! s:OnGoyoEnter() abort
