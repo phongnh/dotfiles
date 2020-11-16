@@ -1161,19 +1161,21 @@ nnoremap <silent> z[ :let &foldcolumn = &foldcolumn - 1<CR>:<C-u>setlocal foldco
 
 " Search and Replace
 nnoremap <Leader>R  :%s//gc<Left><Left><Left>
-nmap     <Leader>rr <Leader>R
 nnoremap <Leader>sr :%s/<C-r>=vim_helpers#CwordForSubstitute()<CR>/gc<Left><Left><Left>
+nmap     <Leader>rr <Leader>sr
 nmap     <Leader>rw <Leader>sr
 
 xnoremap <Leader>R  :s/\%V/gc<Left><Left><Left>
-xmap     <Leader>rr <Leader>R
 xnoremap <Leader>sr <Esc>:%s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
+xmap     <Leader>rr <Leader>sr
 xmap     <Leader>rw <Leader>sr
 
 " Search and Replace entries in quickfix with :cdo
 nnoremap <Leader>Q  :cdo s//<Left>
 nnoremap <Leader>sq :cdo s/<C-r>=vim_helpers#CwordForSubstitute()<CR>/<Left>
+nmap     <Leader>rq <Leader>sq
 xnoremap <Leader>sq <Esc>:cdo s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//<Left>
+xmap     <Leader>rq <Leader>sq
 
 " Buffer-related mappings
 " gl: Go to Last buffer
@@ -1585,14 +1587,12 @@ nmap <Leader>sW ysiW
 
 " tpope/vim-abolish
 nnoremap <Leader>V  :%Subvert//gc<Left><Left><Left>
-nmap     <Leader>rv <Leader>V
 nnoremap <Leader>sv :%Subvert/<C-r>=vim_helpers#CwordForSubstitute()<CR>/gc<Left><Left><Left>
-nmap     <Leader>rc <Leader>sv
+nmap     <Leader>rv <Leader>sv
 
 xnoremap <Leader>V  :Subvert//gc<Left><Left><Left>
-xmap     <Leader>rv <Leader>V
 xnoremap <Leader>sv <Esc>:%Subvert/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//gc<Left><Left><Left>
-xmap     <Leader>rc <Leader>sv
+xmap     <Leader>rv <Leader>sv
 
 if s:IsPlugged('auto-pairs')
     " jiangmiao/auto-pairs
@@ -4639,26 +4639,27 @@ if s:IsPlugged('vim-which-key')
                 \ 'y':    'copy-buffer-to-clipboard',
                 \ 'n':    'open-selected-region',
                 \ 'm':    'maximize-buffer',
-                \ 'z':    'refresh-goyo-mode',
                 \ ';':    'set-buffer-type',
                 \ }
 
-    let g:which_key_map.c = {
-                \ 'name': '+comment',
-                \ ' ':    'toggle-comment',
-                \ 'i':    'toggle-comment-individually',
-                \ 'c':    'comment',
-                \ 'a':    'comment-with-alternate-delimiters',
-                \ 'l':    'comment-align-left',
-                \ 'b':    'comment-align-both',
-                \ 'n':    'comment-line-nesting',
-                \ 'm':    'comment-minimal',
-                \ 's':    'comment-sexily',
-                \ '$':    'comment-from-cursor-to-eol',
-                \ 'y':    'yank-and-comment',
-                \ 'u':    'uncomment-current-line',
-                \ 'A':    'add-comment-to-eol',
-                \ }
+    if s:IsPlugged('nerdcommenter')
+        let g:which_key_map.c = {
+                    \ 'name': '+comment',
+                    \ ' ':    'toggle-comment',
+                    \ 'i':    'toggle-comment-individually',
+                    \ 'c':    'comment',
+                    \ 'a':    'comment-with-alternate-delimiters',
+                    \ 'l':    'comment-align-left',
+                    \ 'b':    'comment-align-both',
+                    \ 'n':    'comment-line-nesting',
+                    \ 'm':    'comment-minimal',
+                    \ 's':    'comment-sexily',
+                    \ '$':    'comment-from-cursor-to-eol',
+                    \ 'y':    'yank-and-comment',
+                    \ 'u':    'uncomment-current-line',
+                    \ 'A':    'add-comment-to-eol',
+                    \ }
+    endif
 
     let g:which_key_map.g = {
                 \ 'name': '+git',
@@ -4742,10 +4743,10 @@ if s:IsPlugged('vim-which-key')
                 \ 'm':    'ctrlsf-search-cword-in-repo-or-cwd',
                 \ 'u':    'ctrlsf-search-update',
                 \ 'o':    'toogle-ctrlsf-search-result',
-                \ 'r':    'search-and-replace-prompt',
-                \ 'v':    'subvert-search-and-replace-prompt',
-                \ 'q':    'cdo-search-and-replace-prompt',
                 \ 'g':    'search-cword-fuzzy',
+                \ 'r':    'search-and-replace-cword-prompt',
+                \ 'v':    'subvert-search-and-replace-cword-prompt',
+                \ 'q':    'cdo-search-and-replace-cword-prompt',
                 \ 'w':    'surround-cword',
                 \ 'W':    'surround-CWORD',
                 \ }
@@ -4762,11 +4763,11 @@ if s:IsPlugged('vim-which-key')
 
     let g:which_key_map.r = {
                 \ 'name': '+replace/rubocop/prettier',
-                \ 'r': 'replace-prompt',
-                \ 'w': 'search-and-replace-prompt',
-                \ 'v': 'subvert-replace-prompt',
-                \ 'c': 'subvert-search-and-replace-prompt',
-                \ 'u': 'run-rubocop',
+                \ 'r':    'search-and-replace-cword-prompt',
+                \ 'w':    'search-and-replace-cword-prompt',
+                \ 'v':    'subvert-search-and-replace-cword-prompt',
+                \ 'q':    'cdo-search-and-replace-cword-prompt',
+                \ 'u':    'run-rubocop',
                 \ }
 
     call which_key#register('<Space>', 'g:which_key_map')
