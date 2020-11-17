@@ -1204,7 +1204,7 @@ nnoremap <silent> <Leader>bx :xit<CR>
 vmap              <Leader>bx <Esc><Leader>bx
 
 " Unload buffer and delete it from the buffer list
-nnoremap <silent> <Leader>bq :confirm bdelete<CR>
+nnoremap <silent> <Leader>bg :confirm bdelete<CR>
 nnoremap <silent> <Leader>bq :confirm bdelete<CR>
 " Like :bdelete, but really delete the buffer. Everything related to the buffer is lost
 nnoremap <silent> <Leader>bk :confirm bwipeout<CR>
