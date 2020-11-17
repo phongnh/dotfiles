@@ -1953,6 +1953,7 @@ if s:IsPlugged('ctrlp.vim')
     " Buffer-related mappings
     nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
     nmap              <Leader>bd <Leader>d
+    nmap              <Leader>bD <Leader>D
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
     nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
@@ -2093,6 +2094,7 @@ if s:IsPlugged('LeaderF')
 
     " Buffer-related mappings
     nmap              <Leader>bd <Leader>d
+    nmap              <Leader>bD <Leader>D
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :LeaderfLine<CR>
     nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
@@ -2203,7 +2205,9 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <C-w>e :Clap filer<CR>
 
     " Buffer-related mappings
+    nnoremap <silent> <Leader>bb :Clap buffers<CR>
     nmap              <Leader>bd <Leader>d
+    nmap              <Leader>bD <Leader>D
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :Clap blines<CR>
     nnoremap <silent> <Leader>bt :Clap tags<CR>
@@ -2253,9 +2257,10 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>\ :Tags!<CR>
 
     " Buffer-related mappings
-    nmap              <Leader>bd <Leader>d
-    nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bb :Buffers<CR>
+    nmap              <Leader>bd <Leader>d
+    nmap              <Leader>bD <Leader>D
+    nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :BLines<CR>
     nnoremap <silent> <Leader>bt :BTags<CR>
     nnoremap <silent> <Leader>bo :BOutline<CR>
@@ -5004,6 +5009,7 @@ if s:IsPlugged('vim-which-key')
                 \ 'b':    'opening-buffers',
                 \ 'j':    'buffers-in-tab',
                 \ 'd':    'files-in-buffer-dir',
+                \ 'D':    'files-in-buffer-grandparent-dir',
                 \ 'p':    'buffer-project',
                 \ 't':    'buffer-tag',
                 \ 'o':    'buffer-outline',
