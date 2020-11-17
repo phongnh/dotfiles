@@ -1200,22 +1200,19 @@ vnoremap <silent> <Leader>w <Esc><Leader>wgv
 nnoremap <silent> <Leader>bw :update<CR>
 vmap              <Leader>bw <Esc><Leader>bwgv
 
-nmap <Leader>bu <Leader>bw
-vmap <Leader>bu <Leader>bw
-
 nnoremap <silent> <C-s> :update<CR>
 vmap              <C-s> <Esc><C-s>gv
 imap              <C-s> <Esc><C-s>
 
 " Save and Quit buffer
-nnoremap <silent> <Leader>x :x<CR>
+nnoremap <silent> <Leader>x :xit<CR>
 vmap              <Leader>x <Esc><Leader>x
 
-nnoremap <silent> <Leader>bx :x<CR>
+nnoremap <silent> <Leader>bx :xit<CR>
 vmap              <Leader>bx <Esc><Leader>bx
 
 " Unload buffer and delete it from the buffer list
-nnoremap <silent> <Leader>bd :confirm bdelete<CR>
+nnoremap <silent> <Leader>bq :confirm bdelete<CR>
 nnoremap <silent> <Leader>bq :confirm bdelete<CR>
 " Like :bdelete, but really delete the buffer. Everything related to the buffer is lost
 nnoremap <silent> <Leader>bk :confirm bwipeout<CR>
@@ -1315,8 +1312,10 @@ vnoremap <silent> <Leader>bw :StripWhitespace<CR>:update<CR>gv
 nnoremap <silent> yo<Space>  :ToggleWhitespace<CR>
 
 " phongnh/ZoomWin
-nmap <silent> <C-w>m <Plug>ZoomWin
-vmap          <C-w>m <Esc><C-w>mgv
+nmap <silent> <C-w>m     <Plug>ZoomWin
+vmap          <C-w>m     <Esc><C-w>mgv
+nmap          <Leader>bm <C-w>m
+vmap          <Leader>bm <C-w>m
 
 " mhinz/vim-sayonara
 let g:sayonara_confirm_quit = 1
@@ -1331,7 +1330,7 @@ let g:sayonara_filetypes = {
             \ 'Mundo':       'MundoHide',
             \ }
 
-nnoremap <silent> <Leader>bd :Sayonara<CR>
+nnoremap <silent> <Leader>bg :Sayonara<CR>
 nnoremap <silent> <Leader>bq :Sayonara!<CR>
 
 " chrisbra/NrrwRgn
@@ -1849,7 +1848,8 @@ if s:IsPlugged('fern.vim')
 
     nnoremap <silent> <Leader>e  :FernDrawerToggle .<CR>
     nnoremap <silent> <Leader>E  :FernDrawerCWD<CR>
-    nnoremap <silent> <Leader>bg :FernDrawerReveal<CR>
+    nnoremap <silent> <Leader>bu :FernDrawerReveal<CR>
+    nnoremap <silent> <Leader>bh :FernDrawerReveal<CR>
 endif
 
 if s:IsPlugged('vaffle.vim')
@@ -1899,7 +1899,8 @@ if s:IsPlugged('vaffle.vim')
 
     nnoremap <silent> <Leader>e  :Vaffle<CR>
     nnoremap <silent> <Leader>E  :VaffleCWD<CR>
-    nnoremap <silent> <Leader>bg :Vaffle %<CR>
+    nnoremap <silent> <Leader>bu :Vaffle %<CR>
+    nnoremap <silent> <Leader>bh :Vaffle %<CR>
 endif
 
 if s:IsPlugged('nerdtree')
@@ -1921,7 +1922,8 @@ if s:IsPlugged('nerdtree')
 
     nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
     noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
-    nnoremap <silent> <Leader>bg :NERDTreeFind<CR>
+    nnoremap <silent> <Leader>bu :NERDTreeFind<CR>
+    nnoremap <silent> <Leader>bh :NERDTreeFind<CR>
 endif
 
 if s:IsPlugged('ctrlp.vim')
@@ -1964,7 +1966,7 @@ if s:IsPlugged('ctrlp.vim')
 
     " Buffer-related mappings
     nnoremap <silent> <Leader>bb :CtrlPBuffer<CR>
-    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bd <Leader>d
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :CtrlPLine %<CR>
     nnoremap <silent> <Leader>bt :CtrlPBufTag<CR>
@@ -2104,7 +2106,7 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>\ :LeaderfTag<CR>
 
     " Buffer-related mappings
-    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bd <Leader>d
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :LeaderfLine<CR>
     nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
@@ -2215,7 +2217,7 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <C-w>e :Clap filer<CR>
 
     " Buffer-related mappings
-    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bd <Leader>d
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bl :Clap blines<CR>
     nnoremap <silent> <Leader>bt :Clap tags<CR>
@@ -2265,7 +2267,7 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>\ :Tags!<CR>
 
     " Buffer-related mappings
-    nmap              <Leader>bh <Leader>d
+    nmap              <Leader>bd <Leader>d
     nmap              <Leader>bp <Leader>p
     nnoremap <silent> <Leader>bb :Buffers<CR>
     nnoremap <silent> <Leader>bl :BLines<CR>
@@ -4612,32 +4614,33 @@ if s:IsPlugged('vim-which-key')
 
     let g:which_key_map.b = {
                 \ 'name': '+buffer',
-                \ '=':    'auto-format-buffer',
-                \ 'i':    'toggle-indent-guide',
-                \ 'v':    'toggle-rainbow',
-                \ 'c':    'check-buffer-syntax',
-                \ 'C':    'fix-buffer-syntax',
-                \ 'f':    'format-buffer',
-                \ 'g':    'find-buffer-in-explorer',
-                \ 'b':    'opening-buffer',
+                \ 'b':    'opening-buffers',
                 \ 'j':    'buffers-in-tab',
-                \ 'h':    'files-in-buffer-dir',
+                \ 'd':    'files-in-buffer-dir',
                 \ 'p':    'buffer-project',
-                \ 'a':    'buffer-alternative',
-                \ 'r':    'buffer-related',
                 \ 't':    'buffer-tag',
                 \ 'o':    'buffer-outline',
                 \ 'l':    'buffer-line',
                 \ 'e':    'reload-buffer',
-                \ 'w':    'save-buffer',
-                \ 'x':    'save-and-close-buffer',
-                \ 'd':    'delete-buffer-with-sayonara',
-                \ 'q':    'delete-buffer-with-sayonara!',
-                \ 'k':    'wipeout-buffer',
-                \ '-':    'wipeout-buffer',
+                \ 'a':    'buffer-alternative',
+                \ 'r':    'buffer-related',
+                \ '=':    'auto-format-buffer',
+                \ 'f':    'format-buffer',
+                \ 'i':    'toggle-indent-guide',
+                \ 'v':    'toggle-rainbow',
+                \ 'c':    'check-buffer-syntax',
+                \ 'C':    'fix-buffer-syntax',
+                \ 'u':    'uncover-buffer-in-explorer',
+                \ 'h':    'find-buffer-in-explorer',
                 \ 's':    'search-cword-in-buffer',
                 \ 'y':    'copy-buffer-to-clipboard',
                 \ 'n':    'open-selected-region',
+                \ 'w':    'save-buffer',
+                \ 'x':    'save-and-close-buffer',
+                \ 'g':    'sayonara',
+                \ 'q':    'sayonara!',
+                \ 'k':    'wipeout-buffer',
+                \ '-':    'wipeout-buffer',
                 \ 'm':    'maximize-buffer',
                 \ ';':    'set-buffer-type',
                 \ }
