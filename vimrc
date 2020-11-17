@@ -440,7 +440,7 @@ call plug#begin()
         Plug 'phongnh/ctrlp-settings.vim'
     elseif s:Use('leaderf') && has('python3')
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
-        Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+        Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
         " Solarized theme for LeaderF
         Plug 'phongnh/vim-leaderf-solarized-theme'
     elseif s:Use('clap') && has('patch-8.1.2114')
