@@ -5094,6 +5094,7 @@ if s:IsPlugged('vim-which-key')
                     \ 'name': '+tmuxify',
                     \ 'b':    'send-<ctrl-c>',
                     \ 'c':    'send-<ctrl-l>',
+                    \ 'C':    'send-clear',
                     \ 'n':    'create-and-associate-with-pane',
                     \ 'p':    'associate-with-existing-pane',
                     \ 'q':    'close-associated-pane',
