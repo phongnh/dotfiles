@@ -1170,12 +1170,18 @@ xnoremap <Leader>sr <Esc>:%s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//
 xmap     <Leader>rr <Leader>sr
 xmap     <Leader>rw <Leader>sr
 
-" Search and Replace entries in quickfix with :cdo
+" Search and Replace entries in quickfix/locationlist with :cdo and :ldo
 nnoremap <Leader>Q  :cdo s//<Left>
 nnoremap <Leader>sq :cdo s/<C-r>=vim_helpers#CwordForSubstitute()<CR>/<Left>
 nmap     <Leader>rq <Leader>sq
 xnoremap <Leader>sq <Esc>:cdo s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//<Left>
 xmap     <Leader>rq <Leader>sq
+
+nnoremap <Leader>L  :ldo s//<Left>
+nnoremap <Leader>sl :ldo s/<C-r>=vim_helpers#CwordForSubstitute()<CR>/<Left>
+nmap     <Leader>rl <Leader>sl
+xnoremap <Leader>sl <Esc>:ldo s/<C-r>=vim_helpers#SelectedTextForSubstitute()<CR>//<Left>
+xmap     <Leader>rl <Leader>sl
 
 " Buffer-related mappings
 " gl: Go to Last buffer
@@ -1330,8 +1336,8 @@ let g:sayonara_filetypes = {
             \ 'Mundo':       'MundoHide',
             \ }
 
-nnoremap <silent> <Leader>bg :Sayonara<CR>
-nnoremap <silent> <Leader>bq :Sayonara!<CR>
+nnoremap <silent> <Leader>bg :Sayonara!<CR>
+nnoremap <silent> <Leader>bq :Sayonara<CR>
 
 " chrisbra/NrrwRgn
 let g:nrrw_topbot_leftright  = 'belowright'
@@ -1389,7 +1395,7 @@ let g:grepper = {
             \ 'jump':                0,
             \ 'prompt':              1,
             \ 'prompt_mapping_tool': '<C-\>',
-            \ 'tools':               ['rg', 'git', 'grep', 'findstr'],
+            \ 'tools':               ['rg', 'git', 'findstr'],
             \ 'stop':                2000,
             \ }
 
@@ -1402,7 +1408,7 @@ endif
 command! -nargs=* -complete=customlist,grepper#complete GrepperExec  Grepper -noprompt <args>
 command! -nargs=* -complete=customlist,grepper#complete PGrepper     Grepper -dir repo,filecwd <args>
 command! -nargs=* -complete=customlist,grepper#complete PGrepperExec Grepper -noprompt -dir repo,filecwd <args>
-command! -nargs=* -complete=customlist,grepper#complete DGrepper     Grepper -dir file <args>
+command! -nargs=* -complete=customlist,grepper#complete DGrepper     Grepper -dir file,filecwd <args>
 command! -nargs=* -complete=customlist,grepper#complete DGrepperExec Grepper -noprompt -dir file,filecwd <args>
 command! -nargs=* -complete=customlist,grepper#complete LGrepper     Grepper -noquickfix <args>
 command! -nargs=* -complete=customlist,grepper#complete LGrepperExec Grepper -noprompt -noquickfix <args>
@@ -1412,10 +1418,8 @@ command! -nargs=* -complete=customlist,grepper#complete BGrepperExec LGrepperExe
 function! s:TGrepper(qargs) abort
     if exists(':GrepperRg') == 2
         let cmd = 'GrepperRg ' . vim_helpers#ParseGrepFileTypeOption('rg')
-    elseif exists(':GrepperGrep') == 2
-        let cmd = 'GrepperGrep ' . vim_helpers#ParseGrepFileTypeOption('grep')
     else
-        let cmd = 'GrepperExec -query'
+        let cmd = 'Grepper -query'
     endif
     execute vim_helpers#strip(cmd . ' ' . a:qargs)
 endfunction
@@ -1447,22 +1451,20 @@ nnoremap <silent> <Leader>sd :DGrepperExec -cword<CR>
 xnoremap <silent> <Leader>sd <Esc>:DGrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 nnoremap <silent> <Leader>s/ :GrepperExec -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
 nnoremap <silent> <Leader>s? :Grepper -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
+nnoremap <silent> <Leader>sc :BGrepperExec -cword<CR>
+xnoremap <silent> <Leader>sc <Esc>:BGrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+
+nnoremap <silent> <Leader>B  :LGrepper<CR>
+nnoremap <silent> <Leader>sb :LGrepperExec -cword<CR>
+xnoremap <silent> <Leader>sb <Esc>:LGrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>bs :LGrepperExec -cword<CR>
+xnoremap <silent> <Leader>bs <Esc>:LGrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
+nnoremap <silent> <Leader>b/ :LGrepperExec -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
+nnoremap <silent> <Leader>b? :LGrepper -query <C-r>=vim_helpers#SearchTextForShell()<CR><CR>
 
 " Grepper with current buffer file type
 nnoremap <silent> <Leader>st :TGrepperCCword<CR>
 xnoremap <silent> <Leader>st <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-nnoremap <silent> <Leader>sc :TGrepperCCword<CR>
-xnoremap <silent> <Leader>sc <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-
-nnoremap <silent> <Leader>L  :LGrepper<CR>
-nnoremap <silent> <Leader>sl :LGrepperExec -cword<CR>
-xnoremap <silent> <Leader>sl <Esc>:LGrepperExec -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-
-nnoremap          <Leader>B  :BGrepper<CR>
-nnoremap <silent> <Leader>sb :BGrepperExec -cword<CR>
-xnoremap <silent> <Leader>sb <Esc>:BGrepper -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
-nnoremap <silent> <Leader>bs :BGrepperExec -cword<CR>
-xnoremap <silent> <Leader>bs <Esc>:BGrepper -query <C-r>=vim_helpers#SelectedTextForShell()<CR><CR>
 
 " dyng/ctrlsf.vim
 let g:ctrlsf_default_root    = 'cwd'
@@ -1506,10 +1508,9 @@ command! -nargs=? PCtrlSFCCword call <SID>PCtrlSFCword(1, <q-args>)
 command! -nargs=? PCtrlSFCword  call <SID>PCtrlSFCword(0, <q-args>)
 
 function! s:CtrlSFParseFileTypeOption(cmd) abort
-    let ext = expand('%:e')
-
     if a:cmd ==# 'rg'
         let ft = vim_helpers#RgFileType(&filetype)
+        let ext = expand('%:e')
 
         if strlen(ft) && vim_helpers#IsRgKnownFileType(ft)
             return printf("-filetype %s", ft)
@@ -1554,6 +1555,14 @@ xnoremap <silent> <Leader>sk <Esc>:TCtrlSF <C-r>=vim_helpers#SelectedTextForShel
 
 nnoremap <silent> <Leader>so :CtrlSFToggle<CR>
 nnoremap <silent> <Leader>su :CtrlSFUpdate<CR>
+
+function! s:ToggleCtrlSFPopulateQuickfix() abort
+    let g:ctrlsf_populate_qflist = !g:ctrlsf_populate_qflist
+    echo printf('CtrlSF: %s populating quickfix!', g:ctrlsf_populate_qflist ? 'Enabled' : 'Disabled')
+endfunction
+
+command! ToogleCtrlSFQuickfix call <SID>ToggleCtrlSFPopulateQuickfix()
+nnoremap <silent> yoq :ToogleCtrlSFQuickfix<CR>
 
 if s:IsPlugged('nerdcommenter')
     " scrooloose/nerdcommenter
@@ -2246,11 +2255,11 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <Leader>q :cclose<CR>:Clap quickfix<CR>
     nnoremap <silent> <Leader>l :lclose<CR>:Clap loclist<CR>
 
-    nnoremap <silent> <Leader>sg :Clap grep2 ++query=<cword><CR>
-    xnoremap <silent> <Leader>sg :Clap grep2 ++query=@visual<CR>
+    nnoremap <silent> <Leader>sg :Clap grep ++query=<cword><CR>
+    xnoremap <silent> <Leader>sg :Clap grep ++query=@visual<CR>
 
-    nnoremap <silent> <Leader>sa :Clap grep ++query=<cword><CR>
-    xnoremap <silent> <Leader>sa :Clap grep ++query=@visual<CR>
+    nnoremap <silent> <Leader>sa :Clap grep2 ++query=<cword><CR>
+    xnoremap <silent> <Leader>sa :Clap grep2 ++query=@visual<CR>
 endif
 
 if s:IsPlugged('fzf')
@@ -4638,13 +4647,15 @@ if s:IsPlugged('vim-which-key')
                 \ 'C':    'fix-buffer-syntax',
                 \ 'u':    'uncover-buffer-in-explorer',
                 \ 'h':    'find-buffer-in-explorer',
-                \ 's':    'search-cword-in-buffer',
+                \ 's':    'buffer-search-cword',
+                \ '/':    'buffer-search-pattern-from-/',
+                \ '?':    'buffer-search-pattern-from-/-prompt',
                 \ 'y':    'copy-buffer-to-clipboard',
                 \ 'n':    'open-selected-region',
                 \ 'w':    'save-buffer',
                 \ 'x':    'save-and-close-buffer',
-                \ 'g':    'sayonara',
-                \ 'q':    'sayonara!',
+                \ 'g':    'delete-buffer-with-sayonara!',
+                \ 'q':    'delete-buffer-with-sayonara',
                 \ 'k':    'wipeout-buffer',
                 \ '-':    'wipeout-buffer',
                 \ 'm':    'maximize-buffer',
@@ -4673,7 +4684,7 @@ if s:IsPlugged('vim-which-key')
     let g:which_key_map.g = {
                 \ 'name': '+git',
                 \ 'i':    'stage-current-file-interactive',
-                \ 'a':    'stage-all-interactive',
+                \ 'a':    'stage-all-files-interactive',
                 \ 's':    'status',
                 \ 'd':    'diff',
                 \ 'c':    'commit',
@@ -4691,48 +4702,50 @@ if s:IsPlugged('vim-which-key')
                 \ 't':    'tig-status',
                 \ }
 
-    let g:which_key_map.m = {
-                \ 'name': '+tmuxify',
-                \ 'b':    'send-<ctrl-c>',
-                \ 'c':    'send-<ctrl-l>',
-                \ 'n':    'create-and-associate-with-pane',
-                \ 'p':    'associate-with-existing-pane',
-                \ 'q':    'close-associated-pane',
-                \ 'r':    'send-text-prompt',
-                \ 't':    'create-pane',
-                \ 'i':    'send-prompt-input',
-                \ 's':    'send-paragraph',
-                \ 'S':    'send-buffer',
-                \ 'l':    'send-line',
-                \ 'w':    'send-word',
-                \ 'a':    'resend-last-text',
-                \ 'k':    'send-key-prompt',
-                \ 'u':    'send-<q>',
-                \ 'm':    'send-<enter>',
-                \ 'd':    'send-<ctrl-d>',
-                \ }
+    if s:IsPlugged('vim-tmuxify')
+        let g:which_key_map.m = {
+                    \ 'name': '+tmuxify',
+                    \ 'b':    'send-<ctrl-c>',
+                    \ 'c':    'send-<ctrl-l>',
+                    \ 'n':    'create-and-associate-with-pane',
+                    \ 'p':    'associate-with-existing-pane',
+                    \ 'q':    'close-associated-pane',
+                    \ 'r':    'send-text-prompt',
+                    \ 't':    'create-pane',
+                    \ 'i':    'send-prompt-input',
+                    \ 's':    'send-paragraph',
+                    \ 'S':    'send-buffer',
+                    \ 'l':    'send-line',
+                    \ 'w':    'send-word',
+                    \ 'a':    'resend-last-text',
+                    \ 'k':    'send-key-prompt',
+                    \ 'u':    'send-<q>',
+                    \ 'm':    'send-<enter>',
+                    \ 'd':    'send-<ctrl-d>',
+                    \ }
 
-    let g:which_key_map.v = {
-                \ 'name': '+tmuxify-buffer',
-                \ 'b':    'send-<ctrl-c>',
-                \ 'c':    'send-<ctrl-l>',
-                \ 'n':    'create-and-associate-with-pane',
-                \ 'p':    'associate-with-existing-pane',
-                \ 'q':    'close-associated-pane',
-                \ 'r':    'send-text-prompt',
-                \ 't':    'create-pane',
-                \ 'i':    'send-prompt-input',
-                \ 's':    'send-paragraph',
-                \ 'S':    'send-buffer',
-                \ 'l':    'send-line',
-                \ 'w':    'send-word',
-                \ 'a':    'resend-last-text',
-                \ 'k':    'send-key-prompt',
-                \ 'u':    'send-<q>',
-                \ 'm':    'send-<enter>',
-                \ 'd':    'send-<ctrl-d>',
-                \ 'v':    'update-plugins',
-                \ }
+        let g:which_key_map.v = {
+                    \ 'name': '+tmuxify-buffer',
+                    \ 'b':    'send-<ctrl-c>',
+                    \ 'c':    'send-<ctrl-l>',
+                    \ 'n':    'create-and-associate-with-pane',
+                    \ 'p':    'associate-with-existing-pane',
+                    \ 'q':    'close-associated-pane',
+                    \ 'r':    'send-text-prompt',
+                    \ 't':    'create-pane',
+                    \ 'i':    'send-prompt-input',
+                    \ 's':    'send-paragraph',
+                    \ 'S':    'send-buffer',
+                    \ 'l':    'send-line',
+                    \ 'w':    'send-word',
+                    \ 'a':    'resend-last-text',
+                    \ 'k':    'send-key-prompt',
+                    \ 'u':    'send-<q>',
+                    \ 'm':    'send-<enter>',
+                    \ 'd':    'send-<ctrl-d>',
+                    \ 'v':    'update-plugins',
+                    \ }
+    endif
 
     let g:which_key_map.s = {
                 \ 'name': '+search/replace/surround',
@@ -4743,9 +4756,8 @@ if s:IsPlugged('vim-which-key')
                 \ '/':    'search-pattern-from-/',
                 \ '?':    'search-pattern-from-/-prompt',
                 \ 't':    'search-cword-with-file-type',
-                \ 'c':    'search-cword-with-file-type',
-                \ 'l':    'search-cword-location-list',
-                \ 'b':    'search-cword-in-buffer',
+                \ 'b':    'search-cword-location-list',
+                \ 'c':    'search-cword-in-buffer',
                 \ 'f':    'ctrlsf-search-cword',
                 \ 'i':    'ctrlsf-search-cword-prompt',
                 \ 'k':    'ctrlsf-search-cword-with-buffer-file-type',
@@ -4756,6 +4768,7 @@ if s:IsPlugged('vim-which-key')
                 \ 'r':    'search-and-replace-cword-prompt',
                 \ 'v':    'subvert-search-and-replace-cword-prompt',
                 \ 'q':    'cdo-search-and-replace-cword-prompt',
+                \ 'l':    'ldo-search-and-replace-cword-prompt',
                 \ 'w':    'surround-cword',
                 \ 'W':    'surround-CWORD',
                 \ }
@@ -4776,6 +4789,7 @@ if s:IsPlugged('vim-which-key')
                 \ 'w':    'search-and-replace-cword-prompt',
                 \ 'v':    'subvert-search-and-replace-cword-prompt',
                 \ 'q':    'cdo-search-and-replace-cword-prompt',
+                \ 'l':    'ldo-search-and-replace-cword-prompt',
                 \ 'u':    'run-rubocop',
                 \ }
 
@@ -4783,9 +4797,6 @@ if s:IsPlugged('vim-which-key')
 
     nnoremap <silent> <Leader> :<C-u>WhichKey '<Space>'<CR>
     vnoremap <silent> <Leader> :<C-u>WhichKeyVisual '<Space>'<CR>
-
-    nnoremap <silent> <LocalLeader> :<C-u>WhichKey '\'<CR>
-    vnoremap <silent> <LocalLeader> :<C-u>WhichKeyVisual '\'<CR>
 endif
 
 " Setup custom mapping to open specific folder
