@@ -445,7 +445,7 @@ call plug#begin()
         Plug 'phongnh/vim-clap-solarized-theme'
     else
         " A command-line fuzzy finder written in Go
-        Plug 'junegunn/fzf', { 'do': './install --bin' }
+        Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
         Plug 'junegunn/fzf.vim'
         Plug 'phongnh/fzf-settings.vim'
     endif
