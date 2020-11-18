@@ -4933,17 +4933,17 @@ if s:IsPlugged('nvim-treesitter')
                     smart_rename = {
                         enable = true,
                         keymaps = {
-                            smart_rename = "str",
+                            smart_rename = "sr",
                         }
                     },
                     navigation = {
                         enable = true,
                         keymaps = {
-                            goto_definition      = "stg",
-                            list_definitions     = "std",
-                            list_definitions_toc = "stc",
-                            goto_next_usage      = "stn",
-                            goto_previous_usage  = "stp",
+                            goto_definition      = "sd",
+                            list_definitions     = "sl",
+                            list_definitions_toc = "sc",
+                            goto_next_usage      = "sj",
+                            goto_previous_usage  = "sk",
                         },
                     },
                 },
@@ -4967,12 +4967,12 @@ if s:IsPlugged('nvim-treesitter')
                         },
                     },
                     swap = {
-                        enable = false,
+                        enable = true,
                         swap_next = {
-                            ["sa"] = "@parameter.inner",
+                            ["sN"] = "@parameter.inner",
                         },
                         swap_previous = {
-                            ["sA"] = "@parameter.inner",
+                            ["sP"] = "@parameter.inner",
                         },
                     },
                     move = {
