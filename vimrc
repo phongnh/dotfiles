@@ -2304,7 +2304,7 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>l :lclose<CR>:LocationList<CR>
 
     nnoremap <silent> <Leader>sg :Rg! <C-r><C-w><CR>
-    xnoremap <silent> <Leader>sg <Esc>:Rg! -F <C-r>=vim_helpers#SelectedText()<CR><CR>
+    xnoremap <silent> <Leader>sg <Esc>:FRg! <C-r>=vim_helpers#SelectedText()<CR><CR>
 endif
 
 if s:IsPlugged('ultisnips')
