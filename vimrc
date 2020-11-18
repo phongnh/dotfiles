@@ -1341,6 +1341,7 @@ let g:sayonara_filetypes = {
             \ 'Mundo':       'MundoHide',
             \ }
 
+nnoremap <silent> <C-w>c     :Sayonara<CR>
 nnoremap <silent> <Leader>bg :Sayonara!<CR>
 nnoremap <silent> <Leader>bq :Sayonara<CR>
 
