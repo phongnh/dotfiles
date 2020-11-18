@@ -1192,6 +1192,9 @@ vnoremap <silent> <Leader>w <Esc><Leader>wgv
 nnoremap <silent> <Leader>bw :update<CR>
 vmap              <Leader>bw <Esc><Leader>bwgv
 
+nnoremap <silent> <Leader>bu :update<CR>
+vmap              <Leader>bu <Esc><Leader>bugv
+
 nnoremap <silent> <C-s> :update<CR>
 vmap              <C-s> <Esc><C-s>gv
 imap              <C-s> <Esc><C-s>
@@ -1775,7 +1778,7 @@ endif
 
 " luochen1990/rainbow
 let g:rainbow_active = 0
-nnoremap <silent> <Leader>bv :RainbowToggle<CR>
+nnoremap <silent> <Leader>bh :RainbowToggle<CR>
 
 if s:IsPlugged('bufexplorer')
     " jlanzarotta/bufexplorer
@@ -1845,8 +1848,7 @@ if s:IsPlugged('fern.vim')
 
     nnoremap <silent> <Leader>e  :FernDrawerToggle .<CR>
     nnoremap <silent> <Leader>E  :FernDrawerCWD<CR>
-    nnoremap <silent> <Leader>bu :FernDrawerReveal<CR>
-    nnoremap <silent> <Leader>bh :FernDrawerReveal<CR>
+    nnoremap <silent> <Leader>bf :FernDrawerReveal<CR>
 endif
 
 if s:IsPlugged('vaffle.vim')
@@ -1896,8 +1898,7 @@ if s:IsPlugged('vaffle.vim')
 
     nnoremap <silent> <Leader>e  :Vaffle<CR>
     nnoremap <silent> <Leader>E  :VaffleCWD<CR>
-    nnoremap <silent> <Leader>bu :Vaffle %<CR>
-    nnoremap <silent> <Leader>bh :Vaffle %<CR>
+    nnoremap <silent> <Leader>bf :Vaffle %<CR>
 endif
 
 if s:IsPlugged('nerdtree')
@@ -1919,8 +1920,7 @@ if s:IsPlugged('nerdtree')
 
     nnoremap <silent> <Leader>e  :NERDTreeToggle<CR>
     noremap  <silent> <Leader>E  :NERDTreeCWD<CR>
-    nnoremap <silent> <Leader>bu :NERDTreeFind<CR>
-    nnoremap <silent> <Leader>bh :NERDTreeFind<CR>
+    nnoremap <silent> <Leader>bf :NERDTreeFind<CR>
 endif
 
 if s:IsPlugged('ctrlp.vim')
@@ -1932,7 +1932,7 @@ if s:IsPlugged('ctrlp.vim')
     if s:IsPlugged('fruzzy')
         " raghur/fruzzy
         let g:fruzzy#usenative       = 1
-        let g:fruzzy#sortonempty     = 0
+        let g:fruzzy#sortonempty     = 1
         let ctrlp_match_current_file = 1
         let g:ctrlp_match_func       = { 'match': 'fruzzy#ctrlp#matcher' }
     elseif s:IsPlugged('ctrlp-fzy-matcher')
@@ -4156,6 +4156,8 @@ if s:IsPlugged('ale')
 
     nnoremap <silent> <Leader>bc :ALELint<CR>
     nnoremap <silent> <Leader>bC :ALEFix<CR>
+    nnoremap <silent> <Leader>bv :ALELint<CR>
+    nnoremap <silent> <Leader>bV :ALEFix<CR>
 endif
 
 if s:IsPlugged('neomake')
@@ -4176,6 +4178,7 @@ if s:IsPlugged('neomake')
     endif
 
     nnoremap <silent> <Leader>bc :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
+    nnoremap <silent> <Leader>bv :Neomake<CR>:echo neomake#statusline#LoclistStatus()<CR>
 endif
 
 if s:IsPlugged('syntastic')
@@ -4222,6 +4225,7 @@ if s:IsPlugged('syntastic')
     call s:AddSyntasticChecker('yamllint', 'yaml')
 
     nnoremap <silent> <Leader>bc :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
+    nnoremap <silent> <Leader>bv :SyntasticCheck<CR>:echo SyntasticStatuslineFlag()<CR>
 endif
 
 if s:IsPlugged('vim-autoformat')
@@ -4241,8 +4245,8 @@ if s:IsPlugged('vim-autoformat')
     xmap     <silent> <Leader>=  <Leader>A
     nmap     <silent> <Leader>b= <Leader>A
     xmap     <silent> <Leader>b= <Leader>A
-    nmap     <silent> <Leader>bf <Leader>A
-    xmap     <silent> <Leader>bf <Leader>A
+    nmap     <silent> <Leader>bu <Leader>A
+    xmap     <silent> <Leader>bu <Leader>A
 endif
 
 if s:IsPlugged('vim-prettier')
@@ -4773,8 +4777,8 @@ if s:IsPlugged('vim-mix-format')
     let g:mix_format_on_save = 0
 
     function! s:SetupMixFormat() abort
-        nnoremap <buffer> <silent> <Leader>bf :MixFormat<CR>
-        nnoremap <buffer> <silent> <Leader>bF :MixFormatDiff<CR>
+        nnoremap <buffer> <silent> <Leader>bu :update<CR>:MixFormat<CR>
+        nnoremap <buffer> <silent> <Leader>bU :update<CR>:MixFormatDiff<CR>
     endfunction
 
     augroup MyAutoCmd
@@ -5029,13 +5033,12 @@ if s:IsPlugged('vim-which-key')
                 \ 'a':    'buffer-alternative',
                 \ 'r':    'buffer-related',
                 \ '=':    'auto-format-buffer',
-                \ 'f':    'format-buffer',
+                \ 'u':    'save-and-format-buffer',
                 \ 'i':    'toggle-indent-guide',
-                \ 'v':    'toggle-rainbow',
+                \ 'h':    'toggle-bracket-highlight',
                 \ 'c':    'check-buffer-syntax',
-                \ 'C':    'fix-buffer-syntax',
-                \ 'u':    'uncover-buffer-in-explorer',
-                \ 'h':    'find-buffer-in-explorer',
+                \ 'v':    'verify-buffer-syntax',
+                \ 'f':    'find-buffer-in-explorer',
                 \ 's':    'buffer-search-cword',
                 \ '/':    'buffer-search-pattern-from-/',
                 \ '?':    'buffer-search-pattern-from-/-prompt',
