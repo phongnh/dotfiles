@@ -2602,8 +2602,8 @@ if s:IsPlugged('nvim-lspconfig')
     function! s:InitNvimLSP() abort
         try
             lua << EOF
-            local nvim_lsp = require('nvim_lsp')
-            local configs = require('nvim_lsp/configs')
+            local lspconfig = require('lspconfig')
+            local configs = require('lspconfig/configs')
 
             local completion
             if pcall(require, 'completion') then
@@ -2649,7 +2649,7 @@ if s:IsPlugged('nvim-lspconfig')
             end
 
             for name, server_config in pairs(vim.g.nvim_lsp_servers) do
-                if not nvim_lsp[name] then
+                if not lspconfig[name] then
                     configs[server_name] = {
                         default_config = {
                             cmd = server_config.cmd,
@@ -2672,7 +2672,7 @@ if s:IsPlugged('nvim-lspconfig')
                     setup_config.on_init = ncm2.register_lsp_source
                 end
 
-                nvim_lsp[name].setup(setup_config)
+                lspconfig[name].setup(setup_config)
             end
 
             vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
