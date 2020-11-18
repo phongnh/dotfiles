@@ -1244,6 +1244,7 @@ if s:IsPlugged('vim-tmuxify')
         execute 'nnoremap <silent> ' . a:prefix . 'b :TxSigInt'    . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'c :TxClear'     . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'C :TxSendClear' . a:suffix . '<CR>'
+        execute 'nnoremap <silent> ' . a:prefix . 'f :TxSendClear' . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'n :TxCreate'    . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'p :TxSetPane'   . a:suffix . '<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'q :TxKill'      . a:suffix . '<CR>'
@@ -1257,7 +1258,8 @@ if s:IsPlugged('vim-tmuxify')
         execute 'nmap     <silent> ' . a:prefix . 'w mmviw'        . a:prefix . 's`m'
         execute 'nnoremap <silent> ' . a:prefix . 'a :TxSend'      . a:suffix . '(@m)<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'k :TxSendKey'   . a:suffix . '<CR>'
-        execute 'nnoremap <silent> ' . a:prefix . 'u :TxSendKey'   . a:suffix . ' C-u q C-u<CR>'
+        execute 'nnoremap <silent> ' . a:prefix . 'e :TxSendKey'   . a:suffix . ' C-u q C-u<CR>'
+        execute 'nnoremap <silent> ' . a:prefix . 'x :TxSendKey'   . a:suffix . ' C-u q C-u<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'm :TxSendKey'   . a:suffix . ' Enter<CR>'
         execute 'nnoremap <silent> ' . a:prefix . 'd :TxSendKey'   . a:suffix . ' C-d<CR>'
     endfunction
@@ -1274,7 +1276,7 @@ if s:IsPlugged('vim-tmuxify')
         endfor
     endfunction
 
-    function! s:RedefineTmuxifyCommands() abort
+    function! s:SetupTmuxifyCommands() abort
         " Overwrite TxClear and TxSendKey commands
         command!          -bar -bang TxClear     call TmuxifySendKeys('C-u C-l C-u', <q-bang>)
         command! -nargs=? -bar -bang TxSendKey   call TmuxifySendKeys(<q-args>, <q-bang>)
@@ -1282,7 +1284,7 @@ if s:IsPlugged('vim-tmuxify')
     endfunction
 
     augroup MyAutoCmd
-        autocmd VimEnter * call <SID>RedefineTmuxifyCommands()
+        autocmd VimEnter * call <SID>SetupTmuxifyCommands()
     augroup END
 endif
 
@@ -4708,6 +4710,7 @@ if s:IsPlugged('vim-which-key')
                     \ 'b':    'send-<ctrl-c>',
                     \ 'c':    'send-<ctrl-l>',
                     \ 'C':    'send-clear',
+                    \ 'f':    'send-clear',
                     \ 'n':    'create-and-associate-with-pane',
                     \ 'p':    'associate-with-existing-pane',
                     \ 'q':    'close-associated-pane',
@@ -4720,7 +4723,8 @@ if s:IsPlugged('vim-which-key')
                     \ 'w':    'send-word',
                     \ 'a':    'resend-last-text',
                     \ 'k':    'send-key-prompt',
-                    \ 'u':    'send-<q>',
+                    \ 'e':    'send-<q>',
+                    \ 'x':    'send-<q>',
                     \ 'm':    'send-<enter>',
                     \ 'd':    'send-<ctrl-d>',
                     \ }
