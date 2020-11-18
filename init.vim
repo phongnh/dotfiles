@@ -1949,6 +1949,8 @@ if s:IsPlugged('ctrlp.vim')
         let g:ctrlp_match_func       = { 'match': 'cpsm#CtrlPMatch' }
     endif
 
+    nnoremap <silent> yof :ToggleCtrlPFollowSymlinks<CR>
+
     nmap <Leader><Leader> <Leader>f
 
     nnoremap <silent> <Leader>f :CtrlP<CR>
@@ -2029,18 +2031,52 @@ if s:IsPlugged('LeaderF')
     let g:Lf_NoChdir              = 1
     let g:Lf_WorkingDirectoryMode = 'c'
 
+    " These options are passed to external tools (rg, fd and pt, ...)
+    let g:Lf_FollowLinks = 0
+    let g:Lf_ShowHidden  = 0
+
+    let g:Lf_WildIgnore = {
+                \ 'dir': ['.svn', '.git', '.hg', '.node_modules', '.gems'],
+                \ 'file': ['*.sw?', '~$*', '*.bak', '*.exe', '*.o', '*.so', '*.py[co]']
+                \ }
+
     let s:Lf_FindTools = {
-            \ 'rg': 'rg %s --color=never --no-ignore-vcs --hidden --files',
-            \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file . %s',
+            \ 'rg': 'rg "%s" --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --files',
+            \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file "%s"',
             \ }
 
-    if g:zero_vim_find_tool == 'fd' && executable('fd')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
-    elseif executable('rg')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['rg']
-    elseif executable('fd')
-        let g:Lf_ExternalCommand = s:Lf_FindTools['fd']
-    endif
+    let s:Lf_FindWithFollowsTools = {
+            \ 'rg': 'rg --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --follow --files "%s"',
+            \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --follow --type file "%s"',
+            \ }
+
+    function! s:ToggleLeaderfFollowLinks() abort
+        if g:Lf_FollowLinks == 0
+            let g:Lf_FollowLinks = 1
+            echo 'LeaderF follows symlinks!'
+        else
+            let g:Lf_FollowLinks = 0
+            echo 'LeaderF does not follow symlinks!'
+        endif
+        call s:SetupLeaderfExternalCommand()
+    endfunction
+
+    command! ToggleLeaderfFollowLinks call <SID>ToggleLeaderfFollowLinks()
+
+    nnoremap <silent> yof :ToggleLeaderfFollowLinks<CR>
+
+    function! s:SetupLeaderfExternalCommand() abort
+        let l:tools = g:Lf_FollowLinks ? s:Lf_FindWithFollowsTools : s:Lf_FindTools
+        if g:zero_vim_find_tool == 'fd' && executable('fd')
+            let g:Lf_ExternalCommand = l:tools['fd']
+        elseif executable('rg')
+            let g:Lf_ExternalCommand = l:tools['rg']
+        elseif executable('fd')
+            let g:Lf_ExternalCommand = l:tools['fd']
+        endif
+    endfunction
+
+    call s:SetupLeaderfExternalCommand()
 
     let g:Lf_RgConfig = [
                 \ '-H',
@@ -2052,15 +2088,6 @@ if s:IsPlugged('LeaderF')
     if g:zero_vim_grep_ignore_vcs
         call add(g:Lf_RgConfig, '--no-ignore-vcs')
     endif
-
-    " These options are passed to external tools (rg, fd and pt, ...)
-    let g:Lf_FollowLinks = 0
-    let g:Lf_ShowHidden  = 0
-
-    let g:Lf_WildIgnore = {
-                \ 'dir': ['.svn', '.git', '.hg', '.node_modules', '.gems'],
-                \ 'file': ['*.sw?', '~$*', '*.bak', '*.exe', '*.o', '*.so', '*.py[co]']
-                \ }
 
     let g:Lf_ShortcutF = '<Leader>f'
     let g:Lf_ShortcutB = '<Leader>bb'
@@ -2129,7 +2156,7 @@ if s:IsPlugged('LeaderF')
 
     nmap              <Leader>sg <Plug>LeaderfRgCwordLiteralBoundary<CR>
     vmap              <Leader>sg <Plug>LeaderfRgVisualLiteralNoBoundary<CR>
-    nnoremap <silent> <Leader>sa :Leaderf rg --recall<CR>
+    nnoremap <silent> <Leader>sG :LeaderfRgRecall<CR>
 endif
 
 if s:IsPlugged('vim-clap')
@@ -2162,20 +2189,51 @@ if s:IsPlugged('vim-clap')
         let g:clap_provider_grep_opts = '-H --no-heading --hidden --vimgrep --smart-case' . (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
     endif
 
+    let g:clap_follow_links = 0
+
     let s:clap_find_tools = {
                 \ 'rg': 'rg --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --files',
                 \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file',
                 \ }
 
-    if g:zero_vim_find_tool == 'fd' && executable('fd')
-        let s:clap_find_tool = s:clap_find_tools['fd']
-    elseif executable('rg')
-        let s:clap_find_tool = s:clap_find_tools['rg']
-    elseif executable('fd')
-        let s:clap_find_tool = s:clap_find_tools['fd']
-    endif
+    let s:clap_find_with_follows_tools = {
+                \ 'rg': 'rg --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --follow --files',
+                \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --follow --type file',
+                \ }
 
-    command! -bang -nargs=? -complete=dir ClapFiles execute printf('%s files ++finder=%s', <bang>0 ? 'Clap!' : 'Clap', s:clap_find_tool) <q-args>
+    function! s:ToggleClapFollowLinks() abort
+        if g:clap_follow_links == 0
+            let g:clap_follow_links = 1
+            echo 'Clap follows symlinks!'
+        else
+            let g:clap_follow_links = 0
+            echo 'Clap does not follow symlinks!'
+        endif
+        call s:SetupClapFindTool()
+    endfunction
+
+    command! ToggleClapFollowLinks call <SID>ToggleClapFollowLinks()
+
+    nnoremap <silent> yof :ToggleClapFollowLinks<CR>
+
+    function! s:SetupClapFindTool() abort
+        let l:tools = g:clap_follow_links ? s:clap_find_with_follows_tools : s:clap_find_tools
+        if g:zero_vim_find_tool == 'fd' && executable('fd')
+            let s:clap_find_tool = l:tools['fd']
+        elseif executable('rg')
+            let s:clap_find_tool = l:tools['rg']
+        elseif executable('fd')
+            let s:clap_find_tool = l:tools['fd']
+        endif
+    endfunction
+
+    call s:SetupClapFindTool()
+
+    if exists('s:clap_find_tool')
+        command! -bang -nargs=? -complete=dir ClapFiles execute printf('%s files +no-cache ++finder=%s', <bang>0 ? 'Clap!' : 'Clap', s:clap_find_tool) <q-args>
+    else
+        command! -bang -nargs=? -complete=dir ClapFiles execute printf('%s files +no-cache', <bang>0 ? 'Clap!' : 'Clap') <q-args>
+    endif
 
     function! s:ClapFindProjectDir(starting_path) abort
         if empty(a:starting_path)
@@ -2256,6 +2314,8 @@ if s:IsPlugged('fzf')
     let g:fzf_find_tool    = g:zero_vim_find_tool
     let g:fzf_ctags        = g:zero_vim_ctags_bin
     let g:fzf_ctags_ignore = g:zero_vim_ctags_ignore
+
+    nnoremap <silent> yof :ToggleFzfFollowSymlinks<CR>
 
     nmap <Leader><Leader> <Leader>f
 
