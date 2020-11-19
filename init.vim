@@ -2641,11 +2641,16 @@ if s:IsPlugged('nvim-lspconfig')
                     \ }
 
         for l:name in s:GetEnabledLanguageServers()
+            let l:nvim_server_name = get(l:nvim_language_server_mappings, l:name, '')
+
+            if empty(l:nvim_server_name)
+                next
+            endif
+
             let l:server = g:language_servers[l:name]
 
             for ft in l:server['filetypes']
-                if !has_key(g:nvim_lsp_filetypes, ft) && has_key(l:nvim_language_server_mappings, l:name)
-                    let l:nvim_server_name = l:nvim_language_server_mappings[l:name]
+                if !has_key(g:nvim_lsp_filetypes, ft)
                     let g:nvim_lsp_servers[l:nvim_server_name] = l:server
                     let g:nvim_lsp_filetypes[ft] = 1
                 endif
@@ -2662,6 +2667,9 @@ if s:IsPlugged('nvim-lspconfig')
     call sign_define('LspDiagnosticsSignHint',        { 'text': g:zero_vim_signs.hint,        'texthl': 'LspDiagnosticsSignHint'        })
 
     function! s:InitNvimLSP() abort
+        if empty(g:nvim_lsp_servers)
+            return
+        endif
         try
             lua << EOF
             local lspconfig = require('lspconfig')
@@ -2750,7 +2758,7 @@ if s:IsPlugged('nvim-lspconfig')
             )
 EOF
         catch /^Vim(lua):E5108/
-            call s:Warn(v:exception)
+            call s:Warn('nvim-lsp: ' . v:exception)
         endtry
     endfunction
 
@@ -3242,7 +3250,7 @@ if s:IsPlugged('completion-nvim')
         try
             lua require('completion').on_attach()
         catch /^Vim(lua):E5108/
-            call s:Warn(v:exception)
+            call s:Warn('completion-nvim: ' . v:exception)
         endtry
     endfunction
 
@@ -4925,7 +4933,7 @@ if s:IsPlugged('nvim-treesitter')
                 },
                 refactor = {
                     highlight_definitions = {
-                        enable = true,
+                        enable = false,
                     },
                     highlight_current_scope = {
                         enable = false,
@@ -5001,7 +5009,7 @@ if s:IsPlugged('nvim-treesitter')
             }
 EOF
         catch /^Vim(lua):E5108/
-            echohl WarningMsg | echomsg 'Please run :PlugInstall to install `nvim-treesitter` plugin!' | echohl None
+            call s:Warn('nvim-treesitter: ' . v:exception)
         endtry
     endfunction
 
