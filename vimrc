@@ -4309,8 +4309,8 @@ endif
 
 if s:IsPlugged('vim-fugitive')
     " tpope/vim-fugitive
-    nnoremap          <Leader>gi :Git add -p %<CR><CR>
-    nnoremap          <Leader>ga :Git add -p<CR><CR>
+    nnoremap          <Leader>gi :Git add -p %<CR>
+    nnoremap          <Leader>ga :Git add -p<CR>
     nnoremap <silent> <Leader>gs :Git<CR>
     nnoremap <silent> <Leader>gd :Gdiffsplit<CR>
     nnoremap <silent> <Leader>gc :Git commit<CR>
