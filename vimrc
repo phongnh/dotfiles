@@ -1754,7 +1754,7 @@ if s:IsPlugged('vim-textobj-elixir')
 
     " Remap from 'e' to 'r'
     augroup MyAutoCmd
-        autocmd FileType elixir,eelixir
+        autocmd FileType elixir
                     \ omap <buffer> ar <Plug>(textobj-elixir-any-a)|
                     \ xmap <buffer> ar <Plug>(textobj-elixir-any-a)|
                     \ omap <buffer> ir <Plug>(textobj-elixir-any-i)|
