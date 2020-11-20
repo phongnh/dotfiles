@@ -497,7 +497,7 @@ call plug#begin()
         Plug 'hrsh7th/vim-vsnip-integ'
     elseif s:Use('deoplete') && has('python3')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-        if s:IsPlugged('nvim-lsp')
+        if s:IsPlugged('nvim-lspconfig')
             Plug 'Shougo/deoplete-lsp'
         elseif s:IsPlugged('vim-lsp')
             Plug 'lighttiger2505/deoplete-vim-lsp'
