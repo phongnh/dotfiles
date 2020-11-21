@@ -1948,6 +1948,7 @@ if s:IsPlugged('ctrlp.vim')
     endif
 
     nnoremap <silent> yof :ToggleCtrlPFollowSymlinks<CR>
+    nnoremap <silent> yok :ChangeCtrlPUserCommand<CR>
 
     nmap <Leader><Leader> <Leader>f
 
@@ -2012,6 +2013,7 @@ if s:IsPlugged('LeaderF')
     let g:Lf_ShortcutB = '<Leader>bb'
 
     nnoremap <silent> yof :ToggleLeaderfFollowLinks<CR>
+    nnoremap <silent> yok :ChangeLeaderfExternalCommand<CR>
 
     nmap <Leader><Leader> <Leader>f
 
@@ -2059,6 +2061,7 @@ if s:IsPlugged('vim-clap')
     let g:clap_grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
 
     nnoremap <silent> yof :ToggleClapFollowLinks<CR>
+    nnoremap <silent> yok :ChangeClapFinder<CR>
 
     nmap <Leader><Leader> <Leader>f
 
@@ -2118,6 +2121,7 @@ if s:IsPlugged('fzf')
     let g:fzf_ctags_ignore    = g:zero_vim_ctags_ignore
 
     nnoremap <silent> yof :ToggleFzfFollowSymlinks<CR>
+    nnoremap <silent> yok :ChangeFzfFilesCommands<CR>
 
     nmap <Leader><Leader> <Leader>f
 
