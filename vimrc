@@ -1938,23 +1938,22 @@ endif
 
 if s:IsPlugged('ctrlp.vim')
     " ctrlpvim/ctrlp.vim
-    let g:ctrlp_find_tool        = g:zero_vim_find_tool
-    let g:ctrlp_follow_symlinks  = g:zero_vim_follow_links
-    let g:ctrlp_buftag_ctags_bin = g:zero_vim_ctags_bin
-    let g:ctrlp_cmd              = 'CtrlPRoot'
+    let g:ctrlp_find_tool          = g:zero_vim_find_tool
+    let g:ctrlp_follow_symlinks    = g:zero_vim_follow_links
+    let g:ctrlp_buftag_ctags_bin   = g:zero_vim_ctags_bin
+    let g:ctrlp_cmd                = 'CtrlPRoot'
 
     if s:IsPlugged('fruzzy')
         " raghur/fruzzy
-        let g:fruzzy#usenative       = 1
-        let g:fruzzy#sortonempty     = 1
-        let ctrlp_match_current_file = 1
-        let g:ctrlp_match_func       = { 'match': 'fruzzy#ctrlp#matcher' }
+        let g:fruzzy#usenative   = 1
+        let g:fruzzy#sortonempty = 1
+        let g:ctrlp_match_func   = { 'match': 'fruzzy#ctrlp#matcher' }
     elseif s:IsPlugged('ctrlp-fzy-matcher')
         " phongnh/ctrlp-fzy-matcher
-        let g:ctrlp_match_func       = { 'match': 'fzy_matcher#match' }
+        let g:ctrlp_match_func = { 'match': 'fzy_matcher#match' }
     elseif s:IsPlugged('ctrlp-cmatcher') && filereadable(s:PlugDir('ctrlp-cmatcher') . 'autoload/fuzzycomt.so')
         " phongnh/ctrlp-cmatcher
-        let g:ctrlp_match_func       = { 'match': 'matcher#cmatch' }
+        let g:ctrlp_match_func = { 'match': 'matcher#cmatch' }
     elseif s:IsPlugged('cpsm') && filereadable(s:PlugDir('cpsm') . 'autoload/cpsm_py.so')
         " nixprime/cpsm
         let g:cpsm_match_empty_query = 0
@@ -1987,7 +1986,7 @@ if s:IsPlugged('ctrlp.vim')
     nnoremap <silent> <Leader>]  :CtrlPBufTagAll<CR>
 
     " DavidEGx/ctrlp-smarttabs
-    nnoremap <silent> <Leader>bT :CtrlPSmartTabs<CR>
+    nnoremap <silent> <Leader>W :CtrlPSmartTabs<CR>
 
     " tacahiroy/ctrlp-funky
     nnoremap <silent> <Leader>bo :CtrlPFunky<CR>
@@ -2047,8 +2046,7 @@ if s:IsPlugged('LeaderF')
     nnoremap <silent> <Leader>bt :LeaderfBufTag<CR>
     nnoremap <silent> <Leader>]  :LeaderfBufTagAll<CR>
 
-    nnoremap <silent> <Leader>bW :LeaderfWindow<CR>
-    nnoremap <silent> <Leader>bT :LeaderfTabBufferAll<CR>
+    nnoremap <silent> <Leader>W :LeaderfWindow<CR>
 
     nnoremap <silent> <Leader>bo :LeaderfFunction<CR>
     nnoremap <silent> <Leader>[  :LeaderfFunctionAll<CR>
@@ -2100,7 +2098,7 @@ if s:IsPlugged('vim-clap')
     nnoremap <silent> <Leader>bt :Clap tags<CR>
     nnoremap <silent> <Leader>]  :Clap proj_tags<CR>
 
-    nnoremap <silent> <Leader>bW :Clap windows<CR>
+    nnoremap <silent> <Leader>W :Clap windows<CR>
 
     nnoremap <silent> <Leader>bo :Clap tags<CR>
     nnoremap <silent> <Leader>[  :Clap proj_tags<CR>
@@ -2156,7 +2154,7 @@ if s:IsPlugged('fzf')
     nnoremap <silent> <Leader>bt :BTags<CR>
     nnoremap <silent> <Leader>bo :BOutline<CR>
 
-    nnoremap <silent> <Leader>bW :Windows<CR>
+    nnoremap <silent> <Leader>W :Windows<CR>
 
     nnoremap <silent> <Leader>b; :Filetypes<CR>
 
