@@ -167,6 +167,7 @@ let g:zero_vim_git_gutter               = get(g:, 'zero_vim_git_gutter',        
 let g:zero_vim_grep_ignore_vcs          = get(g:, 'zero_vim_grep_ignore_vcs',          0)
 let g:zero_vim_leaderf_popup            = get(g:, 'zero_vim_leaderf_popup',            1)
 let g:zero_vim_find_tool                = get(g:, 'zero_vim_find_tool',                'rg')
+let g:zero_vim_follow_links             = get(g:, 'zero_vim_follow_links',             0)
 let g:zero_vim_indent_char              = get(g:, 'zero_vim_indent_char',              '┊')
 let g:zero_vim_indent_first_char        = get(g:, 'zero_vim_indent_first_char',        '│')
 let g:zero_vim_ctags_bin                = get(g:, 'zero_vim_ctags_bin',                executable('ctags-universal') ? 'ctags-universal' : 'ctags')
@@ -1938,8 +1939,9 @@ endif
 if s:IsPlugged('ctrlp.vim')
     " ctrlpvim/ctrlp.vim
     let g:ctrlp_find_tool        = g:zero_vim_find_tool
-    let g:ctrlp_cmd              = 'CtrlPRoot'
+    let g:ctrlp_follow_symlinks  = g:zero_vim_follow_links
     let g:ctrlp_buftag_ctags_bin = g:zero_vim_ctags_bin
+    let g:ctrlp_cmd              = 'CtrlPRoot'
 
     if s:IsPlugged('fruzzy')
         " raghur/fruzzy
@@ -2126,9 +2128,10 @@ endif
 
 if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
-    let g:fzf_find_tool    = g:zero_vim_find_tool
-    let g:fzf_ctags        = g:zero_vim_ctags_bin
-    let g:fzf_ctags_ignore = g:zero_vim_ctags_ignore
+    let g:fzf_find_tool       = g:zero_vim_find_tool
+    let g:fzf_follow_symlinks = g:zero_vim_follow_links
+    let g:fzf_ctags           = g:zero_vim_ctags_bin
+    let g:fzf_ctags_ignore    = g:zero_vim_ctags_ignore
 
     nnoremap <silent> yof :ToggleFzfFollowSymlinks<CR>
 
