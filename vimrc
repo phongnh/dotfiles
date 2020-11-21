@@ -4600,7 +4600,7 @@ endif
 if s:IsPlugged('vim-polyglot') || s:IsPlugged('vim-terraform')
     " hashivim/vim-terraform
     augroup MyAutoCmd
-        autocmd FileType terraform nnoremap <buffer> <silent> <Leader>bf :TerraformFmt<CR>
+        autocmd FileType terraform nnoremap <buffer> <silent> <Leader>bu :TerraformFmt<CR>:update<CR>
     augroup END
 endif
 
