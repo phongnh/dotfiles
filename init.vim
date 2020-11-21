@@ -439,9 +439,7 @@ call plug#begin()
 
         " Modern performant generic finder and dispatcher for Vim and NeoVim
         Plug 'liuchengxu/vim-clap', { 'do': { -> clap#installer#force_download() } }
-
-        " Solarized theme for Clap Popup
-        Plug 'phongnh/vim-clap-solarized-theme'
+        Plug 'phongnh/clap-settings.vim'
     else
         " A command-line fuzzy finder written in Go
         Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -2056,102 +2054,11 @@ endif
 if s:IsPlugged('vim-clap')
     " liuchengxu/vim-clap
     let g:clap_solarized_theme = g:zero_vim_solarized
-
-    let g:clap_search_box_border_style = 'nil'
-    let g:clap_disable_run_rooter      = v:true
-    let g:clap_popup_cursor_shape      = ''
-    let g:clap_current_selection_sign  = { 'text': '» ', 'texthl': 'ClapCurrentSelectionSign', 'linehl': 'ClapCurrentSelection' }
-    let g:clap_selected_sign           = { 'text': ' »', 'texthl': 'ClapSelectedSign', 'linehl': 'ClapSelected' }
-    let g:clap_prompt_format           = ' %spinner%%forerunner_status%%provider_id%:'
-    let g:clap_layout                  = { 'relative': 'editor', 'width': '65%', 'height': '50%',  'row': '20%', 'col': '15%' }
-
-    function! ClapPromptFormat() abort
-        if g:clap.provider.id ==# 'files' && exists('g:__clap_provider_cwd')
-            let cwd = fnamemodify(g:__clap_provider_cwd, ':~:.')
-            if cwd[0] ==# '~' || cwd[0] ==# '/'
-                let cwd = pathshorten(cwd)
-            endif
-            return g:clap_prompt_format . cwd . ' '
-        endif
-        return g:clap_prompt_format . ' '
-    endfunction
-
-    let g:ClapPrompt = function('ClapPromptFormat')
-
-    if executable('rg')
-        let g:clap_provider_grep_executable = 'rg'
-        let g:clap_provider_grep_opts = '-H --no-heading --hidden --vimgrep --smart-case' . (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
-    endif
-
-    let g:clap_follow_links = 0
-
-    let s:clap_find_tools = {
-                \ 'rg': 'rg --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --files',
-                \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file',
-                \ }
-
-    let s:clap_find_with_follows_tools = {
-                \ 'rg': 'rg --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --follow --files',
-                \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --follow --type file',
-                \ }
-
-    function! s:ToggleClapFollowLinks() abort
-        if g:clap_follow_links == 0
-            let g:clap_follow_links = 1
-            echo 'Clap follows symlinks!'
-        else
-            let g:clap_follow_links = 0
-            echo 'Clap does not follow symlinks!'
-        endif
-        call s:SetupClapFindTool()
-    endfunction
-
-    command! ToggleClapFollowLinks call <SID>ToggleClapFollowLinks()
+    let g:clap_find_tool       = g:zero_vim_find_tool
+    let g:clap_follow_links    = g:zero_vim_follow_links
+    let g:clap_grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
 
     nnoremap <silent> yof :ToggleClapFollowLinks<CR>
-
-    function! s:SetupClapFindTool() abort
-        let l:tools = g:clap_follow_links ? s:clap_find_with_follows_tools : s:clap_find_tools
-        if g:zero_vim_find_tool == 'fd' && executable('fd')
-            let s:clap_find_tool = l:tools['fd']
-        elseif executable('rg')
-            let s:clap_find_tool = l:tools['rg']
-        elseif executable('fd')
-            let s:clap_find_tool = l:tools['fd']
-        endif
-    endfunction
-
-    call s:SetupClapFindTool()
-
-    if exists('s:clap_find_tool')
-        command! -bang -nargs=? -complete=dir ClapFiles execute printf('%s files +no-cache ++finder=%s', <bang>0 ? 'Clap!' : 'Clap', s:clap_find_tool) <q-args>
-    else
-        command! -bang -nargs=? -complete=dir ClapFiles execute printf('%s files +no-cache', <bang>0 ? 'Clap!' : 'Clap') <q-args>
-    endif
-
-    function! s:ClapFindProjectDir(starting_path) abort
-        if empty(a:starting_path)
-            return ''
-        endif
-
-        for root_marker in ['.git', '.hg', '.svn']
-            let root_dir = finddir(root_marker, a:starting_path . ';')
-            if empty(root_dir)
-                continue
-            endif
-
-            let root_dir = substitute(root_dir, root_marker, '', '')
-            if !empty(root_dir)
-                let root_dir = fnamemodify(root_dir, ':p:~:.')
-            endif
-
-            return root_dir
-        endfor
-
-        return ''
-    endfunction
-
-    command! -bang ClapRoot execute (<bang>0 ? 'ClapFiles!' : 'ClapFiles') s:ClapFindProjectDir(expand('%:p:h'))
 
     nmap <Leader><Leader> <Leader>f
 
