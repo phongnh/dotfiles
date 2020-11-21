@@ -441,8 +441,7 @@ call plug#begin()
     elseif s:Use('leaderf') && has('python3')
         " An asynchronous fuzzy finder which is used to quickly locate files, buffers, mrus, tags, etc. in large project.
         Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-        " Solarized theme for LeaderF
-        Plug 'phongnh/vim-leaderf-solarized-theme'
+        Plug 'phongnh/leaderf-settings.vim'
     elseif s:Use('clap') && has('patch-8.1.2114')
         " Viewer & Finder for LSP symbols and tags
         Plug 'liuchengxu/vista.vim'
@@ -2015,124 +2014,19 @@ endif
 
 if s:IsPlugged('LeaderF')
     " Yggdroot/LeaderF
-    let g:leaderf_solarized_theme = g:zero_vim_solarized
-
-    let g:Lf_ShowDevIcons  = g:zero_vim_devicons
-    let g:Lf_WindowHeight  = 0.30
-    let g:Lf_MruMaxFiles   = 200
-    let g:Lf_CursorBlink   = 1
-    let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
-
-    " Powerline Separator
-    if g:zero_vim_powerline
-        let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2" }
-    else
-        let g:Lf_StlSeparator = { 'left': '', 'right': '' }
-    endif
-
-    " Popup Settings
-    if g:zero_vim_leaderf_popup && exists('*popup_create') && has('patch-8.1.1615')
-        let g:Lf_PopupShowStatusline  = 0
-        let g:Lf_PreviewInPopup       = 1
-        let g:Lf_PopupPreviewPosition = 'bottom'
-        let g:Lf_WindowPosition       = 'popup'
-    endif
-
-    let g:Lf_UseCache       = 0  " rg/fd is enough fast, we don't need cache
-    let g:Lf_NeedCacheTime  = 10 " 10 seconds
-    let g:Lf_UseMemoryCache = 0
-
-    let g:Lf_NoChdir              = 1
-    let g:Lf_WorkingDirectoryMode = 'c'
-
-    " These options are passed to external tools (rg, fd and pt, ...)
-    let g:Lf_FollowLinks = 0
-    let g:Lf_ShowHidden  = 0
-
-    let g:Lf_WildIgnore = {
-                \ 'dir': ['.svn', '.git', '.hg', '.node_modules', '.gems'],
-                \ 'file': ['*.sw?', '~$*', '*.bak', '*.exe', '*.o', '*.so', '*.py[co]']
-                \ }
-
-    let s:Lf_FindTools = {
-            \ 'rg': 'rg "%s" --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --files',
-            \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --type file "%s"',
-            \ }
-
-    let s:Lf_FindWithFollowsTools = {
-            \ 'rg': 'rg --color=never --no-ignore-vcs --ignore-dot --ignore-parent --hidden --follow --files "%s"',
-            \ 'fd': 'fd --color=never --no-ignore-vcs --hidden --follow --type file "%s"',
-            \ }
-
-    function! s:ToggleLeaderfFollowLinks() abort
-        if g:Lf_FollowLinks == 0
-            let g:Lf_FollowLinks = 1
-            echo 'LeaderF follows symlinks!'
-        else
-            let g:Lf_FollowLinks = 0
-            echo 'LeaderF does not follow symlinks!'
-        endif
-        call s:SetupLeaderfExternalCommand()
-    endfunction
-
-    command! ToggleLeaderfFollowLinks call <SID>ToggleLeaderfFollowLinks()
-
-    nnoremap <silent> yof :ToggleLeaderfFollowLinks<CR>
-
-    function! s:SetupLeaderfExternalCommand() abort
-        let l:tools = g:Lf_FollowLinks ? s:Lf_FindWithFollowsTools : s:Lf_FindTools
-        if g:zero_vim_find_tool == 'fd' && executable('fd')
-            let g:Lf_ExternalCommand = l:tools['fd']
-        elseif executable('rg')
-            let g:Lf_ExternalCommand = l:tools['rg']
-        elseif executable('fd')
-            let g:Lf_ExternalCommand = l:tools['fd']
-        endif
-    endfunction
-
-    call s:SetupLeaderfExternalCommand()
-
-    let g:Lf_RgConfig = [
-                \ '-H',
-                \ '--no-heading',
-                \ '--hidden',
-                \ '--vimgrep',
-                \ '--smart-case'
-                \ ]
-    if g:zero_vim_grep_ignore_vcs
-        call add(g:Lf_RgConfig, '--no-ignore-vcs')
-    endif
+    let g:Lf_SolarizedTheme = g:zero_vim_solarized
+    let g:Lf_Powerline      = g:zero_vim_powerline
+    let g:Lf_Popup          = g:zero_vim_leaderf_popup
+    let g:Lf_ShowDevIcons   = g:zero_vim_devicons
+    let g:Lf_FindTool       = g:zero_vim_find_tool
+    let g:Lf_FollowLinks    = g:zero_vim_follow_links
+    let g:Lf_GrepIgnoreVCS  = g:zero_vim_grep_ignore_vcs
+    let g:Lf_Ctags          = g:zero_vim_ctags_bin
 
     let g:Lf_ShortcutF = '<Leader>f'
     let g:Lf_ShortcutB = '<Leader>bb'
 
-    let g:Lf_Ctags         = g:zero_vim_ctags_bin
-    let g:Lf_CtagsFuncOpts = {
-                \ 'ruby': '--ruby-kinds=fFS',
-                \ }
-
-    let g:Lf_GtagsAutoGenerate = 0
-    let g:Lf_GtagsAutoUpdate   = 0
-    let g:Lf_GtagsGutentags    = 0
-
-    let g:Lf_GtagsGutentags = ''
-    let g:Lf_Gtagslabel     = 'default'
-
-    let g:Lf_CommandMap = {
-                \ '<F5>':  ['<F5>', '<C-z>'],
-                \ '<Esc>': ['<Esc>', '<C-g>'],
-                \ }
-
-    function! s:LeaderfRoot() abort
-        let current = get(g:, 'Lf_WorkingDirectoryMode', 'c')
-        try
-            let g:Lf_WorkingDirectoryMode = 'Ac'
-            :LeaderfFile
-        finally
-            let g:Lf_WorkingDirectoryMode = current
-        endtry
-    endfunction
-    command! -bar LeaderfRoot call <SID>LeaderfRoot()
+    nnoremap <silent> yof :ToggleLeaderfFollowLinks<CR>
 
     nmap <Leader><Leader> <Leader>f
 
