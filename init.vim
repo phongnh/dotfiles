@@ -1924,10 +1924,10 @@ endif
 
 if s:IsPlugged('ctrlp.vim')
     " ctrlpvim/ctrlp.vim
-    let g:ctrlp_find_tool          = g:zero_vim_find_tool
-    let g:ctrlp_follow_symlinks    = g:zero_vim_follow_links
-    let g:ctrlp_buftag_ctags_bin   = g:zero_vim_ctags_bin
-    let g:ctrlp_cmd                = 'CtrlPRoot'
+    let g:ctrlp_find_tool        = g:zero_vim_find_tool
+    let g:ctrlp_follow_symlinks  = g:zero_vim_follow_links
+    let g:ctrlp_buftag_ctags_bin = g:zero_vim_ctags_bin
+    let g:ctrlp_cmd              = 'CtrlPRoot'
 
     if s:IsPlugged('fruzzy')
         " raghur/fruzzy
