@@ -1406,7 +1406,10 @@ let g:grepper = {
 runtime plugin/grepper.vim
 
 if has_key(g:grepper, 'rg')
-    let g:grepper.rg.grepprg .= ' --hidden' .  (g:zero_vim_grep_ignore_vcs ? ' --no-ignore-vcs' : '')
+    let g:grepper.rg.grepprg = 'rg -H --no-heading --line-number --column --hidden --smart-case'
+    if g:zero_vim_grep_ignore_vcs
+        let g:grepper.rg.grepprg .= ' --no-ignore-vcs'
+    endif
 endif
 
 command! -nargs=* -complete=customlist,grepper#complete GrepperExec  Grepper -noprompt <args>
@@ -2131,6 +2134,7 @@ if s:IsPlugged('fzf')
     " junegunn/fzf and junegunn/fzf.vim
     let g:fzf_find_tool       = g:zero_vim_find_tool
     let g:fzf_follow_symlinks = g:zero_vim_follow_links
+    let g:fzf_grep_ignore_vcs = g:zero_vim_grep_ignore_vcs
     let g:fzf_ctags           = g:zero_vim_ctags_bin
     let g:fzf_ctags_ignore    = g:zero_vim_ctags_ignore
 
