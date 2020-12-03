@@ -4132,6 +4132,7 @@ if s:IsPlugged('vim-fugitive')
     nnoremap <silent> <Leader>gf :Git fetch<CR>
     nnoremap <silent> <Leader>gp :Git push<CR>
     nnoremap <silent> <Leader>gu :Git pull --rebase<CR>
+    nnoremap <silent> <Leader>gh :echo "Branch: " . FugitiveHead()<CR>
 
     function! s:SetupGitMappings() abort
         nnoremap <buffer> <silent> <Leader>gw :Gwq <Bar> redraw<CR>
