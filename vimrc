@@ -3865,7 +3865,7 @@ if s:IsPlugged('vim-prettier')
 
     augroup MyAutoCmd
         autocmd FileType javascript,typescript,css,less,scss,json,graphql,markdown,vue,yaml,html
-                    \ nmap <buffer> <Leader>bf <Plug>(PrettierAsync)
+                    \ nmap <buffer> <Leader>bu <Plug>(PrettierAsync)
     augroup END
 endif
 
