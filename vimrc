@@ -1822,20 +1822,6 @@ if s:IsPlugged('fern.vim')
         let g:fern#renderer#default#leaf_symbol      = '  '
         let g:fern#renderer#default#collapsed_symbol = '+ '
         let g:fern#renderer#default#expanded_symbol  = '~ '
-
-        let s:ESCAPE_PATTERN = '^$~.*[]\'
-        function! s:HighlightFern() abort
-            execute printf(
-                        \ 'syntax match FernBranchSymbol /^\%%(%s\)*\%%(%s\|%s\)/ contained nextgroup=FernBranchText',
-                        \ g:fern#renderer#default#leading =~ '\s\+' ? '\s\+' : escape(g:fern#renderer#default#leading, s:ESCAPE_PATTERN),
-                        \ escape(g:fern#renderer#default#collapsed_symbol, s:ESCAPE_PATTERN),
-                        \ escape(g:fern#renderer#default#expanded_symbol, s:ESCAPE_PATTERN),
-                        \)
-        endfunction
-
-        augroup MyAutoCmd
-            autocmd FileType fern call <SID>HighlightFern()
-        augroup END
     endif
 
     command! -nargs=? -complete=customlist,fern#internal#command#fern#complete FernReveal Fern %:h <args> -reveal=%:t
@@ -1846,7 +1832,7 @@ if s:IsPlugged('fern.vim')
 
     function! s:InitFern() abort
         nmap <buffer> <Plug>(fern-action-reload-and-redraw)
-                    \ <Plug>(fern-action-reload)
+                    \ <Plug>(fern-action-reload:all)
                     \ <Plug>(fern-action-redraw)
 
         nmap     <buffer> <silent> o  <Plug>(fern-action-open-or-expand)
