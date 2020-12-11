@@ -1407,6 +1407,9 @@ runtime plugin/grepper.vim
 
 if has_key(g:grepper, 'rg')
     let g:grepper.rg.grepprg = 'rg -H --no-heading --line-number --column --hidden --smart-case'
+    if g:zero_vim_follow_links
+        let g:grepper.rg.grepprg .= ' --follow'
+    endif
     if g:zero_vim_grep_ignore_vcs
         let g:grepper.rg.grepprg .= ' --no-ignore-vcs'
     endif
@@ -1475,21 +1478,21 @@ xnoremap <silent> <Leader>st <Esc>:TGrepper <C-r>=vim_helpers#SelectedTextForShe
 
 " dyng/ctrlsf.vim
 let g:ctrlsf_default_root    = 'cwd'
-let g:ctrlsf_follow_symlinks = 0
+let g:ctrlsf_follow_symlinks = g:zero_vim_follow_links
 let g:ctrlsf_populate_qflist = 0
 let g:ctrlsf_auto_focus = {
             \ 'at': 'start'
             \ }
 
-if g:zero_vim_grep_ignore_vcs
-    let g:ctrlsf_extra_backend_args = {
-                \ 'rg': '--no-ignore-vcs',
-                \ }
-endif
-
 " Prefer rg
 if executable('rg')
     let g:ctrlsf_backend = 'rg'
+
+    if g:zero_vim_grep_ignore_vcs
+        let g:ctrlsf_extra_backend_args = {
+                    \ 'rg': '--no-ignore-vcs',
+                    \ }
+    endif
 endif
 
 function! s:PCtrlSF(qargs) abort
