@@ -4124,14 +4124,14 @@ if s:IsPlugged('vim-fugitive')
     nnoremap          <Leader>ge :Gedit<Space>
     nnoremap <silent> <Leader>gr :Gread<CR>
     nnoremap <silent> <Leader>gw :Gwrite<CR>
+    nnoremap <silent> <Leader>gx :Gwq <Bar> redraw<CR>
     nnoremap <silent> <Leader>gf :Git fetch<CR>
     nnoremap <silent> <Leader>gp :Git push<CR>
     nnoremap <silent> <Leader>gu :Git pull --rebase<CR>
     nnoremap <silent> <Leader>gh :echo "Branch: " . FugitiveHead()<CR>
 
     function! s:SetupGitMappings() abort
-        nnoremap <buffer> <silent> <Leader>gw :Gwq <Bar> redraw<CR>
-        nnoremap <buffer> <silent> U          :Git checkout -- <C-r><C-g><CR>
+        nnoremap <buffer> <silent> U :Git checkout -- <C-r><C-g><CR>
     endfunction
 
     augroup MyAutoCmd
