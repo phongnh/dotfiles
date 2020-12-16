@@ -821,6 +821,12 @@ call plug#begin()
     endif
 " }
 
+" Terraform {
+    if s:Use('terraform')
+        Plug 'hashivim/vim-terraform'
+    endif
+" }
+
 " Others {
     if s:Use('syntax') || s:Use('polyglot')
         " A solid language pack for Vim
@@ -834,10 +840,10 @@ call plug#begin()
         if s:Use('rust') | call add(g:polyglot_disabled, 'rust') | endif
         if s:Use('erlang') | call add(g:polyglot_disabled, 'erlang') | endif
         if s:Use('elixir') | call add(g:polyglot_disabled, 'elixir') | endif
+        if s:Use('terraform') | call add(g:polyglot_disabled, 'terraform') | endif
         Plug 'sheerun/vim-polyglot'
     else
         Plug 'georgewitteman/vim-fish'
-        Plug 'hashivim/vim-terraform'
     endif
 " }
 
