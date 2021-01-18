@@ -36,16 +36,17 @@ spoon.SpoonInstall:andUse("ReloadConfiguration", {
     start = true
 })
 
-spoon.SpoonInstall:andUse("MouseCircle", {
-    disable = true,
-    hotkeys = {
-        show = { altShiftKey, "C" }
-    }
-})
+-- spoon.SpoonInstall:andUse("MouseCircle", {
+--     disable = true,
+--     hotkeys = {
+--         show = { altShiftKey, "C" }
+--     },
+--     start = false
+-- })
 
 spoon.SpoonInstall:andUse("FadeLogo", {
     config = {
-        run_time = 1.0,
+        run_time = 0.75,
     },
     start = true
 })
@@ -63,16 +64,16 @@ spoon.SpoonInstall:andUse("SpeedMenu", {
     start = true
 })
 
-spoon.SpoonInstall:andUse("MenubarFlag", {
-    disable = true,
-    config = {
-        colors = {
-            ["U.S."] = {},
-            ["Simple Telex"] = { hs.drawing.color.x11.red },
-        },
-    },
-    start = true
-})
+-- spoon.SpoonInstall:andUse("MenubarFlag", {
+--     disable = true,
+--     config = {
+--         colors = {
+--             ["U.S."] = {},
+--             ["Simple Telex"] = { hs.drawing.color.x11.red },
+--         },
+--     },
+--     start = false
+-- })
 
 -- Show shortcuts for current application
 spoon.SpoonInstall:andUse("KSheet", {
@@ -80,10 +81,16 @@ spoon.SpoonInstall:andUse("KSheet", {
 })
 
 -- Show Clock
-spoon.SpoonInstall:andUse("CircleClock", {})
+-- spoon.SpoonInstall:andUse("CircleClock", {
+--     disable = true,
+--     start = false
+-- })
 
 -- Show Horizontal Calendar
-spoon.SpoonInstall:andUse("HCalendar", {})
+-- spoon.SpoonInstall:andUse("HCalendar", {
+--     disable = true,
+--     start = false
+-- })
 
 -- Download and set wallpaper from BingDaily / Unsplash
 spoon.SpoonInstall:andUse("BingDaily", {})
@@ -95,38 +102,42 @@ spoon.SpoonInstall:andUse("BingDaily", {})
 -- })
 
 -- Toggle Hammerspoon console
-hs.hotkey.bind(altShiftKey, "Z", function() hs.toggleConsole() end)
+-- hs.hotkey.bind(altShiftKey, "Z", function() hs.toggleConsole() end)
 
 -- Open Hammerspoon manual
-hs.hotkey.bind(altShiftKey, "M", function()
-    hs.doc.hsdocs.forceExternalBrowser(true)
-    hs.doc.hsdocs.moduleEntitiesInSidebar(true)
-    hs.doc.hsdocs.help()
-end)
+-- hs.hotkey.bind(altShiftKey, "M", function()
+--     hs.doc.hsdocs.forceExternalBrowser(true)
+--     hs.doc.hsdocs.moduleEntitiesInSidebar(true)
+--     hs.doc.hsdocs.help()
+-- end)
+
+-- Rescan network
+hs.hotkey.bind(altKey, "S", function() spoon.SpeedMenu:rescan() end)
+hs.hotkey.bind(altShiftKey, "S", function() spoon.SpeedMenu:toggle() end)
 
 -- Lock Screen (Private API)
-hs.hotkey.bind(altKey, "L", function() hs.caffeinate.lockScreen() end)
+hs.hotkey.bind(altShiftKey, "L", function() hs.caffeinate.lockScreen() end)
 
 -- Start Screensaver
-hs.hotkey.bind(cocKey, "DELETE", function() hs.caffeinate.startScreensaver() end)
+hs.hotkey.bind(altKey, "L", function() hs.caffeinate.startScreensaver() end)
 
 -- Grid Show
-hs.hotkey.bind(cocKey, "G", function() hs.grid.show() end)
+hs.hotkey.bind(altKey, "G", function() hs.grid.show() end)
 
 -- Open my initial applications
-hs.hotkey.bind(cocKey, "0", function()
-    hs.alert.show("Opening initial applications...")
-    hs.application.launchOrFocus("Slack")
-    hs.application.launchOrFocus("Google Chrome")
-    hs.application.launchOrFocus("Alacritty Light")
-end)
+-- hs.hotkey.bind(cocKey, "0", function()
+--     hs.alert.show("Opening initial applications...")
+--     hs.application.launchOrFocus("Slack")
+--     hs.application.launchOrFocus("Google Chrome")
+--     hs.application.launchOrFocus("Alacritty Light")
+-- end)
 
 -- Window Switcher
 hs.window.switcher.ui.onlyActiveApplication = false -- only show windows of the active application
 hs.window.switcher.ui.showTitles            = false -- show window titles
 hs.window.switcher.ui.showThumbnails        = true  -- show window thumbnails
 hs.window.switcher.ui.thumbnailSize         = 144   -- size of window thumbnails in screen points
-hs.window.switcher.ui.showSelectedThumbnail = false -- show a larger thumbnail for the currently selected window
+hs.window.switcher.ui.showSelectedThumbnail = true  -- show a larger thumbnail for the currently selected window
 hs.window.switcher.ui.selectedThumbnailSize = 384
 hs.window.switcher.ui.showSelectedTitle     = false -- show larger title for the currently selected window
 
@@ -141,7 +152,7 @@ hs.hotkey.bind(altShiftKey, "Tab", "Previous window", function() windowSwitcher:
 -- hs.hotkey.bind(altShiftKey, "Q", "Previous window", function() windowsInSpaceSwitcher:previous() end, nil, function() windowsInSpaceSwitcher:previous() end)
 
 -- Switcher for predefined browsers
-browserSwitcher = hs.window.switcher.new{ "Safari", "Google Chrome", "Chromium", "Firefox", "Opera", "Microsoft Edge" }
+browserSwitcher = hs.window.switcher.new{ "Safari", "Google Chrome", "Google Chrome Canary", "Chromium", "Brave Browser", "Firefox", "Opera", "Microsoft Edge" }
 hs.hotkey.bind(altKey, "B", "Next browser", function() browserSwitcher:next() end, nil, function() browserSwitcher:next() end)
 hs.hotkey.bind(altShiftKey, "B", "Previous browser", function() browserSwitcher:previous() end, nil, function() browserSwitcher:previous() end)
 
@@ -153,9 +164,7 @@ hs.loadSpoon("WinMan")
 
 -- Show windows with hints
 hs.hotkey.bind(cmdKey, "Escape", function() spoon.WinMan:windowHints("") end)
-hs.hotkey.bind(altKey, "Escape", function() spoon.WinMan:windowHints("") end)
-hs.hotkey.bind(cmdCtrlKey, "O", function() spoon.WinMan:windowHints() end)
-hs.hotkey.bind(altKey, "O", function() spoon.WinMan:windowHints() end)
+hs.hotkey.bind(altKey, "Escape", function() spoon.WinMan:windowHints() end)
 
 -- Snap window
 hs.hotkey.bind(cocKey, "Space", function() spoon.WinMan:snapWindow() end)
@@ -207,11 +216,15 @@ hs.hotkey.bind(cocKey, "DOWN",  function() spoon.WinMan:pushWindowDown() end)
 hs.hotkey.bind(cocKey, "LEFT",  function() spoon.WinMan:pushWindowLeft() end)
 hs.hotkey.bind(cocKey, "RIGHT", function() spoon.WinMan:pushWindowRight() end)
 
+hs.hotkey.bind(cmdCtrlKey, "H", function() spoon.WinMan:pushWindowUp() end)
+hs.hotkey.bind(cmdCtrlKey, "J", function() spoon.WinMan:pushWindowDown() end)
+hs.hotkey.bind(cmdCtrlKey, "K", function() spoon.WinMan:pushWindowLeft() end)
+hs.hotkey.bind(cmdCtrlKey, "L", function() spoon.WinMan:pushWindowRight() end)
+
 -- Focus application by directions
-hs.hotkey.bind(cmdCtrlKey, "H", function() spoon.WinMan:focusLeftWindow() end)
-hs.hotkey.bind(cmdCtrlKey, "J", function() spoon.WinMan:focusDownWindow() end)
-hs.hotkey.bind(cmdCtrlKey, "K", function() spoon.WinMan:focusUpWindow() end)
-hs.hotkey.bind(cmdCtrlKey, "L", function() spoon.WinMan:focusRightWindow() end)
+-- hs.hotkey.bind(cmdCtrlKey, "H", function() spoon.WinMan:focusLeftWindow() end)
+-- hs.hotkey.bind(cmdCtrlKey, "J", function() spoon.WinMan:focusDownWindow() end)
+-- hs.hotkey.bind(cmdCtrlKey, "K", function() spoon.WinMan:focusUpWindow() end)
+-- hs.hotkey.bind(cmdCtrlKey, "L", function() spoon.WinMan:focusRightWindow() end)
 
-
--- hs.alert.show("Hammerspoon started!")
+hs.alert.show("Hammerspoon started!")
