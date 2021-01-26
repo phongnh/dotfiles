@@ -18,8 +18,8 @@ if [ ! -s ~/.vim/autoload/plug.vim ]; then
 fi
 
 # Copy vim configs and related ignores
-cp agignore ~/.agignore
 cp ignore ~/.ignore
+mkdir -p ~/.config/fd && cp ignore ~/.config/fd/ignore
 cp ctags ~/.ctags
 if [ -d ~/.ctags.d ]; then
     cp -r ctags.d/ ~/.ctags.d/
