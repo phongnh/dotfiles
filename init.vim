@@ -343,7 +343,7 @@ call plug#begin()
     if s:Use('airline')
         " My airline settings
         let g:airline_powerline        = g:zero_vim_powerline
-        let g:airline_powerline_style  = g:zero_vim_powerline_style
+        let g:airline_powerline_style  = get(g:, 'airline_powerline_style', g:zero_vim_powerline_style)
         let g:airline_powerline_spaces = g:zero_vim_powerline_spaces
         Plug 'phongnh/airline-settings.vim'
         " lean & mean status/tabline for vim that's light as air
@@ -353,7 +353,7 @@ call plug#begin()
     elseif s:Use('lightline')
         " My lightline settings
         let g:lightline_powerline        = g:zero_vim_powerline
-        let g:lightline_powerline_style  = g:zero_vim_powerline_style
+        let g:lightline_powerline_style  = get(g:, 'lightline_powerline_style', g:zero_vim_powerline_style)
         let g:lightline_powerline_spaces = g:zero_vim_powerline_spaces
         Plug 'phongnh/lightline-settings.vim'
         " A light and configurable statusline/tabline plugin for Vim
@@ -1998,14 +1998,15 @@ endif
 
 if s:IsPlugged('LeaderF')
     " Yggdroot/LeaderF
-    let g:Lf_SolarizedTheme = g:zero_vim_solarized
-    let g:Lf_Powerline      = g:zero_vim_powerline
-    let g:Lf_Popup          = g:zero_vim_leaderf_popup
-    let g:Lf_ShowDevIcons   = g:zero_vim_devicons
-    let g:Lf_FindTool       = g:zero_vim_find_tool
-    let g:Lf_FollowLinks    = g:zero_vim_follow_links
-    let g:Lf_GrepIgnoreVCS  = g:zero_vim_grep_ignore_vcs
-    let g:Lf_Ctags          = g:zero_vim_ctags_bin
+    let g:Lf_SolarizedTheme  = g:zero_vim_solarized
+    let g:Lf_Powerline       = g:zero_vim_powerline
+    let g:Lf_Powerline_Style = get(g:, 'Lf_Powerline_Style', g:zero_vim_powerline_style)
+    let g:Lf_Popup           = g:zero_vim_leaderf_popup
+    let g:Lf_ShowDevIcons    = g:zero_vim_devicons
+    let g:Lf_FindTool        = g:zero_vim_find_tool
+    let g:Lf_FollowLinks     = g:zero_vim_follow_links
+    let g:Lf_GrepIgnoreVCS   = g:zero_vim_grep_ignore_vcs
+    let g:Lf_Ctags           = g:zero_vim_ctags_bin
 
     let g:Lf_ShortcutF = '<Leader>f'
     let g:Lf_ShortcutB = '<Leader>bb'
