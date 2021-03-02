@@ -77,7 +77,9 @@ spoon.SpoonInstall:andUse("SpeedMenu", {
 
 -- Show shortcuts for current application
 spoon.SpoonInstall:andUse("KSheet", {
-    hotkeys = { toggle = { altKey, "/" } }
+    hotkeys = {
+        toggle = { altKey, "/" }
+    }
 })
 
 -- Show Clock
@@ -191,6 +193,13 @@ hs.hotkey.bind(cocKey, "]", function() spoon.WinMan:pushWindowToNextScreen() end
 hs.hotkey.bind(cocKey, "-", function() spoon.WinMan:moveWindowToNextScreenWithScaling() end)
 hs.hotkey.bind(cocKey, "=", function() spoon.WinMan:moveWindowToPreviousScreenWithScaling() end)
 
+hs.hotkey.bind(cocKey, "4", function() spoon.WinMan:moveWindowTo4x5() end)
+hs.hotkey.bind(cocKey, "5", function() spoon.WinMan:moveWindowTo5x6() end)
+hs.hotkey.bind(cocKey, "6", function() spoon.WinMan:moveWindowTo6x6() end)
+hs.hotkey.bind(cocKey, "7", function() spoon.WinMan:moveWindowTo6x7() end)
+hs.hotkey.bind(cocKey, "8", function() spoon.WinMan:moveWindowTo6x8() end)
+hs.hotkey.bind(cocKey, "9", function() spoon.WinMan:moveWindowTo7x8_5() end)
+
 hs.hotkey.bind(cocKey, ",", function() spoon.WinMan:moveWindowToLeft65() end)
 hs.hotkey.bind(cocKey, ".", function() spoon.WinMan:moveWindowToRight35() end)
 
@@ -199,32 +208,19 @@ hs.hotkey.bind(cocKey, "J", function() spoon.WinMan:moveWindowToBottomHalf() end
 hs.hotkey.bind(cocKey, "K", function() spoon.WinMan:moveWindowToTopHalf() end)
 hs.hotkey.bind(cocKey, "L", function() spoon.WinMan:moveWindowToRightHalf() end)
 
-hs.hotkey.bind(cocKey, "4", function() spoon.WinMan:moveWindowTo4x5() end)
-hs.hotkey.bind(cocKey, "5", function() spoon.WinMan:moveWindowTo5x6() end)
-hs.hotkey.bind(cocKey, "6", function() spoon.WinMan:moveWindowTo6x6() end)
-hs.hotkey.bind(cocKey, "7", function() spoon.WinMan:moveWindowTo6x7() end)
-hs.hotkey.bind(cocKey, "8", function() spoon.WinMan:moveWindowTo6x8() end)
-hs.hotkey.bind(cocKey, "9", function() spoon.WinMan:moveWindowTo7x8_5() end)
+hs.hotkey.bind(cocKey, "Y", function() spoon.WinMan:moveWindowToLeft65() end)
+hs.hotkey.bind(cocKey, "U", function() spoon.WinMan:moveWindowToBottom35() end)
+hs.hotkey.bind(cocKey, "I", function() spoon.WinMan:moveWindowToTop65() end)
+hs.hotkey.bind(cocKey, "O", function() spoon.WinMan:moveWindowToRight35() end)
 
-hs.hotkey.bind(cocKey, "Y", function() spoon.WinMan:resizeWindowThinner() end)
-hs.hotkey.bind(cocKey, "U", function() spoon.WinMan:resizeWindowTaller() end)
-hs.hotkey.bind(cocKey, "I", function() spoon.WinMan:resizeWindowShorter() end)
-hs.hotkey.bind(cocKey, "O", function() spoon.WinMan:resizeWindowWider() end)
+hs.hotkey.bind(cmdCtrlKey, "H", function() spoon.WinMan:resizeWindowThinner() end)
+hs.hotkey.bind(cmdCtrlKey, "J", function() spoon.WinMan:resizeWindowTaller() end)
+hs.hotkey.bind(cmdCtrlKey, "K", function() spoon.WinMan:resizeWindowShorter() end)
+hs.hotkey.bind(cmdCtrlKey, "L", function() spoon.WinMan:resizeWindowWider() end)
 
-hs.hotkey.bind(cocKey, "UP",    function() spoon.WinMan:pushWindowUp() end)
-hs.hotkey.bind(cocKey, "DOWN",  function() spoon.WinMan:pushWindowDown() end)
-hs.hotkey.bind(cocKey, "LEFT",  function() spoon.WinMan:pushWindowLeft() end)
-hs.hotkey.bind(cocKey, "RIGHT", function() spoon.WinMan:pushWindowRight() end)
-
-hs.hotkey.bind(cmdCtrlKey, "H", function() spoon.WinMan:pushWindowUp() end)
-hs.hotkey.bind(cmdCtrlKey, "J", function() spoon.WinMan:pushWindowDown() end)
-hs.hotkey.bind(cmdCtrlKey, "K", function() spoon.WinMan:pushWindowLeft() end)
-hs.hotkey.bind(cmdCtrlKey, "L", function() spoon.WinMan:pushWindowRight() end)
-
--- Focus application by directions
--- hs.hotkey.bind(cmdCtrlKey, "H", function() spoon.WinMan:focusLeftWindow() end)
--- hs.hotkey.bind(cmdCtrlKey, "J", function() spoon.WinMan:focusDownWindow() end)
--- hs.hotkey.bind(cmdCtrlKey, "K", function() spoon.WinMan:focusUpWindow() end)
--- hs.hotkey.bind(cmdCtrlKey, "L", function() spoon.WinMan:focusRightWindow() end)
+hs.hotkey.bind(cmdCtrlKey, "UP",    function() spoon.WinMan:pushWindowUp() end)
+hs.hotkey.bind(cmdCtrlKey, "DOWN",  function() spoon.WinMan:pushWindowDown() end)
+hs.hotkey.bind(cmdCtrlKey, "LEFT",  function() spoon.WinMan:pushWindowLeft() end)
+hs.hotkey.bind(cmdCtrlKey, "RIGHT", function() spoon.WinMan:pushWindowRight() end)
 
 hs.alert.show("Hammerspoon started!")

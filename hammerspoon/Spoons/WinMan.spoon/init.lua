@@ -240,6 +240,22 @@ function obj:moveWindowToRight65()
     moveWindowToUnit({ x = 0.35, y = 0, w = 0.65, h = 1.0 })
 end
 
+function obj:moveWindowToTop65()
+    moveWindowToUnit({ x = 0, y = 0, w = 1.0, h = 0.65 })
+end
+
+function obj:moveWindowToBottom35()
+    moveWindowToUnit({ x = 0, y = 0.65, w = 1, h = 0.35 })
+end
+
+function obj:moveWindowToTop35()
+    moveWindowToUnit({ x = 0, y = 0, w = 1.0, h = 0.35 })
+end
+
+function obj:moveWindowToBottom65()
+    moveWindowToUnit({ x = 0, y = 0.35, w = 1, h = 0.65 })
+end
+
 function obj:moveWindowTo4x5()
     moveWindowToGrid(4, 5, 8)
 end
