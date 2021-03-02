@@ -847,6 +847,11 @@ call plug#begin()
     endif
 " }
 
+if s:Use('any-jump') && has('nvim-0.4') && executable('rg')
+    " Jump to any definition and references IDE madness without overhead
+    Plug 'pechorin/any-jump.vim'
+endif
+
 " Run your tests at the speed of thought
 Plug 'vim-test/vim-test'
 
@@ -4683,6 +4688,64 @@ if s:IsPlugged('vim-polyglot') || s:IsPlugged('vim-terraform')
     augroup MyAutoCmd
         autocmd FileType terraform nnoremap <buffer> <silent> <Leader>bu :TerraformFmt<CR>:update<CR>
     augroup END
+endif
+
+if s:IsPlugged('any-jump.vim')
+    " pechorin/any-jump.vim
+    " Disable default any-jump keybindings (default: 0)
+    let g:any_jump_disable_default_keybindings = 1
+
+    " Show line numbers in search rusults
+    let g:any_jump_list_numbers = 0
+
+    " Auto search references
+    let g:any_jump_references_enabled = 1
+
+    " Auto group results by filename
+    let g:any_jump_grouping_enabled = 0
+
+    " Amount of preview lines for each search result
+    let g:any_jump_preview_lines_count = 5
+
+    " Max search results, other results can be opened via [a]
+    let g:any_jump_max_search_results = 10
+
+    " Prefered search engine: rg or ag
+    let g:any_jump_search_prefered_engine = 'rg'
+
+    " Search results list styles:
+    " - 'filename_first'
+    " - 'filename_last'
+    let g:any_jump_results_ui_style = 'filename_first'
+
+    " Any-jump window size & position options
+    let g:any_jump_window_width_ratio  = 0.6
+    let g:any_jump_window_height_ratio = 0.6
+    let g:any_jump_window_top_offset   = 4
+
+    " Remove comments line from search results (default: 1)
+    let g:any_jump_remove_comments_from_results = 1
+
+    " Custom ignore files
+    " default is: ['*.tmp', '*.temp']
+    let g:any_jump_ignored_files = ['*.tmp', '*.temp']
+
+    " Search references only for current file type
+    " (default: false, so will find keyword in all filetypes)
+    let g:any_jump_references_only_for_current_filetype = 0
+
+    " Disable search engine ignore vcs untracked files
+    " (default: false, search engine will ignore vcs untracked files)
+    let g:any_jump_disable_vcs_ignore = 0
+
+    " Normal mode: Jump to definition under cursore
+    nnoremap <silent> <Leader>j :AnyJump<CR>
+    " Visual mode: jump to selected text in visual mode
+    xnoremap <silent> <Leader>j :AnyJumpVisual<CR>
+    " Normal mode: open last closed search window again
+    nnoremap <silent> <Leader>J :AnyJumpLastResults<CR>
+    " Normal mode: open previous opened file (after jump)
+    nnoremap <silent> <C-j>     :AnyJumpBack<CR>
 endif
 
 " vim-test/vim-test
