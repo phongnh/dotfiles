@@ -154,7 +154,7 @@ call s:Source('.vimrc.before')
 let g:zero_vim_groups                   = get(g:, 'zero_vim_groups',                   [])
 let g:zero_vim_devicons                 = get(g:, 'zero_vim_devicons',                 0)
 let g:zero_vim_glyph_palette            = get(g:, 'zero_vim_glyph_palette',            0)
-let g:zero_vim_true_color               = get(g:, 'zero_vim_true_color',               0)
+let g:zero_vim_true_color               = get(g:, 'zero_vim_true_color',               ($COLORTERM ==# 'truecolor' || $COLORTERM ==# '24bit'))
 let g:zero_vim_powerline                = get(g:, 'zero_vim_powerline',                0)
 let g:zero_vim_powerline_style          = get(g:, 'zero_vim_powerline_style',          'default')
 let g:zero_vim_powerline_spaces         = get(g:, 'zero_vim_powerline_spaces',         {})
@@ -856,24 +856,17 @@ Plug 'vim-test/vim-test'
     " Default
     Plug 'altercation/vim-colors-solarized'
     Plug 'gruvbox-community/gruvbox'
-    Plug 'NLKNguyen/papercolor-theme'
-
-    " Code never sleeps in Gotham City
-    Plug 'whatyouhide/gotham'
-
-    " Dark
-    Plug 'dracula/vim'
-    Plug 'doums/darcula'
 
     " True Color
     Plug 'lifepillar/vim-solarized8'
     Plug 'lifepillar/vim-gruvbox8'
-    Plug 'arcticicestudio/nord-vim'
-    Plug 'mhartington/oceanic-next'
     Plug 'sainnhe/gruvbox-material'
     Plug 'sainnhe/sonokai'
     Plug 'sainnhe/forest-night'
     Plug 'sainnhe/edge'
+
+    " Collection of awesome color schemes for Neo/vim, merged for quick use.
+    Plug 'rafi/awesome-vim-colorschemes'
 
     " Simple
     Plug 'pbrisbin/vim-colors-off'
@@ -4507,14 +4500,18 @@ let g:solarized_term_italics = 1
 " lifepillar/vim-gruvbox8
 let g:gruvbox_italic = 1
 
+" sainnhe/sonokai
+let g:sonokai_enable_italic          = 0
+let g:sonokai_disable_italic_comment = 0
+
 " mhartington/oceanic-next
 let g:oceanic_next_terminal_bold   = 1
 let g:oceanic_next_terminal_italic = 1
 
-" sainnhe/sonokai
-let g:sonokai_style                  = 'default'
-let g:sonokai_enable_italic          = 0
-let g:sonokai_disable_italic_comment = 0
+" junegunn/seoul256.vim
+let g:seoul256_background       = 234
+let g:seoul256_light_background = 252
+" let g:seoul256_srgb             = 1
 
 if s:IsPlugged('glyph-palette.vim') && g:zero_vim_glyph_palette
     " lambdalisue/glyph-palette.vim
@@ -4757,22 +4754,22 @@ endfunction
 " Find and source .vimrc.local from root to current folder
 call s:Source('.vimrc.local')
 
+" Default colorscheme
+let g:zero_vim_default_colorscheme = g:zero_vim_true_color ? 'gruvbox8' : 'gruvbox'
+
 try
     if exists('g:zero_vim_colorscheme')
         if exists('g:zero_vim_background')
             execute 'set background=' . g:zero_vim_background
         endif
         execute 'colorscheme ' . g:zero_vim_colorscheme
-    elseif has('gui_running')
-        set background=dark
-        colorscheme solarized8
     else
         set background=dark
-        colorscheme gruvbox8
+        execute 'colorscheme ' . g:zero_vim_default_colorscheme
     endif
 catch
     set background=dark
-    colorscheme gruvbox8
+    execute 'colorscheme ' . g:zero_vim_default_colorscheme
 endtry
 
 set secure
