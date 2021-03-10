@@ -124,6 +124,20 @@ function! s:PlugDir(plugin) abort
     return g:plugs[a:plugin]['dir']
 endfunction
 
+" Setup custom mapping to open specific folder
+function! OpenFolderWithMapping(folder, mapping) abort
+    if exists(':LeaderfFile') == 2
+        let cmd = 'LeaderfFile'
+    elseif exists(':Files') == 2
+        let cmd = 'Files'
+    elseif exists(':ClapFiles') == 2
+        let cmd = 'ClapFiles'
+    else
+        let cmd = 'CtrlP'
+    endif
+    execute printf('nnoremap <silent> %s :%s %s<CR>', a:mapping, cmd, a:folder)
+endfunction
+
 " Check if LSP is enabled
 function! s:IsLSPEnabled() abort
     return s:IsPlugged('coc.nvim') || s:IsPlugged('nvim-lspconfig') || s:IsPlugged('vim-lsp') || s:IsPlugged('vim-lsc') || s:IsPlugged('LanguageClient-neovim') || s:IsPlugged('vim-lamp')
@@ -5131,20 +5145,6 @@ if s:IsPlugged('vim-which-key')
     nnoremap <silent> <Leader> :<C-u>WhichKey '<Space>'<CR>
     vnoremap <silent> <Leader> :<C-u>WhichKeyVisual '<Space>'<CR>
 endif
-
-" Setup custom mapping to open specific folder
-function! OpenFolderWithMapping(folder, mapping) abort
-    if exists(':LeaderfFile') == 2
-        let cmd = 'LeaderfFile'
-    elseif exists(':Files') == 2
-        let cmd = 'Files'
-    elseif exists(':ClapFiles') == 2
-        let cmd = 'ClapFiles'
-    else
-        let cmd = 'CtrlP'
-    endif
-    execute printf('nnoremap <silent> %s :%s %s<CR>', a:mapping, cmd, a:folder)
-endfunction
 
 " Find and source .init.vim.local from root to current folder
 call s:Source('.init.vim.local')
