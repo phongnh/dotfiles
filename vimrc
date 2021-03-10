@@ -161,6 +161,12 @@ function! s:IsUniversalCtags(ctags_path) abort
     return s:universal_ctags[a:ctags_path]
 endfunction
 
+function! s:Warn(message) abort
+    echohl WarningMsg
+    echomsg a:message
+    echohl None
+endfunction
+
 " Find and source .vimrc.before from root to current folder.
 call s:Source('.vimrc.before')
 
@@ -542,7 +548,7 @@ call plug#begin()
                 let l:cmd .= ' --ts-completer'
             endif
 
-            echomsg '[vim-plug] YouCompleteMe:' l:cmd
+            call s:Warn('[vim-plug] YouCompleteMe: ' . l:cmd)
             execute l:cmd
         endfunction
 

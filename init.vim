@@ -546,7 +546,7 @@ call plug#begin()
                 let l:cmd .= ' --ts-completer'
             endif
 
-            echomsg '[vim-plug] YouCompleteMe:' l:cmd
+            call s:Warn('[vim-plug] YouCompleteMe: ' . l:cmd)
             execute l:cmd
         endfunction
 
