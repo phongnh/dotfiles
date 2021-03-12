@@ -594,7 +594,7 @@ call plug#begin()
         Plug 'hrsh7th/vim-vsnip'
         Plug 'hrsh7th/vim-vsnip-integ'
     else
-        Plug 'ajh17/VimCompletesMe'
+        Plug 'ackyshake/VimCompletesMe'
     endif
 " }
 
@@ -3500,7 +3500,7 @@ if s:IsPlugged('vim-mucomplete')
 endif
 
 if s:IsPlugged('VimCompletesMe')
-    " ajh17/VimCompletesMe
+    " ackyshake/VimCompletesMe
     " Disable vim-lsp's async completion
     let g:lsp_async_completion = 0
 endif
