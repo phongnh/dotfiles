@@ -2686,7 +2686,8 @@ endif
 
 if s:IsPlugged('vim-lsc')
     " natebosch/vim-lsc
-    let g:lsc_complete_timeout     = 3 " Wait up to 3 seconds
+    let g:lsc_autocomplete_length  = 2
+    let g:lsc_complete_timeout     = 0.5 " Wait up to a half second
     let g:lsc_enable_diagnostics   = g:zero_vim_lsp_diagnostics ? v:true : v:false
     let g:lsc_reference_highlights = g:zero_vim_lsp_highlight_references ? v:true : v:false
     let g:lsc_trace_level          = 'off'
